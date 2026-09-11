@@ -18,7 +18,7 @@
   "mask_groundtruth_path": "data/cases/case_0002/mask_groundtruth.png",
   "label_source": "generator ground truth (synthetic) \u2014 not a human or independently confirmed label",
   "forcing_path": "data/cases/case_0002/forcing.npz",
-  "forcing_product": "varuna_core.synth_generator constant+spatial field v0.2",
+  "forcing_product": "slicktrace_core.synth_generator constant+spatial field v0.2",
   "forcing_valid_from_utc": "2026-09-09T04:30:00+00:00",
   "forcing_valid_to_utc": "2026-09-10T04:30:00+00:00",
   "ais_source": "synthetic (fictional MMSIs; no real broadcast data)",
@@ -318,7 +318,7 @@
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
-        "source": "varuna_core.synth_generator v0.2 (fictional AIS)"
+        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"
       }
     },
     {
@@ -501,7 +501,7 @@
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
-        "source": "varuna_core.synth_generator v0.2 (fictional AIS)"
+        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"
       }
     },
     {
@@ -684,7 +684,7 @@
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
-        "source": "varuna_core.synth_generator v0.2 (fictional AIS)"
+        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"
       }
     },
     {
@@ -867,7 +867,7 @@
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
-        "source": "varuna_core.synth_generator v0.2 (fictional AIS)"
+        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"
       }
     },
     {
@@ -930,7 +930,7 @@
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
-        "source": "varuna_core.synth_generator v0.2 (fictional AIS)"
+        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"
       }
     },
     {
@@ -1113,13 +1113,13 @@
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
-        "source": "varuna_core.synth_generator v0.2 (fictional AIS)"
+        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"
       }
     }
   ],
   "provenance": {
     "status": "synthetic",
-    "source": "varuna_core.synth_generator v0.2",
+    "source": "slicktrace_core.synth_generator v0.2",
     "license": "repository licence (see LICENSE)"
   },
   "generator": {

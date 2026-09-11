@@ -49,7 +49,7 @@ from datetime import timedelta
 
 import numpy as np
 
-from varuna_core.hindcast import _interp_track_position, _parse
+from slicktrace_core.hindcast import _interp_track_position, _parse
 
 # Operating point. Both numbers are reported with every result — a rate
 # without its gate is not a comparable measurement.

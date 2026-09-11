@@ -71,14 +71,14 @@ silence.
 ## Released artefacts
 
 **The adversarial benchmark.** Generator configuration and case parameters
-(`varuna_core/synth_generator.py`, `CASE_PLAN` with its seeds and four families).
-Note: `varuna_core` is the technical module name; the project is called Slick Trace.
+(`slicktrace_core/synth_generator.py`, `CASE_PLAN` with its seeds and four families).
+Note: `slicktrace_core` is the technical module name; the project is called Slick Trace.
 This is the piece most reusable by others: it lets another team measure false
 attribution under decoy, moving-discharge, absent-source and crowded conditions
 without rebuilding the harness. Released after evaluation.
 
 **The hidden-AIS recovery protocol.** The definition and procedure in
-`varuna_core/coverage.py`, with its three rates — recovery, false
+`slicktrace_core/coverage.py`, with its three rates — recovery, false
 unmatched-alert, mistaken-promotion — and the operating point they are measured
 at. Naming and defining the measure is itself part of the contribution: it lets
 another team reproduce the stress test rather than take a qualitative claim on

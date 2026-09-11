@@ -1,7 +1,7 @@
 """
 Synthetic incident generator — multi-family, ground-truth-safe.
 
-Produces self-contained "cases" satisfying varuna_core.schema's join contract
+Produces self-contained "cases" satisfying slicktrace_core.schema's join contract
 (masterplan p.7). Three things changed from v0.1 and they matter:
 
   1. GROUND TRUTH NO LONGER LIVES IN THE MANIFEST. It is written to a
@@ -54,7 +54,7 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter
 
-from varuna_core.schema import BBox, CaseState, DataStatus
+from slicktrace_core.schema import BBox, CaseState, DataStatus
 
 IMG_SIZE = 256
 DEG_PER_MS_HR = 3600 / 111_000
@@ -329,7 +329,7 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
         "fixes": s["fixes"],
         "missing_intervals": [],
         "provenance": {"status": DataStatus.SYNTHETIC.value,
-                       "source": "varuna_core.synth_generator v0.2 (fictional AIS)"},
+                       "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"},
     } for s in published]
 
     # --- scene raster ---
@@ -389,7 +389,7 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
         "label_source": "generator ground truth (synthetic) — not a human or "
                         "independently confirmed label",
         "forcing_path": forcing_path,
-        "forcing_product": "varuna_core.synth_generator constant+spatial field v0.2",
+        "forcing_product": "slicktrace_core.synth_generator constant+spatial field v0.2",
         "forcing_valid_from_utc": (acquired - timedelta(hours=24)).isoformat(),
         "forcing_valid_to_utc": acquired.isoformat(),
         "ais_source": "synthetic (fictional MMSIs; no real broadcast data)",
@@ -402,7 +402,7 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
         "tracks": tracks,
         "provenance": {
             "status": DataStatus.SYNTHETIC.value,
-            "source": "varuna_core.synth_generator v0.2",
+            "source": "slicktrace_core.synth_generator v0.2",
             "license": "repository licence (see LICENSE)",
         },
         "generator": {"family": family, "seed": seed, "version": "0.2"},

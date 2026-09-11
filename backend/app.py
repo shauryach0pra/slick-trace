@@ -1,5 +1,5 @@
 """
-Slick Trace backend — wires varuna_core into a real API.
+Slick Trace backend — wires slicktrace_core into a real API.
 
 Endpoints are intentionally thin: each reads artifacts already produced by the
 pipeline stages, or recomputes a cheap derived view (the backward envelope for
@@ -30,14 +30,14 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from varuna_core.hindcast import _interp_track_position, _parse, build_backward_envelope
-from varuna_core.nlp_query import CaseKB, ask as ask_nlp
-from varuna_core.report import build_report, render_markdown
+from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
+from slicktrace_core.nlp_query import CaseKB, ask as ask_nlp
+from slicktrace_core.report import build_report, render_markdown
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(REPO_ROOT, "data", "cases")
 
-app = FastAPI(title="Slick Trace / OilTrace API", version="0.2.0")
+app = FastAPI(title="Slick Trace API", version="0.2.0")
 
 _kb_cache: dict[str, CaseKB] = {}
 _envelope_cache: dict[str, list] = {}

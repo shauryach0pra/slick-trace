@@ -1,5 +1,5 @@
 """
-Slick Trace / OilTrace — incident manifest schema.
+Slick Trace — incident manifest schema.
 
 This is the single "join contract" described in the masterplan (p.7): every
 stage (detection, AIS/historical mapping, attribution, NLP, export) reads and

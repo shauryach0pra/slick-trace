@@ -21,10 +21,10 @@ Slick Trace is an oil-spill source attribution system that detects slicks, recon
 ### Project Structure
 
 ```
-varuna/
+slicktrace/
 ├── backend/              # FastAPI application serving attribution results
 ├── frontend/             # React + Vite dashboard with live time-slider controls
-├── varuna_core/          # Core attribution pipeline modules
+├── slicktrace_core/          # Core attribution pipeline modules
 │   ├── schema.py         # Data contracts and validation schemas
 │   ├── synth_generator.py # Synthetic case generation
 │   ├── hindcast.py       # Historical vessel-slick mapping
@@ -132,7 +132,7 @@ docker compose --profile cpu up
 
 # Offline verification (disconnect network, still works)
 docker compose --profile cpu up -d
-docker network disconnect $(docker compose ps -q varuna | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') varuna-cpu-1 --force
+docker network disconnect $(docker compose ps -q slicktrace | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') slicktrace-cpu-1 --force
 curl http://localhost:8000/api/health
 ```
 
@@ -145,7 +145,7 @@ curl http://localhost:8000/api/health
 - `PYTHONDONTWRITEBYTECODE=1` - Prevent .pyc file generation
 
 **Data Configuration:**
-- Synthetic cases are generated from seeds in `varuna_core/synth_generator.py` (keeping existing module name for compatibility)
+- Synthetic cases are generated from seeds in `slicktrace_core/synth_generator.py` (keeping existing module name for compatibility)
 - Ground truth lives in per-case `truth.json` files (never loaded by API)
 - Vessel identifiers use neutral fictional MMSIs (419xxxxxx)
 - Docker uses named volumes at `/app/data` for persistent incident storage
@@ -237,7 +237,7 @@ curl http://localhost:8000/api/health
 This system currently uses synthetic data for demonstration. To deploy with real-world data:
 
 1. Download Zenodo Sentinel-1 oil-spill dataset (Parts I/II/III) and DMA or NOAA AIS extracts
-2. Write an adapter mapping them into `varuna_core.schema.SceneObservation` / `VesselTrack` with `Provenance.status = OBSERVED` (keeping existing module structure)
+2. Write an adapter mapping them into `slicktrace_core.schema.SceneObservation` / `VesselTrack` with `Provenance.status = OBSERVED` (keeping existing module structure)
 3. No other changes required — every pipeline stage reads the schema, not the source format
 
 ---

@@ -1,15 +1,15 @@
 """
 Train the U-Net on data/detection/{train,val}.
 
-NOT RUN IN THIS SANDBOX (see varuna_core/unet_model.py header — no torch
+NOT RUN IN THIS SANDBOX (see slicktrace_core/unet_model.py header — no torch
 here). On your own machine:
 
     pip install torch --index-url https://download.pytorch.org/whl/cpu
-    python3 -m varuna_core.detection_data      # regenerate data if needed
+    python3 -m slicktrace_core.detection_data      # regenerate data if needed
     python3 scripts/train_unet.py --epochs 15
 
 Trains on the *same* synthetic oil/clean/lookalike dataset the classical
-baseline was scored on (varuna_core.baseline_detector), so IoU/FP numbers
+baseline was scored on (slicktrace_core.baseline_detector), so IoU/FP numbers
 are directly comparable — that comparison is the actual deliverable, not
 the absolute IoU value.
 """
@@ -28,7 +28,7 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 
-from varuna_core.unet_model import UNet, combined_loss
+from slicktrace_core.unet_model import UNet, combined_loss
 
 
 class DetectionDataset(Dataset):

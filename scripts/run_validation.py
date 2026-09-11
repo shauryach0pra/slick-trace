@@ -31,9 +31,9 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from varuna_core.next_observation import validate_with_held_out_observation
-from varuna_core.nlp_query import CaseKB, ask
-from varuna_core.synth_generator import CASE_PLAN
+from slicktrace_core.next_observation import validate_with_held_out_observation
+from slicktrace_core.nlp_query import CaseKB, ask
+from slicktrace_core.synth_generator import CASE_PLAN
 from tests.nlp_suite import resolve_suite  # noqa: E402
 
 CASES_ROOT = os.path.join("data", "cases")
@@ -223,7 +223,7 @@ def score_detection() -> dict | None:
     """Classical baseline vs the trained U-Net on the identical split. The
     U-Net number is only reported if a real evaluation file exists — an
     architected-but-untrained model is a design, not a result."""
-    from varuna_core.baseline_detector import evaluate_split
+    from slicktrace_core.baseline_detector import evaluate_split
     try:
         baseline_val = evaluate_split("data/detection/val")
         baseline_test = evaluate_split("data/detection/test")

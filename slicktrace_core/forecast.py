@@ -24,8 +24,8 @@ import os
 import numpy as np
 from PIL import Image
 
-from varuna_core.attribution import lonlat_to_px
-from varuna_core.hindcast import DEG_PER_MS_HR, _parse
+from slicktrace_core.attribution import lonlat_to_px
+from slicktrace_core.hindcast import DEG_PER_MS_HR, _parse
 
 HORIZONS_H = (6, 12, 24)
 BASE_DIFFUSIVITY = 0.020

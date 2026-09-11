@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-11T20:55:21.591434+00:00",
+  "generated_utc": "2026-09-11T21:39:22.522093+00:00",
   "incident_id": "case_0001",
   "scene": {
     "scene_id": "case_0001_S1SYN_20260910T043000",
@@ -25,7 +25,7 @@
       "2026-09-09T04:30:00+00:00",
       "2026-09-10T04:30:00+00:00"
     ],
-    "forcing_product": "varuna_core.synth_generator constant+spatial field v0.2",
+    "forcing_product": "slicktrace_core.synth_generator constant+spatial field v0.2",
     "forcing_window": [
       "2026-09-09T04:30:00+00:00",
       "2026-09-10T04:30:00+00:00"
@@ -2169,13 +2169,13 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "unavailable (not a git checkout, or git not installed)",
+    "git_revision": "e77f017",
     "python": "3.12.3",
     "platform": "Linux 6.18.44-fc-v24 (x86_64)",
     "argv0": "run_pipeline.py"
   },
   "checksums_sha256": {
-    "manifest.json": "dd06755b5f66d391badd9eadd3f5f15fbc91949e9b329944c25eb98ffe596efb",
+    "manifest.json": "18e40d7d189e2904c6a0e25ab3df559b01981ba42fd2ad1d57d1b53fab6075af",
     "historical_mapping.json": "304740ac5a782abfc4db666dafb2addeabb5364edf2881cfc1ad7bb57c4f6744",
     "naive_baseline_result.json": "62aca1ff40858885a8f92f5fe8114a06bc516bfd3b476700cab4abd252e03758",
     "attribution_result.json": "4aea51fba656d1606f3cdaade8a132380459f8904d70e24e4b3ec01e5144db40",

@@ -17,8 +17,8 @@ version rather than a placeholder.
 | Asset | Origin | Licence | Redistribution | Attribution required |
 | --- | --- | --- | --- | --- |
 | Source code | This repository | MIT (see `LICENSE`) | Yes | Copyright notice |
-| Incident cases `data/cases/*` | `varuna_core/synth_generator.py`, seeded | Repository licence | Yes | None |
-| Detection splits `data/detection/*` | `varuna_core/detection_data.py`, seeded | Repository licence | Yes | None |
+| Incident cases `data/cases/*` | `slicktrace_core/synth_generator.py`, seeded | Repository licence | Yes | None |
+| Detection splits `data/detection/*` | `slicktrace_core/detection_data.py`, seeded | Repository licence | Yes | None |
 | Forcing fields `forcing.npz` | Generated constant + spatial field | Repository licence | Yes | None |
 | Coastline and sensitive areas | Generated, fictional | Repository licence | Yes | None |
 | Vessel identities | Fictional MMSIs in the 419 (India MID) range | Repository licence | Yes | None |
@@ -96,7 +96,7 @@ reanalysis with the required Copernicus attribution statement.
 
 ## Open item for the team
 
-The `LICENSE` file names the copyright holder as "Slick Trace / OilTrace team
+The `LICENSE` file names the copyright holder as "Slick Trace team
 (SIH26143)" and applies MIT terms. Both the licence choice and the holder line
 are the team's decision and should be confirmed before submission. MIT was chosen
 as a permissive default consistent with the handover position in Appendix C —

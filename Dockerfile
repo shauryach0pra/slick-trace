@@ -1,4 +1,4 @@
-# Slick Trace / OilTrace — CPU reference image.
+# Slick Trace — CPU reference image.
 #
 # GPU/torch is NOT part of this image: the served app (detection results,
 # hindcast, attribution, NLP, API, UI) only needs the packages in
@@ -29,7 +29,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ ./backend/
-COPY varuna_core/ ./varuna_core/
+COPY slicktrace_core/ ./slicktrace_core/
 COPY scripts/startup_check.py ./scripts/startup_check.py
 COPY scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
 # Bake in the synthetic demo cases so a fresh container has something to show

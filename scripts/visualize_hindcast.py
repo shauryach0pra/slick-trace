@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial import cKDTree
 
-from varuna_core.hindcast import (
+from slicktrace_core.hindcast import (
     build_backward_envelope,
     _interp_track_position,
     _parse,

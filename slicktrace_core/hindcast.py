@@ -3,7 +3,7 @@ Historical mapping: backward hindcast envelope + candidate filtering.
 
 Implements the masterplan's "source-window map" (p.8) and step 1-2 of the
 attribution pipeline (p.10), stopping short of forward-replay ranking
-(that's step 4 / varuna_core.attribution — not built yet):
+(that's step 4 / slicktrace_core.attribution — not built yet):
 
   1. Seed particles at the observed slick footprint (from the ground-truth
      mask here; a real system would use the detector's output polygon).

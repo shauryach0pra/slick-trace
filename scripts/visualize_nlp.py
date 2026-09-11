@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import matplotlib.pyplot as plt
 
-from varuna_core.nlp_query import CaseKB, ask
+from slicktrace_core.nlp_query import CaseKB, ask
 
 DEMO_QUESTIONS = [
     "Which vessels crossed the likely origin zone from 02:00 to 05:00 UTC?",
@@ -24,7 +24,7 @@ def wrap(text, width=88):
 
 def render(case_dir: str = "data/cases/case_0001", out_path: str | None = None):
     kb = CaseKB(case_dir)
-    lines = ["$ ask-varuna --incident case_0001", ""]
+    lines = ["$ ask-slicktrace --incident case_0001", ""]
     for q in DEMO_QUESTIONS:
         r = ask(kb, q)
         color_tag = "OK" if r.supported else "REFUSED"
@@ -54,7 +54,7 @@ def render(case_dir: str = "data/cases/case_0001", out_path: str | None = None):
         y -= dy
 
     fig.tight_layout()
-    out_path = out_path or os.path.join(case_dir, "ask_varuna_transcript.png")
+    out_path = out_path or os.path.join(case_dir, "ask_slicktrace_transcript.png")
     fig.savefig(out_path, dpi=150, facecolor=fig.get_facecolor())
     plt.close(fig)
     return out_path

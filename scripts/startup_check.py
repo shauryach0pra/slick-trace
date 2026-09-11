@@ -49,7 +49,7 @@ def check() -> bool:
                 print(f"[ok]   {label}: found {cases}")
             else:
                 print(f"[FAIL] {label}: none found under {path}")
-                print(f"       fallback: run `python3 -m varuna_core.synth_generator` "
+                print(f"       fallback: run `python3 -m slicktrace_core.synth_generator` "
                       f"to create a synthetic demo case")
                 ok = False
         else:

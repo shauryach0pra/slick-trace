@@ -34,7 +34,7 @@ from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from varuna_core.hindcast import _interp_track_position, _parse, build_backward_envelope
+from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
 import numpy as np
 from scipy.spatial import cKDTree
 

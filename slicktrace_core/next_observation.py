@@ -31,8 +31,8 @@ from datetime import timedelta
 
 import numpy as np
 
-from varuna_core.attribution import ENSEMBLE_VARIANTS, simulate_hypothesis
-from varuna_core.hindcast import _parse
+from slicktrace_core.attribution import ENSEMBLE_VARIANTS, simulate_hypothesis
+from slicktrace_core.hindcast import _parse
 
 DEFAULT_HORIZONS_H = (3, 6, 9, 12, 18, 24)
 
@@ -84,7 +84,7 @@ def run_next_observation(case_dir: str, horizons_h=DEFAULT_HORIZONS_H,
     a, b = ranking[0], ranking[1]
     nominal = ENSEMBLE_VARIANTS[0]
 
-    from varuna_core.attribution import ReleaseHypothesisSpec
+    from slicktrace_core.attribution import ReleaseHypothesisSpec
 
     def spec(r):
         return ReleaseHypothesisSpec(r["candidate_id"], r["vessel_key"],
@@ -173,7 +173,7 @@ def validate_with_held_out_observation(case_dir: str) -> dict:
     tracks = {t["vessel_key"]: t["fixes"] for t in manifest["tracks"]}
     nominal = ENSEMBLE_VARIANTS[0]
 
-    from varuna_core.attribution import ReleaseHypothesisSpec
+    from slicktrace_core.attribution import ReleaseHypothesisSpec
 
     def spec(r):
         return ReleaseHypothesisSpec(r["candidate_id"], r["vessel_key"],

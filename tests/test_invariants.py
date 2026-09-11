@@ -15,10 +15,10 @@ from datetime import datetime, timedelta
 import numpy as np
 import pytest
 
-from varuna_core.attribution import ENSEMBLE_VARIANTS, score_fit, simulate_hypothesis
-from varuna_core.hindcast import _interp_track_position, _parse, build_backward_envelope
-from varuna_core.nlp_query import CaseKB, ask, parse_intent
-from varuna_core.synth_generator import CASE_PLAN
+from slicktrace_core.attribution import ENSEMBLE_VARIANTS, score_fit, simulate_hypothesis
+from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
+from slicktrace_core.nlp_query import CaseKB, ask, parse_intent
+from slicktrace_core.synth_generator import CASE_PLAN
 
 CASES_ROOT = os.path.join("data", "cases")
 ALL_CASE_IDS = [cid for cid, _f, _s in CASE_PLAN]
@@ -110,7 +110,7 @@ def test_three_distinct_candidate_states(cid):
 def test_unassessed_is_reported_for_a_track_with_no_covering_data():
     """Construct a vessel whose fixes lie outside the queried window entirely
     and confirm it comes back unassessed rather than excluded."""
-    from varuna_core.hindcast import assess_vessels
+    from slicktrace_core.hindcast import assess_vessels
     manifest = _load("case_0001", "manifest.json")
     acquired = _parse(manifest["acquired_utc"])
     far_past = acquired - timedelta(days=30)
@@ -165,7 +165,7 @@ def test_dispersion_grows_with_drift_time():
     track = manifest["tracks"][0]
     fixes = track["fixes"]
 
-    from varuna_core.attribution import ReleaseHypothesisSpec
+    from slicktrace_core.attribution import ReleaseHypothesisSpec
     start = _parse(fixes[0]["t_utc"])
 
     spreads = []
@@ -242,7 +242,7 @@ def test_manifest_join_contract_fields(cid):
 
 @pytest.mark.parametrize("cid", ALL_CASE_IDS)
 def test_checksums_match_files(cid):
-    from varuna_core.synth_generator import _sha256
+    from slicktrace_core.synth_generator import _sha256
     manifest = _load(cid, "manifest.json")
     for name, expected in manifest["checksums"].items():
         path = os.path.join(_case_dir(cid), name)

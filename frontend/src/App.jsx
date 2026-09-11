@@ -41,7 +41,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="wordmark">Slick Trace<span className="wordmark-sub">/ OilTrace</span></div>
+        <div className="wordmark">Slick Trace<span className="wordmark-sub">/ source attribution</span></div>
         {manifest && (
           <div className="topbar-meta">
             <span className="tag">{manifest.incident_id}</span>

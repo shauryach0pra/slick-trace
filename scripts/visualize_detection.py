@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
-from varuna_core.baseline_detector import evaluate, iou, predict_mask
+from slicktrace_core.baseline_detector import evaluate, iou, predict_mask
 
 
 def render(split_dir: str = "data/detection/val", out_path: str = "data/detection/detection_demo.png",

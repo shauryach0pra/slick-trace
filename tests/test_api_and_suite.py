@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 
 from backend.app import app
 from tests.nlp_suite import resolve_suite
-from varuna_core.nlp_query import CaseKB, ask
+from slicktrace_core.nlp_query import CaseKB, ask
 
 client = TestClient(app)
 CASE = "case_0001"

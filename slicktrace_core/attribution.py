@@ -1,7 +1,7 @@
 """
 Forward-replay attribution engine (masterplan p.10 — the central
 differentiator). Operates on the candidates surviving historical filtering
-(varuna_core.hindcast), NOT the full vessel list.
+(slicktrace_core.hindcast), NOT the full vessel list.
 
 Pipeline per candidate vessel:
   1. Sample release hypotheses: several plausible (release_start, duration,
@@ -34,7 +34,7 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter, distance_transform_edt
 
-from varuna_core.hindcast import _interp_track_position, _parse, DEG_PER_MS_HR
+from slicktrace_core.hindcast import _interp_track_position, _parse, DEG_PER_MS_HR
 
 IMG_SIZE = 256
 

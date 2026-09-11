@@ -8,8 +8,6 @@ rather than inferring them from source. Each entry is testable, and several are
 varied deliberately in the ensemble or the fragility grid rather than being
 fixed beliefs.
 
-**Note:** File paths reference `varuna_core/` as the technical module name; the project is called Slick Trace.
-
 Any number in the submission that depends on one of these is reported with the
 assumption named, so the result and its boundary can be judged together.
 
@@ -17,7 +15,7 @@ assumption named, so the result and its boundary can be judged together.
 
 ### A1 · Dispersion grows with elapsed drift time (≈ Fickian, √t)
 
-**Where:** `varuna_core/attribution.py:148`, `varuna_core/synth_generator.py:117`
+**Where:** `slicktrace_core/attribution.py:148`, `slicktrace_core/synth_generator.py:117`
 **Enforced by:** `tests/test_invariants.py:155`
 
 **Why.** A parcel adrift for eight hours is more smeared than one released ten
@@ -41,7 +39,7 @@ axis.
 
 ### A2 · The backward envelope diffuses rather than converging
 
-**Where:** `varuna_core/hindcast.py`, `build_backward_envelope`
+**Where:** `slicktrace_core/hindcast.py`, `build_backward_envelope`
 **Enforced by:** `tests/test_invariants.py:201`
 
 **Why.** Release time, duration and diffusivity are all unknown. Reverse
@@ -63,7 +61,7 @@ tested by forward runs.
 
 ### A3 · All candidates are scored under one shared ensemble and an equal budget
 
-**Where:** `varuna_core/attribution.py:42-49` (module-level `ENSEMBLE_VARIANTS`)
+**Where:** `slicktrace_core/attribution.py:42-49` (module-level `ENSEMBLE_VARIANTS`)
 **Enforced by:** `tests/test_invariants.py:181`
 
 **Why.** A comparison is only fair if every candidate is tested under identical
@@ -82,7 +80,7 @@ hypotheses use the same sampling grid for every vessel
 
 ### A4 · Loss weights a, b, c, d
 
-**Where:** `varuna_core/attribution.py:51`
+**Where:** `slicktrace_core/attribution.py:51`
 `{a_iou: 0.5, b_boundary: 0.2, c_area: 0.2, d_complexity: 0.1}`
 
 **Why.** The four terms balance overlap, boundary agreement, area error and a
@@ -101,8 +99,8 @@ them is exposed by the rank-fragility control rather than asserted to be small.
 
 ### A5 · Footprint rasterisation threshold
 
-**Where:** `varuna_core/attribution.py:83` (`thresh_frac=0.15`),
-`varuna_core/fragility.py:57` (varied over 0.10 / 0.15 / 0.22)
+**Where:** `slicktrace_core/attribution.py:83` (`thresh_frac=0.15`),
+`slicktrace_core/fragility.py:57` (varied over 0.10 / 0.15 / 0.22)
 
 **Why.** Simulated particles must be converted into a mask comparable with the
 observed one, and that requires choosing a cut-off.
@@ -118,7 +116,7 @@ reported as fragile, with the specific value that flipped it.
 
 ### A6 · Track interpolation is bounded; gaps are marked, never filled
 
-**Where:** `varuna_core/hindcast.py:109` (`_interp_track_position`)
+**Where:** `slicktrace_core/hindcast.py:109` (`_interp_track_position`)
 **Enforced by:** `tests/test_invariants.py:190`
 
 **Why.** AIS gaps are common. Unbounded interpolation invents vessel history and
@@ -137,7 +135,7 @@ threshold is not treated as proof of an outage.
 
 ### A7 · `unassessed` is not `excluded`
 
-**Where:** `varuna_core/hindcast.py:24, 56, 149`
+**Where:** `slicktrace_core/hindcast.py:24, 56, 149`
 **Enforced by:** `tests/test_invariants.py:97, 110`
 
 **Why.** "No track data covering the queried window" and "data present
@@ -155,7 +153,7 @@ investigation report, which states the distinction in words.
 
 ### A8 · Vessel identity is time-bounded
 
-**Where:** `varuna_core/synth_generator.py:327-328`, `varuna_core/schema.py:73-74`
+**Where:** `slicktrace_core/synth_generator.py:327-328`, `slicktrace_core/schema.py:73-74`
 
 **Why.** MMSI, IMO and name mappings change. An identifier does not describe the
 same vessel forever.
@@ -170,8 +168,8 @@ interval. A stale identity is a disclosure, not a match.
 
 ### A9 · The generator's forcing differs from the simulator's
 
-**Where:** `varuna_core/synth_generator.py:101-107` (spatially varying `swirl`)
-versus `varuna_core/attribution.py:128` (constant `u`, `v`)
+**Where:** `slicktrace_core/synth_generator.py:101-107` (spatially varying `swirl`)
+versus `slicktrace_core/attribution.py:128` (constant `u`, `v`)
 
 **Why.** If the evaluated method inverted exactly the simulator that produced the
 answer, good scores would measure nothing but self-consistency.
@@ -189,7 +187,7 @@ real-world attribution accuracy.
 
 ### A10 · An absolute fit gate must be cleared before any candidate is named
 
-**Where:** `varuna_core/attribution.py:52` (`ABSTENTION_IOU_GATE = 0.30`), `:255`
+**Where:** `slicktrace_core/attribution.py:52` (`ABSTENTION_IOU_GATE = 0.30`), `:255`
 **Enforced by:** `tests/test_invariants.py:131, 142`
 
 **Why.** A pure ranking always has a top entry. Without an absolute floor, the
@@ -210,7 +208,7 @@ which is the honest reading at n = 2.
 
 ### A11 · Ensemble and grid win frequency are not probabilities
 
-**Where:** `varuna_core/fragility.py:204-206`; wording enforced across the
+**Where:** `slicktrace_core/fragility.py:204-206`; wording enforced across the
 report and interface
 
 **Why.** No calibration against held-out outcomes exists. Calibration would
@@ -229,8 +227,8 @@ than relying on a footnote elsewhere.
 
 ### A12 · SAR darkness is not proof of oil
 
-**Where:** `varuna_core/detection_data.py` (look-alike class),
-`varuna_core/baseline_detector.py:68-69` (uniformity rejection)
+**Where:** `slicktrace_core/detection_data.py` (look-alike class),
+`slicktrace_core/baseline_detector.py:68-69` (uniformity rejection)
 
 **Why.** Low wind, biogenic films and wind shadows dampen backscatter too.
 
@@ -248,7 +246,7 @@ false-positive rate on look-alikes and clean water: 0.000 on both val and test.
 
 ### A13 · A source vessel may have left the scene entirely
 
-**Where:** `varuna_core/synth_generator.py:217-227` (`absent_source` family)
+**Where:** `slicktrace_core/synth_generator.py:217-227` (`absent_source` family)
 
 **Why.** A vessel can discharge and transit out of the imaged area before
 acquisition, or stop broadcasting. Same-scene detection cannot recover a contact
@@ -272,7 +270,7 @@ Recorded because their absence is deliberate and a reviewer may look for them:
   are estimated instead; no Fay-based age claim appears anywhere.
 - **No AIS-gap culpability bonus.** A gap in broadcasting does not raise a
   candidate's score. Coverage is assessed separately
-  (`varuna_core/coverage.py`) and unmatched contacts keep identity unknown.
+  (`slicktrace_core/coverage.py`) and unmatched contacts keep identity unknown.
 - **No vessel class treated as automatically innocent.** Vessel type is not an
   input to ranking at any point; physical compatibility drives retention.
 - **No claim that ranked output constitutes proof.** The output is an

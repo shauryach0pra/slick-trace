@@ -23,14 +23,14 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from varuna_core.attribution import run_attribution, run_naive_baseline
-from varuna_core.coverage import run_hidden_ais_experiment
-from varuna_core.forecast import run_forecast
-from varuna_core.fragility import run_fragility
-from varuna_core.hindcast import run_historical_mapping
-from varuna_core.next_observation import run_next_observation
-from varuna_core.report import export_report
-from varuna_core.synth_generator import CASE_PLAN, generate_all
+from slicktrace_core.attribution import run_attribution, run_naive_baseline
+from slicktrace_core.coverage import run_hidden_ais_experiment
+from slicktrace_core.forecast import run_forecast
+from slicktrace_core.fragility import run_fragility
+from slicktrace_core.hindcast import run_historical_mapping
+from slicktrace_core.next_observation import run_next_observation
+from slicktrace_core.report import export_report
+from slicktrace_core.synth_generator import CASE_PLAN, generate_all
 
 
 def run_case(case_dir: str, skip: set[str]) -> dict:

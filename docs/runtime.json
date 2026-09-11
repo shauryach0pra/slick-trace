@@ -1,5 +1,5 @@
 {
-  "wall_clock_s": 31.0,
+  "wall_clock_s": 30.84,
   "n_cases": 6,
   "regenerated_from_seeds": true,
   "skipped_stages": [],
@@ -12,25 +12,25 @@
   },
   "per_case": {
     "case_0001": {
-      "total_s": 4.86,
+      "total_s": 4.59,
       "stages_s": {
         "historical_mapping": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 2.04,
-        "fragility": 2.69,
+        "attribution": 1.95,
+        "fragility": 2.53,
         "coverage": 0.02,
         "forecast": 0.01,
         "next_observation": 0.06,
-        "report": 0.02
+        "report": 0.01
       }
     },
     "case_0002": {
-      "total_s": 6.29,
+      "total_s": 6.23,
       "stages_s": {
         "historical_mapping": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 2.69,
-        "fragility": 3.49,
+        "attribution": 2.7,
+        "fragility": 3.42,
         "coverage": 0.02,
         "forecast": 0.01,
         "next_observation": 0.07,
@@ -38,12 +38,12 @@
       }
     },
     "case_0003": {
-      "total_s": 3.01,
+      "total_s": 2.99,
       "stages_s": {
         "historical_mapping": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 1.28,
-        "fragility": 1.62,
+        "attribution": 1.25,
+        "fragility": 1.63,
         "coverage": 0.02,
         "forecast": 0.01,
         "next_observation": 0.06,
@@ -51,12 +51,12 @@
       }
     },
     "case_0004": {
-      "total_s": 7.79,
+      "total_s": 7.66,
       "stages_s": {
         "historical_mapping": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 3.5,
-        "fragility": 4.16,
+        "attribution": 3.35,
+        "fragility": 4.18,
         "coverage": 0.04,
         "forecast": 0.01,
         "next_observation": 0.06,
@@ -64,12 +64,12 @@
       }
     },
     "case_0005": {
-      "total_s": 4.39,
+      "total_s": 4.53,
       "stages_s": {
         "historical_mapping": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 1.87,
-        "fragility": 2.41,
+        "attribution": 1.98,
+        "fragility": 2.45,
         "coverage": 0.02,
         "forecast": 0.01,
         "next_observation": 0.07,
@@ -77,12 +77,12 @@
       }
     },
     "case_0006": {
-      "total_s": 4.66,
+      "total_s": 4.84,
       "stages_s": {
         "historical_mapping": 0.01,
         "naive_baseline": 0.0,
         "attribution": 2.03,
-        "fragility": 2.53,
+        "fragility": 2.71,
         "coverage": 0.02,
         "forecast": 0.01,
         "next_observation": 0.06,

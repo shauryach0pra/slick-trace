@@ -13,10 +13,10 @@ import numpy as np
 from PIL import Image
 from datetime import datetime
 
-from varuna_core.attribution import (
+from slicktrace_core.attribution import (
     ReleaseHypothesisSpec, simulate_hypothesis, ENSEMBLE_VARIANTS,
 )
-from varuna_core.hindcast import _parse
+from slicktrace_core.hindcast import _parse
 
 
 

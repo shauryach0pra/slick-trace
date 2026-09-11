@@ -484,7 +484,7 @@
 }
 
 /* Adding the investigation-report link gave .topbar-meta a fourth tag, which
-   squeezed the wordmark until "/ OilTrace" wrapped onto its own line on
+   squeezed the wordmark until the subtitle wrapped onto its own line on
    narrow viewports. Let the two halves stack instead of compressing, and
    keep the wordmark on one line. */
 .topbar {

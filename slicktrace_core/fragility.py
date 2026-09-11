@@ -41,13 +41,13 @@ from datetime import timedelta
 import numpy as np
 from PIL import Image
 
-from varuna_core.attribution import (
+from slicktrace_core.attribution import (
     LOSS_WEIGHTS,
     ReleaseHypothesisSpec,
     raster_particles_to_mask,
     score_fit,
 )
-from varuna_core.hindcast import DEG_PER_MS_HR, _interp_track_position, _parse
+from slicktrace_core.hindcast import DEG_PER_MS_HR, _interp_track_position, _parse
 
 # Axis name -> (tested offsets, normalising scale, human label)
 AXES = {

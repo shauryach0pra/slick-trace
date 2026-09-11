@@ -9,7 +9,7 @@ rather than guessing.
 
 Two versions of this project have been in play.
 
-**If your local repo has `varuna_core/fragility.py`**, you have the newer tree
+**If your local repo has `slicktrace_core/fragility.py`**, you have the newer tree
 and only the "Session changes" section below is new to you.
 
 **If it does not**, your repo is the older build and the "Already present"
@@ -19,7 +19,7 @@ treat this zip as the reference rather than cherry-picking from it.
 Quick check:
 
 ```bash
-ls varuna_core/fragility.py 2>/dev/null && echo "newer tree" || echo "older tree"
+ls slicktrace_core/fragility.py 2>/dev/null && echo "newer tree" || echo "older tree"
 ```
 
 ---
@@ -97,7 +97,7 @@ squeezed the wordmark onto two lines at narrow widths.
 
 ### Added: recall and precision
 
-`varuna_core/baseline_detector.py`, `scripts/run_validation.py`
+`slicktrace_core/baseline_detector.py`, `scripts/run_validation.py`
 
 The plan asks for recall ≥ 0.85 and precision alongside IoU. Neither was
 measured.
@@ -150,7 +150,7 @@ MIT, which `manifest.provenance.license` already referenced but which did not
 exist. Includes scope notes separating code from data.
 
 **Two fields are yours to confirm:** the licence choice, and the copyright
-holder line, currently "Slick Trace / OilTrace team (SIH26143)".
+holder line, currently "Slick Trace team (SIH26143)".
 
 ### Added: three appendices
 
