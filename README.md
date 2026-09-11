@@ -132,7 +132,7 @@ docker compose --profile cpu up
 
 # Offline verification (disconnect network, still works)
 docker compose --profile cpu up -d
-docker network disconnect $(docker compose ps -q slick-trace | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') slick-trace-cpu-1 --force
+docker network disconnect $(docker compose ps -q varuna | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') varuna-cpu-1 --force
 curl http://localhost:8000/api/health
 ```
 
