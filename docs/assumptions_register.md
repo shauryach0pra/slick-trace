@@ -8,6 +8,8 @@ rather than inferring them from source. Each entry is testable, and several are
 varied deliberately in the ensemble or the fragility grid rather than being
 fixed beliefs.
 
+**Note:** File paths reference `varuna_core/` as the technical module name; the project is called Slick Trace.
+
 Any number in the submission that depends on one of these is reported with the
 assumption named, so the result and its boundary can be judged together.
 
