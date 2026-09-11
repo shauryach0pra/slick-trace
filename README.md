@@ -21,7 +21,7 @@ Slick Trace is an oil-spill source attribution system that detects slicks, recon
 ### Project Structure
 
 ```
-slick-trace/
+varuna/
 ├── backend/              # FastAPI application serving attribution results
 ├── frontend/             # React + Vite dashboard with live time-slider controls
 ├── varuna_core/          # Core attribution pipeline modules
