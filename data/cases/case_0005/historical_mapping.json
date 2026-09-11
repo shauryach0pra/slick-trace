@@ -1,0 +1,64 @@
+{
+  "incident_id": "case_0005",
+  "hours_back": 24,
+  "assessments": [
+    {
+      "vessel_key": "419420729",
+      "status": "excluded",
+      "first_entry_hours_before": null,
+      "reason": "track data present throughout window; never inside the backward envelope",
+      "inside_at": []
+    },
+    {
+      "vessel_key": "419958088",
+      "status": "candidate",
+      "first_entry_hours_before": 0.0,
+      "reason": "inside envelope at 1 of 25 queried times",
+      "inside_at": [
+        0.0
+      ]
+    },
+    {
+      "vessel_key": "419184924",
+      "status": "candidate",
+      "first_entry_hours_before": 9.0,
+      "reason": "inside envelope at 7 of 25 queried times",
+      "inside_at": [
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0
+      ]
+    },
+    {
+      "vessel_key": "419672961",
+      "status": "excluded",
+      "first_entry_hours_before": null,
+      "reason": "track data present throughout window; never inside the backward envelope",
+      "inside_at": []
+    },
+    {
+      "vessel_key": "419941459",
+      "status": "excluded",
+      "first_entry_hours_before": null,
+      "reason": "track data present throughout window; never inside the backward envelope",
+      "inside_at": []
+    },
+    {
+      "vessel_key": "419931279",
+      "status": "candidate",
+      "first_entry_hours_before": 10.0,
+      "reason": "inside envelope at 5 of 25 queried times",
+      "inside_at": [
+        5.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,439 @@
+{
+  "attribution": {
+    "rows": [
+      {
+        "incident_id": "case_0001",
+        "family": "decoy",
+        "seed": 42,
+        "n_vessels": 6,
+        "n_candidates": 3,
+        "expected": "named_candidate",
+        "method_outcome": "419336692",
+        "method_correct": true,
+        "naive_outcome": "419824090",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.688,
+        "lead_retained": 1.0,
+        "smallest_flip_magnitude": null
+      },
+      {
+        "incident_id": "case_0002",
+        "family": "moving_discharge",
+        "seed": 1701,
+        "n_vessels": 6,
+        "n_candidates": 4,
+        "expected": "named_candidate",
+        "method_outcome": "419858938",
+        "method_correct": true,
+        "naive_outcome": "419453172",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.627,
+        "lead_retained": 1.0,
+        "smallest_flip_magnitude": null
+      },
+      {
+        "incident_id": "case_0003",
+        "family": "absent_source",
+        "seed": 2026,
+        "n_vessels": 5,
+        "n_candidates": 2,
+        "expected": "unknown_source",
+        "method_outcome": "unknown_source",
+        "method_correct": true,
+        "naive_outcome": "419769953",
+        "naive_correct": false,
+        "top1": null,
+        "top3": null,
+        "top_iou": 0.088,
+        "lead_retained": 0.7,
+        "smallest_flip_magnitude": 0.5
+      },
+      {
+        "incident_id": "case_0004",
+        "family": "crowded",
+        "seed": 8813,
+        "n_vessels": 11,
+        "n_candidates": 5,
+        "expected": "named_candidate",
+        "method_outcome": "419255379",
+        "method_correct": true,
+        "naive_outcome": "419369344",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.677,
+        "lead_retained": 0.9375,
+        "smallest_flip_magnitude": 0.5
+      },
+      {
+        "incident_id": "case_0005",
+        "family": "decoy",
+        "seed": 5150,
+        "n_vessels": 6,
+        "n_candidates": 3,
+        "expected": "named_candidate",
+        "method_outcome": "419184924",
+        "method_correct": true,
+        "naive_outcome": "419958088",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.694,
+        "lead_retained": 1.0,
+        "smallest_flip_magnitude": null
+      },
+      {
+        "incident_id": "case_0006",
+        "family": "absent_source",
+        "seed": 9074,
+        "n_vessels": 5,
+        "n_candidates": 3,
+        "expected": "unknown_source",
+        "method_outcome": "unknown_source",
+        "method_correct": true,
+        "naive_outcome": "419738652",
+        "naive_correct": false,
+        "top1": null,
+        "top3": null,
+        "top_iou": 0.043,
+        "lead_retained": 0.5125,
+        "smallest_flip_magnitude": 0.5
+      }
+    ],
+    "n_cases": 6,
+    "source_present": {
+      "n": 4,
+      "method_top1": 4,
+      "method_top3": 4,
+      "naive_top1": 0
+    },
+    "source_absent": {
+      "n": 2,
+      "correct_abstentions": 2,
+      "false_named_attributions": 0
+    }
+  },
+  "nlp": {
+    "n": 40,
+    "n_pass": 40,
+    "n_supported": 29,
+    "n_supported_pass": 29,
+    "n_refusal": 11,
+    "n_refusal_pass": 11,
+    "traceable": 29,
+    "by_category": {
+      "candidate_list": {
+        "n": 2,
+        "pass": 2
+      },
+      "comparison": {
+        "n": 3,
+        "pass": 3
+      },
+      "coverage": {
+        "n": 3,
+        "pass": 3
+      },
+      "forecast": {
+        "n": 3,
+        "pass": 3
+      },
+      "next_observation": {
+        "n": 2,
+        "pass": 2
+      },
+      "provenance": {
+        "n": 2,
+        "pass": 2
+      },
+      "rank_stability": {
+        "n": 4,
+        "pass": 4
+      },
+      "refusal_not_implemented": {
+        "n": 2,
+        "pass": 2
+      },
+      "refusal_out_of_domain": {
+        "n": 5,
+        "pass": 5
+      },
+      "refusal_underspecified": {
+        "n": 4,
+        "pass": 4
+      },
+      "time_window": {
+        "n": 3,
+        "pass": 3
+      },
+      "time_window_midnight": {
+        "n": 1,
+        "pass": 1
+      },
+      "top_candidate": {
+        "n": 3,
+        "pass": 3
+      },
+      "vessel_history": {
+        "n": 3,
+        "pass": 3
+      }
+    },
+    "failures": []
+  },
+  "coverage": [
+    {
+      "incident_id": "case_0001",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8209,
+        "hidden_ais_recovery_n": "55/67",
+        "false_unmatched_alert_rate": 0.2927,
+        "false_unmatched_alert_n": "36/123",
+        "mistaken_promotion_rate": 0.3,
+        "mistaken_promotion_n": "12/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.875,
+        "hidden_ais_recovery_n": "42/48",
+        "false_unmatched_alert_rate": 0.31,
+        "false_unmatched_alert_n": "31/100",
+        "mistaken_promotion_rate": 0.0,
+        "mistaken_promotion_n": "0/34"
+      }
+    },
+    {
+      "incident_id": "case_0002",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.825,
+        "hidden_ais_recovery_n": "66/80",
+        "false_unmatched_alert_rate": 0.2886,
+        "false_unmatched_alert_n": "43/149",
+        "mistaken_promotion_rate": 0.35,
+        "mistaken_promotion_n": "14/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.85,
+        "hidden_ais_recovery_n": "85/100",
+        "false_unmatched_alert_rate": 0.2378,
+        "false_unmatched_alert_n": "39/164",
+        "mistaken_promotion_rate": 0.3,
+        "mistaken_promotion_n": "12/40"
+      }
+    },
+    {
+      "incident_id": "case_0003",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8,
+        "hidden_ais_recovery_n": "64/80",
+        "false_unmatched_alert_rate": 0.25,
+        "false_unmatched_alert_n": "32/128",
+        "mistaken_promotion_rate": null,
+        "mistaken_promotion_n": "0/0"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8286,
+        "hidden_ais_recovery_n": "58/70",
+        "false_unmatched_alert_rate": 0.2683,
+        "false_unmatched_alert_n": "33/123",
+        "mistaken_promotion_rate": null,
+        "mistaken_promotion_n": "0/0"
+      }
+    },
+    {
+      "incident_id": "case_0004",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8108,
+        "hidden_ais_recovery_n": "90/111",
+        "false_unmatched_alert_rate": 0.3317,
+        "false_unmatched_alert_n": "68/205",
+        "mistaken_promotion_rate": 0.225,
+        "mistaken_promotion_n": "9/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8556,
+        "hidden_ais_recovery_n": "77/90",
+        "false_unmatched_alert_rate": 0.3704,
+        "false_unmatched_alert_n": "70/189",
+        "mistaken_promotion_rate": 0.0,
+        "mistaken_promotion_n": "0/35"
+      }
+    },
+    {
+      "incident_id": "case_0005",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8333,
+        "hidden_ais_recovery_n": "60/72",
+        "false_unmatched_alert_rate": 0.2602,
+        "false_unmatched_alert_n": "32/123",
+        "mistaken_promotion_rate": 0.2,
+        "mistaken_promotion_n": "8/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8788,
+        "hidden_ais_recovery_n": "58/66",
+        "false_unmatched_alert_rate": 0.2821,
+        "false_unmatched_alert_n": "33/117",
+        "mistaken_promotion_rate": 0.0,
+        "mistaken_promotion_n": "0/34"
+      }
+    },
+    {
+      "incident_id": "case_0006",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8,
+        "hidden_ais_recovery_n": "64/80",
+        "false_unmatched_alert_rate": 0.252,
+        "false_unmatched_alert_n": "32/127",
+        "mistaken_promotion_rate": null,
+        "mistaken_promotion_n": "0/0"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8302,
+        "hidden_ais_recovery_n": "88/106",
+        "false_unmatched_alert_rate": 0.1724,
+        "false_unmatched_alert_n": "25/145",
+        "mistaken_promotion_rate": null,
+        "mistaken_promotion_n": "0/0"
+      }
+    }
+  ],
+  "next_observation": [
+    {
+      "incident_id": "case_0001",
+      "applicable": true,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 12,
+      "separation_at_recommended": 0.2456,
+      "separation_at_least_informative": 0.0001,
+      "recommendation_helped": true,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
+    },
+    {
+      "incident_id": "case_0002",
+      "applicable": true,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 24,
+      "separation_at_recommended": 0.5712,
+      "separation_at_least_informative": 0.2527,
+      "recommendation_helped": true,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
+    },
+    {
+      "incident_id": "case_0003",
+      "applicable": false,
+      "reason": "absent-source case: there is no true vessel track to generate a held-out observation from"
+    },
+    {
+      "incident_id": "case_0004",
+      "applicable": true,
+      "recommended_horizon_h": 24,
+      "least_informative_horizon_h": 6,
+      "separation_at_recommended": 0.0429,
+      "separation_at_least_informative": 0.079,
+      "recommendation_helped": false,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
+    },
+    {
+      "incident_id": "case_0005",
+      "applicable": true,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 24,
+      "separation_at_recommended": 0.5909,
+      "separation_at_least_informative": 0.2971,
+      "recommendation_helped": true,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
+    },
+    {
+      "incident_id": "case_0006",
+      "applicable": false,
+      "reason": "absent-source case: there is no true vessel track to generate a held-out observation from"
+    }
+  ],
+  "detection": {
+    "baseline_val": {
+      "iou_on_oil": 0.6764698991831838,
+      "recall_on_oil": 0.6815578423255723,
+      "precision_on_oil": 0.9929843729881074,
+      "false_positive_rate_lookalike": 0.0,
+      "false_positive_rate_clean": 0.0,
+      "n_oil": 15,
+      "n_lookalike": 8,
+      "n_clean": 8
+    },
+    "baseline_test": {
+      "iou_on_oil": 0.6881353471879819,
+      "recall_on_oil": 0.6959335099894491,
+      "precision_on_oil": 0.8909385201907789,
+      "false_positive_rate_lookalike": 0.0,
+      "false_positive_rate_clean": 0.0,
+      "n_oil": 20,
+      "n_lookalike": 12,
+      "n_clean": 12
+    },
+    "unet": null
+  }
+}

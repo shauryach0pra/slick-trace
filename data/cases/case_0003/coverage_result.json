@@ -1,0 +1,37 @@
+{
+  "incident_id": "case_0003",
+  "operating_point": {
+    "gate_radius_deg": 0.02,
+    "contact_position_noise_deg": 0.012,
+    "detector_miss_rate": 0.15,
+    "false_detection_rate": 0.15,
+    "hide_fraction_selective": 0.3,
+    "coverage_failure_radius_deg": 0.25
+  },
+  "conditions": {
+    "selective": {
+      "n_runs": 40,
+      "hidden_ais_recovery_rate": 0.8,
+      "hidden_ais_recovery_n": "64/80",
+      "false_unmatched_alert_rate": 0.25,
+      "false_unmatched_alert_n": "32/128",
+      "mistaken_promotion_rate": null,
+      "mistaken_promotion_n": "0/0"
+    },
+    "coverage_failure": {
+      "n_runs": 40,
+      "hidden_ais_recovery_rate": 0.8286,
+      "hidden_ais_recovery_n": "58/70",
+      "false_unmatched_alert_rate": 0.2683,
+      "false_unmatched_alert_n": "33/123",
+      "mistaken_promotion_rate": null,
+      "mistaken_promotion_n": "0/0"
+    }
+  },
+  "limits": [
+    "Synthetic contacts from a stand-in detector, not a validated ship detector on real SAR. The rates measure the matching and coverage logic, not detection quality.",
+    "A source vessel may have left the scene before acquisition. Same-scene ship detection cannot recover a contact absent from the image; the correct output in that situation stays unknown source.",
+    "These are simulated hiding experiments. They are not evidence about real intentional non-broadcasting by any vessel.",
+    "Neighbouring broadcast density is a weak proxy for reception quality; sparse traffic cannot establish good or bad coverage."
+  ]
+}

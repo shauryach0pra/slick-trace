@@ -1,0 +1,51 @@
+{
+  "incident_id": "case_0004",
+  "method": "naive_nearest_at_observation",
+  "ranking": [
+    {
+      "vessel_key": "419369344",
+      "distance_deg": 0.004208053264996832
+    },
+    {
+      "vessel_key": "419255379",
+      "distance_deg": 0.01880882868020559
+    },
+    {
+      "vessel_key": "419569999",
+      "distance_deg": 0.15250328436842972
+    },
+    {
+      "vessel_key": "419629253",
+      "distance_deg": 0.21888760108289787
+    },
+    {
+      "vessel_key": "419625471",
+      "distance_deg": 0.364219491833351
+    },
+    {
+      "vessel_key": "419462109",
+      "distance_deg": 0.3942121319872146
+    },
+    {
+      "vessel_key": "419243120",
+      "distance_deg": 0.4054824322917781
+    },
+    {
+      "vessel_key": "419302866",
+      "distance_deg": 0.4773609820538372
+    },
+    {
+      "vessel_key": "419210002",
+      "distance_deg": 0.7358725506973481
+    },
+    {
+      "vessel_key": "419644041",
+      "distance_deg": 0.7412360108515558
+    },
+    {
+      "vessel_key": "419623942",
+      "distance_deg": 0.8397667078661005
+    }
+  ],
+  "top_candidate_id": "419369344"
+}

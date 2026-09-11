@@ -1,0 +1,93 @@
+{
+  "wall_clock_s": 31.0,
+  "n_cases": 6,
+  "regenerated_from_seeds": true,
+  "skipped_stages": [],
+  "hardware": {
+    "machine": "x86_64",
+    "system": "Linux 6.18.44-fc-v24",
+    "python": "3.12.3",
+    "cpu_count": 1,
+    "compute_profile": "CPU (no GPU, no torch in the served path)"
+  },
+  "per_case": {
+    "case_0001": {
+      "total_s": 4.86,
+      "stages_s": {
+        "historical_mapping": 0.01,
+        "naive_baseline": 0.0,
+        "attribution": 2.04,
+        "fragility": 2.69,
+        "coverage": 0.02,
+        "forecast": 0.01,
+        "next_observation": 0.06,
+        "report": 0.02
+      }
+    },
+    "case_0002": {
+      "total_s": 6.29,
+      "stages_s": {
+        "historical_mapping": 0.01,
+        "naive_baseline": 0.0,
+        "attribution": 2.69,
+        "fragility": 3.49,
+        "coverage": 0.02,
+        "forecast": 0.01,
+        "next_observation": 0.07,
+        "report": 0.01
+      }
+    },
+    "case_0003": {
+      "total_s": 3.01,
+      "stages_s": {
+        "historical_mapping": 0.01,
+        "naive_baseline": 0.0,
+        "attribution": 1.28,
+        "fragility": 1.62,
+        "coverage": 0.02,
+        "forecast": 0.01,
+        "next_observation": 0.06,
+        "report": 0.01
+      }
+    },
+    "case_0004": {
+      "total_s": 7.79,
+      "stages_s": {
+        "historical_mapping": 0.01,
+        "naive_baseline": 0.0,
+        "attribution": 3.5,
+        "fragility": 4.16,
+        "coverage": 0.04,
+        "forecast": 0.01,
+        "next_observation": 0.06,
+        "report": 0.01
+      }
+    },
+    "case_0005": {
+      "total_s": 4.39,
+      "stages_s": {
+        "historical_mapping": 0.01,
+        "naive_baseline": 0.0,
+        "attribution": 1.87,
+        "fragility": 2.41,
+        "coverage": 0.02,
+        "forecast": 0.01,
+        "next_observation": 0.07,
+        "report": 0.01
+      }
+    },
+    "case_0006": {
+      "total_s": 4.66,
+      "stages_s": {
+        "historical_mapping": 0.01,
+        "naive_baseline": 0.0,
+        "attribution": 2.03,
+        "fragility": 2.53,
+        "coverage": 0.02,
+        "forecast": 0.01,
+        "next_observation": 0.06,
+        "report": 0.01
+      }
+    }
+  }
+}

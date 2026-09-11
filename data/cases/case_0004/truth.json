@@ -1,0 +1,31 @@
+{
+  "incident_id": "case_0004",
+  "family": "crowded",
+  "seed": 8813,
+  "true_vessel_key": "419255379",
+  "absent_true_vessel_key": null,
+  "source_is_in_manifest": true,
+  "expected_outcome": "named_candidate",
+  "release_start_utc": "2026-09-09T22:30:00+00:00",
+  "release_duration_hours": 2.0,
+  "is_continuous": true,
+  "swirl": 0.017929844194457235,
+  "roles": {
+    "419243120": "background",
+    "419302866": "background",
+    "419623942": "background",
+    "419462109": "background",
+    "419255379": "true_source",
+    "419369344": "near_decoy",
+    "419644041": "background",
+    "419569999": "background",
+    "419625471": "background",
+    "419210002": "background",
+    "419629253": "near_miss_decoy"
+  },
+  "slick_centroid": [
+    72.29638661287075,
+    19.17715016451511
+  ],
+  "WARNING": "Dev/validation only. Not served by the API, not read by the UI, and not required to reproduce any result shown to a reviewer."
+}

@@ -1,0 +1,66 @@
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+:root {
+  --ink-950: #0b1826;
+  --ink-900: #0f2233;
+  --ink-800: #16324a;
+  --line: #274460;
+  --teal: #00c2b2;
+  --teal-dim: #0a5c58;
+  --amber: #e8a23d;
+  --red: #e5484d;
+  --green: #3fb950;
+  --text-hi: #eaf2f6;
+  --text-mid: #a9c1d1;
+  --text-dim: #5b7083;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--ink-950);
+  color: var(--text-hi);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+}
+
+a {
+  color: var(--teal);
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--teal-dim);
+}
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}

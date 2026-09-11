@@ -1,0 +1,31 @@
+{
+  "incident_id": "case_0002",
+  "method": "naive_nearest_at_observation",
+  "ranking": [
+    {
+      "vessel_key": "419453172",
+      "distance_deg": 0.0024400559973551867
+    },
+    {
+      "vessel_key": "419858938",
+      "distance_deg": 0.14432065850823517
+    },
+    {
+      "vessel_key": "419105092",
+      "distance_deg": 0.19323180596816644
+    },
+    {
+      "vessel_key": "419883006",
+      "distance_deg": 0.2187608155059979
+    },
+    {
+      "vessel_key": "419907832",
+      "distance_deg": 0.43229235367936325
+    },
+    {
+      "vessel_key": "419482780",
+      "distance_deg": 0.996564167847565
+    }
+  ],
+  "top_candidate_id": "419453172"
+}

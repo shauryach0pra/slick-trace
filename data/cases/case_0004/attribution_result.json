@@ -1,0 +1,77 @@
+{
+  "incident_id": "case_0004",
+  "candidates_considered": [
+    "419255379",
+    "419369344",
+    "419569999",
+    "419625471",
+    "419629253"
+  ],
+  "ranking": [
+    {
+      "candidate_id": "419255379_2230_0.5h",
+      "vessel_key": "419255379",
+      "release_start": "2026-09-09T22:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.6771409256251025,
+      "mean_loss": 0.2109467918016397,
+      "ensemble_win_count": 5,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419625471_1830_0.5h",
+      "vessel_key": "419625471",
+      "release_start": "2026-09-09T18:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.4428509486244369,
+      "mean_loss": 0.3615368560777657,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419569999_2330_0.5h",
+      "vessel_key": "419569999",
+      "release_start": "2026-09-09T23:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.31188356779476173,
+      "mean_loss": 0.38721989754591934,
+      "ensemble_win_count": 1,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419369344_0430_0.5h",
+      "vessel_key": "419369344",
+      "release_start": "2026-09-10T04:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.09540016501650166,
+      "mean_loss": 0.5327066044235951,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419629253_2330_0.5h",
+      "vessel_key": "419629253",
+      "release_start": "2026-09-09T23:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.01560911040950127,
+      "mean_loss": 0.5327438516052326,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    }
+  ],
+  "top_candidate_id": "419255379",
+  "unknown_source": false,
+  "abstention_iou_gate": 0.3,
+  "loss_weights": {
+    "a_iou": 0.5,
+    "b_boundary": 0.2,
+    "c_area": 0.2,
+    "d_complexity": 0.1
+  },
+  "n_ensemble_variants": 6
+}

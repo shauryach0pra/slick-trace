@@ -1,0 +1,111 @@
+{
+  "incident_id": "case_0006",
+  "applicable": true,
+  "hypothesis_a": {
+    "vessel_key": "419834449",
+    "candidate_id": "419834449_1830_0.5h"
+  },
+  "hypothesis_b": {
+    "vessel_key": "419738652",
+    "candidate_id": "419738652_0430_0.5h"
+  },
+  "current_ambiguity": {
+    "mean_iou_gap": -0.0378,
+    "mean_loss_gap": 0.0058
+  },
+  "windows": [
+    {
+      "horizon_hours": 3,
+      "valid_utc": "2026-09-10T07:30:00+00:00",
+      "disagreement_score": 0.995,
+      "predicted_overlap_iou": 0.005,
+      "disagreement_bbox": {
+        "min_lon": 72.225,
+        "min_lat": 19.11484,
+        "max_lon": 72.60391,
+        "max_lat": 19.4
+      },
+      "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+    },
+    {
+      "horizon_hours": 6,
+      "valid_utc": "2026-09-10T10:30:00+00:00",
+      "disagreement_score": 0.9561,
+      "predicted_overlap_iou": 0.0439,
+      "disagreement_bbox": {
+        "min_lon": 72.21328,
+        "min_lat": 19.08359,
+        "max_lon": 72.63906,
+        "max_lat": 19.4
+      },
+      "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+    },
+    {
+      "horizon_hours": 9,
+      "valid_utc": "2026-09-10T13:30:00+00:00",
+      "disagreement_score": 0.9158,
+      "predicted_overlap_iou": 0.0842,
+      "disagreement_bbox": {
+        "min_lon": 72.20156,
+        "min_lat": 19.06016,
+        "max_lon": 72.66641,
+        "max_lat": 19.4
+      },
+      "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+    },
+    {
+      "horizon_hours": 12,
+      "valid_utc": "2026-09-10T16:30:00+00:00",
+      "disagreement_score": 0.8961,
+      "predicted_overlap_iou": 0.1039,
+      "disagreement_bbox": {
+        "min_lon": 72.19766,
+        "min_lat": 19.03281,
+        "max_lon": 72.69375,
+        "max_lat": 19.4
+      },
+      "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+    },
+    {
+      "horizon_hours": 18,
+      "valid_utc": "2026-09-10T22:30:00+00:00",
+      "disagreement_score": 0.8555,
+      "predicted_overlap_iou": 0.1445,
+      "disagreement_bbox": {
+        "min_lon": 72.19375,
+        "min_lat": 18.98594,
+        "max_lon": 72.74844,
+        "max_lat": 19.4
+      },
+      "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+    },
+    {
+      "horizon_hours": 24,
+      "valid_utc": "2026-09-11T04:30:00+00:00",
+      "disagreement_score": 0.8302,
+      "predicted_overlap_iou": 0.1698,
+      "disagreement_bbox": {
+        "min_lon": 72.19766,
+        "min_lat": 18.93516,
+        "max_lon": 72.80312,
+        "max_lat": 19.4
+      },
+      "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+    }
+  ],
+  "recommended_window": {
+    "horizon_hours": 3,
+    "valid_utc": "2026-09-10T07:30:00+00:00",
+    "disagreement_score": 0.995,
+    "predicted_overlap_iou": 0.005,
+    "disagreement_bbox": {
+      "min_lon": 72.225,
+      "min_lat": 19.11484,
+      "max_lon": 72.60391,
+      "max_lat": 19.4
+    },
+    "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
+  },
+  "method_note": "Simple footprint-disagreement score between the two leading hypotheses under the nominal forcing variant. Not expected information gain: no observation likelihood and no prior over hypotheses are modelled.",
+  "scope_note": "The system recommends which evidence would be informative. It does not task satellites and does not assert that an acquisition is available in the recommended window."
+}

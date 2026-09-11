@@ -1,0 +1,18 @@
+.venv/
+frontend/node_modules/
+frontend/dist/
+**/__pycache__/
+*.pyc
+data/detection/
+.git/
+*.zip
+.pytest_cache/
+tests/
+
+# Dev-only ground truth. The API never loads these and _strip_truth guards
+# every response, but there is no reason to ship the answer key inside the
+# image where `docker exec` would reveal it. The smoke test reads truth.json
+# from the local checkout (--repo-root), not from the container, and falls
+# back to structural checks when it is absent — so excluding this costs
+# nothing operationally.
+data/cases/*/truth.json

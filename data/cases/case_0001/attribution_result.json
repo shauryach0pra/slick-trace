@@ -1,0 +1,53 @@
+{
+  "incident_id": "case_0001",
+  "candidates_considered": [
+    "419554138",
+    "419336692",
+    "419824090"
+  ],
+  "ranking": [
+    {
+      "candidate_id": "419336692_2230_0.5h",
+      "vessel_key": "419336692",
+      "release_start": "2026-09-09T22:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.6877631208005729,
+      "mean_loss": 0.1986270918709964,
+      "ensemble_win_count": 6,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419824090_0430_0.5h",
+      "vessel_key": "419824090",
+      "release_start": "2026-09-10T04:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.08661048689138577,
+      "mean_loss": 0.5382424984985513,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419554138_2330_0.5h",
+      "vessel_key": "419554138",
+      "release_start": "2026-09-09T23:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.0070049813200498134,
+      "mean_loss": 0.5426387341206418,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    }
+  ],
+  "top_candidate_id": "419336692",
+  "unknown_source": false,
+  "abstention_iou_gate": 0.3,
+  "loss_weights": {
+    "a_iou": 0.5,
+    "b_boundary": 0.2,
+    "c_area": 0.2,
+    "d_complexity": 0.1
+  },
+  "n_ensemble_variants": 6
+}
