@@ -1,6 +1,6 @@
 <div align="center">
 
-### VARUNA
+### Slick Trace
 
 </div>
 
@@ -14,14 +14,14 @@
 
 ### Overview
 
-VARUNA is an oil-spill source attribution system that detects slicks, reconstructs plausible releases from candidate vessel tracks, and reports how well each one explains the observation. The system uses a strictly ordered pipeline with synthetic case generation, historical mapping, forward-replay attribution, fragility analysis, coverage-aware matching, forecasting, and next-observation advisement. Ground truth is never exposed to the API or UI, ensuring attribution methods demonstrate genuine detection capability rather than recognizing known identifiers.
+Slick Trace is an oil-spill source attribution system that detects slicks, reconstructs plausible releases from candidate vessel tracks, and reports how well each one explains the observation. The system uses a strictly ordered pipeline with synthetic case generation, historical mapping, forward-replay attribution, fragility analysis, coverage-aware matching, forecasting, and next-observation advisement. Ground truth is never exposed to the API or UI, ensuring attribution methods demonstrate genuine detection capability rather than recognizing known identifiers.
 
 ---
 
 ### Project Structure
 
 ```
-varuna/
+slick-trace/
 ├── backend/              # FastAPI application serving attribution results
 ├── frontend/             # React + Vite dashboard with live time-slider controls
 ├── varuna_core/          # Core attribution pipeline modules
@@ -34,7 +34,7 @@ varuna/
 │   ├── forecast.py       # 6/12/24h exposure envelope prediction
 │   ├── next_observation.py # Optimal future observation advisor
 │   ├── report.py         # Investigation report export (JSON + Markdown)
-│   ├── nlp_query.py      # "Ask VARUNA" intent-based query system
+│   ├── nlp_query.py      # "Ask Slick Trace" intent-based query system
 │   └── detection/        # Oil slick detection (baseline + U-Net)
 ├── data/                 # Incident data (synthetic cases, volumes)
 ├── data_seed/            # Baked-in demo cases for Docker images
@@ -132,7 +132,7 @@ docker compose --profile cpu up
 
 # Offline verification (disconnect network, still works)
 docker compose --profile cpu up -d
-docker network disconnect $(docker compose ps -q varuna | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') varuna-cpu-1 --force
+docker network disconnect $(docker compose ps -q slick-trace | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') slick-trace-cpu-1 --force
 curl http://localhost:8000/api/health
 ```
 
@@ -145,7 +145,7 @@ curl http://localhost:8000/api/health
 - `PYTHONDONTWRITEBYTECODE=1` - Prevent .pyc file generation
 
 **Data Configuration:**
-- Synthetic cases are generated from seeds in `varuna_core/synth_generator.py`
+- Synthetic cases are generated from seeds in `varuna_core/synth_generator.py` (keeping existing module name for compatibility)
 - Ground truth lives in per-case `truth.json` files (never loaded by API)
 - Vessel identifiers use neutral fictional MMSIs (419xxxxxx)
 - Docker uses named volumes at `/app/data` for persistent incident storage
@@ -237,7 +237,7 @@ curl http://localhost:8000/api/health
 This system currently uses synthetic data for demonstration. To deploy with real-world data:
 
 1. Download Zenodo Sentinel-1 oil-spill dataset (Parts I/II/III) and DMA or NOAA AIS extracts
-2. Write an adapter mapping them into `varuna_core.schema.SceneObservation` / `VesselTrack` with `Provenance.status = OBSERVED`
+2. Write an adapter mapping them into `varuna_core.schema.SceneObservation` / `VesselTrack` with `Provenance.status = OBSERVED` (keeping existing module structure)
 3. No other changes required — every pipeline stage reads the schema, not the source format
 
 ---

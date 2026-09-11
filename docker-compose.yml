@@ -8,23 +8,23 @@
 # offline check below (disconnect networking, rerun, confirm it still works):
 #
 #   docker compose --profile cpu up -d
-#   docker network disconnect $(docker compose ps -q varuna | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') varuna-cpu-1 --force
+#   docker network disconnect $(docker compose ps -q slick-trace | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') slick-trace-cpu-1 --force
 #   curl http://localhost:8000/api/health   # should still succeed — no egress needed for this call
 #
 # (Re-attach the network afterwards if you want to keep using docker compose commands against it.)
 
 services:
-  varuna:
+  slick-trace:
     build:
       context: .
       dockerfile: Dockerfile
-    image: varuna-oiltrace:cpu
+    image: slick-trace-oiltrace:cpu
     profiles: ["cpu"]
     ports:
       - "8000:8000"
     volumes:
-      - varuna-data:/app/data   # named volume so incident data survives container restarts
+      - slick-trace-data:/app/data   # named volume so incident data survives container restarts
     restart: unless-stopped
 
 volumes:
-  varuna-data:
+  slick-trace-data:

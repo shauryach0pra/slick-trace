@@ -1,5 +1,5 @@
 """
-Frozen question suite for Ask VARUNA (masterplan p.15).
+Frozen question suite for Ask Slick Trace (masterplan p.15).
 
 The suite is frozen in the sense that it changes only deliberately: adding a
 question because the parser now handles it is fine, quietly deleting one

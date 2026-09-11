@@ -1,4 +1,4 @@
-"""Render the Ask VARUNA demo Q&A as a terminal-style screenshot."""
+"""Render the Ask Slick Trace demo Q&A as a terminal-style screenshot."""
 
 import os
 import sys

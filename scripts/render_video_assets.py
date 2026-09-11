@@ -32,7 +32,7 @@ def title_card(step_num: int, title: str, summary: str, out_path: str):
     f_summary = ImageFont.truetype(F_SANS, 24)
     f_wordmark = ImageFont.truetype(F_SEMI, 22)
 
-    d.text((70, 56), "VARUNA / OilTrace", font=f_wordmark, fill=TEXT_DIM)
+    d.text((70, 56), "Slick Trace / OilTrace", font=f_wordmark, fill=TEXT_DIM)
     d.line([(70, 96), (W - 70, 96)], fill=LINE, width=1)
 
     d.text((70, 280), f"STEP {step_num}", font=f_label, fill=TEAL)
@@ -89,7 +89,7 @@ STEP_CARDS = [
      "Backward hindcast envelope narrows five vessels to two or three genuine candidates."),
     (4, "Forward-replay attribution",
      "Beats the naive proximity baseline on the exact decoy trap it's designed to catch."),
-    (5, "Ask VARUNA",
+    (5, "Ask Slick Trace",
      "Seven grounded query intents, fully cited, with honest refusals on what it can't answer."),
     (6, "FastAPI + React app",
      "A real working dashboard, verified with an actual headless browser session."),

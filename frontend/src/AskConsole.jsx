@@ -36,7 +36,7 @@ export default function AskConsole({ incidentId, api }) {
   return (
     <div className="panel console-panel">
       <div className="panel-head">
-        <h2>Ask VARUNA</h2>
+        <h2>Ask Slick Trace</h2>
         <span className="tag">grounded query — no free-form generation</span>
       </div>
       <div className="console-history" ref={scrollRef}>

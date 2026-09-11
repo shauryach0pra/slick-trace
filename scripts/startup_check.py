@@ -24,7 +24,7 @@ REQUIRED_PATHS = {
 def check() -> bool:
     ok = True
     print("=" * 60)
-    print("VARUNA startup check")
+    print("Slick Trace startup check")
     print("=" * 60)
     print(f"host arch:      {platform.machine()}")
     print(f"host system:    {platform.system()} {platform.release()}")

@@ -72,6 +72,7 @@ silence.
 
 **The adversarial benchmark.** Generator configuration and case parameters
 (`varuna_core/synth_generator.py`, `CASE_PLAN` with its seeds and four families).
+Note: `varuna_core` is the technical module name; the project is called Slick Trace.
 This is the piece most reusable by others: it lets another team measure false
 attribution under decoy, moving-discharge, absent-source and crowded conditions
 without rebuilding the harness. Released after evaluation.

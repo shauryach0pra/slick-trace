@@ -46,7 +46,7 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
 
-## Ask VARUNA — frozen question suite
+## Ask Slick Trace — frozen question suite
 
 | Measure | Result |
 | --- | --- |

@@ -397,7 +397,7 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
               "picks it up automatically.")
             w("")
 
-    w("## Ask VARUNA — frozen question suite")
+    w("## Ask Slick Trace — frozen question suite")
     w("")
     w(f"| Measure | Result |")
     w(f"| --- | --- |")

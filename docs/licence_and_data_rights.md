@@ -96,7 +96,7 @@ reanalysis with the required Copernicus attribution statement.
 
 ## Open item for the team
 
-The `LICENSE` file names the copyright holder as "VARUNA / OilTrace team
+The `LICENSE` file names the copyright holder as "Slick Trace / OilTrace team
 (SIH26143)" and applies MIT terms. Both the licence choice and the holder line
 are the team's decision and should be confirmed before submission. MIT was chosen
 as a permissive default consistent with the handover position in Appendix C —

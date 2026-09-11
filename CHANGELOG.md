@@ -150,7 +150,7 @@ MIT, which `manifest.provenance.license` already referenced but which did not
 exist. Includes scope notes separating code from data.
 
 **Two fields are yours to confirm:** the licence choice, and the copyright
-holder line, currently "VARUNA / OilTrace team (SIH26143)".
+holder line, currently "Slick Trace / OilTrace team (SIH26143)".
 
 ### Added: three appendices
 

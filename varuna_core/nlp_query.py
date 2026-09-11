@@ -1,5 +1,5 @@
 """
-Ask VARUNA — grounded NLP query layer (masterplan p.5).
+Ask Slick Trace — grounded NLP query layer (masterplan p.5).
 
 Deliberately NOT a chatbot wrapping an LLM. Per the masterplan:
   "Use deterministic answer templates first ... Never execute arbitrary

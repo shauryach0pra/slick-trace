@@ -1,5 +1,5 @@
 """
-VARUNA backend — wires varuna_core into a real API.
+Slick Trace backend — wires varuna_core into a real API.
 
 Endpoints are intentionally thin: each reads artifacts already produced by the
 pipeline stages, or recomputes a cheap derived view (the backward envelope for
@@ -37,7 +37,7 @@ from varuna_core.report import build_report, render_markdown
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(REPO_ROOT, "data", "cases")
 
-app = FastAPI(title="VARUNA / OilTrace API", version="0.2.0")
+app = FastAPI(title="Slick Trace / OilTrace API", version="0.2.0")
 
 _kb_cache: dict[str, CaseKB] = {}
 _envelope_cache: dict[str, list] = {}
