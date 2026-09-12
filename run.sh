@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Launches the Slick Trace app: FastAPI backend serving the built React frontend
+# Launches the VARUNA app: FastAPI backend serving the built React frontend
 # as a single process on http://localhost:8000
 set -e
 cd "$(dirname "$0")"
@@ -13,10 +13,10 @@ if [ ! -d ".venv" ]; then
   echo "Python venv not found — creating one and installing requirements..."
   python3 -m venv .venv
   . .venv/bin/activate
-  pip install -r requirements.txt
+  pip install -r requirements.lock
 else
   . .venv/bin/activate
 fi
 
-echo "Starting Slick Trace at http://localhost:8000"
+echo "Starting VARUNA at http://localhost:8000"
 uvicorn backend.app:app --host 0.0.0.0 --port 8000
