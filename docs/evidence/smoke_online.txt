@@ -1,0 +1,10 @@
+Smoke test against http://localhost:8000
+
+  [PASS] health endpoint responds
+  [PASS] attribution top candidate is the true source  (got 419336692, expected 419336692 (role: true_source))
+  [PASS] top candidate IoU above tolerance  (iou=0.688, need >= 0.55)
+  [PASS] runner-up IoU below tolerance (not a near-tie)  (iou=0.087, need <= 0.3)
+  [PASS] naive baseline reproduces the known decoy trap (documents the improvement, not a bug)  (got 419824090, expected 419824090 (role: near_decoy))
+  [PASS] ask endpoint returns a supported, cited answer
+
+ALL CHECKS PASSED (6/6)

@@ -8,8 +8,13 @@
 # offline check below (disconnect networking, rerun, confirm it still works):
 #
 #   docker compose --profile cpu up -d
-#   docker network disconnect $(docker compose ps -q slicktrace | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') slicktrace-cpu-1 --force
-#   curl http://localhost:8000/api/health   # should still succeed — no egress needed for this call
+#   docker network disconnect slick-trace_default slick-trace-slicktrace-1
+#   docker exec slick-trace-slicktrace-1 python3 scripts/smoke_test.py
+#
+# Run the check INSIDE the container: disconnecting the network also removes
+# the host port forward, so localhost:8000 is unreachable from the host while
+# the container is offline. Reconnect afterwards with:
+#   docker network connect slick-trace_default slick-trace-slicktrace-1
 #
 # (Re-attach the network afterwards if you want to keep using docker compose commands against it.)
 

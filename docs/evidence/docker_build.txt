@@ -1,0 +1,88 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.32kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-slim
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 1.6s
+
+#2 [internal] load metadata for docker.io/library/node:20-slim
+#2 DONE 1.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 585B done
+#4 DONE 0.0s
+
+#5 [frontend-builder 1/6] FROM docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
+#5 resolve docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0 0.0s done
+#5 DONE 0.0s
+
+#6 [runtime  1/12] FROM docker.io/library/python:3.12-slim@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea
+#6 resolve docker.io/library/python:3.12-slim@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 14.36kB 0.0s done
+#7 DONE 0.0s
+
+#8 [runtime  4/12] RUN pip install --no-cache-dir -r requirements.lock
+#8 CACHED
+
+#9 [runtime  2/12] WORKDIR /app
+#9 CACHED
+
+#10 [runtime  7/12] COPY scripts/startup_check.py ./scripts/startup_check.py
+#10 CACHED
+
+#11 [runtime  3/12] COPY requirements.lock ./
+#11 CACHED
+
+#12 [runtime  5/12] COPY backend/ ./backend/
+#12 CACHED
+
+#13 [runtime  6/12] COPY slicktrace_core/ ./slicktrace_core/
+#13 CACHED
+
+#14 [runtime  8/12] COPY scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
+#14 CACHED
+
+#15 [frontend-builder 2/6] WORKDIR /app/frontend
+#15 CACHED
+
+#16 [frontend-builder 5/6] COPY frontend/ ./
+#16 CACHED
+
+#17 [frontend-builder 3/6] COPY frontend/package.json frontend/package-lock.json ./
+#17 CACHED
+
+#18 [frontend-builder 4/6] RUN npm ci
+#18 CACHED
+
+#19 [frontend-builder 6/6] RUN npm run build
+#19 CACHED
+
+#20 [runtime  9/12] COPY scripts/smoke_test.py ./scripts/smoke_test.py
+#20 DONE 0.0s
+
+#21 [runtime 10/12] COPY data/cases/ ./data/cases/
+#21 DONE 0.0s
+
+#22 [runtime 11/12] COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+#22 DONE 0.0s
+
+#23 [runtime 12/12] RUN chmod +x ./scripts/docker-entrypoint.sh
+#23 DONE 0.1s
+
+#24 exporting to image
+#24 exporting layers 0.1s done
+#24 exporting manifest sha256:30da2e3e93d717afd97036648de5a2eb35278e4c25885b4b3c9d2aa8c8701566 done
+#24 exporting config sha256:3ef1ec8a5a6ca9af3941bf5f6ede56a16a492bfd79439b3b7bf4eede3bf69a72 done
+#24 exporting attestation manifest sha256:a8fa43a04dc6d76c6a9e666032f5cb08703787894b636719fcdc52f15a8f23c8 done
+#24 exporting manifest list sha256:3e8de08f5348259b66d6c95e2caf497f635f4dff9690422ea48d0ec6b8047925 done
+#24 naming to docker.io/library/slicktrace:cpu done
+#24 unpacking to docker.io/library/slicktrace:cpu 0.0s done
+#24 DONE 0.1s

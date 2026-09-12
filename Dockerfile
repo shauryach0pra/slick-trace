@@ -33,9 +33,10 @@ COPY requirements.lock ./
 RUN pip install --no-cache-dir -r requirements.lock
 
 COPY backend/ ./backend/
-COPY varuna_core/ ./varuna_core/
+COPY slicktrace_core/ ./slicktrace_core/
 COPY scripts/startup_check.py ./scripts/startup_check.py
 COPY scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
+COPY scripts/smoke_test.py ./scripts/smoke_test.py
 # Bake in the synthetic demo case so a fresh container has something to show
 # immediately — the "incident capsule" idea from the masterplan (p.6): data,
 # results, and launch instructions travel together.

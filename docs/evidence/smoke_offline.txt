@@ -1,0 +1,15 @@
+Smoke test against http://localhost:8000
+
+  [note] truth sidecar unavailable — identity of the expected winner cannot be
+         checked from here. Falling back to structural checks: the two IoU
+         tolerances still apply, and the naive baseline must still disagree
+         with the method. Run from the repo checkout for the full check.
+
+  [PASS] health endpoint responds
+  [PASS] attribution named a candidate (did not abstain on a source-present case)  (got 419336692)
+  [PASS] top candidate IoU above tolerance  (iou=0.688, need >= 0.55)
+  [PASS] runner-up IoU below tolerance (not a near-tie)  (iou=0.087, need <= 0.3)
+  [PASS] naive baseline disagrees with forward replay (the improvement this case exists to show)  (naive picked 419824090)
+  [PASS] ask endpoint returns a supported, cited answer
+
+ALL CHECKS PASSED (6/6)

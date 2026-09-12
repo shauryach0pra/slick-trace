@@ -11,8 +11,8 @@
 #   python3 -m venv .venv && . .venv/bin/activate
 #   pip install -r requirements.txt
 #   pip freeze > requirements.lock
-#   python3 -m varuna_core.synth_generator && python3 -m varuna_core.hindcast \
-#     && python3 -m varuna_core.attribution   # then confirm artifacts are unchanged
+#   python3 -m slicktrace_core.synth_generator && python3 -m slicktrace_core.hindcast \
+#     && python3 -m slicktrace_core.attribution   # then confirm artifacts are unchanged
 
 annotated-doc==0.0.5
 annotated-types==0.8.0
