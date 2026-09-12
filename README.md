@@ -214,7 +214,7 @@ curl http://localhost:8000/api/health
 | Document | Contents |
 |----------|----------|
 | `docs/validation_report.md` | Measured results: attribution, abstention, detection, NLP, coverage, next-observation, runtime, ablations |
-| `docs/assumptions_register.md` | 13 modelling assumptions with code locators and failure modes |
+| `docs/assumptions_register.md` | 14 modelling assumptions with code locators and failure modes |
 | `docs/licence_and_data_rights.md` | Code vs data licensing terms and real-world deployment requirements |
 | `docs/sustainability_and_ownership.md` | Running costs, refresh cadence, handover position, roadmap |
 | `docs/runtime.json` | Per-stage timings with hardware specifications |

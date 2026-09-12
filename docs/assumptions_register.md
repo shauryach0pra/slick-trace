@@ -261,6 +261,32 @@ source's track removed from the manifest entirely. The correct output is
 
 ---
 
+### A14 · The truth sidecar is excluded from the shipped image
+
+**Where:** `Dockerfile:35-41` (copies `backend/`, `slicktrace_core/`,
+`scripts/startup_check.py`, `scripts/docker-entrypoint.sh`,
+`scripts/smoke_test.py` and `data/cases/` — the truth sidecar is not among them)
+
+**Why.** If the container held both the question and its answer key, the offline
+result could not be cleanly distinguished from a system that had been told what
+to find. Keeping the sidecar out means the shipped artifact cannot self-confirm
+an identity it was handed. `--reveal-truth` remains a development-only flag and
+is not reachable from the API or the interface.
+
+**What breaks if it is wrong.** The offline acceptance check cannot verify *which*
+vessel was expected, only that the structure of the result holds. A wrong answer
+would have to survive both IoU tolerances and still disagree with the naive
+baseline in the right direction.
+
+**How it is bounded.** The offline check falls back to structural verification and
+says so in its own output rather than passing silently. Identity is verified
+separately from the repo checkout, where the sidecar is present. Both runs on
+12 Sep produced identical figures — IoU 0.688 / 0.087, top 419336692, naive
+419824090 — recorded in `docs/evidence/smoke_online.txt` and
+`docs/evidence/smoke_offline.txt`.
+
+---
+
 ## Assumptions this system does *not* make
 
 Recorded because their absence is deliberate and a reviewer may look for them:
