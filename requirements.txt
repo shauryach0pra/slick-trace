@@ -1,28 +1,22 @@
-# Pinned exactly, per masterplan §17 ("locked dependencies") and Appendix C
-# ("pinned dependencies and recorded hashes mean a rebuild years later
-# reproduces the same environment"). Unpinned names meant a rebuild next month
-# could pick up a different numpy or scipy and quietly miss the declared
-# numeric tolerances in scripts/smoke_test.py.
+# Direct dependencies — a human-readable declaration of what VARUNA depends on.
 #
-# Versions are the ones every result in docs/validation_report.md was produced
-# under. Bump deliberately, then re-run:
-#   python3 scripts/run_pipeline.py --regenerate
-#   python3 scripts/run_validation.py
-#   python3 -m pytest tests/ -q
-#   python3 scripts/smoke_test.py
+# DO NOT INSTALL FROM THIS FILE. Builds install from requirements.lock, which
+# pins these plus every transitive dependency to an exact version. Installing
+# from here resolves to whatever is current today, which means an image built
+# in November is not the environment the demo was recorded against.
+#
+# Change this file when adding or removing a dependency, then regenerate the
+# lock (instructions in requirements.lock) and re-run the pipeline to confirm
+# case_0001 still reproduces.
 #
 # torch is deliberately absent: it is needed only for the optional offline
-# U-Net training in scripts/train_unet.py and must never enter the served
-# image (see Dockerfile header).
+# U-Net training in scripts/train_unet.py, never by the served application.
 
-numpy==2.4.4
-scipy==1.17.1
-matplotlib==3.10.8
-pydantic==2.13.5
-pillow==12.1.1
-fastapi==0.141.1
-uvicorn[standard]==0.52.4
-httpx==0.28.1
-
-# Test-only; not imported by the served application.
-pytest==9.1.1
+numpy
+scipy
+matplotlib
+pydantic>=2
+pillow
+fastapi
+uvicorn[standard]
+httpx
