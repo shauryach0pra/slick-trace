@@ -1,4 +1,4 @@
-# VARUNA / OilTrace — CPU reference image.
+# Slick Trace — CPU reference image.
 #
 # GPU/torch is NOT part of this image: the served app (detection results,
 # hindcast, attribution, NLP, API, UI) only needs the packages in

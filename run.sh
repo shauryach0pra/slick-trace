@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Launches the VARUNA app: FastAPI backend serving the built React frontend
+# Launches the Slick Trace app: FastAPI backend serving the built React frontend
 # as a single process on http://localhost:8000
 set -e
 cd "$(dirname "$0")"
@@ -18,5 +18,5 @@ else
   . .venv/bin/activate
 fi
 
-echo "Starting VARUNA at http://localhost:8000"
+echo "Starting Slick Trace at http://localhost:8000"
 uvicorn backend.app:app --host 0.0.0.0 --port 8000

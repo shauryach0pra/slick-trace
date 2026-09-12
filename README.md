@@ -80,7 +80,7 @@ slicktrace/
 ```bash
 # Create virtual environment and install dependencies
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.lock -r requirements-dev.lock
 
 # Install frontend dependencies
 cd frontend

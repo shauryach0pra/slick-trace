@@ -1,0 +1,13 @@
+# Slick Trace — development-only dependencies.
+#
+# Install AFTER requirements.lock. Deliberately separate: these are not in the
+# runtime lock because the Docker image must not carry test tooling.
+#
+#   pip install -r requirements.lock -r requirements-dev.lock
+#
+# Needed to run: python3 -m pytest tests/ -q   (expect 119 passed)
+
+iniconfig==2.3.0
+pluggy==1.6.0
+pygments==2.21.0
+pytest==9.1.1

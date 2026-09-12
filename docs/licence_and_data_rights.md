@@ -23,7 +23,7 @@ version rather than a placeholder.
 | Coastline and sensitive areas | Generated, fictional | Repository licence | Yes | None |
 | Vessel identities | Fictional MMSIs in the 419 (India MID) range | Repository licence | Yes | None |
 | Fonts | `@fontsource` packages, self-hosted | SIL Open Font License 1.1 | Yes, with OFL notice | Per OFL |
-| Python dependencies | PyPI, pinned in `requirements.txt` | Respective upstream licences | Per upstream | Per upstream |
+| Python dependencies | PyPI, pinned in `requirements.lock` | Respective upstream licences | Per upstream | Per upstream |
 | JS dependencies | npm, locked in `frontend/package-lock.json` | Respective upstream licences | Per upstream | Per upstream |
 
 Each case manifest carries its own `data_licence` field and a `label_source`

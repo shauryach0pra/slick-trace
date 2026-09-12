@@ -18,7 +18,7 @@ viewports, and the built CSS contains no `https://` references because fonts are
 packaged via `@fontsource`. The application therefore cannot break because a
 third-party service changed or a key expired.
 
-**Pinned dependencies.** `requirements.txt` pins all nine Python packages
+**Pinned dependencies.** `requirements.lock` pins all 34 Python packages (nine direct, the rest transitive)
 exactly, and `frontend/package-lock.json` locks the JS tree. A rebuild later
 reproduces the same environment, subject only to base-image availability. Every
 number in `docs/validation_report.md` was produced under the pinned versions.

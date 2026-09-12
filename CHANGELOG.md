@@ -193,7 +193,7 @@ components this session wired up.
 Run from a clean extraction of this zip:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.lock -r requirements-dev.lock
 python3 scripts/run_pipeline.py --regenerate   # ~32 s, six cases
 python3 scripts/run_validation.py
 python3 -m pytest tests/ -q                    # 119 passed

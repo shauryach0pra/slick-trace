@@ -1,4 +1,4 @@
-# VARUNA / OilTrace — fully pinned runtime environment (direct + transitive).
+# Slick Trace — fully pinned runtime environment (direct + transitive).
 #
 # THIS is what every build installs from. requirements.txt is the human-readable
 # declaration of direct dependencies only; it is not used to install anything.

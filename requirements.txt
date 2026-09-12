@@ -1,4 +1,4 @@
-# Direct dependencies — a human-readable declaration of what VARUNA depends on.
+# Direct dependencies — a human-readable declaration of what Slick Trace depends on.
 #
 # DO NOT INSTALL FROM THIS FILE. Builds install from requirements.lock, which
 # pins these plus every transitive dependency to an exact version. Installing
