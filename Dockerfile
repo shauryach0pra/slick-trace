@@ -1,4 +1,4 @@
-# Slick Trace — CPU reference image.
+# VARUNA / OilTrace — CPU reference image.
 #
 # GPU/torch is NOT part of this image: the served app (detection results,
 # hindcast, attribution, NLP, API, UI) only needs the packages in
@@ -25,27 +25,21 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# Install from the lock, never from requirements.txt: the lock pins every
+# direct and transitive dependency to an exact version, so a rebuild months
+# from now produces the same environment the demo was recorded against
+# (masterplan p.13, Appendix C). requirements.txt is a declaration only.
+COPY requirements.lock ./
+RUN pip install --no-cache-dir -r requirements.lock
 
 COPY backend/ ./backend/
-COPY slicktrace_core/ ./slicktrace_core/
+COPY varuna_core/ ./varuna_core/
 COPY scripts/startup_check.py ./scripts/startup_check.py
 COPY scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
-# Bake in the synthetic demo cases so a fresh container has something to show
+# Bake in the synthetic demo case so a fresh container has something to show
 # immediately — the "incident capsule" idea from the masterplan (p.6): data,
 # results, and launch instructions travel together.
-#
-# These land in data_seed/, NOT data/. docker-compose mounts a named volume at
-# /app/data so incident data survives restarts (p.6), and a named volume is
-# only populated from the image the FIRST time it is created. Copying straight
-# to /app/data would mean that every rebuild after that is silently masked by
-# the stale volume — the container would serve old results while reporting a
-# new image. The entrypoint syncs seed -> volume whenever the ids differ.
-COPY data/cases/ ./data_seed/cases/
-RUN find ./data_seed/cases -type f -exec sha256sum {} \; \
-    | sort -k2 | sha256sum | cut -d' ' -f1 > /tmp/seed_id \
-    && mv /tmp/seed_id ./data_seed/.seed_id
+COPY data/cases/ ./data/cases/
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
 RUN chmod +x ./scripts/docker-entrypoint.sh
