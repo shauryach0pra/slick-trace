@@ -88,6 +88,18 @@ npm install
 cd ..
 ```
 
+
+> **macOS 26 note.** `python3 -m venv` fails at `ensurepip` on macOS 26 — pip
+> cannot parse the OS version and raises `ValueError`. This is a pip/macOS
+> incompatibility, not a project defect. Use `uv` instead:
+>
+> ```bash
+> uv venv --python 3.12 .venv
+> uv pip install --python .venv/bin/python -r requirements.lock -r requirements-dev.lock
+> ```
+>
+> If `./run.sh` reports permission denied, run `chmod +x run.sh`.
+
 **Docker Deployment:**
 
 ```bash
@@ -245,6 +257,40 @@ This system currently uses synthetic data for demonstration. To deploy with real
 ### License
 
 MIT License — see `LICENSE` file for details. Note scope notes separating code from data rights.
+Source licences, redistribution status and required attribution strings for every
+dataset are recorded in `docs/licence_and_data_rights.md`.
+
+---
+
+### Maintainer and handover
+
+**Shaurya Chopra** — shauryachopra@zohomail.in — [github.com/shauryach0pra](https://github.com/shauryach0pra)
+
+Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
+
+Built and maintained by one person. Continuity does not rest on a second reader
+being available: six cases regenerate bit-identically from fixed seeds, 119
+automated tests run on every regeneration, and a scripted acceptance check
+verifies the frozen case against declared tolerances. A no-obligation handover —
+code, manifests, assumptions register, licence appendix and validation report —
+is offered to the evaluating body; see `docs/sustainability_and_ownership.md`.
+Source licences, redistribution status and required attribution strings for every
+dataset are recorded in `docs/licence_and_data_rights.md`.
+
+---
+
+### Maintainer and handover
+
+**Shaurya Chopra** — shauryachopra@zohomail.in — [github.com/shauryach0pra](https://github.com/shauryach0pra)
+
+Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
+
+Built and maintained by one person. Continuity does not rest on a second reader
+being available: six cases regenerate bit-identically from fixed seeds, 119
+automated tests run on every regeneration, and a scripted acceptance check
+verifies the frozen case against declared tolerances. A no-obligation handover —
+code, manifests, assumptions register, licence appendix and validation report —
+is offered to the evaluating body; see `docs/sustainability_and_ownership.md`.
 
 ---
 

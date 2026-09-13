@@ -54,17 +54,17 @@ operation.
 
 Stating a position rather than leaving it open:
 
-The team retains the repository and the released benchmark under the stated open
+Slick Trace retains the repository and the released benchmark under the stated open
 licence (`LICENSE`, MIT). The evaluating body is offered a **no-obligation
 handover** — code, manifests, assumptions register, licence appendix and
 validation report — if it wishes to take the work further. No support commitment
 is implied and none is offered; an explicit modest answer is stronger than
 silence.
 
-> **Open item for the team.** Name the maintaining member and a contact route in
-> the README before submission. This is the one field in this appendix that
-> cannot be filled from the repository, and leaving it blank weakens a handover
-> offer that is otherwise concrete.
+**Maintainer.** Shaurya Chopra — shauryachopra@zohomail.in —
+[github.com/shauryach0pra](https://github.com/shauryach0pra). Slick Trace was
+built and is maintained by one person; the handover offer above is made on that
+basis and is not contingent on a wider group remaining available.
 
 ---
 

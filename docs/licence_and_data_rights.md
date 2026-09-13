@@ -94,11 +94,10 @@ reanalysis with the required Copernicus attribution statement.
 
 ---
 
-## Open item for the team
+## Licence position
 
-The `LICENSE` file names the copyright holder as "Slick Trace team
-(SIH26143)" and applies MIT terms. Both the licence choice and the holder line
-are the team's decision and should be confirmed before submission. MIT was chosen
+The `LICENSE` file names the copyright holder as Shaurya Chopra
+(SIH26143, Team Untangle) and applies MIT terms. MIT was chosen
 as a permissive default consistent with the handover position in Appendix C —
 offering the evaluating body the code, manifests, assumptions register and
 validation report with no obligation attached.
