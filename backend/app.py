@@ -30,6 +30,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+from slicktrace_core.ais_quality import validate_track
 from slicktrace_core.identity import parse_mmsi
 from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
 from slicktrace_core.nlp_query import CaseKB, ask as ask_nlp
@@ -200,6 +201,7 @@ def get_tracks(incident_id: str):
         # how it is displayed. Provenance only, never an input to ranking.
         "tracks": [{"vessel_key": t["vessel_key"], "mmsi": t.get("mmsi"),
                     "identity": parse_mmsi(t.get("mmsi") or t["vessel_key"]),
+                    "quality": validate_track(t),
                     "fixes": t["fixes"]} for t in m["tracks"]],
     })
 
