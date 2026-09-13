@@ -80,6 +80,20 @@ def _boundary_lonlat(mask: np.ndarray, bbox: dict) -> list[list[float]]:
     return out[::step]
 
 
+import inspect as _inspect
+
+
+def _detector_defaults() -> dict:
+    """Read the detector's own defaults rather than restating them here, so the
+    recorded provenance cannot drift away from the code that produced the mask."""
+    sig = _inspect.signature(predict_mask)
+    return {k: v.default for k, v in sig.parameters.items()
+            if v.default is not _inspect.Parameter.empty}
+
+
+_DEFAULTS = _detector_defaults()
+
+
 def characterise(case_dir: str) -> dict:
     manifest = json.load(open(os.path.join(case_dir, "manifest.json")))
     scene = np.array(Image.open(os.path.join(case_dir, "scene.png")).convert("L"))
@@ -151,6 +165,20 @@ def characterise(case_dir: str) -> dict:
         "incident_id": manifest["incident_id"],
         "detector": "classical baseline (local-contrast threshold, "
                     "connected components, uniformity rejection)",
+        # Which detector, at which settings, produced this mask. Recorded on the
+        # artifact rather than left to be inferred from whichever version of the
+        # source happens to be checked out: a mask without its parameters cannot
+        # be reproduced or argued with, and the threshold in particular is a
+        # chosen operating point rather than an optimum (see the operating-point
+        # curve in the validation report).
+        "detector_params": {
+            "dark_thresh_pct": _DEFAULTS["dark_thresh_pct"],
+            "min_region_px": _DEFAULTS["min_region_px"],
+            "uniformity_std_max": _DEFAULTS["uniformity_std_max"],
+            "boundary_count_bias": BOUNDARY_COUNT_BIAS,
+            "note": ("threshold is a fraction of the scene median, not an absolute "
+                     "level; it adapts to scene brightness but not to scene contrast"),
+        },
         "detected": True,
         "case_state": manifest.get("case_state", "potential_slick"),
         "geometry": {

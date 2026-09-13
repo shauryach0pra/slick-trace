@@ -1,6 +1,13 @@
 {
   "incident_id": "case_0006",
   "detector": "classical baseline (local-contrast threshold, connected components, uniformity rejection)",
+  "detector_params": {
+    "dark_thresh_pct": 75,
+    "min_region_px": 60,
+    "uniformity_std_max": 45.0,
+    "boundary_count_bias": 0.89,
+    "note": "threshold is a fraction of the scene median, not an absolute level; it adapts to scene brightness but not to scene contrast"
+  },
   "detected": true,
   "case_state": "potential_slick",
   "geometry": {
