@@ -46,6 +46,38 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
 
+## Detection on the case scenes — characterisation
+
+Separate from the table above, and measuring something different. The rows above
+score the detector on a benchmark split built to be hard: look-alikes and clean
+water are deliberately confusable. The rows below are the same detector run over
+the six incident scenes the attribution pipeline actually consumes, where the
+slick is the dominant feature.
+
+| Case | Family | Area (km²) | Perimeter (km) | Major × minor (km) | Elongation | Bearing | IoU vs truth mask |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| case_0001 | decoy | 316.78 | 178.73 | 22.44 × 19.42 | 1.16 | 71.6° | 0.9186 |
+| case_0002 | moving discharge | 368.86 | 178.73 | 24.77 × 20.34 | 1.22 | 126.0° | 0.9153 |
+| case_0003 | absent source | 313.40 | 166.63 | 21.28 × 20.35 | 1.05 | 80.9° | 0.9199 |
+| case_0004 | crowded | 289.52 | 136.97 | 20.48 × 19.13 | 1.07 | 9.2° | 0.9232 |
+| case_0005 | decoy | 309.45 | 167.80 | 21.07 × 20.41 | 1.03 | 6.3° | 0.9078 |
+| case_0006 | absent source | 339.34 | 173.26 | 22.47 × 20.77 | 1.08 | 85.9° | 0.9222 |
+
+> **These two IoU figures are not comparable and neither supersedes the other.**
+> 0.676 / 0.688 is the detector on a split designed to trap it. 0.91–0.92 is the
+> same detector on the incident scenes. Quoting only the higher number would
+> misrepresent the detector; quoting only the lower would misrepresent the
+> characterisation feeding attribution. Both are reported.
+
+> Geometry is measured on the pixel grid at the manifest's `pixel_spacing_m` — a
+> local planar approximation over a scene of this size, not a reprojection into
+> the declared metric CRS (EPSG:32643). Axis lengths are 2-sigma extents along
+> the principal axes; the perimeter carries a 0.90 correction for the staircase
+> effect of a pixelated outline. See assumption A15.
+
+> The truth-mask IoU exists only because these are synthetic cases with a
+> generator label. On real imagery the field would be absent, not zero.
+
 ## Ask Slick Trace — frozen question suite
 
 | Measure | Result |

@@ -287,6 +287,32 @@ separately from the repo checkout, where the sidecar is present. Both runs on
 
 ---
 
+### A15 · Slick geometry is measured on the pixel grid, not reprojected
+
+**Where:** `slicktrace_core/detection_geometry.py` (`characterise`)
+
+**Why.** The manifest declares a metric CRS (EPSG:32643, UTM 43N), but the
+repository has no reprojection dependency and adding one days before a freeze
+would put a working pipeline at risk for a second-order gain. Over a scene one
+degree across, treating the pixel grid as locally planar at the manifest's
+`pixel_spacing_m` introduces error well below the uncertainty already present in
+the detector's own boundary.
+
+**What breaks if it is wrong.** Area, axis lengths and bearing would be
+systematically distorted — increasingly so at higher latitudes or across a wider
+scene. Elongation, being a ratio, is the most robust of the reported figures;
+absolute area is the least.
+
+**How it is bounded.** The approximation is stated in every artifact that carries
+the geometry (`measurement_note` in `detection_result.json`) and in the interface,
+rather than the declared CRS being allowed to imply a rigour the method does not
+have. Axis lengths are 2-sigma extents along the principal axes, not maximum
+calipers. The perimeter carries a 0.90 correction because a pixelated outline is
+roughly 11% longer than the smooth curve beneath it; that factor is a documented
+convention, not a measurement.
+
+---
+
 ## Assumptions this system does *not* make
 
 Recorded because their absence is deliberate and a reviewer may look for them:
