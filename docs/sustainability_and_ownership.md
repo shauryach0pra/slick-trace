@@ -25,7 +25,7 @@ number in `docs/validation_report.md` was produced under the pinned versions.
 
 **Deterministic regeneration.** `scripts/run_pipeline.py --regenerate` rebuilds
 every case from its seed and recomputes every artifact. Verified: a full
-regeneration produces bit-identical artifacts across all eight cases and eight
+regeneration produces byte-identical analysis artifacts across all eight cases and eight
 artifact types. Nothing shown to a reviewer depends on a file that cannot be
 regenerated, which means there is no state to preserve and no archive to
 maintain.
