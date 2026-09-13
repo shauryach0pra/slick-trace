@@ -95,9 +95,24 @@ def characterise(case_dir: str) -> dict:
 
     # perimeter from boundary pixels, corrected for the staircase effect that
     # makes a pixelated outline ~11% longer than the underlying smooth curve
-    from scipy.ndimage import binary_erosion
-    boundary_px = int((pred - binary_erosion(pred).astype(np.uint8)).sum())
-    perimeter_km = boundary_px * spacing_m * 0.90 / 1000.0
+    from scipy.ndimage import binary_erosion, binary_fill_holes
+    # Perimeter measures the region OUTLINE, so interior speckle holes are
+    # filled first. Without this every single-pixel hole that survived the
+    # darkness threshold contributes its own closed boundary: on case_0001 that
+    # was 87 holes turning a 145-pixel outline into 458, and a 71 km perimeter
+    # into 179 km. Filling applies to the measurement copy only — `pred` is
+    # untouched, because changing the mask would silently alter the IoU this
+    # detector is scored on.
+    outline_src = binary_fill_holes(pred.astype(bool))
+    boundary_px = int((outline_src & ~binary_erosion(outline_src)).sum())
+    n_holes_filled = int(outline_src.sum() - pred.sum())
+    # Correction calibrated empirically, not assumed: a 4-connected boundary
+    # count on a digitised disc measures 0.89x the true circumference, stable
+    # across radii 10-40 px. The previous constant here was 0.90, which pushed
+    # the estimate the wrong way and drove the isoperimetric ratio below 1.0 —
+    # geometrically impossible for any closed shape.
+    BOUNDARY_COUNT_BIAS = 0.89
+    perimeter_km = boundary_px * spacing_m / BOUNDARY_COUNT_BIAS / 1000.0
 
     return {
         "incident_id": manifest["incident_id"],
@@ -108,6 +123,7 @@ def characterise(case_dir: str) -> dict:
         "geometry": {
             "area_km2": round(area_km2, 2),
             "perimeter_km": round(perimeter_km, 2),
+            "interior_holes_filled_px": n_holes_filled,
             "major_axis_km": round(major_m / 1000.0, 2),
             "minor_axis_km": round(minor_m / 1000.0, 2),
             "elongation": round(major_m / max(minor_m, 1e-9), 2),

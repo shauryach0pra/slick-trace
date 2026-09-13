@@ -5,7 +5,8 @@
   "case_state": "potential_slick",
   "geometry": {
     "area_km2": 379.76,
-    "perimeter_km": 202.53,
+    "perimeter_km": 95.97,
+    "interior_holes_filled_px": 105,
     "major_axis_km": 26.15,
     "minor_axis_km": 20.26,
     "elongation": 1.29,

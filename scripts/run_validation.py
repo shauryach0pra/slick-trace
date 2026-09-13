@@ -444,6 +444,49 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
               "picks it up automatically.")
             w("")
 
+    # Characterisation on the case scenes, generated rather than hand-written:
+    # an earlier version of this section was edited into the markdown directly
+    # and was silently destroyed the next time this script ran.
+    import glob as _glob
+    det_rows = []
+    for _f in sorted(_glob.glob("data/cases/*/detection_result.json")):
+        _d = json.load(open(_f))
+        _g = _d.get("geometry")
+        if not _g:
+            continue
+        _c = (_g["perimeter_km"] ** 2) / (4 * math.pi * _g["area_km2"])
+        det_rows.append((_d["incident_id"], _g, _c,
+                         (_d.get("agreement_with_truth_mask") or {}).get("iou")))
+    if det_rows:
+        w("## Detection on the case scenes \u2014 characterisation")
+        w("")
+        w("Separate from the split above, and measuring something different. Those rows "
+          "score the detector on a benchmark built to be hard. These are the same "
+          "detector over the eight incident scenes the attribution pipeline consumes, "
+          "where the slick is the dominant feature.")
+        w("")
+        w("| Case | Area km\u00b2 | Perimeter km | Major \u00d7 minor km | Elongation | "
+          "Complexity | Bearing | IoU vs truth |")
+        w("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        for _id, _g, _c, _iou in det_rows:
+            w(f"| {_id} | {_g['area_km2']} | {_g['perimeter_km']} | "
+              f"{_g['major_axis_km']} \u00d7 {_g['minor_axis_km']} | {_g['elongation']} | "
+              f"{_c:.2f} | {_g['orientation_deg_from_north']}\u00b0 | {_iou} |")
+        w("")
+        w("> **These IoU figures are not comparable to the split above and neither "
+          "supersedes the other.** The split is the detector on a task designed to trap "
+          "it; these are the same detector on the incident scenes. Quoting only the "
+          "higher number would misrepresent the detector.")
+        w("")
+        w("> **Complexity** is the isoperimetric ratio P\u00b2/4\u03c0A \u2014 1.0 for a "
+          "circle, rising with raggedness. It is bounded below by 1.0 for any closed "
+          "shape, which is the check that caught a perimeter defect: interior speckle "
+          "holes were each contributing a closed boundary, inflating perimeter 3.15x and "
+          "driving the ratio to 8.0. Holes are now filled for the outline measurement "
+          "only, and the boundary-count correction is calibrated against a digitised "
+          "disc (0.89x) rather than assumed.")
+        w("")
+
     w("## Ask Slick Trace — frozen question suite")
     w("")
     w(f"| Measure | Result |")
