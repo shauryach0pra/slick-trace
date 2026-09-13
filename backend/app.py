@@ -30,6 +30,7 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+from slicktrace_core.identity import parse_mmsi
 from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
 from slicktrace_core.nlp_query import CaseKB, ask as ask_nlp
 from slicktrace_core.report import build_report, render_markdown
@@ -194,7 +195,11 @@ def get_tracks(incident_id: str):
         "bbox": m["bbox"],
         "coastline": m.get("coastline", []),
         "sensitive_areas": m.get("sensitive_areas", []),
+        # MMSI structure is resolved here rather than in the interface: what a
+        # nine-digit identifier means is a property of the identifier, not of
+        # how it is displayed. Provenance only, never an input to ranking.
         "tracks": [{"vessel_key": t["vessel_key"], "mmsi": t.get("mmsi"),
+                    "identity": parse_mmsi(t.get("mmsi") or t["vessel_key"]),
                     "fixes": t["fixes"]} for t in m["tracks"]],
     })
 
