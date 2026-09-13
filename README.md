@@ -254,11 +254,32 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 
 ### Real Data Integration
 
-This system currently uses synthetic data for demonstration. To deploy with real-world data:
+This system runs on synthetic data by design: the generator owns the ground
+truth, which is what makes the decoy, absent-source and crowded-traffic families
+testable at all. No real dataset can tell you which vessel actually caused a
+given slick, so the measured 4/4 against 0/4 could not be produced on real
+imagery.
 
-1. Download Zenodo Sentinel-1 oil-spill dataset (Parts I/II/III) and DMA or NOAA AIS extracts
-2. Write an adapter mapping them into `slicktrace_core.schema.SceneObservation` / `VesselTrack` with `Provenance.status = OBSERVED` (keeping existing module structure)
-3. No other changes required — every pipeline stage reads the schema, not the source format
+The path to real data is an adapter, not a rewrite — every pipeline stage reads
+`slicktrace_core.schema`, not a source format. Named candidates, with the work
+each implies:
+
+| Layer | Candidate | Effort and caveat |
+|---|---|---|
+| SAR imagery | Zenodo Sentinel-1 oil-spill dataset, Parts I–III | ~96 GB. Part II negatives are essential: its look-alike masks are zero-valued oil masks, not outlines of the look-alike |
+| Ship contacts | `allenai/vessel-detection-sentinels` | Production models from Skylight; would replace the stand-in contact detector behind the coverage metrics |
+| AIS decoding | `pyais` | Message-level only |
+| AIS tracks | MovingPandas, or AISdb for larger extracts | MovingPandas is in-memory; AISdb adds a database but scales |
+| Transport | OpenDrift / OpenOil | **GPL v2 — would require relicensing this repository from MIT.** See `docs/licence_and_data_rights.md` |
+| Oil properties | NOAA ADIOS (`adios_db`) | Unencumbered. Would replace blind variation of density and windage with measured values |
+| Shoreline | GSHHG | LGPL library over public-domain data |
+| Protected areas | WDPA via `pywdpa` | Mandatory attribution string in README, report export and interface |
+| Forcing | Copernicus ERA5 and Marine reanalysis | Accounts and attribution required |
+
+Two things would then need re-establishing rather than assuming: detection
+metrics against real look-alikes, and the fact that real cases have no source
+label, so attribution accuracy becomes unmeasurable without independently
+confirmed incidents.
 
 ---
 
