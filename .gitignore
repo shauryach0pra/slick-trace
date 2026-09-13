@@ -4,3 +4,9 @@ frontend/dist/
 __pycache__/
 *.pyc
 .DS_Store
+
+# Calibration set — 60 generated cases, regenerable from seeds
+data/calibration/
+
+# Calibration set — 60 generated cases, regenerable from seeds
+data/calibration/

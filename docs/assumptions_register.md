@@ -211,8 +211,10 @@ which is the honest reading at n = 2.
 **Where:** `slicktrace_core/fragility.py:204-206`; wording enforced across the
 report and interface
 
-**Why.** No calibration against held-out outcomes exists. Calibration would
-require observed source outcomes this project does not have.
+**Why.** No calibration against *real* outcomes exists, and one cannot: that
+would require confirmed source attributions this project does not have. A
+calibration against *synthetic* truth is possible and has now been run — see
+`docs/calibration_report.md` — but it measures the generator, not the ocean.
 
 **What breaks if it is wrong.** "Leads in 8 of 10 variants" read as "80% likely
 responsible" is the single most damaging misreading available, and it is an easy
@@ -222,6 +224,14 @@ one to invite by accident.
 Calibration language is avoided throughout the interface, the report and the
 validation document. The fragility output carries the disclaimer inline rather
 than relying on a footnote elsewhere.
+
+**Measured, not merely asserted.** 60 separately generated cases yield 236
+(score, outcome) pairs across all candidates, winners and losers. Held out:
+Brier 0.0118, ECE 0.0395. Isotonic calibration halves ECE to 0.0169 and raises
+Brier to 0.0169 — it sharpens near-extremes rather than correcting a real
+miscalibration, because there was little to correct. The caution above stands
+and is now conservative rather than unquantified: the score behaves well on this
+generator, and that is still not a probability of responsibility.
 
 ---
 
