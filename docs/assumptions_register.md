@@ -255,7 +255,7 @@ that is absent from the image.
 **What breaks if it is wrong.** Assuming the source is always among the observed
 candidates guarantees a wrong answer in exactly the cases that matter most.
 
-**How it is bounded.** Two of six cases are built this way, with the true
+**How it is bounded.** Two of eight cases are built this way, with the true
 source's track removed from the manifest entirely. The correct output is
 `unknown source`, and it is tested rather than assumed.
 

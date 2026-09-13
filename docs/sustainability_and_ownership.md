@@ -25,12 +25,12 @@ number in `docs/validation_report.md` was produced under the pinned versions.
 
 **Deterministic regeneration.** `scripts/run_pipeline.py --regenerate` rebuilds
 every case from its seed and recomputes every artifact. Verified: a full
-regeneration produces bit-identical artifacts across all six cases and eight
+regeneration produces bit-identical artifacts across all eight cases and eight
 artifact types. Nothing shown to a reviewer depends on a file that cannot be
 regenerated, which means there is no state to preserve and no archive to
 maintain.
 
-**Measured cost of a full run:** 32 s wall clock for six cases on one CPU core,
+**Measured cost of a full run:** 20 s wall clock for eight cases on one CPU core,
 no GPU. Runtime figures with hardware are in `docs/runtime.json` and the
 validation report.
 
@@ -87,7 +87,7 @@ trust.
 **The assumptions register and validation report.** Shipped with the code in
 `docs/`, not only in the deck.
 
-**The invariant suite.** 119 tests, several of which encode masterplan
+**The invariant suite.** 129 tests, several of which encode masterplan
 constraints directly — no ground truth in the manifest, dispersion scaling with
 drift time, ensemble sharing, the smallest flip actually being the smallest.
 These are the properties that would otherwise regress silently.

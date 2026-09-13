@@ -62,7 +62,7 @@ BASE_DIFFUSIVITY = 0.020  # deg at 1h elapsed; grows as sqrt(t)
 
 CASE_FAMILIES = ("decoy", "moving_discharge", "absent_source", "crowded")
 
-# Six independently seeded cases spanning the required families. Used by
+# Eight independently seeded cases spanning the required families. Used by
 # scripts/generate_cases.py and by the validation harness so that no headline
 # number comes from a single case.
 CASE_PLAN = [
@@ -72,6 +72,8 @@ CASE_PLAN = [
     ("case_0004", "crowded", 8813),
     ("case_0005", "decoy", 5150),
     ("case_0006", "absent_source", 9074),
+    ("case_0007", "decoy", 3312),
+    ("case_0008", "moving_discharge", 6421),
 ]
 
 

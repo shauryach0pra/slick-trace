@@ -51,6 +51,25 @@ def wilson(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
     return (max(0.0, centre - half), min(1.0, centre + half))
 
 
+def mcnemar_exact(b: int, c: int) -> float:
+    """Two-sided exact McNemar test on the discordant pairs of a paired design.
+
+    The method and the baseline are scored on the SAME cases, so the two
+    columns are not independent samples: a chi-square or Fisher test on a 2x2
+    of totals would overstate the evidence by discarding the pairing. Only the
+    discordant pairs carry information — b = method right / baseline wrong,
+    c = method wrong / baseline right. Under the null they split
+    Binomial(b + c, 0.5), and the exact two-sided tail is summed directly
+    rather than approximated, because n here is single digits.
+    """
+    n = b + c
+    if n == 0:
+        return 1.0
+    k = min(b, c)
+    tail = sum(math.comb(n, i) for i in range(k + 1)) / (2 ** n)
+    return min(1.0, 2 * tail)
+
+
 def _fmt_rate(successes: int, n: int) -> str:
     if n == 0:
         return "n/a (0 cases)"
@@ -122,6 +141,13 @@ def score_attribution() -> dict:
     source_present = [r for r in rows if r["expected"] == "named_candidate"]
     source_absent = [r for r in rows if r["expected"] == "unknown_source"]
 
+    # Paired comparison: every source-present case is scored by both the method
+    # and the naive baseline, so significance is McNemar on the discordant
+    # pairs, not a test that treats the two columns as independent groups.
+    b = sum(1 for r in source_present if r["top1"] and not r["naive_correct"])
+    c = sum(1 for r in source_present if r["naive_correct"] and not r["top1"])
+    p_value = mcnemar_exact(b, c)
+
     return {
         "rows": rows,
         "n_cases": len(rows),
@@ -130,6 +156,12 @@ def score_attribution() -> dict:
             "method_top1": sum(1 for r in source_present if r["top1"]),
             "method_top3": sum(1 for r in source_present if r["top3"]),
             "naive_top1": sum(1 for r in source_present if r["naive_correct"]),
+            "mcnemar": {
+                "method_right_baseline_wrong": b,
+                "method_wrong_baseline_right": c,
+                "p_value": round(p_value, 4),
+                "test": "exact McNemar, two-sided, on discordant pairs",
+            },
         },
         "source_absent": {
             "n": len(source_absent),
@@ -331,10 +363,25 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
     if sp["n"]:
         gain = (sp["method_top1"] - sp["naive_top1"]) / sp["n"] * 100
         w(f"| Top-1 gain over naive proximity | {gain:+.0f} percentage points |")
+    mc = sp.get("mcnemar")
+    if mc:
+        sig = "significant" if mc["p_value"] < 0.05 else "not significant"
+        w(f"| Paired comparison (exact McNemar) | p = {mc['p_value']} — {sig} at 0.05 |")
     w(f"| Source-absent cases | {sa['n']} |")
     w(f"| Correct abstentions | {_fmt_rate(sa['correct_abstentions'], sa['n'])} |")
     w(f"| False named attribution | {_fmt_rate(sa['false_named_attributions'], sa['n'])} |")
     w("")
+    if sp.get("mcnemar"):
+        mc = sp["mcnemar"]
+        w("")
+        w(f"> **On the significance test.** Both methods score the same cases, so this is "
+          f"a paired design and the correct test is McNemar on the discordant pairs: "
+          f"{mc['method_right_baseline_wrong']} cases where forward replay was right and "
+          f"the baseline wrong, {mc['method_wrong_baseline_right']} the other way. Exact "
+          f"two-sided p = {mc['p_value']}. A test treating the two columns as independent "
+          f"groups would report a smaller p by ignoring the pairing, and is not used here "
+          f"for that reason.")
+        w("")
     w("> The intervals matter more than the point estimates at this sample size. A perfect "
       "score over a handful of cases still admits a wide true rate, and the interval is the "
       "honest statement of that. The planned benchmark (120 development / 40 validation / "

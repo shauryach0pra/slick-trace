@@ -102,14 +102,54 @@
         "top_iou": 0.043,
         "lead_retained": 0.5125,
         "smallest_flip_magnitude": 0.5
+      },
+      {
+        "incident_id": "case_0007",
+        "family": "decoy",
+        "seed": 3312,
+        "n_vessels": 6,
+        "n_candidates": 4,
+        "expected": "named_candidate",
+        "method_outcome": "419240128",
+        "method_correct": true,
+        "naive_outcome": "419991981",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.676,
+        "lead_retained": 1.0,
+        "smallest_flip_magnitude": null
+      },
+      {
+        "incident_id": "case_0008",
+        "family": "moving_discharge",
+        "seed": 6421,
+        "n_vessels": 6,
+        "n_candidates": 3,
+        "expected": "named_candidate",
+        "method_outcome": "419125223",
+        "method_correct": true,
+        "naive_outcome": "419847031",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.599,
+        "lead_retained": 1.0,
+        "smallest_flip_magnitude": null
       }
     ],
-    "n_cases": 6,
+    "n_cases": 8,
     "source_present": {
-      "n": 4,
-      "method_top1": 4,
-      "method_top3": 4,
-      "naive_top1": 0
+      "n": 6,
+      "method_top1": 6,
+      "method_top3": 6,
+      "naive_top1": 0,
+      "mcnemar": {
+        "method_right_baseline_wrong": 6,
+        "method_wrong_baseline_right": 0,
+        "p_value": 0.0312,
+        "test": "exact McNemar, two-sided, on discordant pairs"
+      }
     },
     "source_absent": {
       "n": 2,
@@ -359,6 +399,64 @@
         "mistaken_promotion_rate": null,
         "mistaken_promotion_n": "0/0"
       }
+    },
+    {
+      "incident_id": "case_0007",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8209,
+        "hidden_ais_recovery_n": "55/67",
+        "false_unmatched_alert_rate": 0.2927,
+        "false_unmatched_alert_n": "36/123",
+        "mistaken_promotion_rate": 0.3,
+        "mistaken_promotion_n": "12/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8871,
+        "hidden_ais_recovery_n": "55/62",
+        "false_unmatched_alert_rate": 0.2636,
+        "false_unmatched_alert_n": "29/110",
+        "mistaken_promotion_rate": 0.0,
+        "mistaken_promotion_n": "0/34"
+      }
+    },
+    {
+      "incident_id": "case_0008",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.825,
+        "hidden_ais_recovery_n": "66/80",
+        "false_unmatched_alert_rate": 0.2886,
+        "false_unmatched_alert_n": "43/149",
+        "mistaken_promotion_rate": 0.35,
+        "mistaken_promotion_n": "14/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8485,
+        "hidden_ais_recovery_n": "56/66",
+        "false_unmatched_alert_rate": 0.3287,
+        "false_unmatched_alert_n": "47/143",
+        "mistaken_promotion_rate": 0.25,
+        "mistaken_promotion_n": "10/40"
+      }
     }
   ],
   "next_observation": [
@@ -411,6 +509,26 @@
       "incident_id": "case_0006",
       "applicable": false,
       "reason": "absent-source case: there is no true vessel track to generate a held-out observation from"
+    },
+    {
+      "incident_id": "case_0007",
+      "applicable": true,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 24,
+      "separation_at_recommended": 0.5914,
+      "separation_at_least_informative": 0.3052,
+      "recommendation_helped": true,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
+    },
+    {
+      "incident_id": "case_0008",
+      "applicable": true,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 18,
+      "separation_at_recommended": 0.583,
+      "separation_at_least_informative": 0.3387,
+      "recommendation_helped": true,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     }
   ],
   "detection": {

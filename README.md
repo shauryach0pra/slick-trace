@@ -39,7 +39,7 @@ slicktrace/
 ├── data/                 # Incident data (synthetic cases, volumes)
 ├── data_seed/            # Baked-in demo cases for Docker images
 ├── scripts/              # Pipeline execution, validation, and smoke tests
-├── tests/                # Comprehensive test suite (119 tests)
+├── tests/                # Comprehensive test suite (129 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
 ```
@@ -53,7 +53,7 @@ slicktrace/
 - NumPy and SciPy for numerical computations and particle tracking
 - Matplotlib for visualization and envelope generation
 - Pydantic for data validation and schema enforcement
-- Pytest for comprehensive testing (119 tests covering invariants, API, and NLP)
+- Pytest for comprehensive testing (129 tests covering invariants, API, and NLP)
 
 **Frontend:**
 - React 19 with Vite for modern build tooling
@@ -172,7 +172,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 
 **Pipeline Configuration:**
 - Case families: `decoy`, `moving_discharge`, `absent_source`, `crowded`
-- Six independently seeded cases defined in `CASE_PLAN`
+- Eight independently seeded cases defined in `CASE_PLAN`
 - Attribution uses 6-member ensemble for wind/current/diffusivity perturbations
 - IoU gate prevents false positives on low-confidence matches
 
@@ -184,8 +184,8 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 |-------|---------|--------|
 | Syntax + imports | `py_compile`, import graph | pass |
 | Startup check | `python3 scripts/startup_check.py` | pass |
-| Determinism | regenerate, diff all artifacts | bit-identical, 6 cases |
-| Test suite | `python3 -m pytest tests/ -q` | 119 passed |
+| Determinism | regenerate, diff all artifacts | bit-identical, 8 cases |
+| Test suite | `python3 -m pytest tests/ -q` | 129 passed |
 | Dependency pins | every `==` vs installed | all match |
 | Validation | `python3 scripts/run_validation.py` | 4/4 attribution, 2/2 abstentions, 40/40 NLP |
 | Acceptance | `python3 scripts/smoke_test.py` | 6/6 |
@@ -298,7 +298,7 @@ dataset are recorded in `docs/licence_and_data_rights.md`.
 Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
 
 Built and maintained by one person. Continuity does not rest on a second reader
-being available: six cases regenerate bit-identically from fixed seeds, 119
+being available: eight cases regenerate bit-identically from fixed seeds, 129
 automated tests run on every regeneration, and a scripted acceptance check
 verifies the frozen case against declared tolerances. A no-obligation handover —
 code, manifests, assumptions register, licence appendix and validation report —
@@ -315,7 +315,7 @@ dataset are recorded in `docs/licence_and_data_rights.md`.
 Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
 
 Built and maintained by one person. Continuity does not rest on a second reader
-being available: six cases regenerate bit-identically from fixed seeds, 119
+being available: eight cases regenerate bit-identically from fixed seeds, 129
 automated tests run on every regeneration, and a scripted acceptance check
 verifies the frozen case against declared tolerances. A no-obligation handover —
 code, manifests, assumptions register, licence appendix and validation report —

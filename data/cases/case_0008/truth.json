@@ -1,0 +1,26 @@
+{
+  "incident_id": "case_0008",
+  "family": "moving_discharge",
+  "seed": 6421,
+  "true_vessel_key": "419125223",
+  "absent_true_vessel_key": null,
+  "source_is_in_manifest": true,
+  "expected_outcome": "named_candidate",
+  "release_start_utc": "2026-09-09T21:30:00+00:00",
+  "release_duration_hours": 4.0,
+  "is_continuous": true,
+  "swirl": 0.016201546291006227,
+  "roles": {
+    "419125223": "true_source",
+    "419253638": "near_miss_decoy",
+    "419969551": "background",
+    "419521453": "background",
+    "419289212": "background",
+    "419847031": "near_decoy"
+  },
+  "slick_centroid": [
+    72.34440671666646,
+    19.158760782112367
+  ],
+  "WARNING": "Dev/validation only. Not served by the API, not read by the UI, and not required to reproduce any result shown to a reviewer."
+}

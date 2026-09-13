@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-13T09:48:38.340175+00:00 · 6 independently generated cases (achieved count, not planned)
+Generated 2026-09-13T17:44:49.959317+00:00 · 8 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -14,19 +14,25 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 | case_0004 | crowded | 11 | 5 | named_candidate | `419255379` | yes | `419369344` | no | 0.677 | 94% | 0.5 |
 | case_0005 | decoy | 6 | 3 | named_candidate | `419184924` | yes | `419958088` | no | 0.694 | 100% | none |
 | case_0006 | absent_source | 5 | 3 | unknown_source | `unknown_source` | yes | `419738652` | no | 0.043 | 51% | 0.5 |
+| case_0007 | decoy | 6 | 4 | named_candidate | `419240128` | yes | `419991981` | no | 0.676 | 100% | none |
+| case_0008 | moving_discharge | 6 | 3 | named_candidate | `419125223` | yes | `419847031` | no | 0.599 | 100% | none |
 
 ## Attribution — aggregates
 
 | Measure | Result |
 | --- | --- |
-| Source-present cases | 4 |
-| Forward-replay Top-1 | 4/4 = 100% [95% CI 51–100%] |
-| Forward-replay Top-3 | 4/4 = 100% [95% CI 51–100%] |
-| Naive proximity Top-1 | 0/4 = 0% [95% CI 0–49%] |
+| Source-present cases | 6 |
+| Forward-replay Top-1 | 6/6 = 100% [95% CI 61–100%] |
+| Forward-replay Top-3 | 6/6 = 100% [95% CI 61–100%] |
+| Naive proximity Top-1 | 0/6 = 0% [95% CI 0–39%] |
 | Top-1 gain over naive proximity | +100 percentage points |
+| Paired comparison (exact McNemar) | p = 0.0312 — significant at 0.05 |
 | Source-absent cases | 2 |
 | Correct abstentions | 2/2 = 100% [95% CI 34–100%] |
 | False named attribution | 0/2 = 0% [95% CI 0–66%] |
+
+
+> **On the significance test.** Both methods score the same cases, so this is a paired design and the correct test is McNemar on the discordant pairs: 6 cases where forward replay was right and the baseline wrong, 0 the other way. Exact two-sided p = 0.0312. A test treating the two columns as independent groups would report a smaller p by ignoring the pairing, and is not used here for that reason.
 
 > The intervals matter more than the point estimates at this sample size. A perfect score over a handful of cases still admits a wide true rate, and the interval is the honest statement of that. The planned benchmark (120 development / 40 validation / 40 source-present / 60 source-absent locked test cases) is not what was achieved; the achieved count is in the header.
 
@@ -45,38 +51,6 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 > **The recall target of 0.85 (masterplan p.15) is not met by the classical baseline: val 0.682; test 0.696.** IoU clears its 0.65 target and the false-positive rates are 0.000, so the baseline is conservative rather than inaccurate — it rejects patchy regions, which buys precision and costs recall. That trade-off is the concrete case for the learned model: the number to beat is recall, not IoU. Reported as a miss rather than omitted.
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
-
-## Detection on the case scenes — characterisation
-
-Separate from the table above, and measuring something different. The rows above
-score the detector on a benchmark split built to be hard: look-alikes and clean
-water are deliberately confusable. The rows below are the same detector run over
-the six incident scenes the attribution pipeline actually consumes, where the
-slick is the dominant feature.
-
-| Case | Family | Area (km²) | Perimeter (km) | Major × minor (km) | Elongation | Bearing | IoU vs truth mask |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| case_0001 | decoy | 316.78 | 178.73 | 22.44 × 19.42 | 1.16 | 71.6° | 0.9186 |
-| case_0002 | moving discharge | 368.86 | 178.73 | 24.77 × 20.34 | 1.22 | 126.0° | 0.9153 |
-| case_0003 | absent source | 313.40 | 166.63 | 21.28 × 20.35 | 1.05 | 80.9° | 0.9199 |
-| case_0004 | crowded | 289.52 | 136.97 | 20.48 × 19.13 | 1.07 | 9.2° | 0.9232 |
-| case_0005 | decoy | 309.45 | 167.80 | 21.07 × 20.41 | 1.03 | 6.3° | 0.9078 |
-| case_0006 | absent source | 339.34 | 173.26 | 22.47 × 20.77 | 1.08 | 85.9° | 0.9222 |
-
-> **These two IoU figures are not comparable and neither supersedes the other.**
-> 0.676 / 0.688 is the detector on a split designed to trap it. 0.91–0.92 is the
-> same detector on the incident scenes. Quoting only the higher number would
-> misrepresent the detector; quoting only the lower would misrepresent the
-> characterisation feeding attribution. Both are reported.
-
-> Geometry is measured on the pixel grid at the manifest's `pixel_spacing_m` — a
-> local planar approximation over a scene of this size, not a reprojection into
-> the declared metric CRS (EPSG:32643). Axis lengths are 2-sigma extents along
-> the principal axes; the perimeter carries a 0.90 correction for the staircase
-> effect of a pixelated outline. See assumption A15.
-
-> The truth-mask IoU exists only because these are synthetic cases with a
-> generator label. On real imagery the field would be absent, not zero.
 
 ## Ask Slick Trace — frozen question suite
 
@@ -123,6 +97,10 @@ slick is the dominant feature.
 | case_0005 | coverage_failure | 0.8788 (58/66) | 0.2821 (33/117) | 0.0 (0/34) |
 | case_0006 | selective | 0.8 (64/80) | 0.252 (32/127) | None (0/0) |
 | case_0006 | coverage_failure | 0.8302 (88/106) | 0.1724 (25/145) | None (0/0) |
+| case_0007 | selective | 0.8209 (55/67) | 0.2927 (36/123) | 0.3 (12/40) |
+| case_0007 | coverage_failure | 0.8871 (55/62) | 0.2636 (29/110) | 0.0 (0/34) |
+| case_0008 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.35 (14/40) |
+| case_0008 | coverage_failure | 0.8485 (56/66) | 0.3287 (47/143) | 0.25 (10/40) |
 
 > Operating point: match gate 0.02°, contact position noise 0.012°, detector miss rate 0.15, false detection rate 0.15. A rate without its operating point is not a comparable measurement.
 
@@ -134,6 +112,8 @@ slick is the dominant feature.
 | case_0002 | +3h | +24h | 0.5712 | 0.2527 | yes |
 | case_0004 | +24h | +6h | 0.0429 | 0.079 | no |
 | case_0005 | +3h | +24h | 0.5909 | 0.2971 | yes |
+| case_0007 | +3h | +24h | 0.5914 | 0.3052 | yes |
+| case_0008 | +3h | +18h | 0.583 | 0.3387 | yes |
 
 > One synthetic held-out observation per case is a weak test, so results are reported per case rather than averaged into a headline figure.
 
@@ -143,15 +123,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 3.2 s (case_0004) | ≤ 5 min |
-| Mean per case | 2.3 s | — |
-| Full run, 6 cases | 13.5 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
+| Slowest single case, all stages | 3.6 s (case_0004) | ≤ 5 min |
+| Mean per case | 2.4 s | — |
+| Full run, 8 cases | 19.5 s | — |
+| Template query, cold — fresh KB + lookup intent | 0.5 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 1.6 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.7 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
-Dominant stages across the run: fragility 7.2 s, attribution 5.6 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
+Dominant stages across the run: fragility 10.4 s, attribution 8.2 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 
