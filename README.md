@@ -116,6 +116,9 @@ docker compose --profile cpu up
 **Pipeline Execution:**
 
 ```bash
+# Activate the environment first — every command below needs it
+source .venv/bin/activate
+
 # Regenerate all synthetic cases and run full pipeline
 python3 scripts/run_pipeline.py --regenerate
 
@@ -139,13 +142,18 @@ python3 scripts/smoke_test.py
 **Docker Usage:**
 
 ```bash
-# Start CPU-only deployment
-docker compose --profile cpu up
+# Check Compose is available first — it is a per-user CLI plugin, so an
+# account with Docker installed may still not have it
+docker compose version
 
-# Offline verification (disconnect network, still works)
+# Build the image, then start the CPU-only deployment
+docker build -t slicktrace:cpu .
 docker compose --profile cpu up -d
-docker network disconnect $(docker compose ps -q slicktrace | xargs docker inspect -f '{{range $$net,$$v := .NetworkSettings.Networks}}{{$$net}}{{end}}') slicktrace-cpu-1 --force
-curl http://localhost:8000/api/health
+
+# Offline verification: cut the container's network, confirm it still passes
+docker network disconnect slick-trace_default slick-trace-slicktrace-1
+docker exec slick-trace-slicktrace-1 python3 scripts/smoke_test.py
+docker network connect slick-trace_default slick-trace-slicktrace-1
 ```
 
 ---
