@@ -27,6 +27,32 @@ from slicktrace_core.baseline_detector import predict_mask, iou  # noqa: E402
 CASES_DIR = "data/cases"
 
 
+
+EARTH_RADIUS_M = 6_371_008.8
+
+
+def _aeqd_scales(manifest: dict) -> tuple[float, float, float]:
+    """Local metric scales for one pixel, at the scene's centre latitude.
+
+    The manifest carries a single `pixel_spacing_m`, which treats a pixel as
+    square. It is not: a degree of longitude shrinks by cos(latitude) while a
+    degree of latitude does not. At 18.9 N that is 434 m north-south against
+    411 m east-west - a 5.7% anisotropy, and a 5% error in area if ignored.
+
+    This is an azimuthal-equidistant treatment centred on the scene: distances
+    and directions from the centre are true, which is what area, axis lengths
+    and bearing need. It replaces the planar approximation recorded in
+    assumption A15 and needs no reprojection library to do it.
+    """
+    b = manifest["bbox"]
+    n = int(manifest["img_size_px"])
+    lat0 = (b["min_lat"] + b["max_lat"]) / 2.0
+    dy = (b["max_lat"] - b["min_lat"]) * math.pi / 180.0 * EARTH_RADIUS_M / n
+    dx = ((b["max_lon"] - b["min_lon"]) * math.pi / 180.0
+          * EARTH_RADIUS_M * math.cos(math.radians(lat0)) / n)
+    return dx, dy, lat0
+
+
 def _boundary_lonlat(mask: np.ndarray, bbox: dict) -> list[list[float]]:
     """Trace the mask outline and map it to lon/lat via the scene bbox."""
     import matplotlib
@@ -76,22 +102,26 @@ def characterise(case_dir: str) -> dict:
                     "proceed into a forced vessel ranking.",
         }
 
+    dx_m, dy_m, lat0 = _aeqd_scales(manifest)
+
     ys, xs = np.nonzero(pred)
     cx, cy = xs.mean(), ys.mean()
-    coords = np.stack([xs - cx, ys - cy])
-    cov = np.cov(coords)
+    # Work in local metres, not pixels: the principal axes of an anisotropic
+    # pixel grid are not the principal axes of the region it represents.
+    mx = (xs - cx) * dx_m
+    my = -(ys - cy) * dy_m          # image y grows downward; flip to north-up
+    cov = np.cov(np.stack([mx, my]))
     evals, evecs = np.linalg.eigh(cov)
     order = np.argsort(evals)[::-1]
     evals, evecs = evals[order], evecs[:, order]
 
-    # 2-sigma extent along each principal axis, in metres
-    major_m = 4.0 * math.sqrt(max(evals[0], 1e-9)) * spacing_m
-    minor_m = 4.0 * math.sqrt(max(evals[1], 1e-9)) * spacing_m
+    # 2-sigma extent along each principal axis, already in metres
+    major_m = 4.0 * math.sqrt(max(evals[0], 1e-9))
+    minor_m = 4.0 * math.sqrt(max(evals[1], 1e-9))
     vx, vy = evecs[0, 0], evecs[1, 0]
-    # image y grows downward, so negate for a true-north bearing
-    bearing = (math.degrees(math.atan2(vx, -vy))) % 180.0
+    bearing = (math.degrees(math.atan2(vx, vy))) % 180.0
 
-    area_km2 = n_px * (spacing_m ** 2) / 1e6
+    area_km2 = n_px * dx_m * dy_m / 1e6
 
     # perimeter from boundary pixels, corrected for the staircase effect that
     # makes a pixelated outline ~11% longer than the underlying smooth curve
@@ -112,7 +142,10 @@ def characterise(case_dir: str) -> dict:
     # the estimate the wrong way and drove the isoperimetric ratio below 1.0 —
     # geometrically impossible for any closed shape.
     BOUNDARY_COUNT_BIAS = 0.89
-    perimeter_km = boundary_px * spacing_m / BOUNDARY_COUNT_BIAS / 1000.0
+    # Geometric mean of the two axis scales: a boundary step is as often
+    # east-west as north-south, so neither scale alone is right.
+    perimeter_km = (boundary_px * math.sqrt(dx_m * dy_m)
+                    / BOUNDARY_COUNT_BIAS / 1000.0)
 
     return {
         "incident_id": manifest["incident_id"],
@@ -144,10 +177,15 @@ def characterise(case_dir: str) -> dict:
                     "truth mask. On real imagery no such label exists.",
         },
         "measurement_note": (
-            f"Geometry measured on the pixel grid at {spacing_m} m spacing — a local "
-            "planar approximation over a scene of this size, not a reprojection into "
-            f"{manifest.get('metric_crs', 'the declared metric CRS')}. Axis lengths are "
-            "2-sigma extents along the principal axes."
+            f"Geometry measured in local azimuthal-equidistant metres centred on the "
+            f"scene at {lat0:.2f} N: {dx_m:.1f} m east-west against {dy_m:.1f} m "
+            f"north-south, rather than the manifest's single {spacing_m} m figure, which "
+            f"treats a pixel as square and overstates area by about 5% at this latitude. "
+            f"Distances and directions from the scene centre are true, which is what "
+            f"area, axis lengths and bearing require. This is not a full reprojection "
+            f"into {manifest.get('metric_crs', 'the declared metric CRS')} - over a scene "
+            f"one degree across the difference is far below the detector's own boundary "
+            f"uncertainty. Axis lengths are 2-sigma extents along the principal axes."
         ),
         "boundary_note": (
             "SAR darkness is not proof of oil. Look-alikes (low wind, biogenic films) "

@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-13T19:34:49.977784+00:00 · 8 independently generated cases (achieved count, not planned)
+Generated 2026-09-13T19:46:18.368419+00:00 · 8 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -58,14 +58,14 @@ Separate from the split above, and measuring something different. Those rows sco
 
 | Case | Area km² | Perimeter km | Major × minor km | Elongation | Complexity | Bearing | IoU vs truth |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| case_0001 | 316.78 | 70.64 | 22.44 × 19.42 | 1.16 | 1.25 | 71.6° | 0.9186 |
-| case_0002 | 368.86 | 84.28 | 24.77 × 20.34 | 1.22 | 1.53 | 126.0° | 0.9153 |
-| case_0003 | 313.4 | 74.54 | 21.28 × 20.35 | 1.05 | 1.41 | 80.9° | 0.9199 |
-| case_0004 | 289.52 | 68.69 | 20.48 × 19.13 | 1.07 | 1.30 | 9.2° | 0.9232 |
-| case_0005 | 309.45 | 79.9 | 21.07 × 20.41 | 1.03 | 1.64 | 6.3° | 0.9078 |
-| case_0006 | 339.34 | 75.03 | 22.47 × 20.77 | 1.08 | 1.32 | 85.9° | 0.9222 |
-| case_0007 | 328.44 | 78.44 | 22.37 × 20.02 | 1.12 | 1.49 | 9.5° | 0.9199 |
-| case_0008 | 379.76 | 95.97 | 26.15 × 20.26 | 1.29 | 1.93 | 124.0° | 0.9191 |
+| case_0001 | 300.76 | 68.83 | 21.45 × 19.3 | 1.11 | 1.25 | 62.3° | 0.9186 |
+| case_0002 | 350.2 | 82.12 | 24.02 × 19.92 | 1.21 | 1.53 | 134.3° | 0.9153 |
+| case_0003 | 297.55 | 72.63 | 20.47 × 20.08 | 1.02 | 1.41 | 23.5° | 0.9199 |
+| case_0004 | 274.88 | 66.93 | 20.5 × 18.14 | 1.13 | 1.30 | 5.1° | 0.9232 |
+| case_0005 | 293.8 | 77.85 | 21.1 × 19.34 | 1.09 | 1.64 | 2.3° | 0.9078 |
+| case_0006 | 322.18 | 73.1 | 21.32 × 20.79 | 1.03 | 1.32 | 76.7° | 0.9222 |
+| case_0007 | 311.83 | 76.43 | 22.39 × 18.99 | 1.18 | 1.49 | 6.3° | 0.9199 |
+| case_0008 | 360.56 | 93.52 | 25.28 × 19.89 | 1.27 | 1.93 | 130.3° | 0.9191 |
 
 > **These IoU figures are not comparable to the split above and neither supersedes the other.** The split is the detector on a task designed to trap it; these are the same detector on the incident scenes. Quoting only the higher number would misrepresent the detector.
 
@@ -147,7 +147,7 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Full run, 8 cases | 19.5 s | — |
 | Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 7.9 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 8.5 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
 Dominant stages across the run: fragility 10.4 s, attribution 8.2 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.

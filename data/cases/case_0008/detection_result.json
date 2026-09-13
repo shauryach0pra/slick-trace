@@ -4,13 +4,13 @@
   "detected": true,
   "case_state": "potential_slick",
   "geometry": {
-    "area_km2": 379.76,
-    "perimeter_km": 95.97,
+    "area_km2": 360.56,
+    "perimeter_km": 93.52,
     "interior_holes_filled_px": 105,
-    "major_axis_km": 26.15,
-    "minor_axis_km": 20.26,
-    "elongation": 1.29,
-    "orientation_deg_from_north": 124.0,
+    "major_axis_km": 25.28,
+    "minor_axis_km": 19.89,
+    "elongation": 1.27,
+    "orientation_deg_from_north": 130.3,
     "centroid": [
       72.3425,
       19.16108
@@ -310,6 +310,6 @@
     "iou": 0.9191,
     "note": "Available because this is a synthetic case with a generator truth mask. On real imagery no such label exists."
   },
-  "measurement_note": "Geometry measured on the pixel grid at 433.59 m spacing \u2014 a local planar approximation over a scene of this size, not a reprojection into EPSG:32643. Axis lengths are 2-sigma extents along the principal axes.",
+  "measurement_note": "Geometry measured in local azimuthal-equidistant metres centred on the scene at 18.90 N: 410.9 m east-west against 434.4 m north-south, rather than the manifest's single 433.59 m figure, which treats a pixel as square and overstates area by about 5% at this latitude. Distances and directions from the scene centre are true, which is what area, axis lengths and bearing require. This is not a full reprojection into EPSG:32643 - over a scene one degree across the difference is far below the detector's own boundary uncertainty. Axis lengths are 2-sigma extents along the principal axes.",
   "boundary_note": "SAR darkness is not proof of oil. Look-alikes (low wind, biogenic films) dampen backscatter too; detection confidence is kept separate from source confidence throughout."
 }

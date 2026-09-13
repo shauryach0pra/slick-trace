@@ -297,16 +297,20 @@ separately from the repo checkout, where the sidecar is present. Both runs on
 
 ---
 
-### A15 · Slick geometry is measured on the pixel grid, not reprojected
+### A15 · Slick geometry uses a local azimuthal-equidistant projection
 
 **Where:** `slicktrace_core/detection_geometry.py` (`characterise`)
 
-**Why.** The manifest declares a metric CRS (EPSG:32643, UTM 43N), but the
-repository has no reprojection dependency and adding one days before a freeze
-would put a working pipeline at risk for a second-order gain. Over a scene one
-degree across, treating the pixel grid as locally planar at the manifest's
-`pixel_spacing_m` introduces error well below the uncertainty already present in
-the detector's own boundary.
+**Why.** The manifest declares a metric CRS (EPSG:32643, UTM 43N) and the
+repository has no reprojection dependency. The earlier version of this entry
+treated the pixel grid as locally planar at the manifest's single
+`pixel_spacing_m`, which was wrong in a measurable way: a degree of longitude
+shrinks by cos(latitude) while a degree of latitude does not, so at 18.9 N a
+pixel is 434 m north-south against 411 m east-west. Treating it as square
+overstated area by about 5% and rotated the principal axes. Geometry is now
+computed in local azimuthal-equidistant metres centred on the scene, where
+distances and directions from the centre are true - which is exactly what area,
+axis lengths and bearing require, and needs no reprojection library.
 
 **What breaks if it is wrong.** Area, axis lengths and bearing would be
 systematically distorted — increasingly so at higher latitudes or across a wider
