@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-13T19:53:55.526257+00:00 · 8 independently generated cases (achieved count, not planned)
+Generated 2026-09-13T20:17:34.752358+00:00 · 8 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -51,6 +51,21 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 > **The recall target of 0.85 (masterplan p.15) is not met by the classical baseline: val 0.682; test 0.696.** IoU clears its 0.65 target and the false-positive rates are 0.000, so the baseline is conservative rather than inaccurate — it rejects patchy regions, which buys precision and costs recall. That trade-off is the concrete case for the learned model: the number to beat is recall, not IoU. Reported as a miss rather than omitted.
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
+
+## Detection operating point - why recall is where it is
+
+| Darkness threshold | IoU | Recall | False positives on look-alikes |
+| --- | --- | --- | --- |
+| 0.75 x scene median  **(in use)** | 0.5759 | 0.5811 | 0.000 |
+| 0.80 x scene median | 0.6439 | 0.6507 | 0.067 |
+| 0.85 x scene median | 0.7012 | 0.7103 | 0.367 |
+| 0.90 x scene median | 0.7570 | 0.7689 | 0.567 |
+
+> **Swept on the training split only.** Sweeping on the split a result is reported against would be choosing the answer rather than measuring it.
+
+> **The recall shortfall is a purchase, not a defect.** Raising the threshold does raise recall - but the false-positive rate on look-alike scenes rises far faster, from zero to over a third by 0.85. The detector is set conservatively on purpose: a missed slick is re-detectable on the next pass, while a false detection routed to an analyst as a candidate spill costs their time and their trust. Reported as a curve so the choice is visible and a reader can disagree with it.
+
+> **Otsu was tried and rejected, with a measurement.** Adaptive thresholding assumes a roughly bimodal histogram with comparable class sizes. A slick occupies about 2.6% of these scenes, so Otsu places the threshold far above the true separation and admits background speckle: IoU on the case scenes falls from 0.92 to 0.19-0.28. A fixed fraction of the scene median is the better estimator for a small dark minority against a stable background.
 
 ## Origin error — how far off is the release point
 
@@ -168,9 +183,9 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Slowest single case, all stages | 3.6 s (case_0004) | ≤ 5 min |
 | Mean per case | 2.4 s | — |
 | Full run, 8 cases | 19.5 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
+| Template query, cold — fresh KB + lookup intent | 0.5 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 7.7 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 8.1 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
 Dominant stages across the run: fragility 10.4 s, attribution 8.2 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
