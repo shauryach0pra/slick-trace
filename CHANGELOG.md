@@ -5,6 +5,51 @@ rather than guessing.
 
 ---
 
+## 13 September 2026
+
+**Detect and characterise (PS part (a)) — new pipeline stage.**
+`slicktrace_core/detection_geometry.py` runs the classical baseline detector over
+each case scene, vectorises the retained region and measures area, perimeter,
+principal axes, elongation and bearing. Served at
+`/api/incidents/{id}/detection`, drawn as an outline over the scene in the
+interface. IoU 0.91–0.92 against the generator truth mask across all six cases —
+reported separately from the 0.676/0.688 benchmark-split figures, which measure
+a deliberately harder task. Recorded as assumption A15: geometry is measured on
+the pixel grid, not reprojected into the declared metric CRS.
+
+**Interface — the finding now precedes the evidence.**
+A verdict band states the outcome in plain language before any panel: the
+proximity baseline's pick struck through, the forward-replay candidate beside
+it, and on absent-source cases an explicit refusal to name anyone. A case
+switcher exposes all six cases with their family and outcome, so the
+cherry-picking objection can be checked rather than argued. Forecast, coverage,
+next-observation and provenance panels surface results the API already served
+but nothing displayed.
+
+**Fresh-start rehearsal — two README defects found and fixed.**
+Performed on a clean macOS account following the README literally. The Usage
+section assumed an activated virtualenv and failed at its first command with
+`ModuleNotFoundError`; the Docker section referenced a container name Compose
+does not create. Both would have blocked a reviewer. Recorded in
+`docs/evidence/fresh_start_rehearsal.md`.
+
+**Docker — three executions recorded.**
+Clean build, acceptance check online, and acceptance check with the container's
+network disconnected, all 6/6. The build revealed that the Dockerfile still
+copied `varuna_core/`, which the rename had removed — the image had never been
+buildable. Logs in `docs/evidence/`.
+
+**Dependencies pinned.** `requirements.lock` (34 packages) and
+`requirements-dev.lock`. Case artifacts regenerate byte-identically under the
+pinned set.
+
+**Documentation.** Licence appendix now records four evaluated-but-unadopted
+dependencies and their licence consequences — notably that OpenDrift is GPL v2
+and would require relicensing this repository. README names the real-data
+integration path per layer. Maintainer, licence holder and host matrix recorded.
+
+---
+
 ## Before you merge: check which baseline you have
 
 Two versions of this project have been in play.
