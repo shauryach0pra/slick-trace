@@ -43,6 +43,13 @@
   "top_candidate_id": null,
   "unknown_source": true,
   "abstention_iou_gate": 0.3,
+  "discrimination": {
+    "discriminated": false,
+    "loss_gap": 0.0058,
+    "iou_gap": -0.0378,
+    "tolerance": 0.05,
+    "note": "top two candidates are not separated - the ordering between them carries no weight and should not be read as a preference; ranking by loss disagrees with ranking by IoU here, which is itself a sign the case is unresolved"
+  },
   "loss_weights": {
     "a_iou": 0.5,
     "b_boundary": 0.2,

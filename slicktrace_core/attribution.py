@@ -187,6 +187,40 @@ def score_fit(pred: np.ndarray, truth: np.ndarray, complexity_penalty: float) ->
     return {"iou": iou, "boundary_distance_norm": boundary, "relative_area_error_norm": area_err, "loss": loss}
 
 
+# Below this loss gap the top two candidates are not meaningfully separated and
+# the ranking should not be read as a preference. Chosen as a guard rather than
+# tuned: named cases here separate by 0.15-0.34, abstained cases by 0.004-0.006,
+# so 0.05 sits in the empty band between them and trips on neither today.
+DISCRIMINATION_LOSS_TOLERANCE = 0.05
+
+
+def _discrimination(ranked: list[dict]) -> dict:
+    """Is the ranking actually separating the top two candidates?
+
+    Distinct from the absolute fit gate, which asks whether the best candidate
+    explains the observation at all. This asks whether the second-best explains
+    it about as well - a ranking can clear the gate and still be a coin toss.
+    Reported always, so the margin is visible rather than inferred, and never
+    used to raise confidence in a result: it can only qualify one.
+    """
+    if len(ranked) < 2:
+        return {"discriminated": None, "loss_gap": None, "iou_gap": None,
+                "tolerance": DISCRIMINATION_LOSS_TOLERANCE,
+                "note": "fewer than two candidates - nothing to discriminate between"}
+    loss_gap = ranked[1]["mean_loss"] - ranked[0]["mean_loss"]
+    iou_gap = ranked[0]["mean_iou"] - ranked[1]["mean_iou"]
+    ok = loss_gap >= DISCRIMINATION_LOSS_TOLERANCE
+    note = ("top two candidates separated on the ranking criterion" if ok else
+            "top two candidates are not separated - the ordering between them "
+            "carries no weight and should not be read as a preference")
+    if iou_gap < 0:
+        note += ("; ranking by loss disagrees with ranking by IoU here, which is "
+                 "itself a sign the case is unresolved")
+    return {"discriminated": ok, "loss_gap": round(loss_gap, 4),
+            "iou_gap": round(iou_gap, 4),
+            "tolerance": DISCRIMINATION_LOSS_TOLERANCE, "note": note}
+
+
 def run_attribution(case_dir: str, candidate_vessel_keys: list[str] | None = None) -> dict:
     with open(os.path.join(case_dir, "manifest.json")) as f:
         manifest = json.load(f)
@@ -261,6 +295,7 @@ def run_attribution(case_dir: str, candidate_vessel_keys: list[str] | None = Non
         "top_candidate_id": None if unknown_source else top.vessel_key,
         "unknown_source": unknown_source,
         "abstention_iou_gate": ABSTENTION_IOU_GATE,
+        "discrimination": _discrimination([r.__dict__ for r in ranking]),
         "loss_weights": LOSS_WEIGHTS,
         "n_ensemble_variants": len(ENSEMBLE_VARIANTS),
     }

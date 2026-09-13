@@ -43,6 +43,13 @@
   "top_candidate_id": "419184924",
   "unknown_source": false,
   "abstention_iou_gate": 0.3,
+  "discrimination": {
+    "discriminated": true,
+    "loss_gap": 0.3393,
+    "iou_gap": 0.6783,
+    "tolerance": 0.05,
+    "note": "top two candidates separated on the ranking criterion"
+  },
   "loss_weights": {
     "a_iou": 0.5,
     "b_boundary": 0.2,
