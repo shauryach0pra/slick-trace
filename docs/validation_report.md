@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-13T19:46:18.368419+00:00 · 8 independently generated cases (achieved count, not planned)
+Generated 2026-09-13T19:53:55.526257+00:00 · 8 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -51,6 +51,29 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 > **The recall target of 0.85 (masterplan p.15) is not met by the classical baseline: val 0.682; test 0.696.** IoU clears its 0.65 target and the false-positive rates are 0.000, so the baseline is conservative rather than inaccurate — it rejects patchy regions, which buys precision and costs recall. That trade-off is the concrete case for the learned model: the number to beat is recall, not IoU. Reported as a miss rather than omitted.
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
+
+## Origin error — how far off is the release point
+
+| Case | Correct vessel | Release start error | Origin error km | True release | Estimated release |
+| --- | --- | --- | --- | --- | --- |
+| case_0001 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
+| case_0002 | yes | +150 min | 9.332 | 4.0h continuous | 0.5h pulse |
+| case_0004 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
+| case_0005 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
+| case_0007 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
+| case_0008 | yes | +150 min | 9.332 | 4.0h continuous | 0.5h pulse |
+| **mean** | | | **3.11** | | |
+| **RMSE** | | | **5.39** | | |
+
+> **Why this sits alongside IoU.** IoU measures footprint agreement. An investigator asks how many kilometres the origin estimate is out by.
+
+> **The release is wrong on every case; the vessel is right on every case.** Every true release here is continuous over 2-4 hours. The method selects a 0.5 hour pulse on all of them. Continuous hypotheses are generated - the search covers 0.5h pulse, 2h and 4h continuous - and lose on loss every time. Getting the vessel right while getting what it did wrong indicates the ranking is driven by where a vessel was, not by reconstructing its discharge.
+
+> **Why the pulse wins, and how it links to the slick shapes.** A continuous release smears along-track; a pulse stays compact. The slicks this generator produces are compact (elongation 1.02-1.27, see the characterisation table), so a compact hypothesis fits them better. Two defects reinforcing each other: the generator does not produce ribbon-shaped discharge, and the attribution therefore prefers non-continuous hypotheses.
+
+> **On the 0.00 km entries.** A 0.5h pulse fitted to a 2h release happens to land on the true start; fitted to a 4h release it lands 2.5h in, and the 9.33 km is the vessel's own travel over that offset. Neither should be read as origin-estimation accuracy - the first is coincidence, the second a systematic offset.
+
+> Measurable only because the generator records the true release. On real imagery no such label exists, which is why published work reporting origin error against historical incidents lands in tens of kilometres. These numbers are not comparable to those.
 
 ## Detection on the case scenes — characterisation
 
@@ -147,7 +170,7 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Full run, 8 cases | 19.5 s | — |
 | Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 8.5 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.7 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
 Dominant stages across the run: fragility 10.4 s, attribution 8.2 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.

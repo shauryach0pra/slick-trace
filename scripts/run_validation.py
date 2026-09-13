@@ -51,6 +51,65 @@ def wilson(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
     return (max(0.0, centre - half), min(1.0, centre + half))
 
 
+EARTH_RADIUS_KM = 6371.0088
+
+
+def _haversine_km(lon1: float, lat1: float, lon2: float, lat2: float) -> float:
+    la1, lo1, la2, lo2 = map(math.radians, (lat1, lon1, lat2, lon2))
+    h = (math.sin((la2 - la1) / 2) ** 2
+         + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2)
+    return 2 * EARTH_RADIUS_KM * math.asin(math.sqrt(h))
+
+
+def _position_at(tracks, vessel_key, when_iso):
+    """Nearest recorded fix to a time. No interpolation: A6 bounds interpolation
+    to a documented motion bound, and inventing a position to make a metric
+    look cleaner would be the wrong trade."""
+    from datetime import datetime
+    tr = next((t for t in tracks if t["vessel_key"] == vessel_key), None)
+    if not tr or not tr.get("fixes"):
+        return None
+    w = datetime.fromisoformat(when_iso)
+    f = min(tr["fixes"],
+            key=lambda x: abs((datetime.fromisoformat(x["t_utc"]) - w).total_seconds()))
+    return f["lon"], f["lat"]
+
+
+def origin_error_km(case_dir):
+    """How far, in km, is the estimated release point from the true one?
+
+    IoU measures footprint agreement. An investigator asks how far off the
+    origin estimate is. Measurable only because the generator records the true
+    release vessel and time; on real imagery no such label exists.
+    """
+    from datetime import datetime
+    try:
+        man = json.load(open(os.path.join(case_dir, "manifest.json")))
+        truth = json.load(open(os.path.join(case_dir, "truth.json")))
+        attr = json.load(open(os.path.join(case_dir, "attribution_result.json")))
+    except Exception:
+        return None
+    if attr.get("unknown_source") or not attr.get("ranking"):
+        return None
+    top = attr["ranking"][0]
+    p_true = _position_at(man["tracks"], truth["true_vessel_key"],
+                          truth["release_start_utc"])
+    p_est = _position_at(man["tracks"], top["vessel_key"], top["release_start"])
+    if not p_true or not p_est:
+        return None
+    dt_min = (datetime.fromisoformat(top["release_start"])
+              - datetime.fromisoformat(truth["release_start_utc"])).total_seconds() / 60.0
+    return {
+        "origin_error_km": round(_haversine_km(*p_true, *p_est), 3),
+        "release_time_error_min": round(dt_min, 1),
+        "correct_vessel": top["vessel_key"] == truth["true_vessel_key"],
+        "release_duration_hours": truth.get("release_duration_hours"),
+        "is_continuous": truth.get("is_continuous"),
+        "est_duration_hours": top.get("duration_hours"),
+        "est_is_continuous": top.get("is_continuous"),
+    }
+
+
 def mcnemar_exact(b: int, c: int) -> float:
     """Two-sided exact McNemar test on the discordant pairs of a paired design.
 
@@ -457,6 +516,57 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
         _c = (_g["perimeter_km"] ** 2) / (4 * math.pi * _g["area_km2"])
         det_rows.append((_d["incident_id"], _g, _c,
                          (_d.get("agreement_with_truth_mask") or {}).get("iou")))
+    oe_rows = []
+    for _d in sorted(_glob.glob("data/cases/case_*")):
+        _oe = origin_error_km(_d)
+        if _oe:
+            oe_rows.append((os.path.basename(_d), _oe))
+    if oe_rows:
+        _vals = [r[1]["origin_error_km"] for r in oe_rows]
+        _mean = sum(_vals) / len(_vals)
+        _rmse = math.sqrt(sum(v * v for v in _vals) / len(_vals))
+        w("## Origin error \u2014 how far off is the release point")
+        w("")
+        w("| Case | Correct vessel | Release start error | Origin error km | True release | Estimated release |")
+        w("| --- | --- | --- | --- | --- | --- |")
+        for _id, _oe in oe_rows:
+            _t = f"{_oe['release_duration_hours']}h {'continuous' if _oe['is_continuous'] else 'pulse'}"
+            _e = f"{_oe['est_duration_hours']}h {'continuous' if _oe['est_is_continuous'] else 'pulse'}"
+            w(f"| {_id} | {'yes' if _oe['correct_vessel'] else 'NO'} | "
+              f"{_oe['release_time_error_min']:+.0f} min | {_oe['origin_error_km']} | "
+              f"{_t} | {_e} |")
+        w(f"| **mean** | | | **{_mean:.2f}** | | |")
+        w(f"| **RMSE** | | | **{_rmse:.2f}** | | |")
+        w("")
+        w("> **Why this sits alongside IoU.** IoU measures footprint agreement. An "
+          "investigator asks how many kilometres the origin estimate is out by.")
+        w("")
+        w("> **The release is wrong on every case; the vessel is right on every case.** "
+          "Every true release here is continuous over 2-4 hours. The method selects a "
+          "0.5 hour pulse on all of them. Continuous hypotheses are generated - the "
+          "search covers 0.5h pulse, 2h and 4h continuous - and lose on loss every time. "
+          "Getting the vessel right while getting what it did wrong indicates the "
+          "ranking is driven by where a vessel was, not by reconstructing its discharge.")
+        w("")
+        w("> **Why the pulse wins, and how it links to the slick shapes.** A continuous "
+          "release smears along-track; a pulse stays compact. The slicks this generator "
+          "produces are compact (elongation 1.02-1.27, see the characterisation table), "
+          "so a compact hypothesis fits them better. Two defects reinforcing each other: "
+          "the generator does not produce ribbon-shaped discharge, and the attribution "
+          "therefore prefers non-continuous hypotheses.")
+        w("")
+        w("> **On the 0.00 km entries.** A 0.5h pulse fitted to a 2h release happens to "
+          "land on the true start; fitted to a 4h release it lands 2.5h in, and the "
+          "9.33 km is the vessel's own travel over that offset. Neither should be read "
+          "as origin-estimation accuracy - the first is coincidence, the second a "
+          "systematic offset.")
+        w("")
+        w("> Measurable only because the generator records the true release. On real "
+          "imagery no such label exists, which is why published work reporting origin "
+          "error against historical incidents lands in tens of kilometres. These "
+          "numbers are not comparable to those.")
+        w("")
+
     if det_rows:
         w("## Detection on the case scenes \u2014 characterisation")
         w("")
