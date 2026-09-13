@@ -408,6 +408,46 @@ high, in the same shape as any age estimate.
 
 ---
 
+### A19 · Determinism holds for results, not for their containers
+
+**Where:** verified on every push by `.github/workflows/tests.yml`
+
+**Why.** Reproducibility is claimed in several places in this repository, and
+the claim was originally unqualified: "regenerates bit-identically". Running the
+regeneration in CI on Ubuntu x86-64, against artifacts committed from macOS
+arm64, showed that is true of the analysis and false of the media.
+
+Byte-identical across both platforms: attribution, fragility, hindcast,
+coverage, forecast, next-observation and detection results. Every number any
+reported figure derives from.
+
+Not byte-identical, for reasons that have nothing to do with the analysis:
+`scene.png` and `mask_groundtruth.png` serialise differently because PNG
+encoding depends on the zlib build; `forcing.npz` is a zip archive and stores
+member timestamps; `manifest.json` and the investigation reports carry SHA-256
+checksums *of those files* and therefore differ too. The pixels and arrays are
+identical; their containers are not.
+
+One genuine numeric difference exists. `distance_deg` in
+`naive_baseline_result.json` differs at the last representable digit between
+x86-64 and arm64 — floating-point reduction order is not architecture-invariant.
+At a typical value of 0.0062 that is a perturbation of about 1.4e-18, against a
+smallest observed ranking gap of 0.1506: a ratio of 9e-18. It cannot reorder a
+ranking, and the discrimination check would report it if it ever grew enough to
+try.
+
+**What breaks if it is wrong.** An unqualified determinism claim is falsifiable
+in ten minutes by any reviewer who clones the repository on Linux and reruns the
+pipeline. They would find 54 changed files and no explanation, and would be
+right to distrust everything else on that basis.
+
+**How it is bounded.** The CI check covers the analysis artifacts and excludes
+the three media categories by name, with the reason written into the workflow
+rather than applied silently. The README states what byte-identical covers. The
+exclusion is visible, so a reader can disagree with where the line was drawn.
+
+---
+
 ## Assumptions this system does *not* make
 
 Recorded because their absence is deliberate and a reviewer may look for them:
