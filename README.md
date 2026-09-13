@@ -236,7 +236,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 | `docs/validation_report.md` | Measured results: attribution, abstention, detection, NLP, coverage, next-observation, runtime, ablations |
 | `docs/calibration_report.md` | Ensemble win fraction against synthetic truth: Brier, ECE, reliability bins, held-out |
 | Origin error (in `validation_report.md`) | Distance from true release point to estimated, per case, with RMSE |
-| `docs/assumptions_register.md` | 15 modelling assumptions with code locators and failure modes |
+| `docs/assumptions_register.md` | 18 modelling assumptions with code locators and failure modes |
 | `docs/licence_and_data_rights.md` | Code vs data licensing terms and real-world deployment requirements |
 | `docs/sustainability_and_ownership.md` | Running costs, refresh cadence, handover position, roadmap |
 | `docs/runtime.json` | Per-stage timings with hardware specifications |

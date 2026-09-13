@@ -327,6 +327,87 @@ convention, not a measurement.
 
 ---
 
+### A16 · Synthetic slick morphology is not drawn from the real distribution
+
+**Where:** `slicktrace_core/synth_generator.py` (slick field construction);
+measured in the characterisation table of `docs/validation_report.md`
+
+**Why.** The generator builds a slick as a diffused, swirled blob so that the
+release geometry stays interpretable and the truth mask is unambiguous. It was
+never fitted to the shape statistics of real SAR oil slicks.
+
+**What breaks if it is wrong.** It is wrong, and measurably. Published
+morphology discriminators treat elongation above about 2.0 and a ragged boundary
+as favouring oil; real bilge discharge from a vessel under way is a ribbon, tens
+of kilometres by a few hundred metres. Every case here measures between 1.02 and
+1.27. Scored against those published thresholds, **all eight cases would be
+classified as look-alikes on shape alone.** Any morphology-based discriminator
+calibrated on real imagery is therefore being applied out of domain when pointed
+at this benchmark, and its output says more about the generator than the method.
+
+**How it is bounded.** Stated here rather than left for a reader to notice.
+Shape is not an input to attribution — ranking is driven by forward-replayed
+footprint overlap, not by whether the slick looks like oil — so the defect does
+not contaminate the headline result. It does two other things, both recorded:
+it makes look-alike discrimination untestable on this benchmark, and it is the
+reason the method prefers short pulses over continuous releases (A17-adjacent,
+see the origin-error section of the validation report). An along-track ribbon
+family is the fix; it is a diagnosed defect, not a roadmap aspiration.
+
+---
+
+### A17 · Stokes drift is not modelled, and neither is wind
+
+**Where:** `slicktrace_core/synth_generator.py` (forcing fields: `u`, `v`,
+`noise` only); `slicktrace_core/attribution.py` (advection)
+
+**Why.** The masterplan warns against double-counting wind and Stokes effects
+where a transport engine already configures them. This pipeline avoids that
+problem by having neither: the forcing carries a current field and a noise term,
+and no wind field exists at any point. The register did not previously say so,
+which left a reader to infer that wind was handled somewhere.
+
+**What breaks if it is wrong.** Surface oil moves at roughly 3% of wind speed
+plus the Stokes drift of the wave field; omitting both means the modelled
+trajectory is a pure current trajectory. On real data that is a first-order
+error, not a refinement. It also removes the strongest physical discriminator
+for look-alikes — the 4-10 m/s window in which a slick is separable at all —
+which is why the look-alike rules that depend on wind report themselves as
+unavailable rather than scoring zero.
+
+**How it is bounded.** Truth and forward simulation share the same forcing, so
+the comparison between candidates is internally consistent and the ranking is
+unaffected. The omission is declared rather than approximated: adding a
+synthetic wind field so that a wind-dependent rule could read it back would be
+checking the system's own fiction against itself.
+
+---
+
+### A18 · Oil volume and tonnage are not estimated
+
+**Where:** not implemented; `slicktrace_core/detection_geometry.py` reports
+area, perimeter, axes, elongation and bearing only
+
+**Why.** Volume from a single SAR scene requires a thickness estimate, and
+thickness is not recoverable from an uncalibrated single-channel amplitude
+image. The operational route is an appearance class — the Bonn Agreement scale
+maps sheen, rainbow and metallic appearance to thickness bands spanning four
+orders of magnitude — and that mapping is defined against calibrated
+backscatter this pipeline does not produce.
+
+**What breaks if it is wrong.** Nothing downstream: no stage consumes volume.
+The cost is to the characterisation output, which answers "how large" in area
+but not "how much".
+
+**How it is bounded.** Declared rather than approximated. Multiplying area by an
+assumed thickness would produce a number with four orders of magnitude of
+unstated uncertainty, presented to three significant figures — the failure mode
+this register exists to prevent. If it is added, it should be a wide interval
+with an appearance class attached and a confidence field that cannot express
+high, in the same shape as any age estimate.
+
+---
+
 ## Assumptions this system does *not* make
 
 Recorded because their absence is deliberate and a reviewer may look for them:
