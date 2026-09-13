@@ -7,7 +7,8 @@ seeds and recomputes every artifact the API, the UI and the report read.
 Nothing shown to a reviewer needs a file that this script cannot produce.
 
 Stages, in dependency order:
-    generate -> historical mapping -> naive baseline -> attribution
+    generate -> detect + characterise -> historical mapping -> naive baseline
+             -> attribution
              -> fragility -> coverage -> forecast -> next observation
              -> investigation report
 """
@@ -25,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from slicktrace_core.attribution import run_attribution, run_naive_baseline
 from slicktrace_core.coverage import run_hidden_ais_experiment
+from slicktrace_core.detection_geometry import run_detection
 from slicktrace_core.forecast import run_forecast
 from slicktrace_core.fragility import run_fragility
 from slicktrace_core.hindcast import run_historical_mapping
@@ -36,6 +38,7 @@ from slicktrace_core.synth_generator import CASE_PLAN, generate_all
 def run_case(case_dir: str, skip: set[str]) -> dict:
     timings = {}
     stages = [
+        ("detection", lambda: run_detection(case_dir)),
         ("historical_mapping", lambda: run_historical_mapping(case_dir)),
         ("naive_baseline", lambda: run_naive_baseline(case_dir)),
         ("attribution", lambda: run_attribution(case_dir)),

@@ -1995,8 +1995,8 @@
     "version": "0.2"
   },
   "checksums": {
-    "scene.png": "ced89e7e0e07b5918a1f3bec471b7453a33c8686a3a646fe2798087f52ffe1d7",
-    "mask_groundtruth.png": "12436851da7788b664037e764a196a098eed96ef5d85ef53fea180aa7d8b491e",
-    "forcing.npz": "60c43017f57ae9a33893da16a422a533cc4c16f1164361524930e5325944d34a"
+    "scene.png": "9ded39b1bc6284875bb21fe0af2a5cde9fd414c23fdeca697d92e2e198590b5f",
+    "mask_groundtruth.png": "2d9b9d2f6845b97bea7048f35ab54d51e084fa6e38c225ca2749e496088b4d73",
+    "forcing.npz": "4b4a3d7409108fc9ff8a0bc13aebea75a693c55c3f7b0ee4d714330907fec93b"
   }
 }

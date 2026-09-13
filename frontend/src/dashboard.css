@@ -798,3 +798,162 @@
     width: 100%;
   }
 }
+
+/* --- Detected slick overlay and geometry --- */
+
+.scene-wrap { position: relative; line-height: 0; }
+
+.scene-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.scene-poly {
+  fill: rgba(45, 212, 191, 0.14);
+  stroke: var(--teal);
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.scene-nodetect {
+  position: absolute;
+  inset: auto 0 0.6rem 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--amber, #e0a03a);
+}
+
+.geom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem 0.9rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.geom-grid > div { display: flex; flex-direction: column; gap: 0.1rem; }
+
+.geom-k {
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.geom-v {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* --- Height-balanced masonry (supersedes the column-count rule above) --- */
+
+@media (min-width: 1100px) {
+  .grid { display: block; column-count: auto; }
+  .grid .panel { display: block; margin-bottom: 0; }
+}
+
+.masonry { display: grid; align-items: start; }
+.masonry-col { display: flex; flex-direction: column; min-width: 0; }
+
+.masonry-measure {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-width: 0;
+}
+
+.masonry-hidden {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+  width: 33%;
+}
+
+/* --- Final layout: three explicit columns, panels hand-distributed ---
+   Supersedes both the column-count and masonry rules above. */
+
+.masonry, .masonry-measure, .masonry-col, .masonry-hidden { display: none !important; }
+
+@media (min-width: 1100px) {
+  .grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.1rem;
+    align-items: start;
+    column-count: auto;
+  }
+  .grid-col {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1.1rem;
+    min-width: 0;
+  }
+  .grid .panel { display: block; margin-bottom: 0; break-inside: auto; }
+}
+
+/* --- Masonry v2: measured in place, absolutely positioned ---
+   Supersedes every earlier .grid / .masonry rule in this file. */
+
+.masonry, .masonry-measure, .masonry-col, .masonry-hidden { display: block !important; }
+.masonry-measure, .masonry-hidden { display: none !important; }
+
+@media (min-width: 1100px) {
+  .grid { display: block !important; column-count: auto; }
+}
+
+.masonry {
+  position: relative;
+  width: 100%;
+}
+
+.masonry-item { width: 100%; }
+
+/* before measurement, stack naturally so nothing is ever hidden */
+.masonry:not(.is-placed) .masonry-item + .masonry-item { margin-top: 18px; }
+
+.masonry.is-placed .masonry-item { margin-top: 0; }
+
+.masonry .panel { margin-bottom: 0; height: 100%; }
+
+/* --- Traffic filtering and provenance --- */
+
+.prov-states { list-style: none; margin: 0.3rem 0 0.6rem; padding: 0; }
+
+.prov-state {
+  display: grid;
+  grid-template-columns: 2.4rem auto;
+  grid-template-areas: "n label" "n note";
+  gap: 0 0.7rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.07));
+}
+
+.prov-state:last-child { border-bottom: none; }
+.prov-state.is-zero { opacity: 0.45; }
+
+.prov-n {
+  grid-area: n;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.prov-candidate .prov-n { color: var(--teal); }
+.prov-excluded .prov-n { color: var(--text-dim); }
+.prov-unassessed .prov-n { color: var(--amber, #e0a03a); }
+
+.prov-label { grid-area: label; font-size: 0.82rem; font-weight: 600; }
+.prov-note { grid-area: note; font-size: 0.72rem; opacity: 0.55; line-height: 1.35; }
+
+.prov-meta dd { word-break: break-word; }
+
+/* the stretched wrapper is only flat if the panel fills it */
+.masonry.is-placed .masonry-item { display: flex; }
+.masonry.is-placed .masonry-item > .panel { flex: 1; }

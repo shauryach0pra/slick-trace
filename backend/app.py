@@ -159,6 +159,12 @@ def get_naive_baseline(incident_id: str):
     return _require(incident_id, "naive_baseline_result.json", "naive baseline")
 
 
+@app.get("/api/incidents/{incident_id}/detection")
+def detection(incident_id: str):
+    """Detected slick outline and geometric characterisation (PS part (a))."""
+    return _require(incident_id, "detection_result.json", "detection result")
+
+
 @app.get("/api/incidents/{incident_id}/fragility")
 def get_fragility(incident_id: str):
     return _require(incident_id, "fragility_result.json", "rank-fragility analysis")

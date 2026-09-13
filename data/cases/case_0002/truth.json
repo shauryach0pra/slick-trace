@@ -9,7 +9,7 @@
   "release_start_utc": "2026-09-09T21:30:00+00:00",
   "release_duration_hours": 4.0,
   "is_continuous": true,
-  "swirl": 0.014020732978607568,
+  "swirl": 0.01402073297860757,
   "roles": {
     "419858938": "true_source",
     "419883006": "near_miss_decoy",

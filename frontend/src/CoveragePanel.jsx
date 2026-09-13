@@ -63,9 +63,12 @@ export default function CoveragePanel({ coverage }) {
         miss {coverage.operating_point.detector_miss_rate}, hidden fraction{' '}
         {coverage.operating_point.hide_fraction_selective}.
       </p>
-      <ul className="cov-limits">
-        {coverage.limits.map((l) => <li key={l}>{l}</li>)}
-      </ul>
+      <details className="text-equivalent">
+        <summary>What these rates do and do not establish</summary>
+        <ul className="cov-limits">
+          {coverage.limits.map((l) => <li key={l}>{l}</li>)}
+        </ul>
+      </details>
     </div>
   );
 }

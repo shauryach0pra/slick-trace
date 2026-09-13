@@ -961,8 +961,8 @@
     "version": "0.2"
   },
   "checksums": {
-    "scene.png": "a09b778588243a34bb9b477ab75c806d1690dc55a99032dde79a9c37ef478caf",
-    "mask_groundtruth.png": "3fe5c0ec23cd4e0f732a4be6246dcebaaff2b932e6e6fde72b85889a54253d9e",
-    "forcing.npz": "46c5dfa114afea61a967deda390f8577d4f8e4621f59c03223f8b75aa9c69d0e"
+    "scene.png": "36d4a1e0d7b61922c7436e834e161e1aab655180b28591a92a63bbe62cfcae44",
+    "mask_groundtruth.png": "e424c14c491b48c913de57fe80ccb8a2962912812250bb112286b645e29dc487",
+    "forcing.npz": "07595f69999ce4c57598ba07aa7a5def993bd877a5709305ca9fc0b3a07b8512"
   }
 }

@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-11T21:39:28.757725+00:00",
+  "generated_utc": "2026-09-13T09:47:07.218448+00:00",
   "incident_id": "case_0002",
   "scene": {
     "scene_id": "case_0002_S1SYN_20260910T043000",
@@ -2189,13 +2189,13 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "e77f017",
-    "python": "3.12.3",
-    "platform": "Linux 6.18.44-fc-v24 (x86_64)",
+    "git_revision": "a773f4b",
+    "python": "3.12.14",
+    "platform": "Darwin 25.2.0 (arm64)",
     "argv0": "run_pipeline.py"
   },
   "checksums_sha256": {
-    "manifest.json": "540eba1b45e871b347928536d01753cf83509f7d3f0cde948bd1849225d2db10",
+    "manifest.json": "ad381ccac87a2ba7dd3a2ed32ea3994099218e048f01f2b8848a495a579c3ba9",
     "historical_mapping.json": "331133bd62189f3e71f15a9b56b783884dcc6a77a623c3dada8f5ffe0e4f6e30",
     "naive_baseline_result.json": "b8fab4ab16e6180c6b1c5fef3306b1361e3ab9c0e68f2f78538e72e2fd8d7154",
     "attribution_result.json": "5187165bdf132d76190d42c1936760a4e7398f0d4c8116906c7e13c6e8a1c050",
@@ -2203,9 +2203,9 @@
     "coverage_result.json": "ed18b35b0a4b5df8724112dc398fd34579a39efeec9c45045d9c19e487ee4bca",
     "forecast_result.json": "7c4e79ba2bd7e4e2cfb32a55eb84742158aa35c300bbd090b2a636bdf84de628",
     "next_observation_result.json": "817150d12ebda2f222beaf64c21b83aeb2db6c0a19e4eed6a9357a9c2cb83a6d",
-    "scene.png": "49c8e3d289af4f37953592bad095c59e57c9fdf84b7c262a3fd242e34ea99311",
-    "mask_groundtruth.png": "0df987c6bd3c4d0d1a6717f3028e8385c3567d7967d068ccd02ef4c7b3ed16c5",
-    "forcing.npz": "7b75330ea491895a9b5b62f8a3aad0566c0118332adb9350f11538c87d2f6c3a"
+    "scene.png": "899f3e3b2175020332f4266edbd45a23275a9571b132a0ed199b6f5fe192600d",
+    "mask_groundtruth.png": "828e0066c72872fa55dcd4ed76493adb320e727d384f7739c0fd9f776340d6f6",
+    "forcing.npz": "d83dc9c6dd317a06e5ab6ca142083c5f10ea299dd52712f37beecb8a556092de"
   },
   "checksum_note": "Hashes verify file integrity only. They do not establish that an observation is true, that a label is correct, or that this analysis is legally sufficient."
 }

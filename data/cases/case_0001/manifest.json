@@ -1080,8 +1080,8 @@
     "version": "0.2"
   },
   "checksums": {
-    "scene.png": "0f9e2d5b68914a15401122678682cfbb979e240c02f87be4393a0efd7554cb16",
-    "mask_groundtruth.png": "05bac70fa57c04e5dcb684304632e3bd75a09d0549b0f0b980381efd6850ca19",
-    "forcing.npz": "0fafb80fd919ab4b3f4b9cb30096f28a4772b15767cc96eb750029fb16d71fbc"
+    "scene.png": "053b188031c45f228b89893add196e93845f18f67274a7e1cef76b36c42565d0",
+    "mask_groundtruth.png": "4617be9267674a8fdbd2f23b506ddcc21cd6bb9d695070a26779e684364a897e",
+    "forcing.npz": "eae171037b53ea6bdf5a452a1ad34e1cab4f9f9179d0d99728c916d6ebe87cac"
   }
 }

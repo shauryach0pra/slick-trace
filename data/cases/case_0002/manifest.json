@@ -1128,8 +1128,8 @@
     "version": "0.2"
   },
   "checksums": {
-    "scene.png": "49c8e3d289af4f37953592bad095c59e57c9fdf84b7c262a3fd242e34ea99311",
-    "mask_groundtruth.png": "0df987c6bd3c4d0d1a6717f3028e8385c3567d7967d068ccd02ef4c7b3ed16c5",
-    "forcing.npz": "7b75330ea491895a9b5b62f8a3aad0566c0118332adb9350f11538c87d2f6c3a"
+    "scene.png": "899f3e3b2175020332f4266edbd45a23275a9571b132a0ed199b6f5fe192600d",
+    "mask_groundtruth.png": "828e0066c72872fa55dcd4ed76493adb320e727d384f7739c0fd9f776340d6f6",
+    "forcing.npz": "d83dc9c6dd317a06e5ab6ca142083c5f10ea299dd52712f37beecb8a556092de"
   }
 }

@@ -4,7 +4,7 @@
   "ranking": [
     {
       "vessel_key": "419824090",
-      "distance_deg": 0.00616564268340419
+      "distance_deg": 0.006165642683404189
     },
     {
       "vessel_key": "419336692",
@@ -24,7 +24,7 @@
     },
     {
       "vessel_key": "419680736",
-      "distance_deg": 0.8046114129519819
+      "distance_deg": 0.8046114129519818
     }
   ],
   "top_candidate_id": "419824090"

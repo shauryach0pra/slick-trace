@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-11T21:39:28.757725+00:00 · git `e77f017` · Linux 6.18.44-fc-v24 (x86_64)
+Generated 2026-09-13T09:47:07.218448+00:00 · git `a773f4b` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -102,7 +102,7 @@ Most informative tested window: **+3 h** (disagreement score 0.9286). hypothetic
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `540eba1b45e871b3…` |
+| `manifest.json` | `ad381ccac87a2ba7…` |
 | `historical_mapping.json` | `331133bd62189f3e…` |
 | `naive_baseline_result.json` | `b8fab4ab16e6180c…` |
 | `attribution_result.json` | `5187165bdf132d76…` |
@@ -110,6 +110,6 @@ Most informative tested window: **+3 h** (disagreement score 0.9286). hypothetic
 | `coverage_result.json` | `ed18b35b0a4b5df8…` |
 | `forecast_result.json` | `7c4e79ba2bd7e4e2…` |
 | `next_observation_result.json` | `817150d12ebda2f2…` |
-| `scene.png` | `49c8e3d289af4f37…` |
-| `mask_groundtruth.png` | `0df987c6bd3c4d0d…` |
-| `forcing.npz` | `7b75330ea491895a…` |
+| `scene.png` | `899f3e3b21750203…` |
+| `mask_groundtruth.png` | `828e0066c72872fa…` |
+| `forcing.npz` | `d83dc9c6dd317a06…` |

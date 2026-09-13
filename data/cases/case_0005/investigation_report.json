@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-11T21:39:43.938153+00:00",
+  "generated_utc": "2026-09-13T09:47:13.735599+00:00",
   "incident_id": "case_0005",
   "scene": {
     "scene_id": "case_0005_S1SYN_20260910T043000",
@@ -172,7 +172,7 @@
         },
         {
           "vessel_key": "419941459",
-          "distance_deg": 0.49171797170362236
+          "distance_deg": 0.4917179717036223
         },
         {
           "vessel_key": "419420729",
@@ -2170,23 +2170,23 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "e77f017",
-    "python": "3.12.3",
-    "platform": "Linux 6.18.44-fc-v24 (x86_64)",
+    "git_revision": "a773f4b",
+    "python": "3.12.14",
+    "platform": "Darwin 25.2.0 (arm64)",
     "argv0": "run_pipeline.py"
   },
   "checksums_sha256": {
-    "manifest.json": "8d02a66f70f72b8436ced60b7ece09c8bd30777da040e2b3239af460ac37dc3f",
+    "manifest.json": "d4d486332d5b0e0e8d0b66dffff2c06f47a206b6c9e1ec1548e996438e0d2caa",
     "historical_mapping.json": "8b0db748bf35d28f41932766b63afdab4023ebc79450b8fde155ac007806fc22",
-    "naive_baseline_result.json": "b36d7871cfc582318356a4313338d1937ab8022a67c1b38ae1440794b0289a8a",
+    "naive_baseline_result.json": "470dcd6df19d123a06fa850a5b9419d97289788898bc34da9a4381c2b52cdc01",
     "attribution_result.json": "b267fa98b9c5d968feae51d356c1f66219e79d962dbd1ffacbe2231e3ed6c1a8",
     "fragility_result.json": "fe88c99a1a7b55bfc30039a70413a5eac4fce082b5de6d8a51fba50cfe8560d6",
     "coverage_result.json": "1b7b4af45b86574572297f43e8ff8ebc92756ff9bc829a5eaff2f7659b0fd828",
     "forecast_result.json": "bd8ea6c0e1d3e52ff79147b773d1878555c533f3f037970a80ad7090120250d4",
     "next_observation_result.json": "403dd0446bf62124f101b990b4f0e78e0440d62c28aeda5acb093c19f39a170c",
-    "scene.png": "0f047dd8e66682ca8308cef9ec6c7a35568ea2f3e332ed35c06ce088a593dbdb",
-    "mask_groundtruth.png": "14fc9d7f1a3c05b1b0b349c7b2eafd53950b1efadcb3c395ce8526d5d4ad9f09",
-    "forcing.npz": "88ec9997e49e6e9699bd4d819460adbd5bb8125ea01c468a6b06b6439d5516e1"
+    "scene.png": "40b11cdd271beb95815280ceb9a9fff978d20fb2aa8ba89fd814eb6314ccf503",
+    "mask_groundtruth.png": "0a45ae61c8bc613f8d5b6e270dd6651c4491911ca5d29a63b4b8ddffce6dd221",
+    "forcing.npz": "34b71c9eccb0e5c6e6040bb3d693733b738a1d2bb059f81a7f790e734cffb928"
   },
   "checksum_note": "Hashes verify file integrity only. They do not establish that an observation is true, that a label is correct, or that this analysis is legally sufficient."
 }

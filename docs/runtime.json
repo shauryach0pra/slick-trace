@@ -1,92 +1,98 @@
 {
-  "wall_clock_s": 30.84,
+  "wall_clock_s": 13.5,
   "n_cases": 6,
   "regenerated_from_seeds": true,
   "skipped_stages": [],
   "hardware": {
-    "machine": "x86_64",
-    "system": "Linux 6.18.44-fc-v24",
-    "python": "3.12.3",
-    "cpu_count": 1,
+    "machine": "arm64",
+    "system": "Darwin 25.2.0",
+    "python": "3.12.14",
+    "cpu_count": 8,
     "compute_profile": "CPU (no GPU, no torch in the served path)"
   },
   "per_case": {
     "case_0001": {
-      "total_s": 4.59,
+      "total_s": 2.16,
       "stages_s": {
-        "historical_mapping": 0.01,
+        "detection": 0.24,
+        "historical_mapping": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 1.95,
-        "fragility": 2.53,
-        "coverage": 0.02,
-        "forecast": 0.01,
-        "next_observation": 0.06,
-        "report": 0.01
+        "attribution": 0.8,
+        "fragility": 1.05,
+        "coverage": 0.01,
+        "forecast": 0.0,
+        "next_observation": 0.02,
+        "report": 0.02
       }
     },
     "case_0002": {
-      "total_s": 6.23,
+      "total_s": 2.78,
       "stages_s": {
-        "historical_mapping": 0.01,
+        "detection": 0.01,
+        "historical_mapping": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 2.7,
-        "fragility": 3.42,
-        "coverage": 0.02,
-        "forecast": 0.01,
-        "next_observation": 0.07,
+        "attribution": 1.2,
+        "fragility": 1.51,
+        "coverage": 0.01,
+        "forecast": 0.0,
+        "next_observation": 0.03,
         "report": 0.01
       }
     },
     "case_0003": {
-      "total_s": 2.99,
+      "total_s": 1.36,
       "stages_s": {
-        "historical_mapping": 0.01,
+        "detection": 0.01,
+        "historical_mapping": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 1.25,
-        "fragility": 1.63,
-        "coverage": 0.02,
-        "forecast": 0.01,
-        "next_observation": 0.06,
+        "attribution": 0.58,
+        "fragility": 0.71,
+        "coverage": 0.01,
+        "forecast": 0.0,
+        "next_observation": 0.03,
         "report": 0.01
       }
     },
     "case_0004": {
-      "total_s": 7.66,
+      "total_s": 3.24,
       "stages_s": {
-        "historical_mapping": 0.01,
+        "detection": 0.01,
+        "historical_mapping": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 3.35,
-        "fragility": 4.18,
-        "coverage": 0.04,
-        "forecast": 0.01,
-        "next_observation": 0.06,
+        "attribution": 1.43,
+        "fragility": 1.75,
+        "coverage": 0.01,
+        "forecast": 0.0,
+        "next_observation": 0.03,
         "report": 0.01
       }
     },
     "case_0005": {
-      "total_s": 4.53,
+      "total_s": 1.92,
       "stages_s": {
-        "historical_mapping": 0.01,
+        "detection": 0.01,
+        "historical_mapping": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 1.98,
-        "fragility": 2.45,
-        "coverage": 0.02,
-        "forecast": 0.01,
-        "next_observation": 0.07,
+        "attribution": 0.79,
+        "fragility": 1.06,
+        "coverage": 0.01,
+        "forecast": 0.0,
+        "next_observation": 0.03,
         "report": 0.01
       }
     },
     "case_0006": {
-      "total_s": 4.84,
+      "total_s": 2.05,
       "stages_s": {
-        "historical_mapping": 0.01,
+        "detection": 0.01,
+        "historical_mapping": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 2.03,
-        "fragility": 2.71,
-        "coverage": 0.02,
-        "forecast": 0.01,
-        "next_observation": 0.06,
-        "report": 0.01
+        "attribution": 0.84,
+        "fragility": 1.13,
+        "coverage": 0.01,
+        "forecast": 0.0,
+        "next_observation": 0.03,
+        "report": 0.02
       }
     }
   }

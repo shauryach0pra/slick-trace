@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import './dashboard.css';
 import { api } from './api';
 import CaseSwitcher from './CaseSwitcher';
+import Masonry from './Masonry';
+import ProvenancePanel from './ProvenancePanel';
 import VerdictBand from './VerdictBand';
 import ScenePanel from './ScenePanel';
 import RankingPanel from './RankingPanel';
@@ -24,6 +26,8 @@ export default function App() {
   const [coverage, setCoverage] = useState(null);
   const [nextObs, setNextObs] = useState(null);
   const [historical, setHistorical] = useState(null);
+  const [detection, setDetection] = useState(null);
+  const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -35,7 +39,7 @@ export default function App() {
     // screen beside another's while the new request is in flight.
     setManifest(null); setAttribution(null); setNaiveBaseline(null);
     setTracksData(null); setFragility(null); setForecast(null);
-    setCoverage(null); setNextObs(null); setHistorical(null); setError(null);
+    setCoverage(null); setNextObs(null); setHistorical(null); setDetection(null); setReport(null); setError(null);
 
     Promise.all([
       api.manifest(incidentId),
@@ -49,6 +53,8 @@ export default function App() {
       .catch((e) => setError(String(e.message ?? e)));
 
     // Secondary evidence: each degrades its own panel, not the page.
+    api.detection(incidentId).then(setDetection).catch(() => setDetection(null));
+    api.report(incidentId).then(setReport).catch(() => setReport(null));
     api.historicalMapping(incidentId).then(setHistorical).catch(() => setHistorical(null));
     api.fragility(incidentId).then(setFragility).catch(() => setFragility(null));
     api.forecast(incidentId).then(setForecast).catch(() => setForecast(null));
@@ -80,21 +86,19 @@ export default function App() {
                    historical={historical} manifest={manifest} />
 
       <main className="grid">
-        <div className="grid-col grid-col-left">
-          <ScenePanel manifest={manifest} sceneUrl={api.sceneUrl(incidentId)} />
+        <Masonry gap={18}>
+          <ScenePanel manifest={manifest} sceneUrl={api.sceneUrl(incidentId)}
+                      detection={detection} />
+          <RankingPanel naive={naiveBaseline} attribution={attribution} />
+          <AskConsole incidentId={incidentId} api={api} />
           <TimeSliderMap incidentId={incidentId} api={api} tracksData={tracksData}
                          topCandidateId={attribution?.top_candidate_id} />
-        </div>
-        <div className="grid-col grid-col-mid">
-          <RankingPanel naive={naiveBaseline} attribution={attribution} />
           <FragilityPanel fragility={fragility} />
-          <NextObservationPanel nextObs={nextObs} />
-        </div>
-        <div className="grid-col grid-col-right">
-          <AskConsole incidentId={incidentId} api={api} />
           <ForecastPanel forecast={forecast} />
+          <NextObservationPanel nextObs={nextObs} />
           <CoveragePanel coverage={coverage} />
-        </div>
+          <ProvenancePanel report={report} manifest={manifest} />
+        </Masonry>
       </main>
     </div>
   );
