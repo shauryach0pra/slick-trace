@@ -38,6 +38,27 @@
     "tolerance": 0.05,
     "note": "top two candidates are not separated - the ordering between them carries no weight and should not be read as a preference"
   },
+  "named_factors": {
+    "factors": [
+      {
+        "vessel_key": "419769953",
+        "proximity_deg_at_acquisition": 0.0030468014651926986,
+        "trajectory_envelope_dwell": 1,
+        "physical_fit_mean_iou": 0.0881,
+        "physical_fit_mean_loss": 0.5373
+      },
+      {
+        "vessel_key": "419876898",
+        "proximity_deg_at_acquisition": 0.21942462444235503,
+        "trajectory_envelope_dwell": 4,
+        "physical_fit_mean_iou": 0.0121,
+        "physical_fit_mean_loss": 0.5412
+      }
+    ],
+    "ranked_on": "physical_fit_mean_loss",
+    "note": "Proximity and trajectory are reported, not scored. Only physical fit orders the ranking; folding proximity in would make the baseline comparison circular, and folding dwell in would count the vessel's path twice.",
+    "behavioural_anomalies": "not scored. A transponder gap does not raise a candidate's score - missing evidence is recorded as unassessed, never as culpability."
+  },
   "loss_weights": {
     "a_iou": 0.5,
     "b_boundary": 0.2,

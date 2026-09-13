@@ -50,6 +50,34 @@
     "tolerance": 0.05,
     "note": "top two candidates separated on the ranking criterion"
   },
+  "named_factors": {
+    "factors": [
+      {
+        "vessel_key": "419125223",
+        "proximity_deg_at_acquisition": 0.15279649882776117,
+        "trajectory_envelope_dwell": 10,
+        "physical_fit_mean_iou": 0.5988,
+        "physical_fit_mean_loss": 0.2459
+      },
+      {
+        "vessel_key": "419253638",
+        "proximity_deg_at_acquisition": 0.21858037708299677,
+        "trajectory_envelope_dwell": 5,
+        "physical_fit_mean_iou": 0.0438,
+        "physical_fit_mean_loss": 0.5326
+      },
+      {
+        "vessel_key": "419847031",
+        "proximity_deg_at_acquisition": 0.003490503939198992,
+        "trajectory_envelope_dwell": 1,
+        "physical_fit_mean_iou": 0.1171,
+        "physical_fit_mean_loss": 0.5428
+      }
+    ],
+    "ranked_on": "physical_fit_mean_loss",
+    "note": "Proximity and trajectory are reported, not scored. Only physical fit orders the ranking; folding proximity in would make the baseline comparison circular, and folding dwell in would count the vessel's path twice.",
+    "behavioural_anomalies": "not scored. A transponder gap does not raise a candidate's score - missing evidence is recorded as unassessed, never as culpability."
+  },
   "loss_weights": {
     "a_iou": 0.5,
     "b_boundary": 0.2,
