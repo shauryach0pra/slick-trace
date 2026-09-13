@@ -78,6 +78,15 @@
     "note": "Proximity and trajectory are reported, not scored. Only physical fit orders the ranking; folding proximity in would make the baseline comparison circular, and folding dwell in would count the vessel's path twice.",
     "behavioural_anomalies": "not scored. A transponder gap does not raise a candidate's score - missing evidence is recorded as unassessed, never as culpability."
   },
+  "release_age": {
+    "estimable": true,
+    "hours": 4.5,
+    "hours_low": 0.0,
+    "hours_high": 9.0,
+    "confidence": "low",
+    "method": "release time from the best-fitting forward-replay hypothesis; interval from the hours at which this vessel was inside the backward origin envelope",
+    "caveat": "Not derived from slick appearance. Area-based age needs volume, oil properties and forcing that a single scene does not supply, so no Fay spreading estimate is made. The interval is as uncertain as the envelope it comes from, and the hypothesis grid it is drawn from has finite time resolution. Confidence cannot be higher than low here and the field cannot express it."
+  },
   "loss_weights": {
     "a_iou": 0.5,
     "b_boundary": 0.2,

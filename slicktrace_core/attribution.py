@@ -191,6 +191,73 @@ def score_fit(pred: np.ndarray, truth: np.ndarray, complexity_penalty: float) ->
 # the ranking should not be read as a preference. Chosen as a guard rather than
 # tuned: named cases here separate by 0.15-0.34, abstained cases by 0.004-0.006,
 # so 0.05 sits in the empty band between them and trips on neither today.
+def _release_age(case_dir: str, manifest: dict, top: dict | None,
+                 unknown_source: bool = False) -> dict:
+    """Age of the slick, as a bounded interval derived from transport.
+
+    The problem statement asks for age "if feasible". From a single scene it is
+    not feasible in the usual sense: slick area depends on volume, oil
+    properties and forcing, none of which is known here, so a Fay spreading
+    calculation would produce a number with unstated uncertainty spanning
+    orders of magnitude. That route is deliberately not taken.
+
+    What the reconstruction does support is a release-time interval. The
+    hindcast records the hours-before-acquisition at which each candidate was
+    inside the backward origin envelope. For the leading candidate, the earliest
+    and latest such hour bound when a release from that vessel could have
+    started and still explain the observation. The point estimate is the
+    best-fitting release in the hypothesis search.
+
+    The confidence field cannot express high, by construction. The interval
+    comes from a transport model over synthetic forcing, bounded by a
+    hypothesis grid of finite resolution, and both bounds are as uncertain as
+    the envelope that produced them.
+    """
+    from datetime import datetime
+    import json as _json, os as _os
+
+    out = {
+        "estimable": False, "hours": None, "hours_low": None, "hours_high": None,
+        "confidence": "unavailable", "method": None, "caveat": None,
+    }
+    if top is None or unknown_source:
+        out["caveat"] = ("no candidate cleared the absolute fit gate, so there is no "
+                         "release to date. An age derived from a candidate the system "
+                         "declined to endorse would contradict the abstention that "
+                         "produced it: the slick exists, its origin does not resolve, "
+                         "and neither does its age.")
+        return out
+
+    try:
+        acq = datetime.fromisoformat(manifest["acquired_utc"])
+        rel = datetime.fromisoformat(str(top["release_start"]))
+        hm = _json.load(open(_os.path.join(case_dir, "historical_mapping.json")))
+    except Exception:
+        return out
+
+    hours = (acq - rel).total_seconds() / 3600.0
+    inside = next((x.get("inside_at") or [] for x in hm.get("assessments", [])
+                   if x["vessel_key"] == top["vessel_key"]), [])
+
+    out.update({
+        "estimable": True,
+        "hours": round(hours, 2),
+        "hours_low": round(min(inside), 2) if inside else None,
+        "hours_high": round(max(inside), 2) if inside else None,
+        "confidence": "low",
+        "method": ("release time from the best-fitting forward-replay hypothesis; "
+                   "interval from the hours at which this vessel was inside the "
+                   "backward origin envelope"),
+        "caveat": ("Not derived from slick appearance. Area-based age needs volume, "
+                   "oil properties and forcing that a single scene does not supply, "
+                   "so no Fay spreading estimate is made. The interval is as "
+                   "uncertain as the envelope it comes from, and the hypothesis "
+                   "grid it is drawn from has finite time resolution. Confidence "
+                   "cannot be higher than low here and the field cannot express it."),
+    })
+    return out
+
+
 def _named_factors(case_dir: str, ranked: list[dict]) -> dict:
     """Report proximity, trajectory and physical fit separately per candidate.
 
@@ -358,6 +425,8 @@ def run_attribution(case_dir: str, candidate_vessel_keys: list[str] | None = Non
         "abstention_iou_gate": ABSTENTION_IOU_GATE,
         "discrimination": _discrimination([r.__dict__ for r in ranking]),
         "named_factors": _named_factors(case_dir, [r.__dict__ for r in ranking]),
+        "release_age": _release_age(case_dir, manifest, top.__dict__ if top else None,
+                                    unknown_source),
         "loss_weights": LOSS_WEIGHTS,
         "n_ensemble_variants": len(ENSEMBLE_VARIANTS),
     }

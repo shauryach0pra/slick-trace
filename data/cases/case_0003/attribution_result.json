@@ -59,6 +59,15 @@
     "note": "Proximity and trajectory are reported, not scored. Only physical fit orders the ranking; folding proximity in would make the baseline comparison circular, and folding dwell in would count the vessel's path twice.",
     "behavioural_anomalies": "not scored. A transponder gap does not raise a candidate's score - missing evidence is recorded as unassessed, never as culpability."
   },
+  "release_age": {
+    "estimable": false,
+    "hours": null,
+    "hours_low": null,
+    "hours_high": null,
+    "confidence": "unavailable",
+    "method": null,
+    "caveat": "no candidate cleared the absolute fit gate, so there is no release to date. An age derived from a candidate the system declined to endorse would contradict the abstention that produced it: the slick exists, its origin does not resolve, and neither does its age."
+  },
   "loss_weights": {
     "a_iou": 0.5,
     "b_boundary": 0.2,
