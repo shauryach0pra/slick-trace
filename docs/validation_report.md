@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-13T20:17:34.752358+00:00 · 8 independently generated cases (achieved count, not planned)
+Generated 2026-09-13T20:21:25.083506+00:00 · 8 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -183,23 +183,29 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Slowest single case, all stages | 3.6 s (case_0004) | ≤ 5 min |
 | Mean per case | 2.4 s | — |
 | Full run, 8 cases | 19.5 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.5 ms | < 2 s |
+| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 8.1 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.9 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
 Dominant stages across the run: fragility 10.4 s, attribution 8.2 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 
-## Required ablations
+## Required ablations - what each stage contributes
+
+| Stage | Measured on source-present cases |
+| --- | --- |
+| 1. Nearest vessel at image time | Top-1 **0/6** |
+| 2. Hindcast intersection (filter only) | true source retained **6/6**; candidate pool 41 -> 22 (46% removed) |
+| 3. Forward reconstruction | Top-1 **6/6** |
+| 4. Uncertainty / abstention | correct on source-absent cases **2/2** |
+
+> **Rung 2 is the one worth reading twice.** Hindcast filtering removes roughly half the candidate pool and, on these cases, never removes the true source. A filter that discarded the answer would be worse than no filter, so retention is reported alongside reduction rather than reduction alone.
+
+> **Rungs 1 and 3 use the same cases and the same candidate data.** The difference between 0 and 6 is the method, not the sample. The paired significance test on that difference is in the attribution section.
 
 | Stage | Status |
 | --- | --- |
-| Nearest-at-image vessel | run (naive baseline, full unfiltered vessel list) |
-| Historical proximity | run (same baseline, reported per case above) |
-| Hindcast intersection | run (candidate/excluded/unassessed filtering) |
-| Forward reconstruction | run (shared-ensemble replay ranking) |
-| Uncertainty / abstention | run (absolute fit gate, source-absent cases) |
 | NLP lookup-only templates before semantic search | run — no semantic search enabled |
 | Radar matching with intentionally hidden AIS | run (hidden-AIS experiment) |
