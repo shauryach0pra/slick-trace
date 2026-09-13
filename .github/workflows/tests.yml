@@ -1,0 +1,57 @@
+name: tests
+
+# Reproducibility is a claim this repository makes in several places. Running
+# the suite on a clean machine on every push is what turns that from an
+# assertion into something a reader can check the result of.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Install from the lock, not requirements.txt: the lock pins every direct
+      # and transitive dependency, so CI runs the environment the results were
+      # produced under rather than whatever resolves today.
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock -r requirements-dev.lock
+
+      - name: Run test suite
+        run: python -m pytest tests/ -q
+
+      # The committed artifacts must be reproducible from their seeds. This
+      # regenerates every case and fails if any artifact differs, which is the
+      # check behind the determinism claim in the README.
+      - name: Regenerate cases and verify artifacts are unchanged
+        run: |
+          python scripts/run_pipeline.py --regenerate
+          git diff --exit-code --stat -- data/cases/ \
+            || (echo "::error::Regenerated artifacts differ from committed ones" && exit 1)
+
+      - name: Re-score and verify headline results hold
+        run: |
+          python scripts/run_validation.py
+          python - <<'EOF'
+          import json
+          d = json.load(open("docs/validation_report.json"))
+          sp = d["attribution"]["source_present"]
+          sa = d["attribution"]["source_absent"]
+          assert sp["method_top1"] == sp["n"], f"forward replay {sp['method_top1']}/{sp['n']}"
+          assert sp["naive_top1"] == 0, f"naive baseline scored {sp['naive_top1']}"
+          assert sa["false_named_attributions"] == 0, "named a source on an absent-source case"
+          assert sp["mcnemar"]["p_value"] < 0.05, f"p = {sp['mcnemar']['p_value']}"
+          print(f"ok: {sp['method_top1']}/{sp['n']} vs {sp['naive_top1']}/{sp['n']}, "
+                f"p = {sp['mcnemar']['p_value']}")
+          EOF
