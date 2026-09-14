@@ -336,12 +336,27 @@ measured in the characterisation table of `docs/validation_report.md`
 release geometry stays interpretable and the truth mask is unambiguous. It was
 never fitted to the shape statistics of real SAR oil slicks.
 
-**What breaks if it is wrong.** It is wrong, and measurably. Published
-morphology discriminators treat elongation above about 2.0 and a ragged boundary
-as favouring oil; real bilge discharge from a vessel under way is a ribbon, tens
-of kilometres by a few hundred metres. Every case here measures between 1.02 and
-1.27. Scored against those published thresholds, **all eight cases would be
-classified as look-alikes on shape alone.** Any morphology-based discriminator
+**What breaks if it is wrong.** It was wrong, measurably, and has been
+partly corrected. Published morphology discriminators treat elongation above
+about 2.0 and a ragged boundary as favouring oil; real bilge discharge from a
+vessel under way is a ribbon, tens of kilometres by a few hundred metres. The
+original eight cases measured between 1.02 and 1.29, so **scored against those
+published thresholds every one would have been classified as a look-alike on
+shape alone.**
+
+The along-track ribbon family (case_0009) was added in response: elongation
+4.34, 68.5 x 15.8 km, isoperimetric complexity 6.13 against 1.25-1.93 for the
+compact cases. It is still at the low end of the real 5-20 range, and for a
+blunt reason - at 111 km to the degree, a fully realistic ribbon runs off the
+edge of a one-degree scene. The benchmark now spans both regimes rather than
+only the unrealistic one, but it is not yet drawn from the real distribution.
+
+**What the correction revealed.** The compact-slick defect was not cosmetic. A
+continuous release smears along-track while a pulse stays compact, so on compact
+slicks the attribution search preferred a 0.5 hour pulse on every single case,
+despite every truth being a 2-4 hour continuous release. On the ribbon it
+selected a continuous release for the first time. The morphology gap and the
+release-type error were one problem, and the fix confirmed the diagnosis. Any morphology-based discriminator
 calibrated on real imagery is therefore being applied out of domain when pointed
 at this benchmark, and its output says more about the generator than the method.
 
