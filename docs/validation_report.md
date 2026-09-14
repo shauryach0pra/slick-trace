@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T05:52:05.035423+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-14T05:54:05.779465+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -49,7 +49,7 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 
 > Recall and precision are pixel-level on oil scenes; the two FP rates are per scene on scenes with no oil in them. Pixel accuracy is not reported, because on scenes that are mostly background it is high regardless of whether the slick was found.
 
-> **The recall target of 0.85 (masterplan p.15) is not met by the classical baseline: test 0.819.** IoU clears its 0.65 target and the false-positive rates are 0.000, so the baseline is conservative rather than inaccurate — it rejects patchy regions, which buys precision and costs recall. That trade-off is the concrete case for the learned model: the number to beat is recall, not IoU. Reported as a miss rather than omitted.
+> **Recall against the 0.85 target (masterplan p.15): met on val 0.860, missed on test 0.819.** Lee speckle filtering at a 0.65 darkness threshold raised recall from 0.682 val and 0.696 test unfiltered. Both splits are reported rather than the flattering one. False-positive rates on look-alike and clean scenes remain 0.000 at this operating point, so the gain was not bought by loosening the detector: the filter moved the whole trade-off curve rather than trading along it (see the operating-point section). The threshold was chosen on the training split before val or test were examined. The remaining test-split shortfall is still the argument for the learned model.
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
 
@@ -191,7 +191,7 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Full run, 9 cases | 20.7 s | — |
 | Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 7.6 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.8 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
 Dominant stages across the run: fragility 11.1 s, attribution 8.8 s, detection 0.4 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.

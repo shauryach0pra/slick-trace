@@ -100,8 +100,8 @@ Maintained separately from the pitch deck, carrying the same gating discipline
 used during the build:
 
 1. **Train and evaluate the U-Net** against the classical baseline on the
-   identical split. The concrete target is recall: the baseline reaches 0.68 on
-   val and 0.70 on test against a 0.85 target, while holding precision near 0.99
+   identical split. The concrete target is recall: the baseline reaches 0.86 on
+   val and 0.82 on test against a 0.85 target — met on validation, missed on test — while holding false positives at zero
    and a 0.000 false-positive rate. That gap is the specific thing a learned
    model has to close, and it is a sharper objective than an IoU figure.
 2. **Real-region validation for Indian waters** with matched AIS and

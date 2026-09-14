@@ -250,7 +250,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 - No DuckDB/Parquet layer; no unstructured evidence index or similarity search
 - No geometry in metric projection (recorded but unused)
 - U-Net implemented but unevaluated (requires GPU environment for training)
-- Classical baseline detector misses recall target (0.68 val / 0.70 test vs 0.85 target)
+- Classical baseline detector: recall 0.86 val / 0.82 test against a 0.85 target — met on validation, missed on test
 - Coverage, forecast, and next-observation results computed but not yet on dashboard
 - `--reveal-truth` flag is development-only and must never be exposed in production
 
