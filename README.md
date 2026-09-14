@@ -24,7 +24,7 @@ Slick Trace is an oil-spill source attribution system that detects slicks, recon
 slicktrace/
 ├── backend/              # FastAPI application serving attribution results
 ├── frontend/             # React + Vite dashboard with live time-slider controls
-├── slicktrace_core/          # Core attribution pipeline modules
+├── slicktrace_core/      # Core attribution pipeline modules
 │   ├── schema.py         # Data contracts and validation schemas
 │   ├── synth_generator.py # Synthetic case generation
 │   ├── hindcast.py       # Historical vessel-slick mapping
@@ -87,7 +87,6 @@ cd frontend
 npm install
 cd ..
 ```
-
 
 > **macOS 26 note.** `python3 -m venv` fails at `ensurepip` on macOS 26 — pip
 > cannot parse the OS version and raises `ValueError`. This is a pip/macOS
@@ -165,7 +164,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 - `PYTHONDONTWRITEBYTECODE=1` - Prevent .pyc file generation
 
 **Data Configuration:**
-- Synthetic cases are generated from seeds in `slicktrace_core/synth_generator.py` (keeping existing module name for compatibility)
+- Synthetic cases are generated from seeds in `slicktrace_core/synth_generator.py`
 - Ground truth lives in per-case `truth.json` files (never loaded by API)
 - Vessel identifiers use neutral fictional MMSIs (419xxxxxx)
 - Docker uses named volumes at `/app/data` for persistent incident storage
@@ -185,8 +184,6 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 | Syntax + imports | `py_compile`, import graph | pass |
 | Startup check | `python3 scripts/startup_check.py` | pass |
 | Determinism | regenerate, diff analysis artifacts | byte-identical, 8 cases, verified in CI on Ubuntu x86-64 |
-
-> **What byte-identical covers.** Every analysis artifact — attribution, fragility, hindcast, coverage, forecast, next-observation, detection — is byte-identical after regeneration on a different OS and architecture, checked in CI. Generated media are not: PNG encoding depends on the zlib build and `.npz` archives store timestamps, so those files differ between platforms while their contents do not. `manifest.json` carries SHA-256 checksums of those files and differs for the same reason. The claim is about the results, not their containers.
 | Test suite | `python3 -m pytest tests/ -q` | 197 passed |
 | Dependency pins | every `==` vs installed | all match |
 | Validation | `python3 scripts/run_validation.py` | 4/4 attribution, 2/2 abstentions, 40/40 NLP |
@@ -195,6 +192,8 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 | Frontend | `npm run lint && npm run build` | 0 errors, 2 warnings |
 | Browser | headless Chromium, desktop + mobile | 0 console errors, 0 external requests |
 | Docker | — | reviewed, not executed (no daemon) |
+
+> **What byte-identical covers.** Every analysis artifact — attribution, fragility, hindcast, coverage, forecast, next-observation, detection — is byte-identical after regeneration on a different OS and architecture, checked in CI. Generated media are not: PNG encoding depends on the zlib build and `.npz` archives store timestamps, so those files differ between platforms while their contents do not. `manifest.json` carries SHA-256 checksums of those files and differs for the same reason. The claim is about the results, not their containers.
 
 ---
 
@@ -309,21 +308,6 @@ code, manifests, assumptions register, licence appendix and validation report �
 is offered to the evaluating body; see `docs/sustainability_and_ownership.md`.
 Source licences, redistribution status and required attribution strings for every
 dataset are recorded in `docs/licence_and_data_rights.md`.
-
----
-
-### Maintainer and handover
-
-**Shaurya Chopra** — shauryachopra@zohomail.in — [github.com/shauryach0pra](https://github.com/shauryach0pra)
-
-Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
-
-Built and maintained by one person. Continuity does not rest on a second reader
-being available: nine cases regenerate byte-identically from fixed seeds, 197
-automated tests run on every regeneration, and a scripted acceptance check
-verifies the frozen case against declared tolerances. A no-obligation handover —
-code, manifests, assumptions register, licence appendix and validation report —
-is offered to the evaluating body; see `docs/sustainability_and_ownership.md`.
 
 ---
 
