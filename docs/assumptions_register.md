@@ -463,6 +463,51 @@ exclusion is visible, so a reader can disagree with where the line was drawn.
 
 ---
 
+### A20 · Vessel positions are constrained by real coastline geometry
+
+**Where:** `slicktrace_core/synth_generator.py` (`_keep_at_sea`, `_coast_lon_at`);
+geometry in `data/geo/coastline_mumbai.json`
+
+**Why.** The case coordinates were always real — 72.1–73.1 E, 18.4–19.4 N, off
+the Maharashtra coast — but the coastline in each manifest was a synthetic
+polyline, and vessel tracks were generated without reference to any land at all.
+That was invisible while the only coast drawn was the synthetic one. Overlaying
+Natural Earth 10m geometry made it obvious: **167 of 1024 vessel fixes, 16.3%,
+sat east of the real shoreline.** Ships on hillsides, and in one case the
+leading candidate inland.
+
+Tracks are now clamped to stay 0.03° (~3.3 km) west of the interpolated coast
+longitude at each latitude. The margin keeps a rendered marker off the shore
+without pushing traffic implausibly far out.
+
+**What breaks if it is wrong.** A scene with vessels on land is not one an
+analyst would accept, and it undermines every other claim in the interface: a
+reviewer who sees a ship parked inland has no reason to trust the attribution
+beside it. The defect was cosmetic in the sense that no computation depended on
+it — and consequential in the sense that it made the system look unserious.
+
+**How it is bounded.** The constraint applies to generated vessel positions
+only. Sensitive areas are not clamped: a mangrove reserve abuts the coast by
+definition, and the one in these cases correctly does. The slick and its origin
+envelope are not clamped either — oil does reach coastlines, and the forecast's
+shoreline-contact figure exists to report exactly that.
+
+The coastline is committed rather than fetched. A basemap from a tile provider
+would end the offline operation verified in `docs/evidence/smoke_offline.txt`,
+which is the same reason fonts are self-hosted. Natural Earth is public domain;
+seven kilobytes in the repository costs less than a network dependency.
+
+**What it did not change.** Every headline result was recomputed after the
+constraint was applied and none moved: 7/7 source-present Top-1 against 0/7 for
+the naive baseline, exact McNemar p = 0.0156, 2/2 correct abstentions. The
+attribution does not depend on coastline geometry, so constraining the scenarios
+changed where the vessels are without changing what the method concludes about
+them. That the numbers held is evidence the fix was cosmetic in the right way —
+had they moved, the result would have been entangled with an artefact of the
+generator.
+
+---
+
 ## Assumptions this system does *not* make
 
 Recorded because their absence is deliberate and a reviewer may look for them:
