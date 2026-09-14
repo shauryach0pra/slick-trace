@@ -301,6 +301,25 @@
       19.27647
     ]
   ],
+  "n_regions": 1,
+  "regions": [
+    {
+      "area_km2": 322.18,
+      "perimeter_km": 73.1,
+      "major_axis_km": 21.32,
+      "minor_axis_km": 20.79,
+      "elongation": 1.03,
+      "orientation_deg_from_north": 76.7,
+      "interior_holes_filled_px": 89,
+      "centroid": [
+        72.27852,
+        19.18256
+      ],
+      "region_px": 1805
+    }
+  ],
+  "total_area_km2": 322.18,
+  "multi_region_note": "Single region in this scene; top-level geometry and regions[0] agree.",
   "agreement_with_truth_mask": {
     "iou": 0.9222,
     "note": "Available because this is a synthetic case with a generator truth mask. On real imagery no such label exists."

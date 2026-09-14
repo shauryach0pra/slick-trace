@@ -94,6 +94,70 @@ def _detector_defaults() -> dict:
 _DEFAULTS = _detector_defaults()
 
 
+def _measure_region(mask: np.ndarray, manifest: dict, dx_m: float, dy_m: float) -> dict:
+    """Geometry of one connected region, in local metres."""
+    from scipy.ndimage import binary_erosion, binary_fill_holes
+    n_px = int(mask.sum())
+    ys, xs = np.nonzero(mask)
+    cx, cy = xs.mean(), ys.mean()
+    mx = (xs - cx) * dx_m
+    my = -(ys - cy) * dy_m
+    cov = np.cov(np.stack([mx, my]))
+    evals, evecs = np.linalg.eigh(cov)
+    order = np.argsort(evals)[::-1]
+    evals, evecs = evals[order], evecs[:, order]
+    major_m = 4.0 * math.sqrt(max(evals[0], 1e-9))
+    minor_m = 4.0 * math.sqrt(max(evals[1], 1e-9))
+    bearing = (math.degrees(math.atan2(evecs[0, 0], evecs[1, 0]))) % 180.0
+
+    outline = binary_fill_holes(mask.astype(bool))
+    boundary_px = int((outline & ~binary_erosion(outline)).sum())
+    perimeter_km = boundary_px * math.sqrt(dx_m * dy_m) / 0.89 / 1000.0
+    area_km2 = n_px * dx_m * dy_m / 1e6
+    b = manifest["bbox"]
+    return {
+        "area_km2": round(area_km2, 2),
+        "perimeter_km": round(perimeter_km, 2),
+        "major_axis_km": round(major_m / 1000.0, 2),
+        "minor_axis_km": round(minor_m / 1000.0, 2),
+        "elongation": round(major_m / max(minor_m, 1e-9), 2),
+        "orientation_deg_from_north": round(bearing, 1),
+        "interior_holes_filled_px": int(outline.sum() - n_px),
+        "centroid": [
+            round(float(b["min_lon"] + (cx / (mask.shape[1] - 1))
+                        * (b["max_lon"] - b["min_lon"])), 5),
+            round(float(b["max_lat"] - (cy / (mask.shape[0] - 1))
+                        * (b["max_lat"] - b["min_lat"])), 5),
+        ],
+    }
+
+
+def _all_regions(pred: np.ndarray, manifest: dict, dx_m: float, dy_m: float) -> list[dict]:
+    """Measure every retained region, largest first.
+
+    The detector's own loop can retain several disconnected regions, and a real
+    scene routinely contains more than one slick - a vessel under way leaves a
+    trail that breaks into segments, and two unrelated discharges can appear in
+    the same frame. The geometry stage previously traced only the longest
+    contour, so a second slick was silently dropped: not reported as unmeasured,
+    simply absent. Every region is measured here, and the largest is promoted to
+    the top-level fields so a reader looking at one slick still finds it where
+    it was.
+    """
+    from scipy.ndimage import label as _label
+    lab, n = _label(pred)
+    out = []
+    for r in range(1, n + 1):
+        m = (lab == r)
+        if m.sum() < 1:
+            continue
+        g = _measure_region(m, manifest, dx_m, dy_m)
+        g["region_px"] = int(m.sum())
+        out.append(g)
+    out.sort(key=lambda g: -g["region_px"])
+    return out
+
+
 def characterise(case_dir: str) -> dict:
     manifest = json.load(open(os.path.join(case_dir, "manifest.json")))
     scene = np.array(Image.open(os.path.join(case_dir, "scene.png")).convert("L"))
@@ -117,6 +181,7 @@ def characterise(case_dir: str) -> dict:
         }
 
     dx_m, dy_m, lat0 = _aeqd_scales(manifest)
+    _regions = _all_regions(pred, manifest, dx_m, dy_m)
 
     ys, xs = np.nonzero(pred)
     cx, cy = xs.mean(), ys.mean()
@@ -199,6 +264,17 @@ def characterise(case_dir: str) -> dict:
             ],
         },
         "polygon": _boundary_lonlat(pred, manifest["bbox"]),
+        # Every retained region, largest first. The top-level geometry above
+        # describes regions[0]; a scene with one slick reads identically to
+        # before, and a scene with several no longer loses them silently.
+        "n_regions": len(_regions),
+        "regions": _regions,
+        "total_area_km2": round(sum(g["area_km2"] for g in _regions), 2),
+        "multi_region_note": (
+            "Top-level geometry describes the largest region. A second slick in the "
+            "same scene is measured and listed under regions, not merged into the "
+            "first and not dropped." if len(_regions) > 1 else
+            "Single region in this scene; top-level geometry and regions[0] agree."),
         "agreement_with_truth_mask": {
             "iou": round(float(iou(pred, truth)), 4),
             "note": "Available because this is a synthetic case with a generator "
