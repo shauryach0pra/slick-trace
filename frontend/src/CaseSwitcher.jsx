@@ -10,8 +10,9 @@
 const FAMILY_LABEL = {
   decoy: 'nearest vessel is a decoy',
   moving_discharge: 'discharge while under way',
-  absent_source: 'no observed vessel is the source',
+  absent_source: 'source not in the scene',
   crowded: 'crowded traffic',
+  along_track_ribbon: 'ribbon laid along track',
 };
 
 export default function CaseSwitcher({ incidents, active, onSelect }) {

@@ -996,3 +996,53 @@
   line-height: 1.4;
   opacity: 0.6;
 }
+
+/* --- Case switcher: one scrollable row -------------------------------------
+   Wrapping put later cases on a second line, which reads as a separate group
+   rather than a continuation of the same set. A single track keeps the nine
+   cases visibly one collection and scales to more without relayout. */
+
+.case-list {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.case-list::-webkit-scrollbar { height: 6px; }
+.case-list::-webkit-scrollbar-track { background: transparent; }
+.case-list::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.case-list:hover::-webkit-scrollbar-thumb { background: var(--text-dim); }
+
+.case-chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  min-height: 76px;
+  justify-content: flex-start;
+}
+
+/* Two lines reserved whether used or not, so differing label lengths cannot
+   make the row ragged - the cases are of equal standing and should look it. */
+.case-chip-family {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.3em;
+}
+
+.case-switcher { position: relative; }
+
+.case-switcher::after {
+  content: '';
+  position: absolute;
+  right: 1.5rem;
+  bottom: 6px;
+  width: 44px;
+  height: calc(100% - 1.9rem);
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--ink-975, #0a1420));
+}
