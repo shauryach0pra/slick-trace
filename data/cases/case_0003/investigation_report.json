@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-14T05:51:49.913202+00:00",
+  "generated_utc": "2026-09-14T06:29:21.191418+00:00",
   "incident_id": "case_0003",
   "scene": {
     "scene_id": "case_0003_S1SYN_20260910T043000",
@@ -2157,7 +2157,7 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "d0e36fd",
+    "git_revision": "33ef044b",
     "python": "3.12.14",
     "platform": "Darwin 25.2.0 (arm64)",
     "argv0": "run_pipeline.py"
@@ -2166,7 +2166,7 @@
     "manifest.json": "978bb1f7afe7277f2feabaf5e48ec13776dbef527bc8774fa7864cd3702f476b",
     "historical_mapping.json": "39e1a2934072dc40f1424b86627dbe185d1afcc38f8bb89e975f8c21ce9dcc94",
     "naive_baseline_result.json": "fedf1188f395724a84e850fa34506c8fb2c638eb2e59142e22e1aee2501efc60",
-    "attribution_result.json": "78a14520eb2dc51b79f2e29f16603fc0ae1cf909a4b49b126fc363d6f792af95",
+    "attribution_result.json": "182cfa47167af72f81bc8d6ea3c37865e3abca5b622978b741e2512dc265a026",
     "fragility_result.json": "251152903d43768283654b0c3758266af759d6f30e6e595c00b219d0e697335d",
     "coverage_result.json": "3d64094b061ffdd13f8cf2127a28e0ffa3e9af5d5f3c1b665e590bc1c3543c5f",
     "forecast_result.json": "f02d0ac96b10581a12659151e8c6f6291b28514f424894065ef9331df4643a6a",

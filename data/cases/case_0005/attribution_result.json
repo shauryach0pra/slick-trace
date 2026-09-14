@@ -54,21 +54,21 @@
     "factors": [
       {
         "vessel_key": "419184924",
-        "proximity_deg_at_acquisition": 0.021402568386226388,
+        "proximity_deg_at_acquisition": 0.021403,
         "trajectory_envelope_dwell": 7,
         "physical_fit_mean_iou": 0.6938,
         "physical_fit_mean_loss": 0.1959
       },
       {
         "vessel_key": "419931279",
-        "proximity_deg_at_acquisition": 0.21665057387789785,
+        "proximity_deg_at_acquisition": 0.216651,
         "trajectory_envelope_dwell": 5,
         "physical_fit_mean_iou": 0.0155,
         "physical_fit_mean_loss": 0.5352
       },
       {
         "vessel_key": "419958088",
-        "proximity_deg_at_acquisition": 0.004658585860727305,
+        "proximity_deg_at_acquisition": 0.004659,
         "trajectory_envelope_dwell": 1,
         "physical_fit_mean_iou": 0.088,
         "physical_fit_mean_loss": 0.5374

@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T06:14:23.919426+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-14T06:30:34.310365+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -192,15 +192,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 3.2 s (case_0004) | ≤ 5 min |
+| Slowest single case, all stages | 3.3 s (case_0009) | ≤ 5 min |
 | Mean per case | 2.3 s | — |
-| Full run, 9 cases | 20.7 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
+| Full run, 9 cases | 21.1 s | — |
+| Template query, cold — fresh KB + lookup intent | 0.5 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 1.7 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.8 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
-Dominant stages across the run: fragility 11.1 s, attribution 8.8 s, detection 0.4 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
+Dominant stages across the run: fragility 11.4 s, attribution 8.8 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 

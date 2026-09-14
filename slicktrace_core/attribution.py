@@ -301,7 +301,13 @@ def _named_factors(case_dir: str, ranked: list[dict]) -> dict:
         vk = r["vessel_key"]
         rows.append({
             "vessel_key": vk,
-            "proximity_deg_at_acquisition": prox.get(vk),
+            # Rounded: this is copied from the naive baseline, where it is a
+            # haversine result that differs at the last representable digit
+            # between x86-64 and arm64 (see A19). Six decimals is ~0.1 m, far
+            # below any distance this quantity is used to reason about, and it
+            # keeps the artifact byte-identical across platforms.
+            "proximity_deg_at_acquisition": (None if prox.get(vk) is None
+                                             else round(prox[vk], 6)),
             "trajectory_envelope_dwell": dwell.get(vk),
             "physical_fit_mean_iou": round(r["mean_iou"], 4),
             "physical_fit_mean_loss": round(r["mean_loss"], 4),
