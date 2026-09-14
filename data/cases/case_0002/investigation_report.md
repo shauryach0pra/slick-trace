@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T06:29:19.916160+00:00 · git `33ef044b` · Darwin 25.2.0 (arm64)
+Generated 2026-09-14T07:21:41.628131+00:00 · git `0d95b90a` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 

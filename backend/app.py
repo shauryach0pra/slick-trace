@@ -208,6 +208,17 @@ def get_tracks(incident_id: str):
 
 # ------------------------------------------------------- live time slider --
 
+@app.get("/api/incidents/{incident_id}/dossier.pdf")
+def get_dossier(incident_id: str):
+    """The investigation report as a PDF, rendered from the committed artifact."""
+    from fastapi.responses import FileResponse
+    path = os.path.join(_case_dir(incident_id), "investigation_dossier.pdf")
+    if not os.path.exists(path):
+        raise HTTPException(404, "dossier not generated for this incident")
+    return FileResponse(path, media_type="application/pdf",
+                        filename=f"{incident_id}_investigation.pdf")
+
+
 @app.get("/api/incidents/{incident_id}/probe")
 def probe_forcing(incident_id: str,
                   lon: float = Query(...), lat: float = Query(...),

@@ -74,6 +74,9 @@ export default function App() {
             <a className="tag tag-link" href={api.reportUrl(incidentId)} target="_blank" rel="noreferrer">
               investigation report
             </a>
+            <a className="tag tag-link" href={api.dossierUrl(incidentId)} target="_blank" rel="noreferrer">
+              dossier (PDF)
+            </a>
           </div>
         )}
       </header>

@@ -24,6 +24,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from slicktrace_core.dossier import build_dossier
 from slicktrace_core.attribution import run_attribution, run_naive_baseline
 from slicktrace_core.coverage import run_hidden_ais_experiment
 from slicktrace_core.detection_geometry import run_detection
@@ -47,6 +48,9 @@ def run_case(case_dir: str, skip: set[str]) -> dict:
         ("forecast", lambda: run_forecast(case_dir)),
         ("next_observation", lambda: run_next_observation(case_dir)),
         ("report", lambda: export_report(case_dir)),
+        # Last: renders the report the previous stage wrote. Computes nothing,
+        # so it cannot disagree with the artifact it draws from.
+        ("dossier", lambda: build_dossier(case_dir)),
     ]
     for name, fn in stages:
         if name in skip:
