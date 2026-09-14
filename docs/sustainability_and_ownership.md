@@ -87,7 +87,7 @@ trust.
 **The assumptions register and validation report.** Shipped with the code in
 `docs/`, not only in the deck.
 
-**The invariant suite.** 193 tests, several of which encode masterplan
+**The invariant suite.** 199 tests, several of which encode masterplan
 constraints directly — no ground truth in the manifest, dispersion scaling with
 drift time, ensemble sharing, the smallest flip actually being the smallest.
 These are the properties that would otherwise regress silently.
