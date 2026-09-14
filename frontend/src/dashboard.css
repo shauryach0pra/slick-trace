@@ -1046,3 +1046,305 @@
   pointer-events: none;
   background: linear-gradient(to right, transparent, var(--ink-975, #0a1420));
 }
+
+/* ===================================================================
+   macOS Finder shell.
+
+   The dashboard is recast as a Finder window: a sidebar of "folders"
+   (every case) on the left, and two split-screen panes on the right —
+   an Evidence window that scrolls through the feature boxes, and a
+   Conclusion window with the file exports pinned to its toolbar above
+   the verdict and the Ask console. Supersedes the earlier .app-shell,
+   .topbar, .grid and .masonry layout rules in this file.
+   =================================================================== */
+
+.finder {
+  height: 100%;
+  padding: 14px;
+  display: flex;
+}
+
+.finder-window {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ink-950);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+}
+
+/* --- title bar --- */
+.finder-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--ink-800), var(--ink-900));
+}
+
+.traffic {
+  display: inline-flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.tl {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.tl-red { background: #ff5f57; }
+.tl-amber { background: #febc2e; }
+.tl-green { background: #28c840; }
+
+.finder-title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+.finder-title-main {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-hi);
+  letter-spacing: 0.01em;
+}
+.finder-title-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.finder-title-meta {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+/* --- body: sidebar + split --- */
+.finder-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* sidebar (row 1) */
+.sidebar {
+  flex: 0 0 244px;
+  width: 244px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 10px;
+  border-right: 1px solid var(--line);
+  background: var(--ink-975, #0a1420);
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 4px 6px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+.disclosure {
+  display: inline-block;
+  font-size: 12px;
+  transition: transform 120ms ease;
+}
+.disclosure.is-open { transform: rotate(90deg); }
+.sidebar-head-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.sidebar-count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.finder-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.finder-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--text-mid);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background 120ms;
+}
+.finder-row:hover { background: rgba(255, 255, 255, 0.04); }
+.finder-row.is-active { background: var(--teal); }
+.finder-row.is-active,
+.finder-row.is-active .finder-row-sub { color: #04121a; }
+
+.fico { width: 20px; height: 16px; flex: 0 0 auto; color: var(--text-dim); }
+.finder-row.is-active .fico { color: #04121a; }
+
+.finder-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+.finder-row-name {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.finder-row-sub {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.finder-row-dot {
+  flex: 0 0 auto;
+  font-size: 10px;
+  color: var(--teal);
+}
+.finder-row-dot.is-unknown { color: var(--amber); }
+.finder-row.is-active .finder-row-dot { color: #04121a; }
+
+/* split (rows 2 & 3) */
+.finder-split {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.finder-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pane-evidence { flex: 1.15; border-right: 1px solid var(--line); }
+.pane-conclusion { flex: 1; }
+
+.pane-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  height: 42px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--ink-900);
+}
+.pane-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-hi);
+}
+.pane-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.pane-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.pane-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--text-mid);
+  text-decoration: none;
+  background: var(--ink-800);
+}
+.pane-file:hover { border-color: var(--teal); color: var(--text-hi); }
+.pane-file-ext {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--teal-dim);
+  color: var(--text-hi);
+}
+
+.pane-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* the verdict was positioned with page margins; inside a pane it fills it */
+.pane-scroll .verdict {
+  margin: 0;
+}
+
+/* the console had a fixed 620px height meant for a grid cell; inside a
+   scrolling pane it should size to content and scroll its own history */
+.pane-conclusion .console-panel { height: auto; }
+.pane-conclusion .console-history {
+  min-height: 220px;
+  max-height: 46vh;
+}
+
+/* --- narrow screens: unstack the Finder into a single column --- */
+@media (max-width: 960px) {
+  .finder { padding: 8px; }
+  .finder-title { justify-content: flex-start; }
+  .finder-body { flex-direction: column; }
+  .sidebar {
+    flex: 0 0 auto;
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .finder-list {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+  }
+  .finder-row { width: auto; flex: 0 0 auto; }
+  .finder-split { flex-direction: column; }
+  .pane-evidence { border-right: 0; border-bottom: 1px solid var(--line); }
+  .finder-pane { flex: none; }
+  .pane-scroll { max-height: 70vh; }
+}

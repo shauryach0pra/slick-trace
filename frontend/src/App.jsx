@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './dashboard.css';
 import { api } from './api';
 import CaseSwitcher from './CaseSwitcher';
-import Masonry from './Masonry';
 import ProvenancePanel from './ProvenancePanel';
 import VerdictBand from './VerdictBand';
 import ScenePanel from './ScenePanel';
@@ -63,46 +62,84 @@ export default function App() {
   }, [incidentId]);
 
   return (
-    <div className="app-shell">
-      <header className="topbar">
-        <div className="wordmark">Slick Trace<span className="wordmark-sub">/ source attribution</span></div>
-        {manifest && (
-          <div className="topbar-meta">
-            <span className="tag">{manifest.incident_id}</span>
-            <span className="tag tag-teal">{manifest.case_state?.replace('_', ' ') ?? 'potential slick'}</span>
-            {manifest.provenance?.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
-            <a className="tag tag-link" href={api.reportUrl(incidentId)} target="_blank" rel="noreferrer">
-              investigation report
-            </a>
-            <a className="tag tag-link" href={api.dossierUrl(incidentId)} target="_blank" rel="noreferrer">
-              dossier (PDF)
-            </a>
+    <div className="finder">
+      <div className="finder-window">
+        <header className="finder-titlebar">
+          <span className="traffic" aria-hidden="true">
+            <span className="tl tl-red" />
+            <span className="tl tl-amber" />
+            <span className="tl tl-green" />
+          </span>
+          <div className="finder-title">
+            <span className="finder-title-main">Slick Trace</span>
+            <span className="finder-title-sub">source attribution</span>
           </div>
-        )}
-      </header>
+          {manifest && (
+            <div className="finder-title-meta">
+              <span className="tag">{manifest.incident_id}</span>
+              <span className="tag tag-teal">
+                {manifest.case_state?.replace('_', ' ') ?? 'potential slick'}
+              </span>
+              {manifest.provenance?.status === 'synthetic' && (
+                <span className="tag tag-amber">synthetic case</span>
+              )}
+            </div>
+          )}
+        </header>
 
-      <CaseSwitcher incidents={incidents} active={incidentId} onSelect={setIncidentId} />
+        <div className="finder-body">
+          {/* Row 1 — the sidebar: every case, as folders */}
+          <CaseSwitcher incidents={incidents} active={incidentId} onSelect={setIncidentId} />
 
-      {error && <div className="error-banner">Failed to load incident data: {error}</div>}
+          {/* Rows 2 & 3 — two split-screen windows */}
+          <div className="finder-split">
+            <section className="finder-pane pane-evidence" aria-label="Evidence">
+              <header className="pane-bar">
+                <span className="pane-title">Evidence</span>
+                {manifest && <span className="pane-sub">{manifest.incident_id}</span>}
+              </header>
+              <div className="pane-scroll">
+                {error && (
+                  <div className="error-banner">Failed to load incident data: {error}</div>
+                )}
+                <ScenePanel manifest={manifest} sceneUrl={api.sceneUrl(incidentId)}
+                            detection={detection} />
+                <RankingPanel naive={naiveBaseline} attribution={attribution} />
+                <TimeSliderMap incidentId={incidentId} api={api} tracksData={tracksData}
+                               topCandidateId={attribution?.top_candidate_id} />
+                <FragilityPanel fragility={fragility} />
+                <ForecastPanel forecast={forecast} />
+                <NextObservationPanel nextObs={nextObs} />
+                <CoveragePanel coverage={coverage} />
+                <ProvenancePanel report={report} manifest={manifest} />
+              </div>
+            </section>
 
-      <VerdictBand attribution={attribution} naive={naiveBaseline}
-                   historical={historical} manifest={manifest} />
-
-      <main className="grid">
-        <Masonry gap={18}>
-          <ScenePanel manifest={manifest} sceneUrl={api.sceneUrl(incidentId)}
-                      detection={detection} />
-          <RankingPanel naive={naiveBaseline} attribution={attribution} />
-          <AskConsole incidentId={incidentId} api={api} />
-          <TimeSliderMap incidentId={incidentId} api={api} tracksData={tracksData}
-                         topCandidateId={attribution?.top_candidate_id} />
-          <FragilityPanel fragility={fragility} />
-          <ForecastPanel forecast={forecast} />
-          <NextObservationPanel nextObs={nextObs} />
-          <CoveragePanel coverage={coverage} />
-          <ProvenancePanel report={report} manifest={manifest} />
-        </Masonry>
-      </main>
+            <section className="finder-pane pane-conclusion" aria-label="Conclusion">
+              <header className="pane-bar">
+                <span className="pane-title">Conclusion</span>
+                {manifest && (
+                  <div className="pane-actions">
+                    <a className="pane-file" href={api.reportUrl(incidentId)}
+                       target="_blank" rel="noreferrer">
+                      <span className="pane-file-ext">MD</span>report
+                    </a>
+                    <a className="pane-file" href={api.dossierUrl(incidentId)}
+                       target="_blank" rel="noreferrer">
+                      <span className="pane-file-ext">PDF</span>dossier
+                    </a>
+                  </div>
+                )}
+              </header>
+              <div className="pane-scroll">
+                <VerdictBand attribution={attribution} naive={naiveBaseline}
+                             historical={historical} manifest={manifest} />
+                <AskConsole incidentId={incidentId} api={api} />
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
