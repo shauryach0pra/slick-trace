@@ -124,6 +124,58 @@ def _advect_forward(lon, lat, u0, v0, swirl, hours, rng, diffusivity=BASE_DIFFUS
     return lon2, lat2
 
 
+# Real coastline, loaded once. Vessel positions are constrained to stay west of
+# it because a track generated without that constraint puts 16% of its fixes on
+# land - 167 of 1024 before this was added. The geometry was schematic, and it
+# showed the moment real geography was drawn beside it: ships on hillsides, a
+# sensitive-area box straddling the shore, the leading candidate inland.
+_COAST_CACHE: dict = {}
+
+
+def _coast_profile():
+    """Westernmost coast longitude per latitude, from the committed Natural Earth
+    extract. Returns (lats, lons) sorted by latitude, or None if absent."""
+    if "profile" in _COAST_CACHE:
+        return _COAST_CACHE["profile"]
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "data", "geo", "coastline_mumbai.json")
+    prof = None
+    if os.path.exists(path):
+        with open(path) as fh:
+            geo = json.load(fh)
+        pts = [p for seg in geo["coordinates"] for p in seg]
+        if pts:
+            arr = np.array(sorted(pts, key=lambda q: q[1]))
+            prof = (arr[:, 1], arr[:, 0])
+    _COAST_CACHE["profile"] = prof
+    return prof
+
+
+def _coast_lon_at(lat: float, halfwin: float = 0.06) -> float:
+    """Longitude of the water/land boundary at this latitude.
+
+    The westernmost coast point in a small latitude window, so an inlet does not
+    let a track slip inland through a gap in the polyline.
+    """
+    prof = _coast_profile()
+    if prof is None:
+        return 180.0                      # no coastline data: no constraint
+    lats, lons = prof
+    m = (lats >= lat - halfwin) & (lats <= lat + halfwin)
+    return float(lons[m].min()) if m.any() else 180.0
+
+
+# Vessels are kept this far west of the coast. ~3.3 km: close enough to be
+# coastal traffic, far enough that a rendered marker does not touch the shore.
+COAST_MARGIN_DEG = 0.03
+
+
+def _keep_at_sea(lon: float, lat: float) -> float:
+    """Clamp a longitude to open water. Returns the adjusted longitude."""
+    limit = _coast_lon_at(lat) - COAST_MARGIN_DEG
+    return min(lon, limit)
+
+
 def _track(start_lon, start_lat, dlon_per_hr, dlat_per_hr, t0, hours, step_min=30,
            sog=9.5, cog=140.0):
     fixes = []
@@ -133,7 +185,8 @@ def _track(start_lon, start_lat, dlon_per_hr, dlat_per_hr, t0, hours, step_min=3
         h = i * step_min / 60.0
         fixes.append({
             "t_utc": (t + timedelta(minutes=i * step_min)).isoformat(),
-            "lon": round(float(start_lon + dlon_per_hr * h), 5),
+            "lon": round(_keep_at_sea(float(start_lon + dlon_per_hr * h),
+                                       float(start_lat + dlat_per_hr * h)), 5),
             "lat": round(float(start_lat + dlat_per_hr * h), 5),
             "sog_knots": round(float(sog), 1),
             "cog_deg": round(float(cog), 1),

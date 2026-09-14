@@ -150,8 +150,8 @@
         "naive_correct": false,
         "top1": true,
         "top3": true,
-        "top_iou": 0.334,
-        "lead_retained": 0.9,
+        "top_iou": 0.331,
+        "lead_retained": 0.9125,
         "smallest_flip_magnitude": 1.0
       }
     ],
@@ -264,10 +264,10 @@
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.875,
-        "hidden_ais_recovery_n": "42/48",
-        "false_unmatched_alert_rate": 0.31,
-        "false_unmatched_alert_n": "31/100",
+        "hidden_ais_recovery_rate": 0.8793,
+        "hidden_ais_recovery_n": "51/58",
+        "false_unmatched_alert_rate": 0.25,
+        "false_unmatched_alert_n": "26/104",
         "mistaken_promotion_rate": 0.0,
         "mistaken_promotion_n": "0/34"
       }
@@ -351,10 +351,10 @@
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8556,
-        "hidden_ais_recovery_n": "77/90",
-        "false_unmatched_alert_rate": 0.3704,
-        "false_unmatched_alert_n": "70/189",
+        "hidden_ais_recovery_rate": 0.8485,
+        "hidden_ais_recovery_n": "84/99",
+        "false_unmatched_alert_rate": 0.3505,
+        "false_unmatched_alert_n": "68/194",
         "mistaken_promotion_rate": 0.0,
         "mistaken_promotion_n": "0/35"
       }
@@ -496,12 +496,12 @@
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8906,
-        "hidden_ais_recovery_n": "57/64",
-        "false_unmatched_alert_rate": 0.3121,
-        "false_unmatched_alert_n": "44/141",
-        "mistaken_promotion_rate": 0.15,
-        "mistaken_promotion_n": "6/40"
+        "hidden_ais_recovery_rate": 0.9,
+        "hidden_ais_recovery_n": "72/80",
+        "false_unmatched_alert_rate": 0.268,
+        "false_unmatched_alert_n": "41/153",
+        "mistaken_promotion_rate": 0.4,
+        "mistaken_promotion_n": "16/40"
       }
     }
   ],
@@ -581,9 +581,9 @@
       "applicable": true,
       "recommended_horizon_h": 3,
       "least_informative_horizon_h": 24,
-      "separation_at_recommended": 0.1966,
-      "separation_at_least_informative": 0.3972,
-      "recommendation_helped": false,
+      "separation_at_recommended": 0.2515,
+      "separation_at_least_informative": 0.1665,
+      "recommendation_helped": true,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     }
   ],

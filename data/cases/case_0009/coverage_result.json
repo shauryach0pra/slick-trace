@@ -20,12 +20,12 @@
     },
     "coverage_failure": {
       "n_runs": 40,
-      "hidden_ais_recovery_rate": 0.8906,
-      "hidden_ais_recovery_n": "57/64",
-      "false_unmatched_alert_rate": 0.3121,
-      "false_unmatched_alert_n": "44/141",
-      "mistaken_promotion_rate": 0.15,
-      "mistaken_promotion_n": "6/40"
+      "hidden_ais_recovery_rate": 0.9,
+      "hidden_ais_recovery_n": "72/80",
+      "false_unmatched_alert_rate": 0.268,
+      "false_unmatched_alert_n": "41/153",
+      "mistaken_promotion_rate": 0.4,
+      "mistaken_promotion_n": "16/40"
     }
   },
   "limits": [

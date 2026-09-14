@@ -31,6 +31,10 @@
       "distance_deg": 0.4054824322917781
     },
     {
+      "vessel_key": "419623942",
+      "distance_deg": 0.4753494916002182
+    },
+    {
       "vessel_key": "419302866",
       "distance_deg": 0.4773609820538372
     },
@@ -41,10 +45,6 @@
     {
       "vessel_key": "419644041",
       "distance_deg": 0.7412360108515558
-    },
-    {
-      "vessel_key": "419623942",
-      "distance_deg": 0.8397667078661005
     }
   ],
   "top_candidate_id": "419369344"

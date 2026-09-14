@@ -26,6 +26,7 @@ export const api = {
   report: (id) => j(`/incidents/${id}/report`),
   reportUrl: (id) => `${BASE}/incidents/${id}/report.md`,
   dossierUrl: (id) => `${BASE}/incidents/${id}/dossier.pdf`,
+  realCoastline: () => j('/geo/coastline'),
   // hours_before is the slider position: 0 = acquisition time, 24 = a full day back
   probe: (id, lon, lat, hoursBefore) =>
     j(`/incidents/${id}/probe?lon=${lon}&lat=${lat}`

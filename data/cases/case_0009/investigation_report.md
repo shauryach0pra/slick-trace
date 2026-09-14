@@ -2,11 +2,11 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T07:21:57.453272+00:00 · git `0d95b90a` · Darwin 25.2.0 (arm64)
+Generated 2026-09-14T07:36:17.064102+00:00 · git `b2e2dab4` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
-**Leading candidate: `419630599`** — mean IoU 0.334, leading in 6/6 shared forcing variants.
+**Leading candidate: `419630599`** — mean IoU 0.331, leading in 6/6 shared forcing variants.
 
 This is an investigative lead for a human analyst. It is not a legal finding, and it is not an accusation.
 
@@ -33,10 +33,10 @@ Backward window: 24 h. Outcomes: 2 excluded, 4 candidate.
 | Vessel | State | Reason |
 | --- | --- | --- |
 | `419679520` | excluded | track data present throughout window; never inside the backward envelope |
-| `419630599` | candidate | inside envelope at 8 of 25 queried times |
+| `419630599` | candidate | inside envelope at 9 of 25 queried times |
 | `419847306` | candidate | inside envelope at 6 of 25 queried times |
 | `419748166` | excluded | track data present throughout window; never inside the backward envelope |
-| `419449957` | candidate | inside envelope at 3 of 25 queried times |
+| `419449957` | candidate | inside envelope at 8 of 25 queried times |
 | `419711487` | candidate | inside envelope at 3 of 25 queried times |
 
 > `unassessed` means no track data covered the queried window. That is missing evidence, not exoneration, and it is reported separately from `excluded` for exactly that reason.
@@ -45,18 +45,18 @@ Backward window: 24 h. Outcomes: 2 excluded, 4 candidate.
 
 | Vessel | Mean IoU | Mean loss | Ensemble wins | Release hypothesis |
 | --- | --- | --- | --- | --- |
-| `419630599` | 0.334 | 0.4287 | 6/6 | 2.0 h continuous |
-| `419847306` | 0.239 | 0.4724 | 0/6 | 2.0 h continuous |
-| `419711487` | 0.079 | 0.5405 | 0/6 | 0.5 h pulse |
-| `419449957` | 0.022 | 0.5560 | 0/6 | 0.5 h pulse |
+| `419630599` | 0.331 | 0.3924 | 6/6 | 0.5 h pulse |
+| `419449957` | 0.240 | 0.4312 | 0/6 | 0.5 h pulse |
+| `419847306` | 0.278 | 0.4453 | 0/6 | 2.0 h continuous |
+| `419711487` | 0.163 | 0.4853 | 0/6 | 0.5 h pulse |
 
 Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419711487`.
 
 ## Rank fragility
 
-80 perturbations tested; the leader changed in 8 of them (90% lead retention).
+80 perturbations tested; the leader changed in 7 of them (91% lead retention).
 
-Smallest tested rank-changing perturbation (standardised magnitude 1.0): `current_u_bias` = 0.03, `diffusivity_scale` = 1.4 → leader becomes `419847306`.
+Smallest tested rank-changing perturbation (standardised magnitude 1.0): `current_v_bias` = -0.06 → leader becomes `419449957`.
 
 > Single-axis and two-axis perturbations only. Three-or-more-axis combinations were not tested, so absence of a flip is evidence of stability across the tested set, not a proof of stability.
 
@@ -68,9 +68,9 @@ _reanalysis-style retrospective field — NOT an operational forecast issued fro
 
 | Horizon | Envelope area (km²) | Shoreline fraction | Sensitive-area contact |
 | --- | --- | --- | --- |
-| +6 h | 524.3 | 0.2186 | Fishing ground (synthetic) |
-| +12 h | 526.2 | 0.2711 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
-| +24 h | 485.2 | 0.3731 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
+| +6 h | 542.2 | 0.0069 | Fishing ground (synthetic) |
+| +12 h | 579.6 | 0.0336 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
+| +24 h | 586.4 | 0.1578 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
 
 > Modelled surface-particle exposure and arrival intervals under the tested forcing ensemble. Not a prediction of beaching, concentration, or environmental damage. Weathering, emulsification and shoreline interaction are not modelled.
 
@@ -81,11 +81,11 @@ Operating point: match gate 0.02°, contact position noise 0.012°.
 | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- |
 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.425 (17/40) |
-| coverage_failure | 0.8906 (57/64) | 0.3121 (44/141) | 0.15 (6/40) |
+| coverage_failure | 0.9 (72/80) | 0.268 (41/153) | 0.4 (16/40) |
 
 ## Recommended next observation
 
-Most informative tested window: **+3 h** (disagreement score 1.0). hypothetical — no acquisition schedule supplied.
+Most informative tested window: **+3 h** (disagreement score 0.8324). hypothetical — no acquisition schedule supplied.
 
 > The system recommends which evidence would be informative. It does not task satellites and does not assert that an acquisition is available in the recommended window.
 
@@ -102,14 +102,14 @@ Most informative tested window: **+3 h** (disagreement score 1.0). hypothetical 
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `9abcc409cc3d52a7…` |
-| `historical_mapping.json` | `2bf1b92aa080cc91…` |
-| `naive_baseline_result.json` | `bcd4a3e79991e78b…` |
-| `attribution_result.json` | `7065ac4f5ae365cd…` |
-| `fragility_result.json` | `4e2eaf3745354deb…` |
-| `coverage_result.json` | `8465bb0585e13f06…` |
-| `forecast_result.json` | `474eb70bf5be54ff…` |
-| `next_observation_result.json` | `3b777cd5e42fef68…` |
-| `scene.png` | `7b049f273fe33275…` |
-| `mask_groundtruth.png` | `6144b9f3deb5f731…` |
+| `manifest.json` | `edc1af030f4b944b…` |
+| `historical_mapping.json` | `0c0a9e3473c908fc…` |
+| `naive_baseline_result.json` | `6d56a8ff2675affd…` |
+| `attribution_result.json` | `e0ace37901d761a8…` |
+| `fragility_result.json` | `f7623e681b81773a…` |
+| `coverage_result.json` | `ac44aef9fa9bf194…` |
+| `forecast_result.json` | `c1b360eaba787cf3…` |
+| `next_observation_result.json` | `851e0a03826ad1f7…` |
+| `scene.png` | `e8498989f80fa09b…` |
+| `mask_groundtruth.png` | `877154e84e621d61…` |
 | `forcing.npz` | `75abcfbcc618a9f4…` |

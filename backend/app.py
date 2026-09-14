@@ -208,6 +208,36 @@ def get_tracks(incident_id: str):
 
 # ------------------------------------------------------- live time slider --
 
+@app.get("/api/geo/coastline")
+def get_real_coastline():
+    """Real coastline geometry for the scene area, as a reference overlay.
+
+    Natural Earth 10m, public domain, clipped to the case bounding boxes and
+    committed to the repository - not fetched from a tile server. The offline
+    smoke test in docs/evidence is a property this project went out of its way
+    to establish, and a basemap that needs the network would end it.
+
+    Served alongside the synthetic coastline in each manifest rather than
+    replacing it. The forecast intersects the synthetic one; swapping it would
+    change results. Drawing both shows where the model's geography and the real
+    geography disagree, which is worth seeing.
+    """
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "data", "geo", "coastline_mumbai.json")
+    if not os.path.exists(path):
+        raise HTTPException(404, "coastline geometry not present")
+    with open(path) as f:
+        geo = json.load(f)
+    return {
+        "geometry": geo,
+        "source": "Natural Earth 10m coastline",
+        "licence": "public domain",
+        "note": ("Reference overlay only. The forecast intersects the synthetic "
+                 "coastline in the manifest, not this one; both are drawn so the "
+                 "difference between modelled and real geography is visible."),
+    }
+
+
 @app.get("/api/incidents/{incident_id}/dossier.pdf")
 def get_dossier(incident_id: str):
     """The investigation report as a PDF, rendered from the committed artifact."""

@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T07:21:46.140617+00:00 · git `0d95b90a` · Darwin 25.2.0 (arm64)
+Generated 2026-09-14T07:36:05.996092+00:00 · git `b2e2dab4` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -87,7 +87,7 @@ Operating point: match gate 0.02°, contact position noise 0.012°.
 | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- |
 | selective | 0.8108 (90/111) | 0.3317 (68/205) | 0.225 (9/40) |
-| coverage_failure | 0.8556 (77/90) | 0.3704 (70/189) | 0.0 (0/35) |
+| coverage_failure | 0.8485 (84/99) | 0.3505 (68/194) | 0.0 (0/35) |
 
 ## Recommended next observation
 
@@ -108,12 +108,12 @@ Most informative tested window: **+24 h** (disagreement score 0.5664). hypotheti
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `3467e285c7241f79…` |
+| `manifest.json` | `99b78ee35fdf39c1…` |
 | `historical_mapping.json` | `3417dd211ee36dfb…` |
-| `naive_baseline_result.json` | `a8fda9fc35412d57…` |
+| `naive_baseline_result.json` | `14b543d5039bd2bc…` |
 | `attribution_result.json` | `dfdc747b975e31f6…` |
 | `fragility_result.json` | `2d3e164441df2589…` |
-| `coverage_result.json` | `e73b92a188c7d31f…` |
+| `coverage_result.json` | `e6189bab5b8cf956…` |
 | `forecast_result.json` | `2c1110160ac8eb48…` |
 | `next_observation_result.json` | `b2c8c40c16306510…` |
 | `scene.png` | `9ded39b1bc628487…` |

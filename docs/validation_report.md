@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T06:33:55.075119+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-14T07:36:17.621534+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -16,7 +16,7 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 | case_0006 | absent_source | 5 | 3 | unknown_source | `unknown_source` | yes | `419738652` | no | 0.043 | 51% | 0.5 |
 | case_0007 | decoy | 6 | 4 | named_candidate | `419240128` | yes | `419991981` | no | 0.676 | 100% | none |
 | case_0008 | moving_discharge | 6 | 3 | named_candidate | `419125223` | yes | `419847031` | no | 0.599 | 100% | none |
-| case_0009 | along_track_ribbon | 6 | 4 | named_candidate | `419630599` | yes | `419711487` | no | 0.334 | 90% | 1.0 |
+| case_0009 | along_track_ribbon | 6 | 4 | named_candidate | `419630599` | yes | `419711487` | no | 0.331 | 91% | 1.0 |
 
 ## Attribution — aggregates
 
@@ -84,9 +84,9 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 | case_0005 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
 | case_0007 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
 | case_0008 | yes | +150 min | 9.332 | 4.0h continuous | 0.5h pulse |
-| case_0009 | yes | +210 min | 39.264 | 7.0h continuous | 2.0h continuous |
-| **mean** | | | **8.28** | | |
-| **RMSE** | | | **15.66** | | |
+| case_0009 | yes | +210 min | 33.645 | 7.0h continuous | 0.5h pulse |
+| **mean** | | | **7.47** | | |
+| **RMSE** | | | **13.66** | | |
 
 > **Why this sits alongside IoU.** IoU measures footprint agreement. An investigator asks how many kilometres the origin estimate is out by.
 
@@ -112,7 +112,7 @@ Separate from the split above, and measuring something different. Those rows sco
 | case_0006 | 334.85 | 71.21 | 21.2 × 20.55 | 1.03 | 1.21 | 72.8° | 0.9672 |
 | case_0007 | 323.61 | 70.73 | 22.16 × 18.95 | 1.17 | 1.23 | 5.7° | 0.9724 |
 | case_0008 | 375.91 | 85.92 | 25.11 × 19.62 | 1.28 | 1.56 | 130.5° | 0.9716 |
-| case_0009 | 658.82 | 215.51 | 68.66 × 15.52 | 4.42 | 5.61 | 111.2° | 0.9584 |
+| case_0009 | 617.94 | 138.14 | 45.34 × 20.16 | 2.25 | 2.46 | 131.0° | 0.9592 |
 
 > **These IoU figures are not comparable to the split above and neither supersedes the other.** The split is the detector on a task designed to trap it; these are the same detector on the incident scenes. Quoting only the higher number would misrepresent the detector.
 
@@ -152,13 +152,13 @@ Separate from the split above, and measuring something different. Those rows sco
 | Case | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- | --- |
 | case_0001 | selective | 0.8209 (55/67) | 0.2927 (36/123) | 0.3 (12/40) |
-| case_0001 | coverage_failure | 0.875 (42/48) | 0.31 (31/100) | 0.0 (0/34) |
+| case_0001 | coverage_failure | 0.8793 (51/58) | 0.25 (26/104) | 0.0 (0/34) |
 | case_0002 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.35 (14/40) |
 | case_0002 | coverage_failure | 0.85 (85/100) | 0.2378 (39/164) | 0.3 (12/40) |
 | case_0003 | selective | 0.8 (64/80) | 0.25 (32/128) | None (0/0) |
 | case_0003 | coverage_failure | 0.8286 (58/70) | 0.2683 (33/123) | None (0/0) |
 | case_0004 | selective | 0.8108 (90/111) | 0.3317 (68/205) | 0.225 (9/40) |
-| case_0004 | coverage_failure | 0.8556 (77/90) | 0.3704 (70/189) | 0.0 (0/35) |
+| case_0004 | coverage_failure | 0.8485 (84/99) | 0.3505 (68/194) | 0.0 (0/35) |
 | case_0005 | selective | 0.8333 (60/72) | 0.2602 (32/123) | 0.2 (8/40) |
 | case_0005 | coverage_failure | 0.8788 (58/66) | 0.2821 (33/117) | 0.0 (0/34) |
 | case_0006 | selective | 0.8 (64/80) | 0.252 (32/127) | None (0/0) |
@@ -168,7 +168,7 @@ Separate from the split above, and measuring something different. Those rows sco
 | case_0008 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.35 (14/40) |
 | case_0008 | coverage_failure | 0.8485 (56/66) | 0.3287 (47/143) | 0.25 (10/40) |
 | case_0009 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.425 (17/40) |
-| case_0009 | coverage_failure | 0.8906 (57/64) | 0.3121 (44/141) | 0.15 (6/40) |
+| case_0009 | coverage_failure | 0.9 (72/80) | 0.268 (41/153) | 0.4 (16/40) |
 
 > Operating point: match gate 0.02°, contact position noise 0.012°, detector miss rate 0.15, false detection rate 0.15. A rate without its operating point is not a comparable measurement.
 
@@ -182,7 +182,7 @@ Separate from the split above, and measuring something different. Those rows sco
 | case_0005 | +3h | +24h | 0.5909 | 0.2971 | yes |
 | case_0007 | +3h | +24h | 0.5914 | 0.3052 | yes |
 | case_0008 | +3h | +18h | 0.583 | 0.3387 | yes |
-| case_0009 | +3h | +24h | 0.1966 | 0.3972 | no |
+| case_0009 | +3h | +24h | 0.2515 | 0.1665 | yes |
 
 > One synthetic held-out observation per case is a weak test, so results are reported per case rather than averaged into a headline figure.
 
@@ -192,15 +192,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 3.3 s (case_0009) | ≤ 5 min |
+| Slowest single case, all stages | 3.2 s (case_0004) | ≤ 5 min |
 | Mean per case | 2.3 s | — |
-| Full run, 9 cases | 21.1 s | — |
+| Full run, 9 cases | 20.3 s | — |
 | Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 7.9 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 1.6 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
-Dominant stages across the run: fragility 11.4 s, attribution 8.8 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
+Dominant stages across the run: fragility 10.9 s, attribution 8.5 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 
@@ -216,7 +216,7 @@ Dominant stages across the run: fragility 11.4 s, attribution 8.8 s, detection 0
 | case_0006 | absent_source | 0.0058 | no | abstained |
 | case_0007 | decoy | 0.332 | yes | correct |
 | case_0008 | moving_discharge | 0.2866 | yes | correct |
-| case_0009 | along_track_ribbon | 0.0438 | no | correct |
+| case_0009 | along_track_ribbon | 0.0388 | no | correct |
 
 > **A separate question from the fit gate.** The abstention gate asks whether the best candidate explains the observation at all. This asks whether the second-best explains it about as well: a ranking can clear the gate and still be a coin toss. The tolerance is 0.05 on the loss the ranking is computed from.
 

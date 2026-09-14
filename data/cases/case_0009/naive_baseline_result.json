@@ -4,27 +4,27 @@
   "ranking": [
     {
       "vessel_key": "419711487",
-      "distance_deg": 0.053624506758428586
-    },
-    {
-      "vessel_key": "419449957",
-      "distance_deg": 0.20609771317380549
-    },
-    {
-      "vessel_key": "419679520",
-      "distance_deg": 0.4126671858140016
-    },
-    {
-      "vessel_key": "419847306",
-      "distance_deg": 0.4396727075516448
+      "distance_deg": 0.022391241583434012
     },
     {
       "vessel_key": "419630599",
-      "distance_deg": 0.5208787714735751
+      "distance_deg": 0.18269382163021347
+    },
+    {
+      "vessel_key": "419449957",
+      "distance_deg": 0.2053840193562363
+    },
+    {
+      "vessel_key": "419679520",
+      "distance_deg": 0.3412213583410202
+    },
+    {
+      "vessel_key": "419847306",
+      "distance_deg": 0.36399551240302275
     },
     {
       "vessel_key": "419748166",
-      "distance_deg": 0.6805103448718461
+      "distance_deg": 0.6223634111146821
     }
   ],
   "top_candidate_id": "419711487"

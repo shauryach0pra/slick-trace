@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-14T07:21:46.140617+00:00",
+  "generated_utc": "2026-09-14T07:36:05.996092+00:00",
   "incident_id": "case_0004",
   "scene": {
     "scene_id": "case_0004_S1SYN_20260910T043000",
@@ -255,6 +255,10 @@
           "distance_deg": 0.4054824322917781
         },
         {
+          "vessel_key": "419623942",
+          "distance_deg": 0.4753494916002182
+        },
+        {
           "vessel_key": "419302866",
           "distance_deg": 0.4773609820538372
         },
@@ -265,10 +269,6 @@
         {
           "vessel_key": "419644041",
           "distance_deg": 0.7412360108515558
-        },
-        {
-          "vessel_key": "419623942",
-          "distance_deg": 0.8397667078661005
         }
       ],
       "top_candidate_id": "419369344"
@@ -2060,10 +2060,10 @@
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8556,
-        "hidden_ais_recovery_n": "77/90",
-        "false_unmatched_alert_rate": 0.3704,
-        "false_unmatched_alert_n": "70/189",
+        "hidden_ais_recovery_rate": 0.8485,
+        "hidden_ais_recovery_n": "84/99",
+        "false_unmatched_alert_rate": 0.3505,
+        "false_unmatched_alert_n": "68/194",
         "mistaken_promotion_rate": 0.0,
         "mistaken_promotion_n": "0/35"
       }
@@ -2283,18 +2283,18 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "0d95b90a",
+    "git_revision": "b2e2dab4",
     "python": "3.12.14",
     "platform": "Darwin 25.2.0 (arm64)",
     "argv0": "run_pipeline.py"
   },
   "checksums_sha256": {
-    "manifest.json": "3467e285c7241f799cdaf851356d4c8b46b1832b163694839e5c930da7469d7f",
+    "manifest.json": "99b78ee35fdf39c13b4518ed297bf7555bf2e2ba26b1476365545bec11fe6af0",
     "historical_mapping.json": "3417dd211ee36dfbc65e48d3d45b47df32727a2e0c918f68a7a257fbeb48bc80",
-    "naive_baseline_result.json": "a8fda9fc35412d5749a99988076630d4a51c6d9db385b93dd39be10413df550a",
+    "naive_baseline_result.json": "14b543d5039bd2bccfe63d58aff893f49eba8cb3924276e8c7f7ce832a352f52",
     "attribution_result.json": "dfdc747b975e31f6861bdd217328cd69ee8f2cd515015d92dfc2b49bb3f53067",
     "fragility_result.json": "2d3e164441df258977a282bf51a799b59642416b403be33e32a21d7b20db06b0",
-    "coverage_result.json": "e73b92a188c7d31fa4ce82a792b96ccc7aae9f4e9cd83e6806d58ff103974f08",
+    "coverage_result.json": "e6189bab5b8cf9562ad50a556a80c36302d90fc61ad80ef5cb851ff48a1f4233",
     "forecast_result.json": "2c1110160ac8eb481cb55e27b017709c14f95ff03743ac8c357157efdf30629e",
     "next_observation_result.json": "b2c8c40c163065109452f5cf7f6db078e63e10c8676a15bfc84a8e909058b339",
     "scene.png": "9ded39b1bc6284875bb21fe0af2a5cde9fd414c23fdeca697d92e2e198590b5f",

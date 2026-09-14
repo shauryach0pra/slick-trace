@@ -49,6 +49,17 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
   // a conditional return runs on some renders and not others, and React counts
   // hooks by call order.
   const [probe, setProbe] = useState(null);
+  // Real coastline, fetched once and drawn as a reference layer. The forecast
+  // intersects the synthetic coast in the manifest, not this one; both are
+  // shown so the gap between modelled and real geography is visible.
+  const [realCoast, setRealCoast] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    api.realCoastline()
+      .then((r) => { if (alive) setRealCoast(r.geometry.coordinates); })
+      .catch(() => setRealCoast(null));
+    return () => { alive = false; };
+  }, [api]);
   const [envelope, setEnvelope] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -121,6 +132,18 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
              `${inside.length} of ${envelope?.vessels?.length ?? 0} vessels are inside the envelope ` +
              `at this time. A text equivalent follows below the map.`}>
         <rect x="0" y="0" width={W} height={H} fill="var(--ink-950)" />
+
+        {/* real coastline (Natural Earth, public domain) - reference only */}
+        {(realCoast ?? []).map((seg, i) => (
+          <polyline
+            key={`rc-${i}`}
+            points={seg.map(([lo, la]) => toXY(lo, la).map((n) => n.toFixed(1)).join(',')).join(' ')}
+            fill="none"
+            stroke="var(--text-dim)"
+            strokeWidth="1.1"
+            strokeOpacity="0.5"
+          />
+        ))}
 
         {areas.map((a) => {
           const pts = a.polygon.map(([lo, la]) => toXY(lo, la).map((n) => n.toFixed(1)).join(',')).join(' ');

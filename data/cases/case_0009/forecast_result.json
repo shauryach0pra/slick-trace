@@ -7,17 +7,17 @@
     {
       "horizon_hours": 6,
       "valid_utc": "2026-09-10T10:30:00+00:00",
-      "envelope_area_km2": 524.3,
+      "envelope_area_km2": 542.2,
       "centroid": [
-        72.86701,
-        18.8161
+        72.78868,
+        18.81474
       ],
-      "modelled_shoreline_fraction": 0.2186,
+      "modelled_shoreline_fraction": 0.0069,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.2522,
+          "modelled_particle_fraction": 0.3256,
           "any_contact": true
         },
         {
@@ -32,23 +32,23 @@
     {
       "horizon_hours": 12,
       "valid_utc": "2026-09-10T16:30:00+00:00",
-      "envelope_area_km2": 526.2,
+      "envelope_area_km2": 579.6,
       "centroid": [
-        72.89661,
-        18.80629
+        72.81828,
+        18.80493
       ],
-      "modelled_shoreline_fraction": 0.2711,
+      "modelled_shoreline_fraction": 0.0336,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.205,
+          "modelled_particle_fraction": 0.2961,
           "any_contact": true
         },
         {
           "name": "Mangrove reserve (synthetic)",
           "kind": "mangrove",
-          "modelled_particle_fraction": 0.0008,
+          "modelled_particle_fraction": 0.0011,
           "any_contact": true
         }
       ],
@@ -57,23 +57,23 @@
     {
       "horizon_hours": 24,
       "valid_utc": "2026-09-11T04:30:00+00:00",
-      "envelope_area_km2": 485.2,
+      "envelope_area_km2": 586.4,
       "centroid": [
-        72.95558,
-        18.7867
+        72.87725,
+        18.78534
       ],
-      "modelled_shoreline_fraction": 0.3731,
+      "modelled_shoreline_fraction": 0.1578,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.1714,
+          "modelled_particle_fraction": 0.2289,
           "any_contact": true
         },
         {
           "name": "Mangrove reserve (synthetic)",
           "kind": "mangrove",
-          "modelled_particle_fraction": 0.0025,
+          "modelled_particle_fraction": 0.0011,
           "any_contact": true
         }
       ],
