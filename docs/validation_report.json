@@ -589,9 +589,9 @@
   ],
   "detection": {
     "baseline_val": {
-      "iou_on_oil": 0.6764698991831838,
-      "recall_on_oil": 0.6815578423255723,
-      "precision_on_oil": 0.9929843729881074,
+      "iou_on_oil": 0.8568972138095907,
+      "recall_on_oil": 0.8596478648414807,
+      "precision_on_oil": 0.9304212717558508,
       "false_positive_rate_lookalike": 0.0,
       "false_positive_rate_clean": 0.0,
       "n_oil": 15,
@@ -599,9 +599,9 @@
       "n_clean": 8
     },
     "baseline_test": {
-      "iou_on_oil": 0.6881353471879819,
-      "recall_on_oil": 0.6959335099894491,
-      "precision_on_oil": 0.8909385201907789,
+      "iou_on_oil": 0.8143217697888503,
+      "recall_on_oil": 0.8189059403071838,
+      "precision_on_oil": 0.8952656465220027,
       "false_positive_rate_lookalike": 0.0,
       "false_positive_rate_clean": 0.0,
       "n_oil": 20,

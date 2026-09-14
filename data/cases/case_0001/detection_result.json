@@ -2,7 +2,7 @@
   "incident_id": "case_0001",
   "detector": "classical baseline (local-contrast threshold, connected components, uniformity rejection)",
   "detector_params": {
-    "dark_thresh_pct": 75,
+    "dark_thresh_pct": 65,
     "min_region_px": 60,
     "uniformity_std_max": 45.0,
     "boundary_count_bias": 0.89,
@@ -11,16 +11,16 @@
   "detected": true,
   "case_state": "potential_slick",
   "geometry": {
-    "area_km2": 300.76,
-    "perimeter_km": 68.83,
-    "interior_holes_filled_px": 99,
-    "major_axis_km": 21.45,
-    "minor_axis_km": 19.3,
-    "elongation": 1.11,
-    "orientation_deg_from_north": 62.3,
+    "area_km2": 315.22,
+    "perimeter_km": 65.51,
+    "interior_holes_filled_px": 5,
+    "major_axis_km": 21.33,
+    "minor_axis_km": 18.97,
+    "elongation": 1.12,
+    "orientation_deg_from_north": 60.7,
     "centroid": [
-      72.29017,
-      19.17732
+      72.28996,
+      19.17667
     ]
   },
   "polygon": [
@@ -33,28 +33,20 @@
       19.26078
     ],
     [
-      72.30588,
-      19.26275
-    ],
-    [
-      72.31569,
+      72.30784,
       19.26471
     ],
     [
-      72.32745,
-      19.26863
+      72.31765,
+      19.26275
+    ],
+    [
+      72.32549,
+      19.26667
     ],
     [
       72.33137,
-      19.26078
-    ],
-    [
-      72.33333,
-      19.25098
-    ],
-    [
-      72.33333,
-      19.24706
+      19.25686
     ],
     [
       72.34118,
@@ -69,104 +61,104 @@
       19.23725
     ],
     [
-      72.37059,
-      19.23333
-    ],
-    [
-      72.38039,
-      19.22745
-    ],
-    [
-      72.38627,
-      19.21765
-    ],
-    [
-      72.39216,
-      19.20784
-    ],
-    [
-      72.39216,
-      19.2
-    ],
-    [
-      72.39412,
-      19.1902
-    ],
-    [
-      72.39608,
-      19.18039
-    ],
-    [
-      72.38824,
-      19.17255
-    ],
-    [
-      72.38235,
-      19.16275
-    ],
-    [
-      72.37647,
-      19.15294
+      72.36863,
+      19.23137
     ],
     [
       72.37843,
-      19.14314
+      19.22549
     ],
     [
-      72.37255,
-      19.13333
+      72.38431,
+      19.21569
     ],
     [
-      72.37255,
+      72.38824,
+      19.20392
+    ],
+    [
+      72.39608,
+      19.19608
+    ],
+    [
+      72.39216,
+      19.18431
+    ],
+    [
+      72.39216,
+      19.17647
+    ],
+    [
+      72.38431,
+      19.16863
+    ],
+    [
+      72.38039,
+      19.15686
+    ],
+    [
+      72.37843,
+      19.14706
+    ],
+    [
+      72.37451,
+      19.13922
+    ],
+    [
+      72.37647,
+      19.12941
+    ],
+    [
+      72.36863,
       19.12549
     ],
     [
-      72.36471,
-      19.11765
+      72.36863,
+      19.12157
     ],
     [
-      72.35294,
-      19.11373
+      72.35882,
+      19.11569
     ],
     [
-      72.34314,
+      72.34706,
+      19.11176
+    ],
+    [
+      72.33529,
       19.10784
     ],
     [
-      72.32941,
-      19.10588
+      72.32353,
+      19.10392
     ],
     [
-      72.31961,
-      19.1
+      72.31373,
+      19.09804
     ],
     [
-      72.30784,
+      72.3,
       19.09608
     ],
     [
-      72.29608,
+      72.29216,
+      19.09608
+    ],
+    [
+      72.28039,
       19.09216
     ],
     [
-      72.28824,
+      72.27255,
       19.09216
-    ],
-    [
-      72.27647,
-      19.08824
     ],
     [
       72.26863,
-      19.09608
+      19.09216
     ],
     [
-      72.26275,
-      19.10196
-    ],
-    [
-      72.26667,
-      19.0902
+      72.26471,
+      19.08431
     ],
     [
       72.25686,
@@ -181,48 +173,40 @@
       19.09608
     ],
     [
-      72.22745,
-      19.09804
+      72.22549,
+      19.1
     ],
     [
-      72.21961,
-      19.10196
+      72.21569,
+      19.10588
     ],
     [
-      72.21176,
-      19.1098
-    ],
-    [
-      72.21176,
+      72.21569,
       19.11373
     ],
     [
-      72.20392,
-      19.11765
+      72.20784,
+      19.11373
     ],
     [
       72.20588,
-      19.12745
+      19.12353
     ],
     [
       72.20392,
-      19.14118
+      19.13333
     ],
     [
-      72.19804,
-      19.15098
-    ],
-    [
-      72.1902,
-      19.15882
+      72.2,
+      19.1451
     ],
     [
       72.19412,
-      19.16667
+      19.1549
     ],
     [
-      72.19804,
-      19.16667
+      72.1902,
+      19.16275
     ],
     [
       72.19216,
@@ -233,60 +217,52 @@
       19.18431
     ],
     [
-      72.20392,
-      19.19608
+      72.19804,
+      19.19804
     ],
     [
-      72.20392,
-      19.2
+      72.19804,
+      19.2098
     ],
     [
-      72.19608,
-      19.20392
-    ],
-    [
-      72.20196,
-      19.21373
+      72.20588,
+      19.21765
     ],
     [
       72.2098,
-      19.21373
+      19.21765
     ],
     [
-      72.20784,
-      19.22353
-    ],
-    [
-      72.21765,
-      19.22941
+      72.21373,
+      19.22549
     ],
     [
       72.22157,
-      19.23725
+      19.23333
     ],
     [
-      72.22353,
-      19.24706
+      72.22745,
+      19.24314
     ],
     [
-      72.23137,
+      72.23725,
+      19.24902
+    ],
+    [
+      72.24706,
       19.25098
     ],
     [
-      72.24118,
-      19.25294
+      72.2549,
+      19.2549
     ],
     [
-      72.25098,
-      19.25098
+      72.26471,
+      19.26078
     ],
     [
-      72.25882,
-      19.25882
-    ],
-    [
-      72.26863,
-      19.26471
+      72.27451,
+      19.26275
     ],
     [
       72.28431,
@@ -313,24 +289,24 @@
   "n_regions": 1,
   "regions": [
     {
-      "area_km2": 300.76,
-      "perimeter_km": 68.83,
-      "major_axis_km": 21.45,
-      "minor_axis_km": 19.3,
-      "elongation": 1.11,
-      "orientation_deg_from_north": 62.3,
-      "interior_holes_filled_px": 99,
+      "area_km2": 315.22,
+      "perimeter_km": 65.51,
+      "major_axis_km": 21.33,
+      "minor_axis_km": 18.97,
+      "elongation": 1.12,
+      "orientation_deg_from_north": 60.7,
+      "interior_holes_filled_px": 5,
       "centroid": [
-        72.29017,
-        19.17732
+        72.28996,
+        19.17667
       ],
-      "region_px": 1685
+      "region_px": 1766
     }
   ],
-  "total_area_km2": 300.76,
+  "total_area_km2": 315.22,
   "multi_region_note": "Single region in this scene; top-level geometry and regions[0] agree.",
   "agreement_with_truth_mask": {
-    "iou": 0.9186,
+    "iou": 0.9766,
     "note": "Available because this is a synthetic case with a generator truth mask. On real imagery no such label exists."
   },
   "measurement_note": "Geometry measured in local azimuthal-equidistant metres centred on the scene at 18.90 N: 410.9 m east-west against 434.4 m north-south, rather than the manifest's single 433.59 m figure, which treats a pixel as square and overstates area by about 5% at this latitude. Distances and directions from the scene centre are true, which is what area, axis lengths and bearing require. This is not a full reprojection into EPSG:32643 - over a scene one degree across the difference is far below the detector's own boundary uncertainty. Axis lengths are 2-sigma extents along the principal axes.",

@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T05:44:28.947861+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-14T05:52:05.035423+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -43,13 +43,13 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 
 | Split | Model | IoU on true oil | Recall | Precision | FP rate (look-alike) | FP rate (clean) | n |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| val | classical baseline | 0.676 | 0.682 | 0.993 | 0.000 | 0.000 | 15/8/8 |
-| test (locked) | classical baseline | 0.688 | 0.696 | 0.891 | 0.000 | 0.000 | 20/12/12 |
+| val | classical baseline | 0.857 | 0.860 | 0.930 | 0.000 | 0.000 | 15/8/8 |
+| test (locked) | classical baseline | 0.814 | 0.819 | 0.895 | 0.000 | 0.000 | 20/12/12 |
 | — | trained U-Net | **not evaluated** | — | — | — | — | — |
 
 > Recall and precision are pixel-level on oil scenes; the two FP rates are per scene on scenes with no oil in them. Pixel accuracy is not reported, because on scenes that are mostly background it is high regardless of whether the slick was found.
 
-> **The recall target of 0.85 (masterplan p.15) is not met by the classical baseline: val 0.682; test 0.696.** IoU clears its 0.65 target and the false-positive rates are 0.000, so the baseline is conservative rather than inaccurate — it rejects patchy regions, which buys precision and costs recall. That trade-off is the concrete case for the learned model: the number to beat is recall, not IoU. Reported as a miss rather than omitted.
+> **The recall target of 0.85 (masterplan p.15) is not met by the classical baseline: test 0.819.** IoU clears its 0.65 target and the false-positive rates are 0.000, so the baseline is conservative rather than inaccurate — it rejects patchy regions, which buys precision and costs recall. That trade-off is the concrete case for the learned model: the number to beat is recall, not IoU. Reported as a miss rather than omitted.
 
 > The U-Net is implemented and trainable but has not been trained and evaluated here, so the defensible detection claim is the baseline number alone. An architected-but-untrained model is a design, not a result. Running `scripts/train_unet.py` writes `data/detection/unet_eval.json` and this table picks it up automatically.
 
@@ -98,15 +98,15 @@ Separate from the split above, and measuring something different. Those rows sco
 
 | Case | Area km² | Perimeter km | Major × minor km | Elongation | Complexity | Bearing | IoU vs truth |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| case_0001 | 300.76 | 68.83 | 21.45 × 19.3 | 1.11 | 1.25 | 62.3° | 0.9186 |
-| case_0002 | 350.2 | 82.12 | 24.02 × 19.92 | 1.21 | 1.53 | 134.3° | 0.9153 |
-| case_0003 | 297.55 | 72.63 | 20.47 × 20.08 | 1.02 | 1.41 | 23.5° | 0.9199 |
-| case_0004 | 274.88 | 66.93 | 20.5 × 18.14 | 1.13 | 1.30 | 5.1° | 0.9232 |
-| case_0005 | 293.8 | 77.85 | 21.1 × 19.34 | 1.09 | 1.64 | 2.3° | 0.9078 |
-| case_0006 | 322.18 | 73.1 | 21.32 × 20.79 | 1.03 | 1.32 | 76.7° | 0.9222 |
-| case_0007 | 311.83 | 76.43 | 22.39 × 18.99 | 1.18 | 1.49 | 6.3° | 0.9199 |
-| case_0008 | 360.56 | 93.52 | 25.28 × 19.89 | 1.27 | 1.93 | 130.3° | 0.9191 |
-| case_0009 | 641.15 | 222.16 | 68.53 × 15.79 | 4.34 | 6.13 | 111.4° | 0.9172 |
+| case_0001 | 315.22 | 65.51 | 21.33 × 18.97 | 1.12 | 1.08 | 60.7° | 0.9766 |
+| case_0002 | 364.3 | 75.48 | 23.99 × 19.68 | 1.22 | 1.24 | 135.0° | 0.9657 |
+| case_0003 | 310.04 | 69.78 | 20.25 × 19.93 | 1.02 | 1.25 | 179.4° | 0.9735 |
+| case_0004 | 284.7 | 66.93 | 20.7 × 17.78 | 1.16 | 1.25 | 4.9° | 0.9699 |
+| case_0005 | 307.01 | 70.73 | 20.72 × 19.27 | 1.07 | 1.30 | 3.0° | 0.9601 |
+| case_0006 | 334.85 | 71.21 | 21.2 × 20.55 | 1.03 | 1.21 | 72.8° | 0.9672 |
+| case_0007 | 323.61 | 70.73 | 22.16 × 18.95 | 1.17 | 1.23 | 5.7° | 0.9724 |
+| case_0008 | 375.91 | 85.92 | 25.11 × 19.62 | 1.28 | 1.56 | 130.5° | 0.9716 |
+| case_0009 | 658.82 | 215.51 | 68.66 × 15.52 | 4.42 | 5.61 | 111.2° | 0.9584 |
 
 > **These IoU figures are not comparable to the split above and neither supersedes the other.** The split is the detector on a task designed to trap it; these are the same detector on the incident scenes. Quoting only the higher number would misrepresent the detector.
 
@@ -188,13 +188,13 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | --- | --- | --- |
 | Slowest single case, all stages | 3.2 s (case_0004) | ≤ 5 min |
 | Mean per case | 2.3 s | — |
-| Full run, 9 cases | 20.6 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.7 ms | < 2 s |
+| Full run, 9 cases | 20.7 s | — |
+| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 1.7 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.6 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
-Dominant stages across the run: fragility 11.1 s, attribution 8.7 s, detection 0.4 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
+Dominant stages across the run: fragility 11.1 s, attribution 8.8 s, detection 0.4 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 
