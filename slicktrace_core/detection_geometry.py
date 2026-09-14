@@ -22,6 +22,7 @@ import numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from slicktrace_core import radiometry as _radiometry
 from slicktrace_core.baseline_detector import predict_mask, iou  # noqa: E402
 
 CASES_DIR = "data/cases"
@@ -335,6 +336,13 @@ def characterise(case_dir: str) -> dict:
         # Every retained region, largest first. The top-level geometry above
         # describes regions[0]; a scene with one slick reads identically to
         # before, and a scene with several no longer loses them silently.
+        # Radiometric provenance: what scale this raster is on, and what the
+        # detector assumed about it. The scenes here are 8-bit synthetic
+        # amplitude, which is neither calibrated linear nor dB, and saying so
+        # is the point - a real product would report db or linear here, and a
+        # mismatch between that and the detector assumption is the failure
+        # this records.
+        "radiometry": _radiometry.describe(scene),
         "land_rejection": _land_info,
         "n_regions": len(_regions),
         "regions": _regions,

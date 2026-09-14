@@ -297,6 +297,16 @@
       19.28824
     ]
   ],
+  "radiometry": {
+    "inferred_scale": "dn_uint",
+    "reason": "integer dtype: these are digital numbers, not calibrated sigma-nought. Calibration to linear or dB requires the product's own calibration LUT, which is not derivable from the pixel values",
+    "evidence": {
+      "min": 2.0,
+      "max": 255.0,
+      "dtype": "uint8"
+    },
+    "detection_assumes": "a darkness threshold on amplitude. On a dB raster the ordering is preserved, so the threshold still selects dark pixels; on a raster whose scale has been misidentified and converted, it selects the wrong ones and reports a confident detection"
+  },
   "land_rejection": {
     "land_mask_available": true,
     "regions_rejected_as_land": 0,
