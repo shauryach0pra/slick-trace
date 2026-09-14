@@ -390,8 +390,11 @@ def get_envelope(incident_id: str,
                           "places the mass and inherit its assumptions; a tight contour "
                           "means the model is confident, not that the answer is certain."),
         "vessels": vessels,
-        "note": "Envelope width grows with hours-back because release time, duration and "
-                "diffusivity are unknown. It is not converging on a point source.",
+        "note": ("Envelope width grows with hours-back because release time, duration "
+                 "and diffusivity are unknown. It is not converging on a point source. "
+                 "At the longest lookbacks the outer contour runs past the frame: the "
+                 "envelope genuinely extends beyond the imagery, and is drawn clipped "
+                 "rather than truncated to fit."),
     }
 
 
