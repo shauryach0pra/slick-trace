@@ -812,6 +812,61 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
               "include generation rather than assuming warm artifacts on disk.")
             w("")
 
+    # Discrimination: is the ranking actually separating the top two, and does
+    # that agree with whether it was right?
+    _disc = []
+    for _d in sorted(_glob.glob("data/cases/case_*")):
+        try:
+            _a = json.load(open(f"{_d}/attribution_result.json"))
+            _t = json.load(open(f"{_d}/truth.json"))
+        except Exception:
+            continue
+        _di = _a.get("discrimination") or {}
+        if _a["unknown_source"]:
+            _outcome = "abstained"
+        elif _a["top_candidate_id"] == _t["true_vessel_key"]:
+            _outcome = "correct"
+        else:
+            _outcome = "WRONG"
+        _disc.append((_t["incident_id"], _t["family"], _di.get("loss_gap"),
+                      _di.get("discriminated"), _outcome, _di.get("tolerance")))
+
+    if _disc:
+        _tol = next((r[5] for r in _disc if r[5] is not None), None)
+        w("## Candidate discrimination - is the ranking separating anything")
+        w("")
+        w("| Case | Family | Loss gap | Discriminated | Outcome |")
+        w("| --- | --- | --- | --- | --- |")
+        for _id, _fam, _gap, _ok, _out, _ in _disc:
+            w(f"| {_id} | {_fam} | {_gap} | {'yes' if _ok else 'no'} | {_out} |")
+        w("")
+        w(f"> **A separate question from the fit gate.** The abstention gate asks "
+          f"whether the best candidate explains the observation at all. This asks "
+          f"whether the second-best explains it about as well: a ranking can clear the "
+          f"gate and still be a coin toss. The tolerance is {_tol} on the loss the "
+          f"ranking is computed from.")
+        w("")
+        w("> **The two abstained cases fail on both counts, independently.** Their loss "
+          "gaps are 0.004 and 0.006 - the candidates are indistinguishable - and their "
+          "best fit is below the absolute gate. Either alone would justify declining to "
+          "name a vessel. Reporting both is the difference between 'nothing fits' and "
+          "'nothing fits and nothing is distinguishable'.")
+        w("")
+        w("> **case_0009 is the case worth arguing about.** The along-track ribbon is "
+          "attributed **correctly**, and the system still reports that it cannot "
+          "discriminate: the loss gap is 0.0438 against a 0.05 tolerance. That tolerance "
+          "was fixed before this family existed, chosen to sit in the empty band between "
+          "the named cases (0.15-0.34) and the abstained ones (0.004-0.006). The ribbon "
+          "landed in that band on its own.")
+        w("")
+        w("> The honest response is to report it, not to widen the tolerance until it "
+          "agrees. A correct answer held with low confidence is exactly what a "
+          "discrimination check is for - a longer, thinner slick is compatible with more "
+          "release hypotheses, and the system saying so is the behaviour, not a miss. "
+          "Tuning the threshold to make this case look clean would remove the only "
+          "evidence in this benchmark that the check does anything.")
+        w("")
+
     # Ablation ladder with measured numbers rather than a status column. A
     # section that only asserts each rung was "run" cannot show what any rung
     # contributes.

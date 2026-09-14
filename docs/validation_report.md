@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T06:30:34.310365+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-14T06:33:55.075119+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -195,14 +195,36 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Slowest single case, all stages | 3.3 s (case_0009) | ≤ 5 min |
 | Mean per case | 2.3 s | — |
 | Full run, 9 cases | 21.1 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.5 ms | < 2 s |
+| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
-| Time-window query, cold — fresh KB + envelope build | 7.8 ms | < 2 s |
+| Time-window query, cold — fresh KB + envelope build | 7.9 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
 Dominant stages across the run: fragility 11.4 s, attribution 8.8 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
+
+## Candidate discrimination - is the ranking separating anything
+
+| Case | Family | Loss gap | Discriminated | Outcome |
+| --- | --- | --- | --- | --- |
+| case_0001 | decoy | 0.3396 | yes | correct |
+| case_0002 | moving_discharge | 0.2718 | yes | correct |
+| case_0003 | absent_source | 0.0038 | no | abstained |
+| case_0004 | crowded | 0.1506 | yes | correct |
+| case_0005 | decoy | 0.3393 | yes | correct |
+| case_0006 | absent_source | 0.0058 | no | abstained |
+| case_0007 | decoy | 0.332 | yes | correct |
+| case_0008 | moving_discharge | 0.2866 | yes | correct |
+| case_0009 | along_track_ribbon | 0.0438 | no | correct |
+
+> **A separate question from the fit gate.** The abstention gate asks whether the best candidate explains the observation at all. This asks whether the second-best explains it about as well: a ranking can clear the gate and still be a coin toss. The tolerance is 0.05 on the loss the ranking is computed from.
+
+> **The two abstained cases fail on both counts, independently.** Their loss gaps are 0.004 and 0.006 - the candidates are indistinguishable - and their best fit is below the absolute gate. Either alone would justify declining to name a vessel. Reporting both is the difference between 'nothing fits' and 'nothing fits and nothing is distinguishable'.
+
+> **case_0009 is the case worth arguing about.** The along-track ribbon is attributed **correctly**, and the system still reports that it cannot discriminate: the loss gap is 0.0438 against a 0.05 tolerance. That tolerance was fixed before this family existed, chosen to sit in the empty band between the named cases (0.15-0.34) and the abstained ones (0.004-0.006). The ribbon landed in that band on its own.
+
+> The honest response is to report it, not to widen the tolerance until it agrees. A correct answer held with low confidence is exactly what a discrimination check is for - a longer, thinner slick is compatible with more release hypotheses, and the system saying so is the behaviour, not a miss. Tuning the threshold to make this case look clean would remove the only evidence in this benchmark that the check does anything.
 
 ## Required ablations - what each stage contributes
 
