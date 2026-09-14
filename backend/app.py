@@ -233,6 +233,13 @@ def get_envelope(incident_id: str,
     hm = _load_json(incident_id, "historical_mapping.json") or {}
     status_by_vessel = {a["vessel_key"]: a["status"] for a in hm.get("assessments", [])}
 
+    # Probability contours over the particle cloud. A cloud of dots says
+    # "somewhere around here"; contours enclosing 50/75/90% of the density say
+    # how much of the probability sits where, which is the judgement the
+    # envelope exists to support.
+    from slicktrace_core.envelope_density import density_contours
+    contours = density_contours(snap.particles_lon, snap.particles_lat)
+
     import numpy as np
     from scipy.spatial import cKDTree
     tree = cKDTree(np.column_stack([snap.particles_lon, snap.particles_lat]))
@@ -268,6 +275,14 @@ def get_envelope(incident_id: str,
         "inclusion_radius_deg": inclusion_radius,
         "particles": [[round(float(lo), 5), round(float(la), 5)]
                       for lo, la in zip(snap.particles_lon[::step], snap.particles_lat[::step])],
+        # Contours are computed on the full particle set, not the decimated one
+        # sent to the client: subsampling for bandwidth should not change where
+        # the probability mass is said to be.
+        "density_contours": contours,
+        "density_note": ("Contours enclose 50/75/90% of the estimated density over the "
+                          "backward particles. They describe where this transport model "
+                          "places the mass and inherit its assumptions; a tight contour "
+                          "means the model is confident, not that the answer is certain."),
         "vessels": vessels,
         "note": "Envelope width grows with hours-back because release time, duration and "
                 "diffusivity are unknown. It is not converging on a point source.",

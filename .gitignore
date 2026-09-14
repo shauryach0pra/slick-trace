@@ -10,3 +10,7 @@ data/calibration/
 
 # Calibration set — 60 generated cases, regenerable from seeds
 data/calibration/
+
+# Training-only environment: torch is not in requirements.lock and the
+# runtime image does not need it
+.venv-train/

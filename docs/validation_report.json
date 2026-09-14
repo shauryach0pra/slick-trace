@@ -608,6 +608,31 @@
       "n_lookalike": 12,
       "n_clean": 12
     },
-    "unet": null
+    "unet": {
+      "checkpoint": "data/detection/unet.pt",
+      "decision_threshold": 0.5,
+      "val": {
+        "iou_on_oil": 0.9702,
+        "recall_on_oil": 0.9938,
+        "precision_on_oil": 0.9763,
+        "false_positive_rate_lookalike": 0.0,
+        "false_positive_rate_clean": 0.0,
+        "n_oil": 15,
+        "n_lookalike": 8,
+        "n_clean": 8
+      },
+      "test": {
+        "iou_on_oil": 0.9675,
+        "recall_on_oil": 0.9984,
+        "precision_on_oil": 0.969,
+        "false_positive_rate_lookalike": 0.0,
+        "false_positive_rate_clean": 0.0,
+        "n_oil": 20,
+        "n_lookalike": 12,
+        "n_clean": 12
+      },
+      "preprocessing_note": "The U-Net sees raw scenes; the classical baseline applies Lee speckle filtering before thresholding. The comparison is therefore between two complete detectors, not two architectures.",
+      "training_set_note": "Trained on 60 oil-bearing 128x128 patches. That is a small positive set for a segmentation network, and overfitting is the expected failure mode; the test-split figures are the ones to read."
+    }
   }
 }

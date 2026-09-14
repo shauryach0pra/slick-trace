@@ -110,6 +110,24 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
           }).join(' ')} fill="none" stroke="var(--line)" strokeWidth="1.5" />
         )}
 
+        {/* Probability contours over the origin envelope. Drawn under the
+            particles: the cloud shows the ensemble, the rings say how much of
+            it sits where. 90% outermost so the nesting reads correctly. */}
+        {[...(envelope?.density_contours ?? [])].reverse().map((c, ci) =>
+          c.polygons.map((ring, ri) => (
+            <polygon
+              key={`dc-${ci}-${ri}`}
+              points={ring.map(([lo, la]) => toXY(lo, la).map((n) => n.toFixed(1)).join(',')).join(' ')}
+              fill="var(--teal)"
+              fillOpacity={0.05 + 0.05 * ci}
+              stroke="var(--teal)"
+              strokeOpacity={0.35 + 0.2 * ci}
+              strokeWidth="0.9"
+              strokeDasharray={ci === 2 ? 'none' : '3 2'}
+            />
+          )),
+        )}
+
         {/* origin envelope particles at the selected time */}
         {(envelope?.particles ?? []).map(([lo, la], i) => {
           const [x, y] = toXY(lo, la);
@@ -176,6 +194,7 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
 
       <div className="legend" aria-hidden="true">
         <span><i className="mk mk-circle" /> in envelope</span>
+        <span className="mk-contour-legend">50 / 75 / 90% of origin density</span>
         <span><i className="mk mk-square" /> outside</span>
         <span><i className="mk mk-triangle" /> no data</span>
         <span><i className="mk mk-ring" /> leading candidate</span>
