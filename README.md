@@ -35,10 +35,24 @@ slicktrace/
 │   ├── next_observation.py # Optimal future observation advisor
 │   ├── report.py         # Investigation report export (JSON + Markdown)
 │   ├── nlp_query.py      # "Ask Slick Trace" intent-based query system
-│   └── detection/        # Oil slick detection (baseline + U-Net)
+│   ├── detection/        # Oil slick detection (baseline + U-Net)
+│   ├── ais_quality.py    # AIS field validation against reserved sentinels
+│   ├── detection_geometry.py # Slick detection and geometry measurement
+│   ├── dossier.py        # PDF investigation report generation
+│   ├── radiometry.py     # SAR radiometry scale inference
+│   ├── speckle.py        # Lee adaptive speckle filtering
+│   ├── identity.py       # MMSI structure validation and flag state lookup
+│   ├── envelope_density.py # Traffic density envelope computation
+│   ├── tiling.py         # Scene tiling for large imagery
+│   └── adapters/         # Real data integration adapters
+│       ├── geotiff.py    # GeoTIFF scene reader
+│       └── marinecadastre.py # MarineCadastre AIS CSV reader
 ├── data/                 # Incident data (synthetic cases, volumes)
 ├── data_seed/            # Baked-in demo cases for Docker images
 ├── scripts/              # Pipeline execution, validation, and smoke tests
+│   ├── eval_unet.py      # U-Net evaluation on test splits
+│   ├── fit_calibration.py # Ensemble calibration against held-out set
+│   └── verify_document_claims.py # Document claim verification
 ├── tests/                # Comprehensive test suite (197 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
@@ -60,10 +74,20 @@ slicktrace/
 - Recharts for data visualization
 - Self-hosted fonts (@fontsource) for offline capability
 - Keyboard-accessible time slider controls with ARIA support
+- Specialized panels: CaseSwitcher, CoveragePanel, ForecastPanel, ProvenancePanel, NextObservationPanel
 
 **Detection:**
 - Classical computer vision baseline detector (OpenCV-based)
 - PyTorch U-Net architecture (implemented, requires separate training environment)
+- Lee adaptive speckle filtering for improved detection performance
+- SAR radiometry scale inference (DN/linear/dB) to prevent silent failures
+- AIS quality validation against ITU-R M.1371 reserved sentinels
+
+**Data Integration:**
+- GeoTIFF adapter for real SAR imagery (lazy import, no GDAL dependency)
+- MarineCadastre AIS CSV reader with field validation
+- MMSI structure validation and flag state lookup
+- Scene tiling support for large imagery processing
 
 **Infrastructure:**
 - Multi-stage Docker build (Node.js for frontend, Python for runtime)
@@ -126,6 +150,15 @@ python3 scripts/run_validation.py
 
 # Run test suite
 python3 -m pytest tests/ -q
+
+# Evaluate U-Net model on test splits
+python3 scripts/eval_unet.py
+
+# Calibrate ensemble win fraction against held-out set
+python3 scripts/fit_calibration.py
+
+# Verify all documented claims against repository
+python3 scripts/verify_document_claims.py
 ```
 
 **Running the Application:**
@@ -228,6 +261,12 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 - No outbound network calls in served application
 - Self-hosted fonts for offline capability
 
+**Report Generation:**
+- JSON and Markdown investigation reports with full attribution details
+- PDF investigation dossier generation with checksums for file integrity
+- Explicit uncertainty statements to avoid legal misinterpretation
+- Case switcher UI for accessing all benchmark cases with outcome labels
+
 ---
 
 ### Documentation
@@ -236,11 +275,13 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 |----------|----------|
 | `docs/validation_report.md` | Measured results: attribution, abstention, detection, NLP, coverage, next-observation, runtime, ablations |
 | `docs/calibration_report.md` | Ensemble win fraction against synthetic truth: Brier, ECE, reliability bins, held-out |
+| `docs/calibration_report.json` | Detailed calibration metrics and reliability analysis |
 | Origin error (in `validation_report.md`) | Distance from true release point to estimated, per case, with RMSE |
 | `docs/assumptions_register.md` | 20 modelling assumptions with code locators and failure modes |
 | `docs/licence_and_data_rights.md` | Code vs data licensing terms and real-world deployment requirements |
 | `docs/sustainability_and_ownership.md` | Running costs, refresh cadence, handover position, roadmap |
 | `docs/runtime.json` | Per-stage timings with hardware specifications |
+| `docs/evidence/` | Smoke test results, Docker build logs, and verification evidence |
 
 ---
 
@@ -250,8 +291,9 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 - No geometry in metric projection (recorded but unused)
 - U-Net implemented but unevaluated (requires GPU environment for training)
 - Classical baseline detector: recall 0.86 val / 0.82 test against a 0.85 target — met on validation, missed on test
-- Coverage, forecast, and next-observation results computed but not yet on dashboard
+- Coverage, forecast, and next-observation results computed with dedicated dashboard panels
 - `--reveal-truth` flag is development-only and must never be exposed in production
+- GeoTIFF and MarineCadastre adapters implemented but not tested on real data
 
 ---
 
