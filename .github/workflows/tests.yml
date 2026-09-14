@@ -34,6 +34,13 @@ jobs:
       # actually load the shipped checkpoint skip without it - and a checkpoint
       # that fails to load is precisely the failure a clone would hit first.
       # CPU-only wheel: no CUDA, much smaller download.
+      # rasterio is optional for the same reason as torch: it pulls GDAL
+      # (>100 MB) and the shipped runtime reads PNG. Installed here so the
+      # GeoTIFF adapter tests run rather than skip - an adapter nobody
+      # exercises is an adapter nobody has checked.
+      - name: Install rasterio so GeoTIFF adapter tests do not skip
+        run: pip install rasterio
+
       - name: Install torch (CPU) so checkpoint tests do not skip
         run: pip install torch --index-url https://download.pytorch.org/whl/cpu
 
