@@ -45,6 +45,10 @@ function VesselMarker({ x, y, state, isLead }) {
 
 export default function TimeSliderMap({ incidentId, api, tracksData, topCandidateId }) {
   const [hoursBefore, setHoursBefore] = useState(0);
+  // Declared with the other hooks, above the early return below: a hook after
+  // a conditional return runs on some renders and not others, and React counts
+  // hooks by call order.
+  const [probe, setProbe] = useState(null);
   const [envelope, setEnvelope] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -78,6 +82,25 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
     PAD + ((bbox.max_lat - lat) / (bbox.max_lat - bbox.min_lat)) * (H - 2 * PAD),
   ];
 
+  // Click-to-probe: read the forcing the model uses at an arbitrary point.
+  // The inverse of toXY, which is only valid because the projection is the
+  // linear bbox stretch above; a real basemap would need its own unproject.
+  const onMapClick = async (evt) => {
+    const rect = evt.currentTarget.getBoundingClientRect();
+    const px = ((evt.clientX - rect.left) / rect.width) * W;
+    const py = ((evt.clientY - rect.top) / rect.height) * H;
+    const lon = bbox.min_lon
+      + ((px - PAD) / (W - 2 * PAD)) * (bbox.max_lon - bbox.min_lon);
+    const lat = bbox.max_lat
+      - ((py - PAD) / (H - 2 * PAD)) * (bbox.max_lat - bbox.min_lat);
+    try {
+      const r = await api.probe(incidentId, lon.toFixed(5), lat.toFixed(5), hoursBefore);
+      setProbe({ ...r, px, py });
+    } catch {
+      setProbe(null);               // outside the scene: the API returns 400
+    }
+  };
+
   const timeLabel = envelope
     ? envelope.time_utc.replace('T', ' ').replace('+00:00', '')
     : '—';
@@ -92,7 +115,8 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
         </span>
       </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} className="track-map" role="img"
+      <svg viewBox={`0 0 ${W} ${H}`} className="track-map probe-target" role="img"
+           onClick={onMapClick}
            aria-label={`Vessel positions and the backward origin envelope at ${timeLabel} UTC. ` +
              `${inside.length} of ${envelope?.vessels?.length ?? 0} vessels are inside the envelope ` +
              `at this time. A text equivalent follows below the map.`}>
@@ -163,7 +187,32 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
             </g>
           );
         })}
+        {/* probe marker at the clicked point */}
+        {probe && (
+          <g>
+            <circle cx={probe.px} cy={probe.py} r="4.5" fill="none"
+                    stroke="var(--amber)" strokeWidth="1.2" />
+            <line x1={probe.px - 7} y1={probe.py} x2={probe.px + 7} y2={probe.py}
+                  stroke="var(--amber)" strokeWidth="0.8" />
+            <line x1={probe.px} y1={probe.py - 7} x2={probe.px} y2={probe.py + 7}
+                  stroke="var(--amber)" strokeWidth="0.8" />
+          </g>
+        )}
       </svg>
+
+      {probe && (
+        <div className="probe-readout">
+          <div className="probe-head">
+            <strong>{probe.current.speed_knots} kn</strong> bearing{' '}
+            {probe.current.bearing_deg_from_north}&deg; at{' '}
+            {probe.lat.toFixed(3)}&deg;N {probe.lon.toFixed(3)}&deg;E
+            <button type="button" className="probe-close"
+                    onClick={() => setProbe(null)}>clear</button>
+          </div>
+          <p className="probe-note">{probe.model_note}</p>
+          <p className="probe-note">{probe.wind_note}</p>
+        </div>
+      )}
 
       <div className="slider-row">
         <label htmlFor="utc-slider" className="slider-label">

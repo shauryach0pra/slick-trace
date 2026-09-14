@@ -208,6 +208,71 @@ def get_tracks(incident_id: str):
 
 # ------------------------------------------------------- live time slider --
 
+@app.get("/api/incidents/{incident_id}/probe")
+def probe_forcing(incident_id: str,
+                  lon: float = Query(...), lat: float = Query(...),
+                  hours_before: float = Query(0.0, ge=0.0, le=24.0)):
+    """The transport forcing at one point, as the attribution model sees it.
+
+    Deliberately not the true field. The generator applies a spatial swirl the
+    simulator is never given - it is the unmodelled variation the whole
+    fragility analysis exists to probe - and serving it here would leak truth
+    into the interface and make the model look better informed than it is.
+
+    What is returned is the uniform current the attribution actually advects
+    with. A reviewer clicking two points and getting the same answer is seeing
+    a real property of the model, not a broken endpoint.
+    """
+    import math
+    import numpy as np
+
+    m = _load_json(incident_id, "manifest.json")
+    if m is None:
+        raise HTTPException(404, "manifest not found")
+    b = m["bbox"]
+    if not (b["min_lon"] <= lon <= b["max_lon"] and b["min_lat"] <= lat <= b["max_lat"]):
+        raise HTTPException(400, "point is outside the scene")
+
+    f = np.load(m["forcing_path"])
+    u_deg, v_deg = float(f["u"]), float(f["v"])
+
+    # deg/h -> km/h, with the cos(lat) factor that assumption A15 records
+    east_kmh = u_deg * 111.32 * math.cos(math.radians(lat))
+    north_kmh = v_deg * 110.57
+    speed = math.hypot(east_kmh, north_kmh)
+    bearing = (math.degrees(math.atan2(east_kmh, north_kmh)) + 360) % 360
+
+    return {
+        "incident_id": incident_id,
+        "lon": round(lon, 5), "lat": round(lat, 5),
+        "hours_before_acquisition": hours_before,
+        "current": {
+            "east_km_per_h": round(east_kmh, 3),
+            "north_km_per_h": round(north_kmh, 3),
+            "speed_km_per_h": round(speed, 3),
+            "speed_knots": round(speed / 1.852, 3),
+            "bearing_deg_from_north": round(bearing, 1),
+        },
+        "wind": None,
+        "model_note": (
+            "This is the current the attribution model advects with: uniform in space "
+            "and constant in time. Two different points return the same vector, which "
+            "is a property of the model rather than a fault in this endpoint."
+        ),
+        "truth_note": (
+            "The generator applies a spatial swirl the simulator is never given. That "
+            "unmodelled variation is what the rank-fragility sweep exists to probe, and "
+            "it is deliberately not served here: an interface that showed the true "
+            "field would make the model look better informed than it is."
+        ),
+        "wind_note": (
+            "No wind field exists anywhere in this pipeline - see assumption A17. "
+            "Surface oil moves at roughly 3% of wind speed plus Stokes drift, so this "
+            "is a first-order omission on real data, not a refinement."
+        ),
+    }
+
+
 @app.get("/api/incidents/{incident_id}/envelope")
 def get_envelope(incident_id: str,
                  hours_before: float = Query(0.0, ge=0.0, le=24.0),

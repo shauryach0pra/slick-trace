@@ -26,6 +26,10 @@ export const api = {
   report: (id) => j(`/incidents/${id}/report`),
   reportUrl: (id) => `${BASE}/incidents/${id}/report.md`,
   // hours_before is the slider position: 0 = acquisition time, 24 = a full day back
+  probe: (id, lon, lat, hoursBefore) =>
+    j(`/incidents/${id}/probe?lon=${lon}&lat=${lat}`
+      + `&hours_before=${encodeURIComponent(hoursBefore)}`),
+
   envelope: (id, hoursBefore) =>
     j(`/incidents/${id}/envelope?hours_before=${encodeURIComponent(hoursBefore)}`),
   ask: (id, question) => j(`/incidents/${id}/ask`, {
