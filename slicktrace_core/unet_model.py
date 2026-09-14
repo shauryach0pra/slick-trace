@@ -86,6 +86,52 @@ def dice_loss(logits: torch.Tensor, target: torch.Tensor, eps: float = 1e-6) -> 
     return 1 - dice.mean()
 
 
+def tversky_loss(logits: torch.Tensor, target: torch.Tensor,
+                 alpha: float = 0.3, beta: float = 0.7,
+                 eps: float = 1e-6) -> torch.Tensor:
+    """Tversky loss: 1 - TP / (TP + alpha*FP + beta*FN).
+
+    Dice weights false positives and false negatives equally. Tversky lets them
+    be weighted separately, which matters here because the two errors are not
+    equally costly: a missed slick is re-detectable on the next pass, a false
+    detection routed to an analyst costs their time and their trust - but the
+    classical baseline already sits at zero false positives and short of the
+    recall target, so at the margin the miss is what needs penalising.
+
+    ON THE DIRECTION, WHICH IS EASY TO GET BACKWARDS
+        Raising **beta** penalises false negatives and buys recall. Raising
+        alpha penalises false positives and buys precision. A widely-copied
+        implementation in this problem statement's public field documents
+        alpha=0.7, beta=0.3 as "thin-slick recall optimization", which is
+        inverted: those values weight FP at more than twice FN and buy
+        precision, not recall.
+
+        Verified rather than assumed. Against a fixed truth mask, an
+        over-predicting mask and an under-predicting one:
+
+            alpha=0.5 beta=0.5   over 0.2195   under 0.2800
+            alpha=0.7 beta=0.3   over 0.2825   under 0.1892   <- punishes FALSE ALARMS
+            alpha=0.3 beta=0.7   over 0.1444   under 0.3525   <- punishes MISSES
+
+        The defaults here are alpha=0.3, beta=0.7.
+    """
+    p_ = torch.sigmoid(logits)
+    tp = (p_ * target).sum()
+    fp = (p_ * (1 - target)).sum()
+    fn = ((1 - p_) * target).sum()
+    return 1.0 - (tp + eps) / (tp + alpha * fp + beta * fn + eps)
+
+
+def bce_tversky_loss(logits: torch.Tensor, target: torch.Tensor,
+                     tversky_weight: float = 0.5,
+                     alpha: float = 0.3, beta: float = 0.7) -> torch.Tensor:
+    """BCE for calibrated per-pixel gradients, Tversky for the region overlap
+    the detector is actually scored on."""
+    bce = F.binary_cross_entropy_with_logits(logits, target)
+    tl = tversky_loss(logits, target, alpha, beta)
+    return tversky_weight * tl + (1 - tversky_weight) * bce
+
+
 def combined_loss(logits: torch.Tensor, target: torch.Tensor,
                    dice_weight: float = 0.5) -> torch.Tensor:
     bce = F.binary_cross_entropy_with_logits(logits, target)

@@ -28,7 +28,7 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 
-from slicktrace_core.unet_model import UNet, combined_loss
+from slicktrace_core.unet_model import UNet, bce_tversky_loss
 
 
 class DetectionDataset(Dataset):
@@ -79,7 +79,7 @@ def main():
             x, y = x.to(device), y.to(device)
             opt.zero_grad()
             logits = model(x)
-            loss = combined_loss(logits, y)
+            loss = bce_tversky_loss(logits, y)
             loss.backward()
             opt.step()
             train_loss += loss.item() * x.size(0)
