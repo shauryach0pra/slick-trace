@@ -39,7 +39,7 @@ slicktrace/
 ├── data/                 # Incident data (synthetic cases, volumes)
 ├── data_seed/            # Baked-in demo cases for Docker images
 ├── scripts/              # Pipeline execution, validation, and smoke tests
-├── tests/                # Comprehensive test suite (153 tests)
+├── tests/                # Comprehensive test suite (160 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
 ```
@@ -53,7 +53,7 @@ slicktrace/
 - NumPy and SciPy for numerical computations and particle tracking
 - Matplotlib for visualization and envelope generation
 - Pydantic for data validation and schema enforcement
-- Pytest for comprehensive testing (153 tests covering invariants, API, and NLP)
+- Pytest for comprehensive testing (160 tests covering invariants, API, and NLP)
 
 **Frontend:**
 - React 19 with Vite for modern build tooling
@@ -187,7 +187,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 | Determinism | regenerate, diff analysis artifacts | byte-identical, 8 cases, verified in CI on Ubuntu x86-64 |
 
 > **What byte-identical covers.** Every analysis artifact — attribution, fragility, hindcast, coverage, forecast, next-observation, detection — is byte-identical after regeneration on a different OS and architecture, checked in CI. Generated media are not: PNG encoding depends on the zlib build and `.npz` archives store timestamps, so those files differ between platforms while their contents do not. `manifest.json` carries SHA-256 checksums of those files and differs for the same reason. The claim is about the results, not their containers.
-| Test suite | `python3 -m pytest tests/ -q` | 153 passed |
+| Test suite | `python3 -m pytest tests/ -q` | 160 passed |
 | Dependency pins | every `==` vs installed | all match |
 | Validation | `python3 scripts/run_validation.py` | 4/4 attribution, 2/2 abstentions, 40/40 NLP |
 | Acceptance | `python3 scripts/smoke_test.py` | 6/6 |
@@ -302,7 +302,7 @@ dataset are recorded in `docs/licence_and_data_rights.md`.
 Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
 
 Built and maintained by one person. Continuity does not rest on a second reader
-being available: eight cases regenerate byte-identically from fixed seeds, 153
+being available: eight cases regenerate byte-identically from fixed seeds, 160
 automated tests run on every regeneration, and a scripted acceptance check
 verifies the frozen case against declared tolerances. A no-obligation handover —
 code, manifests, assumptions register, licence appendix and validation report —
@@ -319,7 +319,7 @@ dataset are recorded in `docs/licence_and_data_rights.md`.
 Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
 
 Built and maintained by one person. Continuity does not rest on a second reader
-being available: eight cases regenerate byte-identically from fixed seeds, 153
+being available: eight cases regenerate byte-identically from fixed seeds, 160
 automated tests run on every regeneration, and a scripted acceptance check
 verifies the frozen case against declared tolerances. A no-obligation handover —
 code, manifests, assumptions register, licence appendix and validation report —
