@@ -293,6 +293,13 @@
       19.27255
     ]
   ],
+  "land_rejection": {
+    "land_mask_available": true,
+    "regions_rejected_as_land": 0,
+    "land_fraction_of_scene": 0.0599,
+    "rejected_land_fractions": [],
+    "note": "regions more than 50% on land are rejected; a region straddling the shoreline is kept, because oil does reach a coast and discarding a landfall detection would be worse than the false positive it guards against"
+  },
   "n_regions": 1,
   "regions": [
     {

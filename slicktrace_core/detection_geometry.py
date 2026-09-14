@@ -94,6 +94,71 @@ def _detector_defaults() -> dict:
 _DEFAULTS = _detector_defaults()
 
 
+def _land_mask(manifest: dict, shape: tuple[int, int]):
+    """Boolean mask, True where a pixel is land.
+
+    The masterplan requires rejecting land where appropriate, and the reason is
+    radiometric rather than procedural: land is dark in SAR for its own reasons
+    - smooth terrain, wet soil, radar shadow behind relief - and a
+    darkness-threshold detector has no way to tell that darkness from a slick.
+    On an open-water scene this costs nothing. On a coastal scene, which is
+    where spills are investigated, it is the difference between a detection and
+    a hillside.
+
+    The coastline in the manifest is a polyline running roughly north-south with
+    water to its west. Land is therefore everything east of the interpolated
+    coastline longitude at each row's latitude. This is a scene-specific
+    simplification, not a general coastline test, and it is stated as such: a
+    real deployment needs a real shoreline product (GSHHG or equivalent) and a
+    proper point-in-polygon test.
+    """
+    coast = manifest.get("coastline") or []
+    if len(coast) < 2:
+        return None
+    b = manifest["bbox"]
+    h, w = shape
+    lats = b["max_lat"] - (np.arange(h) + 0.5) / h * (b["max_lat"] - b["min_lat"])
+    cl = np.array(sorted(coast, key=lambda p: p[1]))
+    coast_lon_at_row = np.interp(lats, cl[:, 1], cl[:, 0])
+    lons = b["min_lon"] + (np.arange(w) + 0.5) / w * (b["max_lon"] - b["min_lon"])
+    return lons[None, :] > coast_lon_at_row[:, None]
+
+
+def _reject_land_regions(pred, manifest: dict, max_land_fraction: float = 0.5):
+    """Drop regions that sit mostly on land, and say how many were dropped.
+
+    A region straddling the shoreline is kept: oil does reach a coast, and
+    discarding a landfall detection would be worse than the false positive it
+    guards against. Only regions more than half on land are removed, and the
+    count is reported rather than silently applied.
+    """
+    land = _land_mask(manifest, pred.shape)
+    info = {"land_mask_available": land is not None,
+            "regions_rejected_as_land": 0, "land_fraction_of_scene": None}
+    if land is None:
+        info["note"] = "no coastline in the manifest; no land rejection performed"
+        return pred, info
+
+    info["land_fraction_of_scene"] = round(float(land.mean()), 4)
+    from scipy.ndimage import label as _label
+    lab, n = _label(pred)
+    out = pred.copy()
+    rejected = []
+    for r in range(1, n + 1):
+        m = lab == r
+        frac = float((m & land).sum()) / max(int(m.sum()), 1)
+        if frac > max_land_fraction:
+            out[m] = 0
+            rejected.append(round(frac, 3))
+    info["regions_rejected_as_land"] = len(rejected)
+    info["rejected_land_fractions"] = rejected
+    info["note"] = (f"regions more than {max_land_fraction:.0%} on land are rejected; "
+                    "a region straddling the shoreline is kept, because oil does "
+                    "reach a coast and discarding a landfall detection would be "
+                    "worse than the false positive it guards against")
+    return out, info
+
+
 def _measure_region(mask: np.ndarray, manifest: dict, dx_m: float, dy_m: float) -> dict:
     """Geometry of one connected region, in local metres."""
     from scipy.ndimage import binary_erosion, binary_fill_holes
@@ -162,6 +227,9 @@ def characterise(case_dir: str) -> dict:
     manifest = json.load(open(os.path.join(case_dir, "manifest.json")))
     scene = np.array(Image.open(os.path.join(case_dir, "scene.png")).convert("L"))
     pred = predict_mask(scene)
+    # Land rejection before measurement: a dark hillside is not a slick, and a
+    # darkness threshold cannot tell them apart on its own.
+    pred, _land_info = _reject_land_regions(pred, manifest)
 
     truth_path = os.path.join(case_dir, "mask_groundtruth.png")
     truth = (np.array(Image.open(truth_path).convert("L")) > 127).astype(np.uint8)
@@ -267,6 +335,7 @@ def characterise(case_dir: str) -> dict:
         # Every retained region, largest first. The top-level geometry above
         # describes regions[0]; a scene with one slick reads identically to
         # before, and a scene with several no longer loses them silently.
+        "land_rejection": _land_info,
         "n_regions": len(_regions),
         "regions": _regions,
         "total_area_km2": round(sum(g["area_km2"] for g in _regions), 2),
