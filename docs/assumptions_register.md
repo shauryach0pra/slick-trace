@@ -421,6 +421,28 @@ this register exists to prevent. If it is added, it should be a wide interval
 with an appearance class attached and a confidence field that cannot express
 high, in the same shape as any age estimate.
 
+**The route, identified and not taken.** NOAA's ADIOS Oil Database is the
+public source for the missing half. It compiles oil assays aggregated from
+Environment and Climate Change Canada's Emergencies Science and Technology
+Section, the Norwegian Clean Seas Association, published ExxonMobil assays and
+NOAA's own records, and carries per-oil density, kinematic and dynamic
+viscosity, and emulsion water content. The working data is published as JSON on
+NOAA-ORR-ERD's GitHub alongside an `adios_db` Python package, so there is no
+licence obstacle and no account to obtain.
+
+It is cited rather than integrated, deliberately. Volume needs thickness, and
+thickness needs an appearance class this pipeline does not produce; oil density
+and viscosity would additionally need somewhere to act, and the transport model
+here carries neither windage nor Stokes drift (A17), so an oil record would be
+loaded and never read. A database with no consumer is the pattern this
+repository criticises elsewhere in competing work, and adding one to claim the
+integration would be the same move.
+
+What it would take to be real: oil properties entering spreading and windage,
+which is a change to the transport model rather than a lookup. That is
+post-freeze work, and it cannot be validated against synthetic forcing anyway —
+a more sophisticated model of a fiction is still a fiction.
+
 ---
 
 ### A19 · Determinism holds for results, not for their containers
