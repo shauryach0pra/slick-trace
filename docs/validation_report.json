@@ -136,18 +136,35 @@
         "top_iou": 0.599,
         "lead_retained": 1.0,
         "smallest_flip_magnitude": null
+      },
+      {
+        "incident_id": "case_0009",
+        "family": "along_track_ribbon",
+        "seed": 7734,
+        "n_vessels": 6,
+        "n_candidates": 4,
+        "expected": "named_candidate",
+        "method_outcome": "419630599",
+        "method_correct": true,
+        "naive_outcome": "419711487",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.334,
+        "lead_retained": 0.9,
+        "smallest_flip_magnitude": 1.0
       }
     ],
-    "n_cases": 8,
+    "n_cases": 9,
     "source_present": {
-      "n": 6,
-      "method_top1": 6,
-      "method_top3": 6,
+      "n": 7,
+      "method_top1": 7,
+      "method_top3": 7,
       "naive_top1": 0,
       "mcnemar": {
-        "method_right_baseline_wrong": 6,
+        "method_right_baseline_wrong": 7,
         "method_wrong_baseline_right": 0,
-        "p_value": 0.0312,
+        "p_value": 0.0156,
         "test": "exact McNemar, two-sided, on discordant pairs"
       }
     },
@@ -457,6 +474,35 @@
         "mistaken_promotion_rate": 0.25,
         "mistaken_promotion_n": "10/40"
       }
+    },
+    {
+      "incident_id": "case_0009",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.825,
+        "hidden_ais_recovery_n": "66/80",
+        "false_unmatched_alert_rate": 0.2886,
+        "false_unmatched_alert_n": "43/149",
+        "mistaken_promotion_rate": 0.425,
+        "mistaken_promotion_n": "17/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8906,
+        "hidden_ais_recovery_n": "57/64",
+        "false_unmatched_alert_rate": 0.3121,
+        "false_unmatched_alert_n": "44/141",
+        "mistaken_promotion_rate": 0.15,
+        "mistaken_promotion_n": "6/40"
+      }
     }
   ],
   "next_observation": [
@@ -528,6 +574,16 @@
       "separation_at_recommended": 0.583,
       "separation_at_least_informative": 0.3387,
       "recommendation_helped": true,
+      "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
+    },
+    {
+      "incident_id": "case_0009",
+      "applicable": true,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 24,
+      "separation_at_recommended": 0.1966,
+      "separation_at_least_informative": 0.3972,
+      "recommendation_helped": false,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     }
   ],

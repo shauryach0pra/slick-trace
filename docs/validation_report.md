@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T05:41:05.255947+00:00 · 8 independently generated cases (achieved count, not planned)
+Generated 2026-09-14T05:44:28.947861+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -16,23 +16,24 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 | case_0006 | absent_source | 5 | 3 | unknown_source | `unknown_source` | yes | `419738652` | no | 0.043 | 51% | 0.5 |
 | case_0007 | decoy | 6 | 4 | named_candidate | `419240128` | yes | `419991981` | no | 0.676 | 100% | none |
 | case_0008 | moving_discharge | 6 | 3 | named_candidate | `419125223` | yes | `419847031` | no | 0.599 | 100% | none |
+| case_0009 | along_track_ribbon | 6 | 4 | named_candidate | `419630599` | yes | `419711487` | no | 0.334 | 90% | 1.0 |
 
 ## Attribution — aggregates
 
 | Measure | Result |
 | --- | --- |
-| Source-present cases | 6 |
-| Forward-replay Top-1 | 6/6 = 100% [95% CI 61–100%] |
-| Forward-replay Top-3 | 6/6 = 100% [95% CI 61–100%] |
-| Naive proximity Top-1 | 0/6 = 0% [95% CI 0–39%] |
+| Source-present cases | 7 |
+| Forward-replay Top-1 | 7/7 = 100% [95% CI 65–100%] |
+| Forward-replay Top-3 | 7/7 = 100% [95% CI 65–100%] |
+| Naive proximity Top-1 | 0/7 = 0% [95% CI 0–35%] |
 | Top-1 gain over naive proximity | +100 percentage points |
-| Paired comparison (exact McNemar) | p = 0.0312 — significant at 0.05 |
+| Paired comparison (exact McNemar) | p = 0.0156 — significant at 0.05 |
 | Source-absent cases | 2 |
 | Correct abstentions | 2/2 = 100% [95% CI 34–100%] |
 | False named attribution | 0/2 = 0% [95% CI 0–66%] |
 
 
-> **On the significance test.** Both methods score the same cases, so this is a paired design and the correct test is McNemar on the discordant pairs: 6 cases where forward replay was right and the baseline wrong, 0 the other way. Exact two-sided p = 0.0312. A test treating the two columns as independent groups would report a smaller p by ignoring the pairing, and is not used here for that reason.
+> **On the significance test.** Both methods score the same cases, so this is a paired design and the correct test is McNemar on the discordant pairs: 7 cases where forward replay was right and the baseline wrong, 0 the other way. Exact two-sided p = 0.0156. A test treating the two columns as independent groups would report a smaller p by ignoring the pairing, and is not used here for that reason.
 
 > The intervals matter more than the point estimates at this sample size. A perfect score over a handful of cases still admits a wide true rate, and the interval is the honest statement of that. The planned benchmark (120 development / 40 validation / 40 source-present / 60 source-absent locked test cases) is not what was achieved; the achieved count is in the header.
 
@@ -77,8 +78,9 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 | case_0005 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
 | case_0007 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
 | case_0008 | yes | +150 min | 9.332 | 4.0h continuous | 0.5h pulse |
-| **mean** | | | **3.11** | | |
-| **RMSE** | | | **5.39** | | |
+| case_0009 | yes | +210 min | 39.264 | 7.0h continuous | 2.0h continuous |
+| **mean** | | | **8.28** | | |
+| **RMSE** | | | **15.66** | | |
 
 > **Why this sits alongside IoU.** IoU measures footprint agreement. An investigator asks how many kilometres the origin estimate is out by.
 
@@ -104,6 +106,7 @@ Separate from the split above, and measuring something different. Those rows sco
 | case_0006 | 322.18 | 73.1 | 21.32 × 20.79 | 1.03 | 1.32 | 76.7° | 0.9222 |
 | case_0007 | 311.83 | 76.43 | 22.39 × 18.99 | 1.18 | 1.49 | 6.3° | 0.9199 |
 | case_0008 | 360.56 | 93.52 | 25.28 × 19.89 | 1.27 | 1.93 | 130.3° | 0.9191 |
+| case_0009 | 641.15 | 222.16 | 68.53 × 15.79 | 4.34 | 6.13 | 111.4° | 0.9172 |
 
 > **These IoU figures are not comparable to the split above and neither supersedes the other.** The split is the detector on a task designed to trap it; these are the same detector on the incident scenes. Quoting only the higher number would misrepresent the detector.
 
@@ -158,6 +161,8 @@ Separate from the split above, and measuring something different. Those rows sco
 | case_0007 | coverage_failure | 0.8871 (55/62) | 0.2636 (29/110) | 0.0 (0/34) |
 | case_0008 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.35 (14/40) |
 | case_0008 | coverage_failure | 0.8485 (56/66) | 0.3287 (47/143) | 0.25 (10/40) |
+| case_0009 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.425 (17/40) |
+| case_0009 | coverage_failure | 0.8906 (57/64) | 0.3121 (44/141) | 0.15 (6/40) |
 
 > Operating point: match gate 0.02°, contact position noise 0.012°, detector miss rate 0.15, false detection rate 0.15. A rate without its operating point is not a comparable measurement.
 
@@ -171,6 +176,7 @@ Separate from the split above, and measuring something different. Those rows sco
 | case_0005 | +3h | +24h | 0.5909 | 0.2971 | yes |
 | case_0007 | +3h | +24h | 0.5914 | 0.3052 | yes |
 | case_0008 | +3h | +18h | 0.583 | 0.3387 | yes |
+| case_0009 | +3h | +24h | 0.1966 | 0.3972 | no |
 
 > One synthetic held-out observation per case is a weak test, so results are reported per case rather than averaged into a headline figure.
 
@@ -180,15 +186,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 3.1 s (case_0004) | ≤ 5 min |
-| Mean per case | 2.2 s | — |
-| Full run, 8 cases | 17.6 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
+| Slowest single case, all stages | 3.2 s (case_0004) | ≤ 5 min |
+| Mean per case | 2.3 s | — |
+| Full run, 9 cases | 20.6 s | — |
+| Template query, cold — fresh KB + lookup intent | 0.7 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
 | Time-window query, cold — fresh KB + envelope build | 1.7 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
-Dominant stages across the run: fragility 9.4 s, attribution 7.4 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
+Dominant stages across the run: fragility 11.1 s, attribution 8.7 s, detection 0.4 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 
@@ -196,9 +202,9 @@ Dominant stages across the run: fragility 9.4 s, attribution 7.4 s, detection 0.
 
 | Stage | Measured on source-present cases |
 | --- | --- |
-| 1. Nearest vessel at image time | Top-1 **0/6** |
-| 2. Hindcast intersection (filter only) | true source retained **6/6**; candidate pool 41 -> 22 (46% removed) |
-| 3. Forward reconstruction | Top-1 **6/6** |
+| 1. Nearest vessel at image time | Top-1 **0/7** |
+| 2. Hindcast intersection (filter only) | true source retained **7/7**; candidate pool 47 -> 26 (45% removed) |
+| 3. Forward reconstruction | Top-1 **7/7** |
 | 4. Uncertainty / abstention | correct on source-absent cases **2/2** |
 
 > **Rung 2 is the one worth reading twice.** Hindcast filtering removes roughly half the candidate pool and, on these cases, never removes the true source. A filter that discarded the answer would be worse than no filter, so retention is reported alongside reduction rather than reduction alone.

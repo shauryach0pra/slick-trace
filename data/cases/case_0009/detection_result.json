@@ -1,0 +1,322 @@
+{
+  "incident_id": "case_0009",
+  "detector": "classical baseline (local-contrast threshold, connected components, uniformity rejection)",
+  "detector_params": {
+    "dark_thresh_pct": 75,
+    "min_region_px": 60,
+    "uniformity_std_max": 45.0,
+    "boundary_count_bias": 0.89,
+    "note": "threshold is a fraction of the scene median, not an absolute level; it adapts to scene brightness but not to scene contrast"
+  },
+  "detected": true,
+  "case_state": "potential_slick",
+  "geometry": {
+    "area_km2": 641.15,
+    "perimeter_km": 222.16,
+    "interior_holes_filled_px": 199,
+    "major_axis_km": 68.53,
+    "minor_axis_km": 15.79,
+    "elongation": 4.34,
+    "orientation_deg_from_north": 111.4,
+    "centroid": [
+      72.84206,
+      18.82494
+    ]
+  },
+  "polygon": [
+    [
+      73.1,
+      18.63725
+    ],
+    [
+      73.08431,
+      18.65294
+    ],
+    [
+      73.08039,
+      18.68431
+    ],
+    [
+      73.07059,
+      18.70196
+    ],
+    [
+      73.04118,
+      18.69608
+    ],
+    [
+      73.01569,
+      18.71765
+    ],
+    [
+      72.99804,
+      18.73137
+    ],
+    [
+      72.97059,
+      18.71176
+    ],
+    [
+      72.94118,
+      18.72157
+    ],
+    [
+      72.93333,
+      18.73725
+    ],
+    [
+      72.96078,
+      18.73333
+    ],
+    [
+      72.97451,
+      18.74706
+    ],
+    [
+      72.96275,
+      18.75882
+    ],
+    [
+      72.94118,
+      18.76471
+    ],
+    [
+      72.91176,
+      18.76275
+    ],
+    [
+      72.88627,
+      18.7451
+    ],
+    [
+      72.87059,
+      18.76863
+    ],
+    [
+      72.86471,
+      18.80196
+    ],
+    [
+      72.85098,
+      18.79216
+    ],
+    [
+      72.82549,
+      18.78627
+    ],
+    [
+      72.79608,
+      18.77647
+    ],
+    [
+      72.76863,
+      18.76863
+    ],
+    [
+      72.77059,
+      18.78235
+    ],
+    [
+      72.74902,
+      18.79216
+    ],
+    [
+      72.72941,
+      18.79216
+    ],
+    [
+      72.70392,
+      18.81373
+    ],
+    [
+      72.67059,
+      18.80784
+    ],
+    [
+      72.64118,
+      18.82157
+    ],
+    [
+      72.62353,
+      18.84314
+    ],
+    [
+      72.59608,
+      18.8549
+    ],
+    [
+      72.59804,
+      18.88824
+    ],
+    [
+      72.58039,
+      18.9098
+    ],
+    [
+      72.57647,
+      18.93725
+    ],
+    [
+      72.58039,
+      18.96078
+    ],
+    [
+      72.6,
+      18.96471
+    ],
+    [
+      72.62941,
+      18.9549
+    ],
+    [
+      72.63333,
+      18.93137
+    ],
+    [
+      72.61569,
+      18.92549
+    ],
+    [
+      72.61765,
+      18.89216
+    ],
+    [
+      72.62941,
+      18.88431
+    ],
+    [
+      72.64706,
+      18.90588
+    ],
+    [
+      72.66667,
+      18.93333
+    ],
+    [
+      72.68627,
+      18.96078
+    ],
+    [
+      72.71569,
+      18.96275
+    ],
+    [
+      72.72941,
+      18.9451
+    ],
+    [
+      72.74902,
+      18.92549
+    ],
+    [
+      72.76471,
+      18.91765
+    ],
+    [
+      72.7902,
+      18.90392
+    ],
+    [
+      72.80784,
+      18.88235
+    ],
+    [
+      72.82353,
+      18.87451
+    ],
+    [
+      72.85294,
+      18.88039
+    ],
+    [
+      72.87059,
+      18.85882
+    ],
+    [
+      72.88627,
+      18.8549
+    ],
+    [
+      72.9098,
+      18.84314
+    ],
+    [
+      72.93529,
+      18.82941
+    ],
+    [
+      72.95882,
+      18.8451
+    ],
+    [
+      72.97647,
+      18.83922
+    ],
+    [
+      72.98235,
+      18.82157
+    ],
+    [
+      73.00588,
+      18.83725
+    ],
+    [
+      73.01569,
+      18.82353
+    ],
+    [
+      73.03725,
+      18.81373
+    ],
+    [
+      73.06863,
+      18.80588
+    ],
+    [
+      73.09804,
+      18.80392
+    ]
+  ],
+  "radiometry": {
+    "inferred_scale": "dn_uint",
+    "reason": "integer dtype: these are digital numbers, not calibrated sigma-nought. Calibration to linear or dB requires the product's own calibration LUT, which is not derivable from the pixel values",
+    "evidence": {
+      "min": 1.0,
+      "max": 255.0,
+      "dtype": "uint8"
+    },
+    "detection_assumes": "a darkness threshold on amplitude. On a dB raster the ordering is preserved, so the threshold still selects dark pixels; on a raster whose scale has been misidentified and converted, it selects the wrong ones and reports a confident detection"
+  },
+  "land_rejection": {
+    "land_mask_available": true,
+    "regions_rejected_as_land": 0,
+    "land_fraction_of_scene": 0.0599,
+    "rejected_land_fractions": [],
+    "note": "regions more than 50% on land are rejected; a region straddling the shoreline is kept, because oil does reach a coast and discarding a landfall detection would be worse than the false positive it guards against"
+  },
+  "n_regions": 1,
+  "regions": [
+    {
+      "area_km2": 641.15,
+      "perimeter_km": 222.16,
+      "major_axis_km": 68.53,
+      "minor_axis_km": 15.79,
+      "elongation": 4.34,
+      "orientation_deg_from_north": 111.4,
+      "interior_holes_filled_px": 199,
+      "centroid": [
+        72.84206,
+        18.82494
+      ],
+      "region_px": 3592
+    }
+  ],
+  "total_area_km2": 641.15,
+  "multi_region_note": "Single region in this scene; top-level geometry and regions[0] agree.",
+  "agreement_with_truth_mask": {
+    "iou": 0.9172,
+    "note": "Available because this is a synthetic case with a generator truth mask. On real imagery no such label exists."
+  },
+  "measurement_note": "Geometry measured in local azimuthal-equidistant metres centred on the scene at 18.90 N: 410.9 m east-west against 434.4 m north-south, rather than the manifest's single 433.59 m figure, which treats a pixel as square and overstates area by about 5% at this latitude. Distances and directions from the scene centre are true, which is what area, axis lengths and bearing require. This is not a full reprojection into EPSG:32643 - over a scene one degree across the difference is far below the detector's own boundary uncertainty. Axis lengths are 2-sigma extents along the principal axes.",
+  "boundary_note": "SAR darkness is not proof of oil. Look-alikes (low wind, biogenic films) dampen backscatter too; detection confidence is kept separate from source confidence throughout."
+}

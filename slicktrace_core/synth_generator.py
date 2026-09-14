@@ -60,9 +60,10 @@ IMG_SIZE = 256
 DEG_PER_MS_HR = 3600 / 111_000
 BASE_DIFFUSIVITY = 0.020  # deg at 1h elapsed; grows as sqrt(t)
 
-CASE_FAMILIES = ("decoy", "moving_discharge", "absent_source", "crowded")
+CASE_FAMILIES = ("decoy", "moving_discharge", "absent_source", "crowded",
+                 "along_track_ribbon")
 
-# Eight independently seeded cases spanning the required families. Used by
+# Nine independently seeded cases spanning the required families. Used by
 # scripts/generate_cases.py and by the validation harness so that no headline
 # number comes from a single case.
 CASE_PLAN = [
@@ -74,6 +75,7 @@ CASE_PLAN = [
     ("case_0006", "absent_source", 9074),
     ("case_0007", "decoy", 3312),
     ("case_0008", "moving_discharge", 6421),
+    ("case_0009", "along_track_ribbon", 7734),
 ]
 
 
@@ -199,8 +201,31 @@ def _build_family(family: str, rng: np.random.Generator, acquired: datetime,
     """
     specs = []
 
-    if family in ("decoy", "crowded", "moving_discharge"):
-        if family == "moving_discharge":
+    if family in ("decoy", "crowded", "moving_discharge", "along_track_ribbon"):
+        if family == "along_track_ribbon":
+            # Routine bilge discharge from a vessel under way: a long, thin
+            # ribbon laid along the track rather than a compact patch.
+            #
+            # The other families produce near-circular slicks (elongation
+            # 1.02-1.29), which published SAR morphology work would classify as
+            # look-alikes rather than oil - see assumption A16. This family
+            # exists because that was a real gap in the benchmark, not a
+            # cosmetic one: a compact slick is better explained by a short
+            # pulse than a continuous release, which is why the attribution
+            # search selected a 0.5h pulse on every earlier case despite every
+            # truth being 2-4h continuous.
+            #
+            # The ribbon here runs ~84 km and reaches elongation ~4.3. Real
+            # bilge ribbons reach 5-20, and this one is at the low end for a
+            # blunt reason: at 111 km to the degree, a fully realistic ribbon
+            # runs off the edge of a one-degree scene. Truncated by the frame,
+            # and said so rather than quietly cropped.
+            release_start = acquired - timedelta(hours=8)
+            true_fixes = _track(origin_lon - 0.17, origin_lat + 0.07,
+                                0.100, -0.035, release_start - timedelta(hours=1),
+                                hours=9, sog=13.0, cog=115.0)
+            duration, continuous = 7.0, True
+        elif family == "moving_discharge":
             # long transit, continuous discharge over 4h
             release_start = acquired - timedelta(hours=7)
             true_fixes = _track(origin_lon - 0.40, origin_lat + 0.34,
