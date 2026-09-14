@@ -28,6 +28,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.lock -r requirements-dev.lock
 
+      # Torch is deliberately absent from requirements.lock: the runtime image
+      # runs the classical detector and does not need a deep learning
+      # framework. It is installed here anyway, because the two tests that
+      # actually load the shipped checkpoint skip without it - and a checkpoint
+      # that fails to load is precisely the failure a clone would hit first.
+      # CPU-only wheel: no CUDA, much smaller download.
+      - name: Install torch (CPU) so checkpoint tests do not skip
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
       - name: Run test suite
         run: python -m pytest tests/ -q
 
