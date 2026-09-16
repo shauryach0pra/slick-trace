@@ -14,8 +14,8 @@ export default function ForecastPanel({ forecast }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Forward exposure</h2>
-        <span className="tag tag-amber">modelled</span>
+        <h2>Forward Exposure</h2>
+        <span className="tag tag-amber">Modelled</span>
       </div>
 
       <p className="ranking-caption">

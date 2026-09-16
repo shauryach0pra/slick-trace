@@ -13,7 +13,7 @@ export default function NextObservationPanel({ nextObs }) {
   if (!nextObs.applicable) {
     return (
       <div className="panel">
-        <div className="panel-head"><h2>Next observation</h2></div>
+        <div className="panel-head"><h2>Next Observation</h2></div>
         <p className="empty-state">
           Not applicable for this incident: {nextObs.reason ?? 'no competing hypothesis pair'}
         </p>
@@ -29,8 +29,8 @@ export default function NextObservationPanel({ nextObs }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Next observation</h2>
-        <span className="tag tag-amber">hypothetical</span>
+        <h2>Next Observation</h2>
+        <span className="tag tag-amber">Advisory</span>
       </div>
 
       <p className="frag-headline">

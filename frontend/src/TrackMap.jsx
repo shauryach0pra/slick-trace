@@ -25,7 +25,7 @@ export default function TrackMap({ tracksData, historicalMapping, topCandidateId
         <span className="tag">origin envelope</span>
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} className="track-map">
-        <rect x="0" y="0" width={W} height={H} fill="var(--ink-900)" />
+        <rect x="0" y="0" width={W} height={H} fill="var(--ink-900, #f5f5f7)" />
         {tracks.map((t) => {
           const status = statusByVessel[t.vessel_key] ?? 'unassessed';
           const color = STATUS_COLOR[status];

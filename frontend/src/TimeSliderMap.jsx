@@ -120,9 +120,9 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Historical replay</h2>
+        <h2>Historical Replay</h2>
         <span className={envelope?.hindcast ? 'tag tag-amber' : 'tag tag-teal'}>
-          {envelope?.hindcast ? 'hindcast — modelled' : 'observed'}
+          {envelope?.hindcast ? 'Modelled' : 'Observed'}
         </span>
       </div>
 
@@ -131,7 +131,7 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
            aria-label={`Vessel positions and the backward origin envelope at ${timeLabel} UTC. ` +
              `${inside.length} of ${envelope?.vessels?.length ?? 0} vessels are inside the envelope ` +
              `at this time. A text equivalent follows below the map.`}>
-        <rect x="0" y="0" width={W} height={H} fill="var(--ink-950)" />
+        <rect x="0" y="0" width={W} height={H} fill="var(--ink-950, #ffffff)" />
 
         {/* real coastline (Natural Earth, public domain) - reference only */}
         {(realCoast ?? []).map((seg, i) => (
@@ -239,7 +239,7 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
 
       <div className="slider-row">
         <label htmlFor="utc-slider" className="slider-label">
-          UTC replay
+          UTC Replay
           <MetricInfo metric="hindcastEnvelope" />
         </label>
         <input

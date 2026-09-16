@@ -24,8 +24,10 @@ export default function ScenePanel({ manifest, sceneUrl, detection }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Observed scene</h2>
-        {isSynthetic && <span className="tag tag-amber">synthetic</span>}
+        <h2>Observed Scene</h2>
+        <span className={isSynthetic ? 'tag tag-amber' : 'tag tag-teal'}>
+          {isSynthetic ? 'Synthetic' : 'Real'}
+        </span>
       </div>
 
       <div className="scene-wrap">
@@ -47,8 +49,8 @@ export default function ScenePanel({ manifest, sceneUrl, detection }) {
           <div className="geom-grid">
             <div><span className="geom-k">Area</span><span className="geom-v">{g.area_km2} km²</span></div>
             <div><span className="geom-k">Perimeter</span><span className="geom-v">{g.perimeter_km} km</span></div>
-            <div><span className="geom-k">Major axis</span><span className="geom-v">{g.major_axis_km} km</span></div>
-            <div><span className="geom-k">Minor axis</span><span className="geom-v">{g.minor_axis_km} km</span></div>
+            <div><span className="geom-k">Major Axis</span><span className="geom-v">{g.major_axis_km} km</span></div>
+            <div><span className="geom-k">Minor Axis</span><span className="geom-v">{g.minor_axis_km} km</span></div>
             <div><span className="geom-k">Elongation</span><span className="geom-v">{g.elongation}</span></div>
             <div><span className="geom-k">Bearing</span><span className="geom-v">{g.orientation_deg_from_north}° from N</span></div>
           </div>

@@ -23,8 +23,8 @@ export default function ProvenancePanel({ report, manifest }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Traffic filtering and provenance</h2>
-        <span className="tag">{total} tracked</span>
+        <h2>Traffic Filtering and Provenance</h2>
+        <span className="tag tag-teal">{total} vessels</span>
       </div>
 
       <ul className="prov-states">

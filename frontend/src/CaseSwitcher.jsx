@@ -21,7 +21,7 @@ export default function CaseSwitcher({ incidents, active, onSelect }) {
   return (
     <nav className="case-switcher" aria-label="Incident cases">
       <span className="case-switcher-label">
-        {incidents.length} independently generated cases
+        Cases
       </span>
       <ul className="case-list">
         {incidents.map((c) => {
@@ -31,20 +31,22 @@ export default function CaseSwitcher({ incidents, active, onSelect }) {
             <li key={c.incident_id}>
               <button
                 type="button"
-                className={`case-chip${isActive ? ' is-active' : ''}${unknown ? ' is-unknown' : ''}`}
+                className={`case-item${isActive ? ' is-active' : ''}`}
                 aria-current={isActive ? 'true' : undefined}
                 onClick={() => onSelect(c.incident_id)}
               >
-                <span className="case-chip-id">{c.incident_id.replace('case_', 'case ')}</span>
-                <span className="case-chip-family">
-                  {FAMILY_LABEL[c.family] ?? c.family}
-                </span>
-                <span className={`case-chip-outcome${unknown ? ' is-unknown' : ''}`}>
-                  <span aria-hidden="true">{unknown ? '◇' : '●'}</span>{' '}
-                  {unknown ? 'unknown source' : 'candidate named'}
-                  <span className="visually-hidden">
-                    {` — ${c.n_vessels} vessels tracked`}
+                <span
+                  className={`case-indicator ${unknown ? 'indicator-unknown' : 'indicator-known'}`}
+                  aria-hidden="true"
+                />
+                <span className="case-text">
+                  <span className="case-id">{c.incident_id.replace('case_', 'case ')}</span>
+                  <span className="case-description">
+                    {FAMILY_LABEL[c.family] ?? c.family}
                   </span>
+                </span>
+                <span className="visually-hidden">
+                  {unknown ? ', outcome: source not identified' : ', outcome: source identified'}
                 </span>
               </button>
             </li>

@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 const SUGGESTIONS = [
   'What is the top candidate and why?',
   'Which vessels crossed the likely origin zone from 02:00 to 05:00 UTC?',
-  'Why is the top candidate above the second candidate?',
   'Find the current-field source used in this report.',
 ];
 
@@ -39,17 +38,17 @@ export default function AskConsole({ incidentId, api }) {
         <h2>Ask Slick Trace</h2>
         <span className="tag">grounded query — no free-form generation</span>
       </div>
-      <div className="console-history" ref={scrollRef}>
-        {history.length === 0 && (
-          <div className="console-empty">
-            <p>Try a question, or pick one below.</p>
-            <div className="suggestions">
-              {SUGGESTIONS.map((s) => (
-                <button key={s} className="suggestion" onClick={() => submit(s)}>{s}</button>
-              ))}
-            </div>
+      {history.length === 0 && (
+        <div className="suggestions-section">
+          <p>Try a question, or pick one below.</p>
+          <div className="suggestions">
+            {SUGGESTIONS.map((s) => (
+              <button key={s} className="suggestion" onClick={() => submit(s)}>{s}</button>
+            ))}
           </div>
-        )}
+        </div>
+      )}
+      <div className="console-history" ref={scrollRef}>
         {history.map((r, i) => (
           <div className="console-entry" key={i}>
             <div className="console-q">&gt;&gt;&gt; {r.question}</div>

@@ -20,8 +20,8 @@ export default function CoveragePanel({ coverage }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Coverage-aware matching</h2>
-        <span className="tag">{selective.n_runs} runs each</span>
+        <h2>Coverage-Aware Matching</h2>
+        <span className="tag tag-teal">Tested</span>
       </div>
 
       <table className="fc-table">

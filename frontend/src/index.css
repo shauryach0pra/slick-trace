@@ -6,22 +6,53 @@
 @import '@fontsource/ibm-plex-mono/500.css';
 
 :root {
-  --ink-950: #0b1826;
-  --ink-900: #0f2233;
-  --ink-800: #16324a;
-  --line: #274460;
-  --teal: #00c2b2;
-  --teal-dim: #0a5c58;
-  --amber: #e8a23d;
-  --red: #e5484d;
-  --green: #3fb950;
-  --text-hi: #eaf2f6;
-  --text-mid: #a9c1d1;
-  --text-dim: #5b7083;
+  /* macOS Finder Light Theme Colors */
+  --ink-975: #f5f5f7;
+  --ink-950: #ffffff;
+  --ink-900: #fafafa;
+  --ink-800: #f5f5f7;
+  --ink-700: #e8e8ed;
+  --line: #d1d1d6;
+  --line-subtle: #e5e5ea;
+  --teal: #007AFF;
+  --teal-dim: #0056b3;
+  --teal-subtle: rgba(0, 122, 255, 0.1);
+  --amber: #FF9500;
+  --amber-subtle: rgba(255, 149, 0, 0.1);
+  --red: #FF3B30;
+  --red-subtle: rgba(255, 59, 48, 0.1);
+  --green: #34C759;
+  --green-subtle: rgba(52, 199, 89, 0.1);
+  --text-hi: #000000;
+  --text-mid: #333333;
+  --text-dim: #666666;
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
 
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, 'Menlo', 'Monaco', monospace;
+
+  /* Typography Scale - macOS inspired */
+  --font-size-xl: 22px;
+  --font-size-lg: 17px;
+  --font-size-md: 15px;
+  --font-size-base: 13px;
+  --font-size-sm: 12px;
+  --font-size-xs: 11px;
+  --font-size-xxs: 10px;
+  --font-size-xxxs: 9px;
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  
+  /* macOS Corner Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
 }
 
 * {
@@ -31,15 +62,18 @@
 html, body, #root {
   height: 100%;
   margin: 0;
+  overflow: hidden;
 }
 
 body {
-  background: var(--ink-950);
+  background: var(--ink-975);
   color: var(--text-hi);
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
 }
 
 h1, h2, h3 {
@@ -63,4 +97,31 @@ button {
 :focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 2px;
+}
+
+/* macOS-style scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }

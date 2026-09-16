@@ -7,9 +7,9 @@ function BaselineChart({ naive, topAttributed }) {
   return (
     <div className="ranking-block">
       <div className="ranking-block-head">
-        <h3>Naive historical-proximity baseline</h3>
+        <h3>Naive Historical-Proximity Baseline</h3>
         <span className={wrong ? 'tag tag-red' : 'tag tag-green'}>
-          top pick: {naive.top_candidate_id} {wrong ? '— wrong' : ''}
+          {wrong ? 'Top Pick Wrong' : 'Top Pick Right'}
         </span>
       </div>
       <ResponsiveContainer width="100%" height={22 * data.length + 20}>
@@ -24,7 +24,7 @@ function BaselineChart({ naive, topAttributed }) {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <p className="ranking-caption">distance to slick, degrees — lower is a stronger naive pick</p>
+      <p className="ranking-caption">Distance to slick, degrees — lower is a stronger naive pick</p>
     </div>
   );
 }
@@ -36,9 +36,9 @@ function AttributionChart({ attribution }) {
   return (
     <div className="ranking-block">
       <div className="ranking-block-head">
-        <h3>Forward-replay attribution</h3>
+        <h3>Forward-Replay Attribution</h3>
         <span className={correct ? 'tag tag-green' : 'tag tag-amber'}>
-          {correct ? `top pick: ${attribution.top_candidate_id}` : 'unknown source'}
+          {correct ? 'Top Pick Right' : 'Unknown Source'}
         </span>
       </div>
       <ResponsiveContainer width="100%" height={22 * data.length + 20}>
@@ -54,8 +54,8 @@ function AttributionChart({ attribution }) {
         </BarChart>
       </ResponsiveContainer>
       <p className="ranking-caption">
-        mean IoU vs observed slick, across {attribution.n_ensemble_variants} shared forcing variants
-        — abstention gate at {attribution.abstention_iou_gate}
+        Mean IoU vs observed slick, across {attribution.n_ensemble_variants} shared forcing variants
+        — Abstention gate at {attribution.abstention_iou_gate}
       </p>
     </div>
   );
@@ -65,7 +65,7 @@ export default function RankingPanel({ naive, attribution }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Candidate ranking</h2>
+        <h2>Candidate Ranking</h2>
       </div>
       <BaselineChart naive={naive} topAttributed={attribution?.top_candidate_id} />
       <AttributionChart attribution={attribution} />

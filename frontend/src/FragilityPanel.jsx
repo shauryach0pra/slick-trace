@@ -33,7 +33,10 @@ export default function FragilityPanel({ fragility }) {
   if (!fragility.testable) {
     return (
       <div className="panel">
-        <div className="panel-head"><h2>Rank fragility</h2></div>
+        <div className="panel-head">
+          <h2>Rank Fragility</h2>
+          <span className="tag tag-amber">Not Testable</span>
+        </div>
         <p className="empty-state">
           Not testable for this incident: {fragility.reason}
         </p>
@@ -50,9 +53,9 @@ export default function FragilityPanel({ fragility }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2>Rank fragility</h2>
+        <h2>Rank Fragility</h2>
         <span className={fragility.flip_found ? 'tag tag-amber' : 'tag tag-green'}>
-          {fragility.flip_found ? 'lead can flip' : 'lead stable'}
+          {fragility.flip_found ? 'Lead Can Flip' : 'Lead Stable'}
         </span>
       </div>
 
@@ -120,7 +123,7 @@ export default function FragilityPanel({ fragility }) {
         <dl className="frag-detail">
           <div>
             <dt>Selected run</dt>
-            <dd>{selected.point_id} <span className="tag">cached</span></dd>
+            <dd>{selected.point_id}</dd>
           </div>
           <div>
             <dt>Leader under this setting</dt>

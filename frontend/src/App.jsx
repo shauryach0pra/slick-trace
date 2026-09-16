@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './dashboard.css';
 import { api } from './api';
 import CaseSwitcher from './CaseSwitcher';
-import Masonry from './Masonry';
 import ProvenancePanel from './ProvenancePanel';
 import VerdictBand from './VerdictBand';
 import ScenePanel from './ScenePanel';
@@ -13,6 +12,7 @@ import AskConsole from './AskConsole';
 import ForecastPanel from './ForecastPanel';
 import CoveragePanel from './CoveragePanel';
 import NextObservationPanel from './NextObservationPanel';
+import ConclusionGraph from './ConclusionGraph';
 
 export default function App() {
   const [incidents, setIncidents] = useState([]);
@@ -68,41 +68,81 @@ export default function App() {
         <div className="wordmark">Slick Trace<span className="wordmark-sub">/ source attribution</span></div>
         {manifest && (
           <div className="topbar-meta">
-            <span className="tag">{manifest.incident_id}</span>
             <span className="tag tag-teal">{manifest.case_state?.replace('_', ' ') ?? 'potential slick'}</span>
             {manifest.provenance?.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
-            <a className="tag tag-link" href={api.reportUrl(incidentId)} target="_blank" rel="noreferrer">
-              investigation report
-            </a>
-            <a className="tag tag-link" href={api.dossierUrl(incidentId)} target="_blank" rel="noreferrer">
-              dossier (PDF)
-            </a>
           </div>
         )}
       </header>
 
-      <CaseSwitcher incidents={incidents} active={incidentId} onSelect={setIncidentId} />
-
       {error && <div className="error-banner">Failed to load incident data: {error}</div>}
 
-      <VerdictBand attribution={attribution} naive={naiveBaseline}
-                   historical={historical} manifest={manifest} />
+      <div className="finder-layout">
+        {/* First column: Sidebar with cases */}
+        <aside className="finder-sidebar">
+          <CaseSwitcher incidents={incidents} active={incidentId} onSelect={setIncidentId} />
+        </aside>
 
-      <main className="grid">
-        <Masonry gap={18}>
-          <ScenePanel manifest={manifest} sceneUrl={api.sceneUrl(incidentId)}
-                      detection={detection} />
-          <RankingPanel naive={naiveBaseline} attribution={attribution} />
-          <AskConsole incidentId={incidentId} api={api} />
-          <TimeSliderMap incidentId={incidentId} api={api} tracksData={tracksData}
-                         topCandidateId={attribution?.top_candidate_id} />
-          <FragilityPanel fragility={fragility} />
-          <ForecastPanel forecast={forecast} />
-          <NextObservationPanel nextObs={nextObs} />
-          <CoveragePanel coverage={coverage} />
-          <ProvenancePanel report={report} manifest={manifest} />
-        </Masonry>
-      </main>
+        {/* Second column: Feature boxes - Inverted Pyramid Structure */}
+        <div className="finder-content">
+          <div className="finder-features">
+            {/* Top: Most important conclusion */}
+            <VerdictBand attribution={attribution} naive={naiveBaseline}
+                         historical={historical} manifest={manifest} />
+            
+            {/* Key attribution results */}
+            <RankingPanel naive={naiveBaseline} attribution={attribution} />
+            
+            {/* Primary evidence */}
+            <ScenePanel manifest={manifest} sceneUrl={api.sceneUrl(incidentId)}
+                        detection={detection} />
+            
+            {/* Supporting analysis */}
+            <TimeSliderMap incidentId={incidentId} api={api} tracksData={tracksData}
+                           topCandidateId={attribution?.top_candidate_id} />
+            
+            {/* Sensitivity analysis */}
+            <FragilityPanel fragility={fragility} />
+            
+            {/* Predictive information */}
+            <ForecastPanel forecast={forecast} />
+            
+            {/* Future analysis */}
+            <NextObservationPanel nextObs={nextObs} />
+            
+            {/* Hidden AIS analysis */}
+            <CoveragePanel coverage={coverage} />
+            
+            {/* Technical metadata */}
+            <ProvenancePanel report={report} manifest={manifest} />
+          </div>
+
+          {/* Third column: Ask Console and report buttons */}
+          <div className="finder-details">
+            {manifest && (
+              <div className="report-buttons">
+                <a className="report-button" href={api.reportUrl(incidentId)} target="_blank" rel="noreferrer">
+                  Investigation Report
+                </a>
+                <a className="report-button" href={api.dossierUrl(incidentId)} target="_blank" rel="noreferrer">
+                  Dossier (PDF)
+                </a>
+              </div>
+            )}
+            <ConclusionGraph 
+              attribution={attribution} 
+              naive={naiveBaseline}
+              historical={historical} 
+              manifest={manifest} 
+              detection={detection} 
+              fragility={fragility} 
+              forecast={forecast} 
+              coverage={coverage} 
+              nextObs={nextObs} 
+            />
+            <AskConsole incidentId={incidentId} api={api} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
