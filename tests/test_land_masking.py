@@ -59,8 +59,12 @@ def test_a_region_straddling_the_shoreline_is_kept():
     """Oil reaches coastlines. Discarding a landfall detection would be worse
     than the false positive the guard exists to prevent."""
     m = _manifest()
+    land = _land_mask(m, (256, 256))
+    row = 110
+    shore = int(np.argmax(land[row]))          # first land pixel along this row
+    assert 10 < shore < 246, "the scene should have a shoreline to straddle"
     pred = np.zeros((256, 256), dtype=np.uint8)
-    pred[100:120, 225:245] = 1
+    pred[row - 10:row + 10, shore - 12:shore + 8] = 1   # 60% at sea, 40% on land
     out, info = _reject_land_regions(pred, m)
     assert out.sum() == pred.sum(), "a landfall slick must survive"
     assert info["regions_rejected_as_land"] == 0

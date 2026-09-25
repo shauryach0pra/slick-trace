@@ -385,7 +385,7 @@ def time_template_query() -> dict | None:
     }
 
 
-def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
+def render(attr, nlp, cov, nxt, det, nlp_timing=None, leak=None) -> str:
     L = []
     w = L.append
     sp, sa = attr["source_present"], attr["source_absent"]
@@ -399,6 +399,34 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
       "measurement of real-world attribution accuracy, and no real matched incident has "
       "been scored here.")
     w("")
+
+    if leak:
+        w("## Leak audit - can a rule with no physics find the source")
+        w("")
+        w("Each rule looks only at track bookkeeping - fix count, first and last fix, span, "
+          "actual speed, straightness, reported-vs-actual speed, closest approach to the slick - "
+          "and names one vessel per case, lowest, second-lowest, highest or second-highest on "
+          "that attribute. Ties count as misses. Rules and the flag threshold were fixed before "
+          "the generator was changed. A rule that names the true source in "
+          f"{leak['flag_at']} or more of the {leak['n_source_present']} source-present cases is "
+          f"flagged. A rule picking at random reaches that with probability "
+          f"{leak['chance_p_per_rule']}, so about {leak['chance_expected_flags']} of "
+          f"{len(leak['rules'])} rules are expected to flag by luck alone.")
+        w("")
+        flagged = [r for r in leak["rules"] if r["flagged"]]
+        w(f"**{len(flagged)} of {len(leak['rules'])} rules flagged.**")
+        w("")
+        w("| Rule | Source named | Flagged |")
+        w("| --- | --- | --- |")
+        for r in sorted(leak["rules"], key=lambda r: -r["hits"]):
+            if r["hits"]:
+                w(f"| {r['rule']} | {r['hits']}/{r['n']} | {'yes' if r['flagged'] else ''} |")
+        w("")
+        w("Rules naming the source in no case are omitted from the table. \"Closest approach to "
+          "the slick\" has a physical cause rather than a bookkeeping one: the source was at the "
+          "release point hours before the image and the slick drifts only a few kilometres, while "
+          "the near decoy is placed on the slick at image time. It is reported, not engineered away.")
+        w("")
 
     w("## Attribution — per case")
     w("")
@@ -939,20 +967,25 @@ def main():
     nxt = score_next_observation()
     det = score_detection()
     nlp_timing = time_template_query()
+    from slicktrace_core.leak_audit import audit as leak_audit
+    leak = leak_audit()
 
     os.makedirs("docs", exist_ok=True)
-    md = render(attr, nlp, cov, nxt, det, nlp_timing)
+    md = render(attr, nlp, cov, nxt, det, nlp_timing, leak)
     with open(os.path.join("docs", "validation_report.md"), "w") as f:
         f.write(md)
     with open(os.path.join("docs", "validation_report.json"), "w") as f:
         json.dump({"attribution": attr, "nlp": nlp, "coverage": cov,
-                   "next_observation": nxt, "detection": det}, f, indent=2, default=str)
+                   "next_observation": nxt, "detection": det, "leak_audit": leak},
+                  f, indent=2, default=str)
 
     sp, sa = attr["source_present"], attr["source_absent"]
     print(f"Cases scored:            {attr['n_cases']}")
     print(f"  source-present Top-1:  {_fmt_rate(sp['method_top1'], sp['n'])}")
     print(f"  naive proximity Top-1: {_fmt_rate(sp['naive_top1'], sp['n'])}")
     print(f"  correct abstentions:   {_fmt_rate(sa['correct_abstentions'], sa['n'])}")
+    print(f"  leak audit:            {sum(r['flagged'] for r in leak['rules'])} of "
+          f"{len(leak['rules'])} bookkeeping rules flagged (about {leak['chance_expected_flags']} by chance)")
     print(f"NLP suite:               {_fmt_rate(nlp['n_pass'], nlp['n'])} "
           f"({nlp['n_refusal']} of which are refusal cases)")
     if det and "error" not in det:

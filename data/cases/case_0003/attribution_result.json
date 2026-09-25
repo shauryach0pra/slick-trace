@@ -1,58 +1,77 @@
 {
   "incident_id": "case_0003",
   "candidates_considered": [
-    "419876898",
-    "419769953"
+    "419949542",
+    "419101352",
+    "419829242"
   ],
   "ranking": [
     {
-      "candidate_id": "419769953_0430_0.5h",
-      "vessel_key": "419769953",
-      "release_start": "2026-09-10T04:30:00+00:00",
+      "candidate_id": "419829242_0200_0.5h",
+      "vessel_key": "419829242",
+      "release_start": "2026-09-10T02:00:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.08806818181818182,
-      "mean_loss": 0.5373096111920231,
-      "ensemble_win_count": 4,
+      "mean_iou": 0.49397812884250375,
+      "mean_loss": 0.3013312746801195,
+      "ensemble_win_count": 3,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419876898_2330_0.5h",
-      "vessel_key": "419876898",
-      "release_start": "2026-09-09T23:30:00+00:00",
+      "candidate_id": "419101352_2145_0.5h",
+      "vessel_key": "419101352",
+      "release_start": "2026-09-09T21:45:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.012128969507433696,
-      "mean_loss": 0.5411547213557127,
-      "ensemble_win_count": 2,
+      "mean_iou": 0.4055224292420554,
+      "mean_loss": 0.34772746247340053,
+      "ensemble_win_count": 3,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419949542_0345_0.5h",
+      "vessel_key": "419949542",
+      "release_start": "2026-09-10T03:45:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.19085982588844597,
+      "mean_loss": 0.47218638742636304,
+      "ensemble_win_count": 0,
       "n_ensemble": 6
     }
   ],
-  "top_candidate_id": null,
-  "unknown_source": true,
+  "top_candidate_id": "419829242",
+  "unknown_source": false,
   "abstention_iou_gate": 0.3,
   "discrimination": {
     "discriminated": false,
-    "loss_gap": 0.0038,
-    "iou_gap": 0.0759,
+    "loss_gap": 0.0464,
+    "iou_gap": 0.0885,
     "tolerance": 0.05,
     "note": "top two candidates are not separated - the ordering between them carries no weight and should not be read as a preference"
   },
   "named_factors": {
     "factors": [
       {
-        "vessel_key": "419769953",
-        "proximity_deg_at_acquisition": 0.003047,
-        "trajectory_envelope_dwell": 1,
-        "physical_fit_mean_iou": 0.0881,
-        "physical_fit_mean_loss": 0.5373
+        "vessel_key": "419829242",
+        "proximity_deg_at_acquisition": 0.134552,
+        "trajectory_envelope_dwell": 4,
+        "physical_fit_mean_iou": 0.494,
+        "physical_fit_mean_loss": 0.3013
       },
       {
-        "vessel_key": "419876898",
-        "proximity_deg_at_acquisition": 0.219425,
-        "trajectory_envelope_dwell": 4,
-        "physical_fit_mean_iou": 0.0121,
-        "physical_fit_mean_loss": 0.5412
+        "vessel_key": "419101352",
+        "proximity_deg_at_acquisition": 0.234076,
+        "trajectory_envelope_dwell": 11,
+        "physical_fit_mean_iou": 0.4055,
+        "physical_fit_mean_loss": 0.3477
+      },
+      {
+        "vessel_key": "419949542",
+        "proximity_deg_at_acquisition": 0.002719,
+        "trajectory_envelope_dwell": 2,
+        "physical_fit_mean_iou": 0.1909,
+        "physical_fit_mean_loss": 0.4722
       }
     ],
     "ranked_on": "physical_fit_mean_loss",
@@ -60,13 +79,13 @@
     "behavioural_anomalies": "not scored. A transponder gap does not raise a candidate's score - missing evidence is recorded as unassessed, never as culpability."
   },
   "release_age": {
-    "estimable": false,
-    "hours": null,
-    "hours_low": null,
-    "hours_high": null,
-    "confidence": "unavailable",
-    "method": null,
-    "caveat": "no candidate cleared the absolute fit gate, so there is no release to date. An age derived from a candidate the system declined to endorse would contradict the abstention that produced it: the slick exists, its origin does not resolve, and neither does its age."
+    "estimable": true,
+    "hours": 2.5,
+    "hours_low": 1.0,
+    "hours_high": 4.0,
+    "confidence": "low",
+    "method": "release time from the best-fitting forward-replay hypothesis; interval from the hours at which this vessel was inside the backward origin envelope",
+    "caveat": "Not derived from slick appearance. Area-based age needs volume, oil properties and forcing that a single scene does not supply, so no Fay spreading estimate is made. The interval is as uncertain as the envelope it comes from, and the hypothesis grid it is drawn from has finite time resolution. Confidence cannot be higher than low here and the field cannot express it."
   },
   "loss_weights": {
     "a_iou": 0.5,

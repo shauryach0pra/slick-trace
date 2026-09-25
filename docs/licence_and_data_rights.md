@@ -105,7 +105,7 @@ obvious one would change this repository's licence.
 |---|---|---|---|
 | OpenDrift / OpenOil | Replace the in-repo transport model with an established Lagrangian oil drift and weathering engine | **GPL v2** | Linking it would require relicensing this repository from MIT to GPL. A deliberate decision, not a detail — deferred until the real-data path is actually built |
 | NOAA ADIOS (`adios_db`) | Real oil properties — density, evaporation, emulsification — instead of varying them blind | Openly available, unencumbered | Safe to adopt. The most attractive of the four, and the one that directly serves assumption A-oil-properties |
-| GSHHG shorelines | Real coastline geometry in place of the generator's synthetic coast | LGPL since 2.2.2 (source data itself public domain) | Usable; conditions attach to the library rather than the data |
+| GSHHG shorelines | Higher-resolution coastline than the Natural Earth 10 m the cases use | LGPL since 2.2.2 (source data itself public domain) | Usable; conditions attach to the library rather than the data |
 | WDPA via `pywdpa` | Real marine protected areas for the exposure forecast | Open, with a **mandatory citation string** | Adoptable, but the attribution must then appear in the README, the report export and the interface — not only in a slide |
 
 Recorded here rather than discovered later: a reviewer asking "why not just use

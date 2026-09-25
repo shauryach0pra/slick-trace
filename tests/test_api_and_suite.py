@@ -184,11 +184,15 @@ def test_report_markdown_states_its_limits():
 
 
 def test_report_for_absent_source_case_says_unknown_source():
+    """Every absent-source case that abstains says so in its report. The one
+    that does not (tests/test_invariants.py, KNOWN_FALSE_NAMINGS) must not."""
     absent = [i["incident_id"] for i in client.get("/api/incidents").json()
               if i["family"] == "absent_source"]
     assert absent
-    text = client.get(f"/api/incidents/{absent[0]}/report.md").text
-    assert "Unknown source" in text
+    for cid in absent:
+        abstained = client.get(f"/api/incidents/{cid}/attribution").json()["unknown_source"]
+        text = client.get(f"/api/incidents/{cid}/report.md").text
+        assert ("Unknown source" in text) == abstained, cid
 
 
 def test_missing_stage_returns_actionable_404(tmp_path):

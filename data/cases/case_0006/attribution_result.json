@@ -1,41 +1,53 @@
 {
   "incident_id": "case_0006",
   "candidates_considered": [
-    "419530869",
-    "419738652",
-    "419834449"
+    "419603086",
+    "419212504",
+    "419748958",
+    "419439072"
   ],
   "ranking": [
     {
-      "candidate_id": "419834449_1830_0.5h",
-      "vessel_key": "419834449",
-      "release_start": "2026-09-09T18:30:00+00:00",
-      "duration_hours": 0.5,
-      "is_continuous": false,
-      "mean_iou": 0.043348483017461414,
-      "mean_loss": 0.5359572160093308,
-      "ensemble_win_count": 4,
+      "candidate_id": "419748958_0230_2.0h",
+      "vessel_key": "419748958",
+      "release_start": "2026-09-10T02:30:00+00:00",
+      "duration_hours": 2.0,
+      "is_continuous": true,
+      "mean_iou": 0.22861612187458516,
+      "mean_loss": 0.47285362714513285,
+      "ensemble_win_count": 5,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419738652_0430_0.5h",
-      "vessel_key": "419738652",
-      "release_start": "2026-09-10T04:30:00+00:00",
+      "candidate_id": "419439072_1500_0.5h",
+      "vessel_key": "419439072",
+      "release_start": "2026-09-09T15:00:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.08118534104857093,
-      "mean_loss": 0.541740304450871,
-      "ensemble_win_count": 2,
+      "mean_iou": 0.03334222220012821,
+      "mean_loss": 0.5211926422676956,
+      "ensemble_win_count": 0,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419530869_2330_0.5h",
-      "vessel_key": "419530869",
-      "release_start": "2026-09-09T23:30:00+00:00",
-      "duration_hours": 0.5,
-      "is_continuous": false,
-      "mean_iou": 0.0,
-      "mean_loss": 0.5777742813869476,
+      "candidate_id": "419603086_1745_2.0h",
+      "vessel_key": "419603086",
+      "release_start": "2026-09-09T17:45:00+00:00",
+      "duration_hours": 2.0,
+      "is_continuous": true,
+      "mean_iou": 0.20411368444358233,
+      "mean_loss": 0.5263150355445831,
+      "ensemble_win_count": 1,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419212504_1500_2.0h",
+      "vessel_key": "419212504",
+      "release_start": "2026-09-09T15:00:00+00:00",
+      "duration_hours": 2.0,
+      "is_continuous": true,
+      "mean_iou": 0.1075103761046779,
+      "mean_loss": 0.527258060787052,
       "ensemble_win_count": 0,
       "n_ensemble": 6
     }
@@ -45,33 +57,40 @@
   "abstention_iou_gate": 0.3,
   "discrimination": {
     "discriminated": false,
-    "loss_gap": 0.0058,
-    "iou_gap": -0.0378,
+    "loss_gap": 0.0483,
+    "iou_gap": 0.1953,
     "tolerance": 0.05,
-    "note": "top two candidates are not separated - the ordering between them carries no weight and should not be read as a preference; ranking by loss disagrees with ranking by IoU here, which is itself a sign the case is unresolved"
+    "note": "top two candidates are not separated - the ordering between them carries no weight and should not be read as a preference"
   },
   "named_factors": {
     "factors": [
       {
-        "vessel_key": "419834449",
-        "proximity_deg_at_acquisition": 0.222767,
+        "vessel_key": "419748958",
+        "proximity_deg_at_acquisition": 0.004236,
+        "trajectory_envelope_dwell": 2,
+        "physical_fit_mean_iou": 0.2286,
+        "physical_fit_mean_loss": 0.4729
+      },
+      {
+        "vessel_key": "419439072",
+        "proximity_deg_at_acquisition": 0.216453,
         "trajectory_envelope_dwell": 5,
-        "physical_fit_mean_iou": 0.0433,
-        "physical_fit_mean_loss": 0.536
+        "physical_fit_mean_iou": 0.0333,
+        "physical_fit_mean_loss": 0.5212
       },
       {
-        "vessel_key": "419738652",
-        "proximity_deg_at_acquisition": 0.004413,
-        "trajectory_envelope_dwell": 1,
-        "physical_fit_mean_iou": 0.0812,
-        "physical_fit_mean_loss": 0.5417
+        "vessel_key": "419603086",
+        "proximity_deg_at_acquisition": 0.190663,
+        "trajectory_envelope_dwell": 4,
+        "physical_fit_mean_iou": 0.2041,
+        "physical_fit_mean_loss": 0.5263
       },
       {
-        "vessel_key": "419530869",
-        "proximity_deg_at_acquisition": 0.145207,
-        "trajectory_envelope_dwell": 1,
-        "physical_fit_mean_iou": 0.0,
-        "physical_fit_mean_loss": 0.5778
+        "vessel_key": "419212504",
+        "proximity_deg_at_acquisition": 0.662106,
+        "trajectory_envelope_dwell": 6,
+        "physical_fit_mean_iou": 0.1075,
+        "physical_fit_mean_loss": 0.5273
       }
     ],
     "ranked_on": "physical_fit_mean_loss",

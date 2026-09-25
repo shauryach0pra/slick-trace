@@ -208,9 +208,18 @@ human investigator's attention.
 **How it is bounded.** Below the gate the system returns `unknown source` rather
 than the least-bad name. Tested on the two source-absent cases, where the near-
 miss decoy deliberately survives hindcast filtering so the gate is genuinely
-exercised rather than trivially satisfied. Current result: 2/2 correct
-abstentions, 0/2 false named attributions — with a 95% interval of 0 to 66%,
-which is the honest reading at n = 2.
+exercised rather than trivially satisfied. Current result: 1/2 correct
+abstentions, 1/2 false named attributions, with a 95% interval of 9 to 91% on
+the abstention rate, which is the honest reading at n = 2.
+
+**Where it fails.** In case_0003 a passer-by crossed the slick area 2.5 h before
+the image. Its best hypothetical release fits at mean IoU 0.49, above the 0.3
+gate, and is not separated from the runner-up (0.41); the system names it. The
+fit gate alone cannot reject a plausible but imperfect alternative. Before the
+benchmark fix (A21) this case could not arise: every innocent vessel was placed
+far from the slick. A candidate rule - name no one when the top two are not
+separated - is recorded as future work and is to be evaluated on held-out seeds,
+not on these cases, so that it is not tuned to them.
 
 ---
 
@@ -529,12 +538,74 @@ seven kilobytes in the repository costs less than a network dependency.
 
 **What it did not change.** Every headline result was recomputed after the
 constraint was applied and none moved: 7/7 source-present Top-1 against 0/7 for
-the naive baseline, exact McNemar p = 0.0156, 2/2 correct abstentions. The
+the naive baseline, exact McNemar p = 0.0156, 2/2 correct abstentions. (These are
+the numbers of that time. A21 later changed the benchmark itself, and the
+current numbers are in the validation report.) The
 attribution does not depend on coastline geometry, so constraining the scenarios
 changed where the vessels are without changing what the method concludes about
 them. That the numbers held is evidence the fix was cosmetic in the right way —
 had they moved, the result would have been entangled with an artefact of the
 generator.
+
+---
+
+### A21 · The benchmark does not hand over the answer
+
+**The assumption.** Forward replay's accuracy is measured on cases where nothing
+but the physics identifies the source.
+
+**Why it was needed.** It was not true. The generator built the true source's
+track from its release story, so its length (13 or 19 fixes against 21 for other
+traffic and 6 for the near decoy), its start time and its speed were unlike any
+other vessel's; it stopped reporting before the image in four cases; it loitered
+at about 0.2 kn while reporting 9.5 kn; and no background vessel came near the
+slick. A leak audit - rules that use only track bookkeeping, fixed before the
+generator was changed - found 10 of 33 rules naming the source at or above the
+flag threshold, four of them in 7 of 7 cases, matching forward replay's headline
+without any physics.
+
+**How it is bounded.** Every vessel now draws its first fix (10 to 16 h before
+the image), reporting cadence (30 min), speed (a shared mix of loitering and
+transit) and route from the same distributions whatever its role; reported speed
+and course are its actual motion; half of background traffic passes the slick as
+closely as a polluter does (0.5 to 3.3 km, the range the sources were measured
+at). Innocent vessels are kept physically identifiable: none is within 8 km of
+the source while it releases, because a vessel at the release point during the
+release is indistinguishable from the polluter by drift physics and a case
+containing one tests nothing. The audit runs in every validation: 2 of 33 rules
+flag, where about 2.7 are expected by chance, and no rule exceeds 5 of 7.
+
+**What remains.** "Second-closest approach to the slick" names the source in 5 of
+7. Its cause is physical rather than bookkeeping - the source was at the release
+point hours before the image and the slick drifts only a few kilometres, while
+the near decoy is placed on the slick at image time - so it is reported, not
+engineered away. The fairer benchmark cost the headline: the naive baseline now
+names the source once (a loitering source sitting beside its own slick), McNemar
+p rose from 0.0156 to 0.0312, and one absent-source case now names a vessel (A10).
+
+---
+
+### A22 · One real coastline, used everywhere
+
+**The assumption.** Where the cases put land, sea, vessels and oil matches the
+real coast the map draws underneath them.
+
+**Why it was needed.** Three approximations stood in for the coast: the generator
+invented one about 19 km east of the real shore, the detector interpolated a
+coastline longitude per row (which zig-zags on a creek-cut shore), and the
+forecast counted anything east of the coastline's westernmost point as ashore.
+On real imagery a synthetic mangrove reserve sat over Mumbai, part of case_0009's
+slick lay on land, and a forecast plume could drift inland.
+
+**How it is bounded.** slicktrace_core/geography.py closes the committed Natural
+Earth 10 m coastline around the land to its east and tests points against that
+polygon. Every manifest carries the real coastline clipped to its scene; vessels
+steer clear of land; the truth slick is sea only; the fishing ground is placed at
+sea and the mangrove fringe straddles the shore; the radar scene renders land
+bright, as SAR shows it; and forecast particles that reach land strand there,
+checked hourly. Forecasts whose particles never touch land are unchanged to the
+last digit. Natural Earth 10 m resolves narrow creeks and harbour detail only
+coarsely; it is a scene-scale shoreline, not a harbour chart.
 
 ---
 

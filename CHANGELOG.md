@@ -139,6 +139,33 @@ and on the real coastline over a plain sea when it is not. If imagery tiles fail
 Basemap only: no case data is drawn on it yet. Esri attribution is shown as its
 terms require.
 
+**Benchmark: real geography and no leaked answers.** A leak audit - rules that
+use only track bookkeeping, fixed before the generator was changed - found the
+old generator handed over the answer: 10 of 33 rules named the true source at or
+above the flag threshold, four of them in 7 of 7 cases, because the source's track
+length, start time and speed were unlike any other vessel's, it stopped reporting
+before the image, and no other traffic came near the slick. Every vessel now draws
+those from the same distributions; reported speed and course are its actual
+motion; half of background traffic passes the slick as closely as a polluter does;
+and innocent vessels are kept physically identifiable (none within 8 km of the
+source while it releases). The audit runs in every validation: 2 of 33 rules flag,
+about 2.7 expected by chance, none above 5 of 7 (A21).
+
+One real coastline everywhere (`slicktrace_core/geography.py`, A22): manifests,
+the detector's land rejection and the forecast use the Natural Earth coast, which
+an invented coastline about 19 km east of it stood in for. Vessels steer clear of
+land, the truth slick is sea only, the fishing ground is at sea, the mangrove
+fringe straddles the shore, the radar scene renders land, and forecast oil strands
+on the coast, checked hourly (forecasts that never touch land are unchanged).
+
+The fairer benchmark has an honest cost. Forward replay held at 7/7; the naive
+baseline now names the source once (1/7, was 0/7) and McNemar p is 0.0312 (was
+0.0156); correct abstentions are 1/2 (was 2/2): in case_0003 a passer-by fits at
+IoU 0.49, above the 0.3 gate, and is named (A10). Two case_0001 claims were retired
+from tests and documents because they are no longer true: that the naive baseline
+falls for the decoy, and that the runner-up fits at 0.30 or below. 294 tests pass
+(67 added, 3 retired); all 135 case artifacts regenerate byte-identically.
+
 ---
 
 ## 13 September 2026

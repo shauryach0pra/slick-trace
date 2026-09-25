@@ -1,77 +1,96 @@
 {
   "incident_id": "case_0001",
   "candidates_considered": [
-    "419554138",
-    "419336692",
-    "419824090"
+    "419586236",
+    "419919665",
+    "419282834",
+    "419146624"
   ],
   "ranking": [
     {
-      "candidate_id": "419336692_2230_0.5h",
-      "vessel_key": "419336692",
+      "candidate_id": "419146624_2230_0.5h",
+      "vessel_key": "419146624",
       "release_start": "2026-09-09T22:30:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.6877631208005729,
-      "mean_loss": 0.1986270918709964,
-      "ensemble_win_count": 6,
+      "mean_iou": 0.686218082245929,
+      "mean_loss": 0.1995079779953203,
+      "ensemble_win_count": 5,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419824090_0430_0.5h",
-      "vessel_key": "419824090",
-      "release_start": "2026-09-10T04:30:00+00:00",
+      "candidate_id": "419586236_1800_0.5h",
+      "vessel_key": "419586236",
+      "release_start": "2026-09-09T18:00:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.08661048689138577,
-      "mean_loss": 0.5382424984985513,
+      "mean_iou": 0.4867967975458865,
+      "mean_loss": 0.31220239674613753,
+      "ensemble_win_count": 1,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419282834_1930_2.0h",
+      "vessel_key": "419282834",
+      "release_start": "2026-09-09T19:30:00+00:00",
+      "duration_hours": 2.0,
+      "is_continuous": true,
+      "mean_iou": 0.4008627111163487,
+      "mean_loss": 0.4103178909045973,
       "ensemble_win_count": 0,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419554138_2330_0.5h",
-      "vessel_key": "419554138",
-      "release_start": "2026-09-09T23:30:00+00:00",
-      "duration_hours": 0.5,
-      "is_continuous": false,
-      "mean_iou": 0.0070049813200498134,
-      "mean_loss": 0.5426387341206418,
+      "candidate_id": "419919665_0230_2.0h",
+      "vessel_key": "419919665",
+      "release_start": "2026-09-10T02:30:00+00:00",
+      "duration_hours": 2.0,
+      "is_continuous": true,
+      "mean_iou": 0.23043514916413846,
+      "mean_loss": 0.47069292351637665,
       "ensemble_win_count": 0,
       "n_ensemble": 6
     }
   ],
-  "top_candidate_id": "419336692",
+  "top_candidate_id": "419146624",
   "unknown_source": false,
   "abstention_iou_gate": 0.3,
   "discrimination": {
     "discriminated": true,
-    "loss_gap": 0.3396,
-    "iou_gap": 0.6012,
+    "loss_gap": 0.1127,
+    "iou_gap": 0.1994,
     "tolerance": 0.05,
     "note": "top two candidates separated on the ranking criterion"
   },
   "named_factors": {
     "factors": [
       {
-        "vessel_key": "419336692",
-        "proximity_deg_at_acquisition": 0.015825,
-        "trajectory_envelope_dwell": 7,
-        "physical_fit_mean_iou": 0.6878,
-        "physical_fit_mean_loss": 0.1986
+        "vessel_key": "419146624",
+        "proximity_deg_at_acquisition": 0.006091,
+        "trajectory_envelope_dwell": 13,
+        "physical_fit_mean_iou": 0.6862,
+        "physical_fit_mean_loss": 0.1995
       },
       {
-        "vessel_key": "419824090",
-        "proximity_deg_at_acquisition": 0.006166,
-        "trajectory_envelope_dwell": 1,
-        "physical_fit_mean_iou": 0.0866,
-        "physical_fit_mean_loss": 0.5382
+        "vessel_key": "419586236",
+        "proximity_deg_at_acquisition": 0.78919,
+        "trajectory_envelope_dwell": 2,
+        "physical_fit_mean_iou": 0.4868,
+        "physical_fit_mean_loss": 0.3122
       },
       {
-        "vessel_key": "419554138",
-        "proximity_deg_at_acquisition": 0.221959,
-        "trajectory_envelope_dwell": 4,
-        "physical_fit_mean_iou": 0.007,
-        "physical_fit_mean_loss": 0.5426
+        "vessel_key": "419282834",
+        "proximity_deg_at_acquisition": 0.491281,
+        "trajectory_envelope_dwell": 5,
+        "physical_fit_mean_iou": 0.4009,
+        "physical_fit_mean_loss": 0.4103
+      },
+      {
+        "vessel_key": "419919665",
+        "proximity_deg_at_acquisition": 0.00629,
+        "trajectory_envelope_dwell": 2,
+        "physical_fit_mean_iou": 0.2304,
+        "physical_fit_mean_loss": 0.4707
       }
     ],
     "ranked_on": "physical_fit_mean_loss",
@@ -81,8 +100,8 @@
   "release_age": {
     "estimable": true,
     "hours": 6.0,
-    "hours_low": 3.0,
-    "hours_high": 9.0,
+    "hours_low": 0.0,
+    "hours_high": 12.0,
     "confidence": "low",
     "method": "release time from the best-fitting forward-replay hypothesis; interval from the hours at which this vessel was inside the backward origin envelope",
     "caveat": "Not derived from slick appearance. Area-based age needs volume, oil properties and forcing that a single scene does not supply, so no Fay spreading estimate is made. The interval is as uncertain as the envelope it comes from, and the hypothesis grid it is drawn from has finite time resolution. Confidence cannot be higher than low here and the field cannot express it."

@@ -7,17 +7,17 @@
     {
       "horizon_hours": 6,
       "valid_utc": "2026-09-10T10:30:00+00:00",
-      "envelope_area_km2": 480.9,
+      "envelope_area_km2": 481.9,
       "centroid": [
-        72.31841,
-        19.16738
+        72.31816,
+        19.16772
       ],
       "modelled_shoreline_fraction": 0.0,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.4258,
+          "modelled_particle_fraction": 0.4272,
           "any_contact": true
         },
         {
@@ -32,17 +32,17 @@
     {
       "horizon_hours": 12,
       "valid_utc": "2026-09-10T16:30:00+00:00",
-      "envelope_area_km2": 529.4,
+      "envelope_area_km2": 532.6,
       "centroid": [
-        72.34802,
-        19.15756
+        72.34776,
+        19.1579
       ],
       "modelled_shoreline_fraction": 0.0,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.4144,
+          "modelled_particle_fraction": 0.4097,
           "any_contact": true
         },
         {
@@ -57,33 +57,33 @@
     {
       "horizon_hours": 24,
       "valid_utc": "2026-09-11T04:30:00+00:00",
-      "envelope_area_km2": 582.8,
+      "envelope_area_km2": 580.7,
       "centroid": [
-        72.40699,
-        19.13798
+        72.40654,
+        19.13832
       ],
-      "modelled_shoreline_fraction": 0.0,
+      "modelled_shoreline_fraction": 0.0033,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.2886,
+          "modelled_particle_fraction": 0.2933,
           "any_contact": true
         },
         {
           "name": "Mangrove reserve (synthetic)",
           "kind": "mangrove",
-          "modelled_particle_fraction": 0.0,
-          "any_contact": false
+          "modelled_particle_fraction": 0.0017,
+          "any_contact": true
         }
       ],
       "particles": 3600
     }
   ],
-  "first_modelled_shoreline_contact_h": null,
+  "first_modelled_shoreline_contact_h": 24,
   "first_modelled_sensitive_contact_h": {
     "Fishing ground (synthetic)": 6,
-    "Mangrove reserve (synthetic)": null
+    "Mangrove reserve (synthetic)": 24
   },
-  "interpretation_note": "Modelled surface-particle exposure and arrival intervals under the tested forcing ensemble. Not a prediction of beaching, concentration, or environmental damage. Weathering, emulsification and shoreline interaction are not modelled."
+  "interpretation_note": "Modelled surface-particle exposure and arrival intervals under the tested forcing ensemble. Not a prediction of beaching, concentration, or environmental damage. A particle that reaches the coastline is held where it arrives (simple stranding, checked hourly); refloating, weathering and emulsification are not modelled."
 }

@@ -25,6 +25,7 @@ import numpy as np
 from PIL import Image
 
 from slicktrace_core.attribution import lonlat_to_px
+from slicktrace_core.geography import on_land
 from slicktrace_core.hindcast import DEG_PER_MS_HR, _parse
 
 HORIZONS_H = (6, 12, 24)
@@ -85,8 +86,33 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
     ][:n_ensemble]
 
     coastline = manifest.get("coastline", [])
-    coast_lon = min((p[0] for p in coastline), default=None)
     sensitive = manifest.get("sensitive_areas", [])
+
+    # Beaching. Each particle draws the same normals at every horizon, so its
+    # position is one smooth path in time: drift * t plus a fixed direction
+    # scaled by sqrt(t). Stepping that path hourly finds the first hour it
+    # reaches land; from then on it stays there, stranded, and counts as
+    # shoreline contact. Particles that never touch land are unchanged.
+    h_max = max(horizons_h)
+    hours = np.arange(1, h_max + 1, dtype=float)
+
+    def _paths(vi, var):
+        r = np.random.default_rng(seed + vi)
+        z_lon = r.normal(0, 1.0, len(lon0))
+        z_lat = r.normal(0, 1.0, len(lat0))
+        k = BASE_DIFFUSIVITY * var["kscale"]
+        def at(t):
+            return (lon0 + (u0 + var["du"]) * t * DEG_PER_MS_HR + z_lon * k * np.sqrt(t),
+                    lat0 + (v0 + var["dv"]) * t * DEG_PER_MS_HR + z_lat * k * np.sqrt(t))
+        strand_h = np.full(len(lon0), np.inf)
+        if coastline:
+            for t in hours:
+                lo, la = at(t)
+                hit = np.isinf(strand_h) & on_land(lo, la, coastline)
+                strand_h[hit] = t
+        return at, strand_h
+
+    paths = [_paths(vi, var) for vi, var in enumerate(variants)]
 
     horizons = []
     particles_by_horizon = []  # the same particles, kept for forecast_contours.json
@@ -94,16 +120,16 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
     first_shore_contact = None
 
     for h in horizons_h:
-        all_lon, all_lat = [], []
-        for vi, var in enumerate(variants):
-            r = np.random.default_rng(seed + vi)
-            spread = BASE_DIFFUSIVITY * var["kscale"] * np.sqrt(h)
-            lon = lon0 + (u0 + var["du"]) * h * DEG_PER_MS_HR + r.normal(0, spread, len(lon0))
-            lat = lat0 + (v0 + var["dv"]) * h * DEG_PER_MS_HR + r.normal(0, spread, len(lat0))
+        all_lon, all_lat, stranded = [], [], []
+        for at, strand_h in paths:
+            t_eff = np.minimum(float(h), strand_h)
+            lon, lat = at(t_eff)
             all_lon.append(lon)
             all_lat.append(lat)
+            stranded.append(strand_h <= h)
         lon_h = np.concatenate(all_lon)
         lat_h = np.concatenate(all_lat)
+        stranded_h = np.concatenate(stranded)
         particles_by_horizon.append((lon_h, lat_h))
 
         xs, ys = lonlat_to_px(lon_h, lat_h, bbox, img_size)
@@ -125,7 +151,7 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
             if frac > 0.0 and first_contact[area["name"]] is None:
                 first_contact[area["name"]] = h
 
-        shore_frac = float((lon_h >= coast_lon).mean()) if coast_lon is not None else None
+        shore_frac = float(stranded_h.mean()) if coastline else None
         if shore_frac and shore_frac > 0.0 and first_shore_contact is None:
             first_shore_contact = h
 
@@ -150,8 +176,10 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
         "first_modelled_sensitive_contact_h": {k: v for k, v in first_contact.items()},
         "interpretation_note": "Modelled surface-particle exposure and arrival intervals "
                                "under the tested forcing ensemble. Not a prediction of "
-                               "beaching, concentration, or environmental damage. Weathering, "
-                               "emulsification and shoreline interaction are not modelled.",
+                               "beaching, concentration, or environmental damage. A particle "
+                               "that reaches the coastline is held where it arrives (simple "
+                               "stranding, checked hourly); refloating, weathering and "
+                               "emulsification are not modelled.",
     }
     with open(os.path.join(case_dir, "forecast_result.json"), "w") as f:
         json.dump(out, f, indent=2, default=str)

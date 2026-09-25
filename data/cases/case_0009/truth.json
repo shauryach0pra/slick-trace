@@ -2,7 +2,7 @@
   "incident_id": "case_0009",
   "family": "along_track_ribbon",
   "seed": 7734,
-  "true_vessel_key": "419630599",
+  "true_vessel_key": "419336308",
   "absent_true_vessel_key": null,
   "source_is_in_manifest": true,
   "expected_outcome": "named_candidate",
@@ -11,16 +11,16 @@
   "is_continuous": true,
   "swirl": 0.012537198146016266,
   "roles": {
-    "419679520": "background",
-    "419630599": "true_source",
-    "419847306": "background",
-    "419748166": "background",
-    "419449957": "near_miss_decoy",
-    "419711487": "near_decoy"
+    "419173678": "near_miss_decoy",
+    "419336308": "true_source",
+    "419806892": "background",
+    "419285458": "background",
+    "419163741": "background",
+    "419358060": "near_decoy"
   },
   "slick_centroid": [
-    72.77678965599661,
-    18.810916731780083
+    72.51806195014353,
+    18.87165218764824
   ],
   "WARNING": "Dev/validation only. Not served by the API, not read by the UI, and not required to reproduce any result shown to a reviewer."
 }

@@ -257,10 +257,10 @@ def get_real_coastline():
     smoke test in docs/evidence is a property this project went out of its way
     to establish, and a basemap that needs the network would end it.
 
-    Served alongside the synthetic coastline in each manifest rather than
-    replacing it. The forecast intersects the synthetic one; swapping it would
-    change results. Drawing both shows where the model's geography and the real
-    geography disagree, which is worth seeing.
+    The same coastline every case now uses: each manifest carries it clipped
+    to the scene, the detector rejects land against it, and the forecast strands
+    oil on it (slicktrace_core.geography). An invented coastline about 19 km
+    east of this one stood in for it before.
     """
     path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                         "data", "geo", "coastline_mumbai.json")
@@ -272,9 +272,9 @@ def get_real_coastline():
         "geometry": geo,
         "source": "Natural Earth 10m coastline",
         "licence": "public domain",
-        "note": ("Reference overlay only. The forecast intersects the synthetic "
-                 "coastline in the manifest, not this one; both are drawn so the "
-                 "difference between modelled and real geography is visible."),
+        "note": ("The coastline every case uses: manifests carry it clipped to the scene, "
+                 "detection rejects land against it and the forecast strands oil on it. "
+                 "Natural Earth 10 m is scene-scale; narrow creeks are resolved only coarsely."),
     }
 
 

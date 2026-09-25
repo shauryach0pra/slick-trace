@@ -106,23 +106,16 @@ def _land_mask(manifest: dict, shape: tuple[int, int]):
     where spills are investigated, it is the difference between a detection and
     a hillside.
 
-    The coastline in the manifest is a polyline running roughly north-south with
-    water to its west. Land is therefore everything east of the interpolated
-    coastline longitude at each row's latitude. This is a scene-specific
-    simplification, not a general coastline test, and it is stated as such: a
-    real deployment needs a real shoreline product (GSHHG or equivalent) and a
-    proper point-in-polygon test.
+    Land is the area east of the manifest's coastline, tested point-in-polygon
+    (slicktrace_core.geography). An earlier version interpolated a coastline
+    longitude per row, which zig-zags on a creek-cut shore; the polygon does
+    not. It is still a scene-scale shoreline, not a harbour chart.
     """
+    from slicktrace_core.geography import land_mask
     coast = manifest.get("coastline") or []
     if len(coast) < 2:
         return None
-    b = manifest["bbox"]
-    h, w = shape
-    lats = b["max_lat"] - (np.arange(h) + 0.5) / h * (b["max_lat"] - b["min_lat"])
-    cl = np.array(sorted(coast, key=lambda p: p[1]))
-    coast_lon_at_row = np.interp(lats, cl[:, 1], cl[:, 0])
-    lons = b["min_lon"] + (np.arange(w) + 0.5) / w * (b["max_lon"] - b["min_lon"])
-    return lons[None, :] > coast_lon_at_row[:, None]
+    return land_mask(manifest["bbox"], shape, coast)
 
 
 def _reject_land_regions(pred, manifest: dict, max_land_fraction: float = 0.5):

@@ -12,7 +12,13 @@ end the offline operation this project verified in
 same reason. Seven kilobytes in the repository costs less than a network
 dependency.
 
-**A reference overlay, not an input.** The forecast intersects the *synthetic*
-coastline in each manifest. This one is drawn alongside it so the difference
-between the model's geography and the real coast is visible; replacing the
-synthetic coastline would silently change every forecast result.
+**The coastline every case uses.** Each manifest carries this coastline clipped
+to its scene; the generator keeps vessels, slicks and fishing grounds off the
+land east of it; the detector rejects land against it; and the forecast strands
+oil that reaches it. One land test does all of it: `slicktrace_core/geography.py`,
+point-in-polygon against the coastline closed around the land to its east.
+
+An invented coastline about 19 km east of this one stood in for it until the
+benchmark fix recorded in the CHANGELOG. On real imagery that put a synthetic
+mangrove reserve over the city and part of a slick on land. Natural Earth 10 m is
+scene-scale: narrow creeks and harbour detail are resolved only coarsely.

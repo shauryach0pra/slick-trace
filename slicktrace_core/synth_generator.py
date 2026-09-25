@@ -49,11 +49,13 @@ import hashlib
 import json
 import os
 from datetime import datetime, timedelta, timezone
+from math import atan2, cos, degrees, hypot, radians
 
 import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter
 
+from slicktrace_core.geography import coastline_for_bbox, land_mask, on_land
 from slicktrace_core.schema import BBox, CaseState, DataStatus
 
 IMG_SIZE = 256
@@ -124,75 +126,138 @@ def _advect_forward(lon, lat, u0, v0, swirl, hours, rng, diffusivity=BASE_DIFFUS
     return lon2, lat2
 
 
-# Real coastline, loaded once. Vessel positions are constrained to stay west of
-# it because a track generated without that constraint puts 16% of its fixes on
-# land - 167 of 1024 before this was added. The geometry was schematic, and it
-# showed the moment real geography was drawn beside it: ships on hillsides, a
-# sensitive-area box straddling the shore, the leading candidate inland.
-_COAST_CACHE: dict = {}
+# ------------------------------------------------------------ vessel tracks --
+#
+# Every vessel, whatever its role, draws its track bookkeeping from the SAME
+# distributions: when its first fix is, its reporting cadence, how fast it
+# moves, and whether its route passes near the slick. Only what the release
+# physics requires differs by role (the source must be where its release was).
+#
+# This replaced role-specific track spans that leaked the answer. The true
+# source's track length came from its release story (13 or 19 fixes against
+# 21 for everyone else and 6 for the near decoy), it stopped reporting before
+# the image in four cases, it loitered at a speed no other vessel had while
+# reporting 9.5 kn, and background traffic never came near the slick. The leak
+# audit in scripts/run_validation.py found rules using none of the physics that
+# named the true source in up to 7 of 7 cases; it now runs on every regeneration.
+
+TRACK_STEP_MIN = 30
+TRACK_START_H = (10.0, 16.0)          # first fix, hours before acquisition, every vessel
+LOITER_P = 0.4                        # share of vessels loitering (fishing, waiting, drifting)
+LOITER_SPEED_DEG_H = (0.002, 0.008)   # ~0.1-0.5 kn
+TRANSIT_SPEED_DEG_H = (0.020, 0.120)  # ~1.2-7 kn
+PASS_NEAR_P = 0.5                     # background vessels whose route passes near the slick
+# A passer-by comes as close to the slick as a polluter does. The source is
+# 0.7-2.7 km from the slick centroid at its closest (it was at the release
+# point hours earlier, and the slick drifts a few km), so background passes
+# are drawn over the same range; farther passes made 'second closest to the
+# slick' a way to find the source without any physics.
+PASS_NEAR_RADIUS_DEG = (0.005, 0.030)
+SEA_MARGIN_DEG = 0.02                 # vessels keep this far clear of land (~2 km)
+# Physical identifiability: no innocent vessel is within this distance of the
+# source while the source is releasing. A vessel at the release point during
+# the release is physically indistinguishable from the polluter - no method
+# built on drift physics can separate them - so a case containing one tests
+# nothing. Both innocents the first regeneration named were within 2 km.
+IDENTIFIABLE_KM = 8.0
 
 
-def _coast_profile():
-    """Westernmost coast longitude per latitude, from the committed Natural Earth
-    extract. Returns (lats, lons) sorted by latitude, or None if absent."""
-    if "profile" in _COAST_CACHE:
-        return _COAST_CACHE["profile"]
-    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                        "data", "geo", "coastline_mumbai.json")
-    prof = None
-    if os.path.exists(path):
-        with open(path) as fh:
-            geo = json.load(fh)
-        pts = [p for seg in geo["coordinates"] for p in seg]
-        if pts:
-            arr = np.array(sorted(pts, key=lambda q: q[1]))
-            prof = (arr[:, 1], arr[:, 0])
-    _COAST_CACHE["profile"] = prof
-    return prof
+def _track_start(rng: np.random.Generator, acquired: datetime) -> datetime:
+    h = round(float(rng.uniform(*TRACK_START_H)) * 2) / 2
+    return acquired - timedelta(hours=h)
 
 
-def _coast_lon_at(lat: float, halfwin: float = 0.06) -> float:
-    """Longitude of the water/land boundary at this latitude.
+def _speed(rng: np.random.Generator) -> float:
+    if rng.random() < LOITER_P:
+        return float(rng.uniform(*LOITER_SPEED_DEG_H))
+    return float(rng.uniform(*TRANSIT_SPEED_DEG_H))
 
-    The westernmost coast point in a small latitude window, so an inlet does not
-    let a track slip inland through a gap in the polyline.
+
+def _heading_velocity(speed: float, bearing_deg: float) -> tuple[float, float]:
+    b = radians(bearing_deg)
+    return speed * np.sin(b), speed * np.cos(b)
+
+
+def _clear_water(lon: float, lat: float) -> bool:
+    m = SEA_MARGIN_DEG
+    return not any(on_land(lon + dx, lat + dy)
+                   for dx, dy in ((0, 0), (m, 0), (-m, 0), (0, m), (0, -m)))
+
+
+def _walk(lon, lat, vlon, vlat, n_steps, direction):
+    """n_steps half-hour positions from (lon, lat), forward or backward in time.
+
+    A vessel about to leave clear water turns away: the first of its velocity
+    with the east-west part reversed, the north-south part reversed, or both,
+    that keeps it at sea. Boxed in, it holds position.
     """
-    prof = _coast_profile()
-    if prof is None:
-        return 180.0                      # no coastline data: no constraint
-    lats, lons = prof
-    m = (lats >= lat - halfwin) & (lats <= lat + halfwin)
-    return float(lons[m].min()) if m.any() else 180.0
+    dt = TRACK_STEP_MIN / 60.0
+    out = []
+    for _ in range(n_steps):
+        for cand in ((vlon, vlat), (-vlon, vlat), (vlon, -vlat), (-vlon, -vlat)):
+            nl, na = lon + direction * cand[0] * dt, lat + direction * cand[1] * dt
+            if _clear_water(nl, na):
+                vlon, vlat = cand
+                break
+        else:
+            nl, na = lon, lat
+        lon, lat = nl, na
+        out.append((lon, lat))
+    return out
 
 
-# Vessels are kept this far west of the coast. ~3.3 km: close enough to be
-# coastal traffic, far enough that a rendered marker does not touch the shore.
-COAST_MARGIN_DEG = 0.03
-
-
-def _keep_at_sea(lon: float, lat: float) -> float:
-    """Clamp a longitude to open water. Returns the adjusted longitude."""
-    limit = _coast_lon_at(lat) - COAST_MARGIN_DEG
-    return min(lon, limit)
-
-
-def _track(start_lon, start_lat, dlon_per_hr, dlat_per_hr, t0, hours, step_min=30,
-           sog=9.5, cog=140.0):
-    fixes = []
-    t = t0
-    n = int(hours * 60 / step_min) + 1
-    for i in range(n):
-        h = i * step_min / 60.0
-        fixes.append({
-            "t_utc": (t + timedelta(minutes=i * step_min)).isoformat(),
-            "lon": round(_keep_at_sea(float(start_lon + dlon_per_hr * h),
-                                       float(start_lat + dlat_per_hr * h)), 5),
-            "lat": round(float(start_lat + dlat_per_hr * h), 5),
-            "sog_knots": round(float(sog), 1),
-            "cog_deg": round(float(cog), 1),
+def _fixes(points, times):
+    """AIS-like fixes. Reported speed and course are the vessel's actual motion."""
+    hrs = TRACK_STEP_MIN / 60.0
+    out = []
+    for i, ((lo, la), t) in enumerate(zip(points, times)):
+        j0, j1 = (i, i + 1) if i + 1 < len(points) else (max(i - 1, 0), i)
+        (a, b), (c, d) = points[j0], points[j1]
+        dx = (c - a) * 111.0 * cos(radians((b + d) / 2))
+        dy = (d - b) * 111.0
+        out.append({
+            "t_utc": t.isoformat(),
+            "lon": round(float(lo), 5),
+            "lat": round(float(la), 5),
+            "sog_knots": round(hypot(dx, dy) / hrs / 1.852, 1),
+            "cog_deg": round((degrees(atan2(dx, dy)) + 360.0) % 360.0, 1),
             "interpolated": False,
         })
-    return fixes
+    return out
+
+
+def _track_through(anchor, anchor_t, velocity, t_start, t_end):
+    """A track that is at `anchor` at `anchor_t`, walked back to t_start and on
+    to t_end at the given velocity (degrees per hour), steering clear of land."""
+    step = timedelta(minutes=TRACK_STEP_MIN)
+    n_back = int(round((anchor_t - t_start) / step))
+    n_fwd = int(round((t_end - anchor_t) / step))
+    back = _walk(anchor[0], anchor[1], velocity[0], velocity[1], n_back, -1)[::-1]
+    fwd = _walk(anchor[0], anchor[1], velocity[0], velocity[1], n_fwd, +1)
+    pts = back + [tuple(anchor)] + fwd
+    first_t = anchor_t - n_back * step
+    return _fixes(pts, [first_t + i * step for i in range(len(pts))])
+
+
+def _closest_during_release_km(fixes, source_fixes, release_start, duration_hours):
+    """Closest distance between a vessel and the source over the release window."""
+    step = timedelta(minutes=TRACK_STEP_MIN)
+    n = int(round(timedelta(hours=duration_hours) / step))
+    best = float("inf")
+    for i in range(n + 1):
+        t = release_start + i * step
+        a, b = _interp(fixes, t), _interp(source_fixes, t)
+        if a is None or b is None:
+            continue
+        dx = (a[0] - b[0]) * 111.0 * cos(radians((a[1] + b[1]) / 2))
+        best = min(best, hypot(dx, (a[1] - b[1]) * 111.0))
+    return best
+
+
+def _in_scene(fixes, bbox):
+    """The fixes an AIS query for the scene area returns: those inside it."""
+    return [f for f in fixes
+            if bbox.min_lon <= f["lon"] <= bbox.max_lon and bbox.min_lat <= f["lat"] <= bbox.max_lat]
 
 
 def _interp(fixes, t):
@@ -249,65 +314,58 @@ def _build_family(family: str, rng: np.random.Generator, acquired: datetime,
     """Returns (tracks_spec, true_spec) where tracks_spec is a list of
     {role, fixes} and true_spec describes the release that made the slick.
 
+    Each family fixes only what its release needs: where the source is when the
+    release starts, how it moves while releasing, and for how long. The track
+    before and after comes from the same builder and the same span as every
+    other vessel.
+
     `role` is retained ONLY for the dev-only truth sidecar and the validation
     harness; it never reaches the manifest, the API or the UI.
     """
-    specs = []
-
-    if family in ("decoy", "crowded", "moving_discharge", "along_track_ribbon"):
-        if family == "along_track_ribbon":
-            # Routine bilge discharge from a vessel under way: a long, thin
-            # ribbon laid along the track rather than a compact patch.
-            #
-            # The other families produce near-circular slicks (elongation
-            # 1.02-1.29), which published SAR morphology work would classify as
-            # look-alikes rather than oil - see assumption A16. This family
-            # exists because that was a real gap in the benchmark, not a
-            # cosmetic one: a compact slick is better explained by a short
-            # pulse than a continuous release, which is why the attribution
-            # search selected a 0.5h pulse on every earlier case despite every
-            # truth being 2-4h continuous.
-            #
-            # The ribbon here runs ~84 km and reaches elongation ~4.3. Real
-            # bilge ribbons reach 5-20, and this one is at the low end for a
-            # blunt reason: at 111 km to the degree, a fully realistic ribbon
-            # runs off the edge of a one-degree scene. Truncated by the frame,
-            # and said so rather than quietly cropped.
-            release_start = acquired - timedelta(hours=8)
-            true_fixes = _track(origin_lon - 0.17, origin_lat + 0.07,
-                                0.100, -0.035, release_start - timedelta(hours=1),
-                                hours=9, sog=13.0, cog=115.0)
-            duration, continuous = 7.0, True
-        elif family == "moving_discharge":
-            # long transit, continuous discharge over 4h
-            release_start = acquired - timedelta(hours=7)
-            true_fixes = _track(origin_lon - 0.40, origin_lat + 0.34,
-                                0.030, -0.018, release_start - timedelta(hours=2),
-                                hours=9, sog=11.0, cog=145.0)
-            duration, continuous = 4.0, True
-        else:
-            release_start = acquired - timedelta(hours=6)
-            true_fixes = _track(origin_lon - 0.35, origin_lat + 0.30,
-                                0.004, -0.003, release_start - timedelta(hours=3),
-                                hours=6, sog=9.5, cog=140.0)
-            duration, continuous = 2.0, True
-        specs.append({"role": "true_source", "fixes": true_fixes})
-        true_spec = {"release_start": release_start, "duration_hours": duration,
-                     "is_continuous": continuous, "track_index": 0}
+    t_start = _track_start(rng, acquired)
+    if family in ("decoy", "crowded"):
+        # A 2 h release. The source's speed is drawn like any vessel's: loitering
+        # it leaves a compact patch, under way a short streak. Fixing it to
+        # loitering made "the slowest vessel" a way to find the source.
+        release_start = acquired - timedelta(hours=6)
+        anchor = (origin_lon - 0.338, origin_lat + 0.291)
+        velocity = _heading_velocity(_speed(rng), 127.0)
+        duration, continuous, role = 2.0, True, "true_source"
     elif family == "absent_source":
         # The source discharged and then left the scene / stopped broadcasting.
         # Its track is generated so the slick is physically real, then dropped
         # from the manifest entirely.
         release_start = acquired - timedelta(hours=6)
-        true_fixes = _track(origin_lon - 0.36, origin_lat + 0.31,
-                            0.004, -0.003, release_start - timedelta(hours=3),
-                            hours=6, sog=10.0, cog=140.0)
-        specs.append({"role": "absent_true_source", "fixes": true_fixes})
-        true_spec = {"release_start": release_start, "duration_hours": 2.0,
-                     "is_continuous": True, "track_index": 0}
+        anchor = (origin_lon - 0.348, origin_lat + 0.301)
+        velocity = _heading_velocity(_speed(rng), 127.0)
+        duration, continuous, role = 2.0, True, "absent_true_source"
+    elif family == "moving_discharge":
+        # long transit, continuous discharge over 4 h
+        release_start = acquired - timedelta(hours=7)
+        anchor = (origin_lon - 0.34, origin_lat + 0.304)
+        velocity = (0.030, -0.018)
+        duration, continuous, role = 4.0, True, "true_source"
+    elif family == "along_track_ribbon":
+        # Routine bilge discharge from a vessel under way: a long, thin ribbon
+        # laid along its track rather than a compact patch.
+        #
+        # The other families produce near-circular slicks, which published SAR
+        # morphology work would classify as look-alikes rather than oil (A16);
+        # this family exists because that was a real gap in the benchmark. The
+        # ribbon runs along the shore, as coastal traffic does: an earlier
+        # version headed east into the coast, where the clamp that kept the ship
+        # at sea bent the ribbon along the shoreline and onto land.
+        release_start = acquired - timedelta(hours=8)
+        anchor = (origin_lon - 0.17, origin_lat + 0.30)
+        velocity = (0.020, -0.095)
+        duration, continuous, role = 7.0, True, "true_source"
     else:
         raise ValueError(f"unknown family: {family}")
 
+    fixes = _track_through(anchor, release_start, velocity, t_start, acquired)
+    specs = [{"role": role, "fixes": fixes}]
+    true_spec = {"release_start": release_start, "duration_hours": duration,
+                 "is_continuous": continuous, "track_index": 0}
     return specs, true_spec
 
 
@@ -344,46 +402,59 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
 
     # --- the nearest-at-acquisition decoy, aimed at the ACTUAL post-drift
     # slick centroid (not the scene centre). Aiming it at the scene centre
-    # would leave the proximity baseline untrapped and flatter the method. ---
-    if family != "crowded":
-        near_start_lon, near_start_lat = origin_lon + 0.15, origin_lat - 0.15
-    else:
-        near_start_lon, near_start_lat = origin_lon + 0.20, origin_lat - 0.20
-    near_fixes = []
-    t = acquired - timedelta(hours=2.5)
-    n_steps = 6
-    for step in range(n_steps):
-        frac = step / (n_steps - 1)
-        near_fixes.append({
-            "t_utc": (t + timedelta(minutes=30 * step)).isoformat(),
-            "lon": round(float(near_start_lon + frac * (centroid_lon - near_start_lon)), 5),
-            "lat": round(float(near_start_lat + frac * (centroid_lat - near_start_lat)), 5),
-            "sog_knots": 11.0, "cog_deg": 310.0, "interpolated": False,
-        })
-    specs.append({"role": "near_decoy", "fixes": near_fixes})
+    # would leave the proximity baseline untrapped and flatter the method.
+    # It arrives from seaward, at a speed and over a span drawn like any other. ---
+    rs, dur = true_spec["release_start"], true_spec["duration_hours"]
+
+    def _identifiable(draw):
+        """Draw an innocent's track until it is not at the release while it happens."""
+        for _ in range(60):
+            fixes = draw()
+            if _closest_during_release_km(fixes, true_fixes, rs, dur) >= IDENTIFIABLE_KM:
+                return fixes
+        raise RuntimeError("could not draw a physically identifiable innocent track")
+
+    specs.append({"role": "near_decoy", "fixes": _identifiable(lambda: _track_through(
+        (centroid_lon, centroid_lat), acquired,
+        _heading_velocity(_speed(rng), float(rng.uniform(30.0, 150.0))),
+        _track_start(rng, acquired), acquired))})
 
     # --- a near-miss decoy that DOES survive hindcast filtering but fits
     # the observed footprint badly. In absent_source cases this is what
     # actually exercises the abstention gate: the system has something
     # plausible to name, and must decline to name it. ---
-    miss_start_lon = centroid_lon + 0.10
-    miss_start_lat = centroid_lat + 0.12
-    specs.append({"role": "near_miss_decoy",
-                  "fixes": _track(miss_start_lon, miss_start_lat, -0.012, 0.010,
-                                  acquired - timedelta(hours=10), hours=10,
-                                  sog=7.0, cog=95.0)})
+    specs.append({"role": "near_miss_decoy", "fixes": _identifiable(lambda: _track_through(
+        (centroid_lon - 0.02, centroid_lat + 0.22), acquired, _heading_velocity(_speed(rng), 310.0),
+        _track_start(rng, acquired), acquired))})
 
-    # --- unrelated traffic ---
+    # --- unrelated traffic: some of it passes near the slick, as real traffic
+    # does, so being near it at some point is not evidence by construction ---
     n_other = 8 if family == "crowded" else 3
+    step = timedelta(minutes=TRACK_STEP_MIN)
+    def _background():
+        t0 = _track_start(rng, acquired)
+        v = _heading_velocity(_speed(rng), float(rng.uniform(0.0, 360.0)))
+        anchor = None
+        if rng.random() < PASS_NEAR_P:
+            for _try in range(20):
+                r = float(rng.uniform(*PASS_NEAR_RADIUS_DEG))
+                a = float(rng.uniform(0.0, 2 * np.pi))
+                cand = (centroid_lon + r * np.cos(a), centroid_lat + r * np.sin(a))
+                if _clear_water(*cand):
+                    n_steps = int(round((acquired - t0) / step))
+                    anchor, anchor_t = cand, t0 + int(rng.integers(0, n_steps + 1)) * step
+                    break
+        if anchor is None:
+            for _try in range(200):
+                cand = (float(rng.uniform(bbox.min_lon + 0.05, bbox.max_lon - 0.05)),
+                        float(rng.uniform(bbox.min_lat + 0.05, bbox.max_lat - 0.05)))
+                if _clear_water(*cand):
+                    anchor, anchor_t = cand, t0
+                    break
+        return _track_through(anchor, anchor_t, v, t0, acquired)
+
     for _ in range(n_other):
-        specs.append({"role": "background",
-                      "fixes": _track(origin_lon + float(rng.uniform(-0.45, 0.45)),
-                                      origin_lat + float(rng.uniform(-0.45, 0.45)),
-                                      float(rng.uniform(-0.03, 0.03)),
-                                      float(rng.uniform(-0.03, 0.03)),
-                                      acquired - timedelta(hours=10), hours=10,
-                                      sog=float(rng.uniform(4, 14)),
-                                      cog=float(rng.uniform(0, 360)))})
+        specs.append({"role": "background", "fixes": _identifiable(_background)})
 
     # --- assign neutral identities and shuffle so ordering leaks nothing ---
     mmsis = _mmsi_pool(rng, len(specs))
@@ -396,7 +467,8 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
     absent_vessel_key = next((s["vessel_key"] for s in specs if s["role"] == "absent_true_source"), None)
 
     # the absent source is removed from the manifest — this is the whole point
-    published = [s for s in specs if s["role"] != "absent_true_source"]
+    published = [s for s in specs if s["role"] != "absent_true_source"
+                 and len(_in_scene(s["fixes"], bbox)) >= 2]
 
     identity_from = (acquired - timedelta(days=365)).isoformat()
     tracks = [{
@@ -406,47 +478,69 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
         "name": None,
         "identity_valid_from": identity_from,
         "identity_valid_to": None,
-        "fixes": s["fixes"],
+        "fixes": _in_scene(s["fixes"], bbox),
         "missing_intervals": [],
         "provenance": {"status": DataStatus.SYNTHETIC.value,
                        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"},
     } for s in published]
 
-    # --- scene raster ---
+    # --- scene raster: sea speckle, darker where oil damps the waves, and
+    # land from the real coastline, brighter and textured as it is in SAR ---
+    coastline = coastline_for_bbox(bbox.model_dump())
+    land = land_mask(bbox.model_dump(), (img_size, img_size), coastline)
+    if land is None:
+        land = np.zeros((img_size, img_size), dtype=bool)
+    mask = (mask.astype(bool) & ~land).astype(np.uint8)   # the truth slick is at sea only
     speckle = rng.gamma(shape=4.0, scale=0.25, size=(img_size, img_size))
     scene = speckle.copy()
     scene[mask == 1] *= 0.35  # oil dampens capillary waves -> darker in SAR
-    scene_img = (255 * (np.clip(scene, 0, None) / scene.max())).astype(np.uint8)
+    relief = gaussian_filter(rng.normal(0, 1, (img_size, img_size)), sigma=5)
+    relief = relief / (np.abs(relief).max() + 1e-9)
+    scene[land] = speckle[land] * (2.1 + 0.6 * relief[land])
+    scene_img = (255 * np.clip(scene / np.percentile(scene, 99.7), 0, 1)).astype(np.uint8)
     image_path = os.path.join(case_dir, "scene.png")
     mask_path = os.path.join(case_dir, "mask_groundtruth.png")
     Image.fromarray(scene_img, mode="L").save(image_path)
     Image.fromarray((mask * 255).astype(np.uint8), mode="L").save(mask_path)
 
-    # --- synthetic coastline + sensitive areas, for the forward exposure mode ---
-    coast_lon = bbox.max_lon - 0.06
-    coastline = [[round(coast_lon + 0.015 * np.sin(i * 0.7), 5),
-                  round(bbox.min_lat + i * (bbox.max_lat - bbox.min_lat) / 19, 5)]
-                 for i in range(20)]
-    # Sensitive areas are placed relative to the ACTUAL post-drift slick
-    # centroid and the mean drift direction, so the forward exposure mode has
-    # something real to intersect. Areas parked in a corner the slick never
-    # reaches would make every forecast report "no contact" regardless of
-    # whether the intersection logic worked at all.
+    # --- sensitive areas, for the forward exposure mode. The coastline is the
+    # real one (slicktrace_core.geography), clipped to the scene above. ---
+    # Placed relative to the ACTUAL post-drift slick centroid and the mean
+    # drift direction, so the forward exposure mode has something real to
+    # intersect. Areas parked in a corner the slick never reaches would make
+    # every forecast report "no contact" regardless of whether the
+    # intersection logic worked at all.
     drift_lon_24h = u0 * 24 * DEG_PER_MS_HR
     drift_lat_24h = v0 * 24 * DEG_PER_MS_HR
     fg_lon = centroid_lon + drift_lon_24h * 0.55
     fg_lat = centroid_lat + drift_lat_24h * 0.55
+
+    def _box(cx, cy):
+        return [[round(cx - 0.06, 5), round(cy - 0.08, 5)], [round(cx + 0.14, 5), round(cy - 0.08, 5)],
+                [round(cx + 0.14, 5), round(cy + 0.08, 5)], [round(cx - 0.06, 5), round(cy + 0.08, 5)]]
+    fishing = _box(fg_lon, fg_lat)
+    for _ in range(40):                     # a fishing ground is at sea: move it seaward until it is
+        if not any(on_land(x, y, coastline) for x, y in fishing):
+            break
+        fg_lon -= 0.02
+        fishing = _box(fg_lon, fg_lat)
+
+    # A mangrove fringe is intertidal: a strip straddling the open coast, the
+    # first land met from seaward at each latitude. Following every coastline
+    # vertex in the band instead traced both banks of the creeks and gave a
+    # polygon that crossed itself.
+    def _open_coast_lon(lat):
+        lon = bbox.min_lon
+        while lon < bbox.max_lon and not on_land(lon, lat, coastline):
+            lon += 0.002
+        return lon
+    band = np.arange(origin_lat + 0.10, origin_lat + 0.28 + 1e-9, 0.01)
+    shore = [(_open_coast_lon(float(la)), float(la)) for la in band]
+    mangrove = ([[round(x - 0.015, 5), round(y, 5)] for x, y in shore]
+                + [[round(x + 0.015, 5), round(y, 5)] for x, y in reversed(shore)])
     sensitive_areas = [
-        {"name": "Fishing ground (synthetic)", "kind": "fishery",
-         "polygon": [[round(fg_lon - 0.06, 5), round(fg_lat - 0.08, 5)],
-                     [round(fg_lon + 0.14, 5), round(fg_lat - 0.08, 5)],
-                     [round(fg_lon + 0.14, 5), round(fg_lat + 0.08, 5)],
-                     [round(fg_lon - 0.06, 5), round(fg_lat + 0.08, 5)]]},
-        {"name": "Mangrove reserve (synthetic)", "kind": "mangrove",
-         "polygon": [[round(coast_lon - 0.05, 5), round(origin_lat + 0.10, 5)],
-                     [round(coast_lon, 5), round(origin_lat + 0.10, 5)],
-                     [round(coast_lon, 5), round(origin_lat + 0.28, 5)],
-                     [round(coast_lon - 0.05, 5), round(origin_lat + 0.28, 5)]]},
+        {"name": "Fishing ground (synthetic)", "kind": "fishery", "polygon": fishing},
+        {"name": "Mangrove reserve (synthetic)", "kind": "mangrove", "polygon": mangrove},
     ]
 
     deg_lat_m = 111_000.0

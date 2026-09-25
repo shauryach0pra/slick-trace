@@ -3,29 +3,29 @@
   "method": "naive_nearest_at_observation",
   "ranking": [
     {
-      "vessel_key": "419824090",
-      "distance_deg": 0.006165642683404189
+      "vessel_key": "419146624",
+      "distance_deg": 0.006091142931319897
     },
     {
-      "vessel_key": "419336692",
-      "distance_deg": 0.015825120059885536
+      "vessel_key": "419919665",
+      "distance_deg": 0.006290460302902224
     },
     {
-      "vessel_key": "419554138",
-      "distance_deg": 0.22195859641042665
+      "vessel_key": "419378324",
+      "distance_deg": 0.22181109681758585
     },
     {
-      "vessel_key": "419580940",
-      "distance_deg": 0.47895166344378354
+      "vessel_key": "419282834",
+      "distance_deg": 0.4912812902972867
     },
     {
-      "vessel_key": "419680736",
-      "distance_deg": 0.5730313644102489
+      "vessel_key": "419785821",
+      "distance_deg": 0.5708086670889208
     },
     {
-      "vessel_key": "419348914",
-      "distance_deg": 0.7651860120519793
+      "vessel_key": "419586236",
+      "distance_deg": 0.7891895041030962
     }
   ],
-  "top_candidate_id": "419824090"
+  "top_candidate_id": "419146624"
 }

@@ -16,10 +16,10 @@ never really about the names; it is about which *role* wins. So it is pinned
 here, by role, where a regeneration cannot invalidate it and where reverting to
 hardcoded identifiers will fail loudly.
 
-The two numeric tolerances below are the real acceptance bounds and are
-deliberately duplicated from scripts/smoke_test.py: the smoke test checks a
-running server, this checks the artifacts on disk, and both should fail if the
-physics moves. Neither may be loosened to make a run go green.
+The numeric tolerance below is the real acceptance bound and is deliberately
+duplicated from scripts/smoke_test.py: the smoke test checks a running server,
+this checks the artifacts on disk, and both should fail if the physics moves.
+It may not be loosened to make a run go green.
 """
 
 from __future__ import annotations
@@ -33,7 +33,6 @@ CASES_ROOT = os.path.join("data", "cases")
 FROZEN_CASE = "case_0001"
 
 MIN_TOP_CANDIDATE_IOU = 0.55
-MAX_RUNNER_UP_IOU = 0.30
 
 
 def _load(name):
@@ -67,29 +66,14 @@ def test_top_candidate_clears_the_fit_floor():
     assert top_iou >= MIN_TOP_CANDIDATE_IOU, f"top IoU {top_iou:.3f} below {MIN_TOP_CANDIDATE_IOU}"
 
 
-def test_runner_up_is_not_a_near_tie():
-    attribution = _load("attribution_result.json")
-    ranking = attribution["ranking"]
-    assert len(ranking) > 1, "frozen case must retain more than one candidate to be a comparison"
-    runner_up_iou = ranking[1]["mean_iou"]
-    assert runner_up_iou <= MAX_RUNNER_UP_IOU, f"runner-up IoU {runner_up_iou:.3f} is a near-tie"
-
-
-def test_naive_baseline_falls_for_the_decoy(roles):
-    """The naive baseline being wrong is the point of this case, not a defect.
-
-    If this ever starts passing in the sense of picking the true source, the
-    case has stopped being a discriminating test and the comparison against
-    historical proximity no longer demonstrates anything.
-    """
-    naive = _load("naive_baseline_result.json")
-    assert naive["top_candidate_id"] == _key_for_role(roles, "near_decoy")
-
-
-def test_the_two_methods_disagree():
-    attribution = _load("attribution_result.json")
-    naive = _load("naive_baseline_result.json")
-    assert naive["top_candidate_id"] != attribution["top_candidate_id"]
+# Two claims about case_0001 were retired when the benchmark was fixed
+# (CHANGELOG, "Benchmark: real geography and no leaked answers"): that the
+# naive baseline falls for the decoy, and that the runner-up fits at IoU
+# 0.30 or below. Both were properties of the old generator, which placed
+# every innocent far from the slick and made the source loiter. Under the
+# fair generator a loitering source can sit beside its own slick, so the
+# naive baseline picks it, and passers-by fit as well as 0.49. The claims
+# were removed from the documents, not only from the tests.
 
 
 def test_no_vessel_key_encodes_its_role(roles):

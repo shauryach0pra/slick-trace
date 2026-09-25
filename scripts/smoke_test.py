@@ -25,8 +25,16 @@ import json
 # either one would falsify the result rather than test it.
 EXPECTED = {
     "min_top_candidate_iou": 0.55,
-    "max_runner_up_iou": 0.30,
 }
+
+# Two claims about case_0001 were retired when the benchmark was fixed
+# (CHANGELOG, "Benchmark: real geography and no leaked answers"): that the
+# naive baseline falls for the decoy, and that the runner-up fits at IoU
+# 0.30 or below. Both were properties of the old generator, which placed
+# every innocent far from the slick and made the source loiter. Under the
+# fair generator a loitering source can sit beside its own slick, so the
+# naive baseline picks it, and passers-by fit as well as 0.49. The claims
+# were removed from the documents, not only from the tests.
 
 # Which vessel should win is identified by its ROLE in the frozen case, not by
 # a literal identifier. Vessel keys are per-seed fictional MMSIs precisely so
@@ -35,7 +43,6 @@ EXPECTED = {
 # break again the next time a case is regenerated.
 EXPECTED_ROLES = {
     "top_candidate": "true_source",
-    "naive_baseline_top_candidate": "near_decoy",  # the naive baseline SHOULD be wrong
 }
 
 CASE_ID = "case_0001"
@@ -114,27 +121,14 @@ def run(base_url: str, expected_keys: dict | None) -> bool:
         check("top candidate IoU above tolerance",
               top_iou >= EXPECTED["min_top_candidate_iou"],
               f"iou={top_iou:.3f}, need >= {EXPECTED['min_top_candidate_iou']}")
-        if len(attribution["ranking"]) > 1:
-            runner_up_iou = attribution["ranking"][1]["mean_iou"]
-            check("runner-up IoU below tolerance (not a near-tie)",
-                  runner_up_iou <= EXPECTED["max_runner_up_iou"],
-                  f"iou={runner_up_iou:.3f}, need <= {EXPECTED['max_runner_up_iou']}")
     except Exception as e:
         check("attribution result well-formed", False, str(e))
 
     try:
         naive = fetch_json(f"{base_url}/api/incidents/{CASE_ID}/naive-baseline")
-        if expected_keys is not None:
-            check("naive baseline reproduces the known decoy trap "
-                  "(documents the improvement, not a bug)",
-                  naive["top_candidate_id"] == expected_keys["naive_baseline_top_candidate"],
-                  f"got {naive['top_candidate_id']}, "
-                  f"expected {expected_keys['naive_baseline_top_candidate']} (role: near_decoy)")
-        else:
-            check("naive baseline disagrees with forward replay "
-                  "(the improvement this case exists to show)",
-                  naive["top_candidate_id"] != attribution.get("top_candidate_id"),
-                  f"naive picked {naive['top_candidate_id']}")
+        check("naive baseline names a vessel (it is shown whether it wins or loses)",
+              naive.get("top_candidate_id") is not None,
+              f"got {naive.get('top_candidate_id')}")
     except Exception as e:
         check("naive baseline result well-formed", False, str(e))
 

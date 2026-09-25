@@ -51,8 +51,8 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
   // a conditional return runs on some renders and not others, and React counts
   // hooks by call order.
   const [probe, setProbe] = useState(null);
-  // Real coastline, fetched once and drawn as a reference layer. The forecast
-  // intersects the synthetic coast in the manifest, not this one; both are
+  // Real coastline, fetched once and drawn as a reference layer. Every case now
+  // uses this same coastline (slicktrace_core.geography); earlier cases did not, and
   // shown so the gap between modelled and real geography is visible.
   const [realCoast, setRealCoast] = useState(null);
   useEffect(() => {

@@ -6,79 +6,28 @@
         "family": "decoy",
         "seed": 42,
         "n_vessels": 6,
-        "n_candidates": 3,
+        "n_candidates": 4,
         "expected": "named_candidate",
-        "method_outcome": "419336692",
+        "method_outcome": "419146624",
         "method_correct": true,
-        "naive_outcome": "419824090",
-        "naive_correct": false,
+        "naive_outcome": "419146624",
+        "naive_correct": true,
         "top1": true,
         "top3": true,
-        "top_iou": 0.688,
-        "lead_retained": 1.0,
-        "smallest_flip_magnitude": null
+        "top_iou": 0.686,
+        "lead_retained": 0.8125,
+        "smallest_flip_magnitude": 0.5
       },
       {
         "incident_id": "case_0002",
         "family": "moving_discharge",
         "seed": 1701,
         "n_vessels": 6,
-        "n_candidates": 4,
-        "expected": "named_candidate",
-        "method_outcome": "419858938",
-        "method_correct": true,
-        "naive_outcome": "419453172",
-        "naive_correct": false,
-        "top1": true,
-        "top3": true,
-        "top_iou": 0.627,
-        "lead_retained": 1.0,
-        "smallest_flip_magnitude": null
-      },
-      {
-        "incident_id": "case_0003",
-        "family": "absent_source",
-        "seed": 2026,
-        "n_vessels": 5,
-        "n_candidates": 2,
-        "expected": "unknown_source",
-        "method_outcome": "unknown_source",
-        "method_correct": true,
-        "naive_outcome": "419769953",
-        "naive_correct": false,
-        "top1": null,
-        "top3": null,
-        "top_iou": 0.088,
-        "lead_retained": 0.7,
-        "smallest_flip_magnitude": 0.5
-      },
-      {
-        "incident_id": "case_0004",
-        "family": "crowded",
-        "seed": 8813,
-        "n_vessels": 11,
         "n_candidates": 5,
         "expected": "named_candidate",
-        "method_outcome": "419255379",
+        "method_outcome": "419120580",
         "method_correct": true,
-        "naive_outcome": "419369344",
-        "naive_correct": false,
-        "top1": true,
-        "top3": true,
-        "top_iou": 0.677,
-        "lead_retained": 0.9375,
-        "smallest_flip_magnitude": 0.5
-      },
-      {
-        "incident_id": "case_0005",
-        "family": "decoy",
-        "seed": 5150,
-        "n_vessels": 6,
-        "n_candidates": 3,
-        "expected": "named_candidate",
-        "method_outcome": "419184924",
-        "method_correct": true,
-        "naive_outcome": "419958088",
+        "naive_outcome": "419648686",
         "naive_correct": false,
         "top1": true,
         "top3": true,
@@ -87,55 +36,106 @@
         "smallest_flip_magnitude": null
       },
       {
+        "incident_id": "case_0003",
+        "family": "absent_source",
+        "seed": 2026,
+        "n_vessels": 5,
+        "n_candidates": 3,
+        "expected": "unknown_source",
+        "method_outcome": "419829242",
+        "method_correct": false,
+        "naive_outcome": "419949542",
+        "naive_correct": false,
+        "top1": null,
+        "top3": null,
+        "top_iou": 0.494,
+        "lead_retained": 0.475,
+        "smallest_flip_magnitude": 0.25
+      },
+      {
+        "incident_id": "case_0004",
+        "family": "crowded",
+        "seed": 8813,
+        "n_vessels": 11,
+        "n_candidates": 8,
+        "expected": "named_candidate",
+        "method_outcome": "419602854",
+        "method_correct": true,
+        "naive_outcome": "419643687",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.479,
+        "lead_retained": 0.875,
+        "smallest_flip_magnitude": 1.0
+      },
+      {
+        "incident_id": "case_0005",
+        "family": "decoy",
+        "seed": 5150,
+        "n_vessels": 6,
+        "n_candidates": 4,
+        "expected": "named_candidate",
+        "method_outcome": "419923894",
+        "method_correct": true,
+        "naive_outcome": "419621596",
+        "naive_correct": false,
+        "top1": true,
+        "top3": true,
+        "top_iou": 0.617,
+        "lead_retained": 0.8375,
+        "smallest_flip_magnitude": 0.25
+      },
+      {
         "incident_id": "case_0006",
         "family": "absent_source",
         "seed": 9074,
         "n_vessels": 5,
-        "n_candidates": 3,
+        "n_candidates": 4,
         "expected": "unknown_source",
         "method_outcome": "unknown_source",
         "method_correct": true,
-        "naive_outcome": "419738652",
+        "naive_outcome": "419748958",
         "naive_correct": false,
         "top1": null,
         "top3": null,
-        "top_iou": 0.043,
-        "lead_retained": 0.5125,
-        "smallest_flip_magnitude": 0.5
+        "top_iou": 0.229,
+        "lead_retained": 0.525,
+        "smallest_flip_magnitude": 0.25
       },
       {
         "incident_id": "case_0007",
         "family": "decoy",
         "seed": 3312,
         "n_vessels": 6,
-        "n_candidates": 4,
+        "n_candidates": 6,
         "expected": "named_candidate",
-        "method_outcome": "419240128",
+        "method_outcome": "419323519",
         "method_correct": true,
-        "naive_outcome": "419991981",
+        "naive_outcome": "419625403",
         "naive_correct": false,
         "top1": true,
         "top3": true,
-        "top_iou": 0.676,
-        "lead_retained": 1.0,
-        "smallest_flip_magnitude": null
+        "top_iou": 0.345,
+        "lead_retained": 0.9875,
+        "smallest_flip_magnitude": 1.5
       },
       {
         "incident_id": "case_0008",
         "family": "moving_discharge",
         "seed": 6421,
         "n_vessels": 6,
-        "n_candidates": 3,
+        "n_candidates": 5,
         "expected": "named_candidate",
-        "method_outcome": "419125223",
+        "method_outcome": "419485509",
         "method_correct": true,
-        "naive_outcome": "419847031",
+        "naive_outcome": "419998212",
         "naive_correct": false,
         "top1": true,
         "top3": true,
-        "top_iou": 0.599,
-        "lead_retained": 1.0,
-        "smallest_flip_magnitude": null
+        "top_iou": 0.681,
+        "lead_retained": 0.85,
+        "smallest_flip_magnitude": 0.5
       },
       {
         "incident_id": "case_0009",
@@ -144,14 +144,14 @@
         "n_vessels": 6,
         "n_candidates": 4,
         "expected": "named_candidate",
-        "method_outcome": "419630599",
+        "method_outcome": "419336308",
         "method_correct": true,
-        "naive_outcome": "419711487",
+        "naive_outcome": "419358060",
         "naive_correct": false,
         "top1": true,
         "top3": true,
-        "top_iou": 0.331,
-        "lead_retained": 0.9125,
+        "top_iou": 0.417,
+        "lead_retained": 0.775,
         "smallest_flip_magnitude": 1.0
       }
     ],
@@ -160,18 +160,18 @@
       "n": 7,
       "method_top1": 7,
       "method_top3": 7,
-      "naive_top1": 0,
+      "naive_top1": 1,
       "mcnemar": {
-        "method_right_baseline_wrong": 7,
+        "method_right_baseline_wrong": 6,
         "method_wrong_baseline_right": 0,
-        "p_value": 0.0156,
+        "p_value": 0.0312,
         "test": "exact McNemar, two-sided, on discordant pairs"
       }
     },
     "source_absent": {
       "n": 2,
-      "correct_abstentions": 2,
-      "false_named_attributions": 0
+      "correct_abstentions": 1,
+      "false_named_attributions": 1
     }
   },
   "nlp": {
@@ -255,21 +255,21 @@
       },
       "selective": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8209,
-        "hidden_ais_recovery_n": "55/67",
-        "false_unmatched_alert_rate": 0.2927,
-        "false_unmatched_alert_n": "36/123",
-        "mistaken_promotion_rate": 0.3,
-        "mistaken_promotion_n": "12/40"
+        "hidden_ais_recovery_rate": 0.7875,
+        "hidden_ais_recovery_n": "63/80",
+        "false_unmatched_alert_rate": 0.2945,
+        "false_unmatched_alert_n": "43/146",
+        "mistaken_promotion_rate": 0.25,
+        "mistaken_promotion_n": "10/40"
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8793,
-        "hidden_ais_recovery_n": "51/58",
-        "false_unmatched_alert_rate": 0.25,
-        "false_unmatched_alert_n": "26/104",
-        "mistaken_promotion_rate": 0.0,
-        "mistaken_promotion_n": "0/34"
+        "hidden_ais_recovery_rate": 0.8182,
+        "hidden_ais_recovery_n": "72/88",
+        "false_unmatched_alert_rate": 0.268,
+        "false_unmatched_alert_n": "41/153",
+        "mistaken_promotion_rate": 0.4,
+        "mistaken_promotion_n": "16/40"
       }
     },
     {
@@ -284,21 +284,21 @@
       },
       "selective": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.825,
-        "hidden_ais_recovery_n": "66/80",
-        "false_unmatched_alert_rate": 0.2886,
-        "false_unmatched_alert_n": "43/149",
+        "hidden_ais_recovery_rate": 0.8065,
+        "hidden_ais_recovery_n": "50/62",
+        "false_unmatched_alert_rate": 0.2708,
+        "false_unmatched_alert_n": "26/96",
         "mistaken_promotion_rate": 0.35,
         "mistaken_promotion_n": "14/40"
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.85,
-        "hidden_ais_recovery_n": "85/100",
-        "false_unmatched_alert_rate": 0.2378,
-        "false_unmatched_alert_n": "39/164",
-        "mistaken_promotion_rate": 0.3,
-        "mistaken_promotion_n": "12/40"
+        "hidden_ais_recovery_rate": 0.8519,
+        "hidden_ais_recovery_n": "46/54",
+        "false_unmatched_alert_rate": 0.2179,
+        "false_unmatched_alert_n": "17/78",
+        "mistaken_promotion_rate": 0.4286,
+        "mistaken_promotion_n": "12/28"
       }
     },
     {
@@ -313,21 +313,21 @@
       },
       "selective": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8,
-        "hidden_ais_recovery_n": "64/80",
-        "false_unmatched_alert_rate": 0.25,
-        "false_unmatched_alert_n": "32/128",
-        "mistaken_promotion_rate": null,
-        "mistaken_promotion_n": "0/0"
+        "hidden_ais_recovery_rate": 0.7846,
+        "hidden_ais_recovery_n": "51/65",
+        "false_unmatched_alert_rate": 0.2526,
+        "false_unmatched_alert_n": "24/95",
+        "mistaken_promotion_rate": 0.35,
+        "mistaken_promotion_n": "14/40"
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8286,
-        "hidden_ais_recovery_n": "58/70",
-        "false_unmatched_alert_rate": 0.2683,
-        "false_unmatched_alert_n": "33/123",
-        "mistaken_promotion_rate": null,
-        "mistaken_promotion_n": "0/0"
+        "hidden_ais_recovery_rate": 0.8304,
+        "hidden_ais_recovery_n": "93/112",
+        "false_unmatched_alert_rate": 0.0268,
+        "false_unmatched_alert_n": "3/112",
+        "mistaken_promotion_rate": 1.0,
+        "mistaken_promotion_n": "32/32"
       }
     },
     {
@@ -342,141 +342,25 @@
       },
       "selective": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8108,
-        "hidden_ais_recovery_n": "90/111",
-        "false_unmatched_alert_rate": 0.3317,
-        "false_unmatched_alert_n": "68/205",
-        "mistaken_promotion_rate": 0.225,
-        "mistaken_promotion_n": "9/40"
+        "hidden_ais_recovery_rate": 0.9016,
+        "hidden_ais_recovery_n": "55/61",
+        "false_unmatched_alert_rate": 0.315,
+        "false_unmatched_alert_n": "40/127",
+        "mistaken_promotion_rate": 0.275,
+        "mistaken_promotion_n": "11/40"
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8485,
-        "hidden_ais_recovery_n": "84/99",
-        "false_unmatched_alert_rate": 0.3505,
-        "false_unmatched_alert_n": "68/194",
-        "mistaken_promotion_rate": 0.0,
-        "mistaken_promotion_n": "0/35"
+        "hidden_ais_recovery_rate": 0.9062,
+        "hidden_ais_recovery_n": "29/32",
+        "false_unmatched_alert_rate": 0.2667,
+        "false_unmatched_alert_n": "16/60",
+        "mistaken_promotion_rate": 0.0588,
+        "mistaken_promotion_n": "1/17"
       }
     },
     {
       "incident_id": "case_0005",
-      "operating_point": {
-        "gate_radius_deg": 0.02,
-        "contact_position_noise_deg": 0.012,
-        "detector_miss_rate": 0.15,
-        "false_detection_rate": 0.15,
-        "hide_fraction_selective": 0.3,
-        "coverage_failure_radius_deg": 0.25
-      },
-      "selective": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8333,
-        "hidden_ais_recovery_n": "60/72",
-        "false_unmatched_alert_rate": 0.2602,
-        "false_unmatched_alert_n": "32/123",
-        "mistaken_promotion_rate": 0.2,
-        "mistaken_promotion_n": "8/40"
-      },
-      "coverage_failure": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8788,
-        "hidden_ais_recovery_n": "58/66",
-        "false_unmatched_alert_rate": 0.2821,
-        "false_unmatched_alert_n": "33/117",
-        "mistaken_promotion_rate": 0.0,
-        "mistaken_promotion_n": "0/34"
-      }
-    },
-    {
-      "incident_id": "case_0006",
-      "operating_point": {
-        "gate_radius_deg": 0.02,
-        "contact_position_noise_deg": 0.012,
-        "detector_miss_rate": 0.15,
-        "false_detection_rate": 0.15,
-        "hide_fraction_selective": 0.3,
-        "coverage_failure_radius_deg": 0.25
-      },
-      "selective": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8,
-        "hidden_ais_recovery_n": "64/80",
-        "false_unmatched_alert_rate": 0.252,
-        "false_unmatched_alert_n": "32/127",
-        "mistaken_promotion_rate": null,
-        "mistaken_promotion_n": "0/0"
-      },
-      "coverage_failure": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8302,
-        "hidden_ais_recovery_n": "88/106",
-        "false_unmatched_alert_rate": 0.1724,
-        "false_unmatched_alert_n": "25/145",
-        "mistaken_promotion_rate": null,
-        "mistaken_promotion_n": "0/0"
-      }
-    },
-    {
-      "incident_id": "case_0007",
-      "operating_point": {
-        "gate_radius_deg": 0.02,
-        "contact_position_noise_deg": 0.012,
-        "detector_miss_rate": 0.15,
-        "false_detection_rate": 0.15,
-        "hide_fraction_selective": 0.3,
-        "coverage_failure_radius_deg": 0.25
-      },
-      "selective": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8209,
-        "hidden_ais_recovery_n": "55/67",
-        "false_unmatched_alert_rate": 0.2927,
-        "false_unmatched_alert_n": "36/123",
-        "mistaken_promotion_rate": 0.3,
-        "mistaken_promotion_n": "12/40"
-      },
-      "coverage_failure": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8871,
-        "hidden_ais_recovery_n": "55/62",
-        "false_unmatched_alert_rate": 0.2636,
-        "false_unmatched_alert_n": "29/110",
-        "mistaken_promotion_rate": 0.0,
-        "mistaken_promotion_n": "0/34"
-      }
-    },
-    {
-      "incident_id": "case_0008",
-      "operating_point": {
-        "gate_radius_deg": 0.02,
-        "contact_position_noise_deg": 0.012,
-        "detector_miss_rate": 0.15,
-        "false_detection_rate": 0.15,
-        "hide_fraction_selective": 0.3,
-        "coverage_failure_radius_deg": 0.25
-      },
-      "selective": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.825,
-        "hidden_ais_recovery_n": "66/80",
-        "false_unmatched_alert_rate": 0.2886,
-        "false_unmatched_alert_n": "43/149",
-        "mistaken_promotion_rate": 0.35,
-        "mistaken_promotion_n": "14/40"
-      },
-      "coverage_failure": {
-        "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8485,
-        "hidden_ais_recovery_n": "56/66",
-        "false_unmatched_alert_rate": 0.3287,
-        "false_unmatched_alert_n": "47/143",
-        "mistaken_promotion_rate": 0.25,
-        "mistaken_promotion_n": "10/40"
-      }
-    },
-    {
-      "incident_id": "case_0009",
       "operating_point": {
         "gate_radius_deg": 0.02,
         "contact_position_noise_deg": 0.012,
@@ -496,12 +380,128 @@
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.9,
-        "hidden_ais_recovery_n": "72/80",
-        "false_unmatched_alert_rate": 0.268,
-        "false_unmatched_alert_n": "41/153",
-        "mistaken_promotion_rate": 0.4,
-        "mistaken_promotion_n": "16/40"
+        "hidden_ais_recovery_rate": 0.8333,
+        "hidden_ais_recovery_n": "50/60",
+        "false_unmatched_alert_rate": 0.3382,
+        "false_unmatched_alert_n": "46/136",
+        "mistaken_promotion_rate": 0.15,
+        "mistaken_promotion_n": "6/40"
+      }
+    },
+    {
+      "incident_id": "case_0006",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8444,
+        "hidden_ais_recovery_n": "38/45",
+        "false_unmatched_alert_rate": 0.3091,
+        "false_unmatched_alert_n": "17/55",
+        "mistaken_promotion_rate": null,
+        "mistaken_promotion_n": "0/0"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8929,
+        "hidden_ais_recovery_n": "25/28",
+        "false_unmatched_alert_rate": 0.3902,
+        "false_unmatched_alert_n": "16/41",
+        "mistaken_promotion_rate": null,
+        "mistaken_promotion_n": "0/0"
+      }
+    },
+    {
+      "incident_id": "case_0007",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.7778,
+        "hidden_ais_recovery_n": "56/72",
+        "false_unmatched_alert_rate": 0.2542,
+        "false_unmatched_alert_n": "30/118",
+        "mistaken_promotion_rate": 0.2,
+        "mistaken_promotion_n": "8/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8659,
+        "hidden_ais_recovery_n": "71/82",
+        "false_unmatched_alert_rate": 0.1917,
+        "false_unmatched_alert_n": "23/120",
+        "mistaken_promotion_rate": 0.1176,
+        "mistaken_promotion_n": "4/34"
+      }
+    },
+    {
+      "incident_id": "case_0008",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.7286,
+        "hidden_ais_recovery_n": "51/70",
+        "false_unmatched_alert_rate": 0.3025,
+        "false_unmatched_alert_n": "36/119",
+        "mistaken_promotion_rate": 0.325,
+        "mistaken_promotion_n": "13/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8804,
+        "hidden_ais_recovery_n": "81/92",
+        "false_unmatched_alert_rate": 0.121,
+        "false_unmatched_alert_n": "15/124",
+        "mistaken_promotion_rate": 0.5294,
+        "mistaken_promotion_n": "18/34"
+      }
+    },
+    {
+      "incident_id": "case_0009",
+      "operating_point": {
+        "gate_radius_deg": 0.02,
+        "contact_position_noise_deg": 0.012,
+        "detector_miss_rate": 0.15,
+        "false_detection_rate": 0.15,
+        "hide_fraction_selective": 0.3,
+        "coverage_failure_radius_deg": 0.25
+      },
+      "selective": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8305,
+        "hidden_ais_recovery_n": "49/59",
+        "false_unmatched_alert_rate": 0.2581,
+        "false_unmatched_alert_n": "24/93",
+        "mistaken_promotion_rate": 0.375,
+        "mistaken_promotion_n": "15/40"
+      },
+      "coverage_failure": {
+        "n_runs": 40,
+        "hidden_ais_recovery_rate": 0.8269,
+        "hidden_ais_recovery_n": "43/52",
+        "false_unmatched_alert_rate": 0.2083,
+        "false_unmatched_alert_n": "15/72",
+        "mistaken_promotion_rate": 0.1786,
+        "mistaken_promotion_n": "5/28"
       }
     }
   ],
@@ -509,20 +509,20 @@
     {
       "incident_id": "case_0001",
       "applicable": true,
-      "recommended_horizon_h": 3,
-      "least_informative_horizon_h": 12,
-      "separation_at_recommended": 0.2456,
-      "separation_at_least_informative": 0.0001,
-      "recommendation_helped": true,
+      "recommended_horizon_h": 24,
+      "least_informative_horizon_h": 3,
+      "separation_at_recommended": 0.0126,
+      "separation_at_least_informative": 0.0754,
+      "recommendation_helped": false,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     },
     {
       "incident_id": "case_0002",
       "applicable": true,
       "recommended_horizon_h": 3,
-      "least_informative_horizon_h": 24,
-      "separation_at_recommended": 0.5712,
-      "separation_at_least_informative": 0.2527,
+      "least_informative_horizon_h": 18,
+      "separation_at_recommended": 0.3409,
+      "separation_at_least_informative": 0.1316,
       "recommendation_helped": true,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     },
@@ -534,21 +534,21 @@
     {
       "incident_id": "case_0004",
       "applicable": true,
-      "recommended_horizon_h": 24,
-      "least_informative_horizon_h": 6,
-      "separation_at_recommended": 0.0429,
-      "separation_at_least_informative": 0.079,
-      "recommendation_helped": false,
+      "recommended_horizon_h": 3,
+      "least_informative_horizon_h": 9,
+      "separation_at_recommended": -0.0098,
+      "separation_at_least_informative": -0.0412,
+      "recommendation_helped": true,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     },
     {
       "incident_id": "case_0005",
       "applicable": true,
-      "recommended_horizon_h": 3,
-      "least_informative_horizon_h": 24,
-      "separation_at_recommended": 0.5909,
-      "separation_at_least_informative": 0.2971,
-      "recommendation_helped": true,
+      "recommended_horizon_h": 24,
+      "least_informative_horizon_h": 9,
+      "separation_at_recommended": 0.0407,
+      "separation_at_least_informative": 0.0592,
+      "recommendation_helped": false,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     },
     {
@@ -560,30 +560,30 @@
       "incident_id": "case_0007",
       "applicable": true,
       "recommended_horizon_h": 3,
-      "least_informative_horizon_h": 24,
-      "separation_at_recommended": 0.5914,
-      "separation_at_least_informative": 0.3052,
-      "recommendation_helped": true,
+      "least_informative_horizon_h": 18,
+      "separation_at_recommended": -0.0978,
+      "separation_at_least_informative": -0.0734,
+      "recommendation_helped": false,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     },
     {
       "incident_id": "case_0008",
       "applicable": true,
-      "recommended_horizon_h": 3,
-      "least_informative_horizon_h": 18,
-      "separation_at_recommended": 0.583,
-      "separation_at_least_informative": 0.3387,
-      "recommendation_helped": true,
+      "recommended_horizon_h": 24,
+      "least_informative_horizon_h": 9,
+      "separation_at_recommended": 0.0983,
+      "separation_at_least_informative": 0.1189,
+      "recommendation_helped": false,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     },
     {
       "incident_id": "case_0009",
       "applicable": true,
-      "recommended_horizon_h": 3,
-      "least_informative_horizon_h": 24,
-      "separation_at_recommended": 0.2515,
-      "separation_at_least_informative": 0.1665,
-      "recommendation_helped": true,
+      "recommended_horizon_h": 24,
+      "least_informative_horizon_h": 3,
+      "separation_at_recommended": -0.0173,
+      "separation_at_least_informative": 0.0735,
+      "recommendation_helped": false,
       "note": "Separation is IoU(leading hypothesis, held-out observation) minus IoU(runner-up, held-out observation). Larger is better. A single synthetic held-out observation per case is a weak test and is reported per case rather than averaged into a headline number."
     }
   ],
@@ -634,5 +634,275 @@
       "preprocessing_note": "The U-Net sees raw scenes; the classical baseline applies Lee speckle filtering before thresholding. The comparison is therefore between two complete detectors, not two architectures.",
       "training_set_note": "Trained on 60 oil-bearing 128x128 patches. That is a small positive set for a segmentation network, and overfitting is the expected failure mode; the test-split figures are the ones to read."
     }
+  },
+  "leak_audit": {
+    "flag_at": 3,
+    "n_source_present": 7,
+    "rules": [
+      {
+        "rule": "only vessel with a unique fix count",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "lowest fix count",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest fix count",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0005"
+        ]
+      },
+      {
+        "rule": "highest fix count",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-highest fix count",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0001"
+        ]
+      },
+      {
+        "rule": "lowest first fix time",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest first fix time",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0001"
+        ]
+      },
+      {
+        "rule": "highest first fix time",
+        "hits": 2,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0004",
+          "case_0009"
+        ]
+      },
+      {
+        "rule": "second-highest first fix time",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0005"
+        ]
+      },
+      {
+        "rule": "lowest last fix time",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest last fix time",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "highest last fix time",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-highest last fix time",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "lowest track span",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest track span",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0005"
+        ]
+      },
+      {
+        "rule": "highest track span",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-highest track span",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0001"
+        ]
+      },
+      {
+        "rule": "lowest actual speed",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest actual speed",
+        "hits": 2,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0001",
+          "case_0002"
+        ]
+      },
+      {
+        "rule": "highest actual speed",
+        "hits": 1,
+        "n": 7,
+        "flagged": false,
+        "cases": [
+          "case_0004"
+        ]
+      },
+      {
+        "rule": "second-highest actual speed",
+        "hits": 3,
+        "n": 7,
+        "flagged": true,
+        "cases": [
+          "case_0005",
+          "case_0007",
+          "case_0009"
+        ]
+      },
+      {
+        "rule": "lowest straightness",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest straightness",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "highest straightness",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-highest straightness",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "lowest reported-vs-actual speed gap",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest reported-vs-actual speed gap",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "highest reported-vs-actual speed gap",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-highest reported-vs-actual speed gap",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "lowest closest approach to the slick",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-lowest closest approach to the slick",
+        "hits": 4,
+        "n": 7,
+        "flagged": true,
+        "cases": [
+          "case_0001",
+          "case_0002",
+          "case_0008",
+          "case_0009"
+        ]
+      },
+      {
+        "rule": "highest closest approach to the slick",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "second-highest closest approach to the slick",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      }
+    ],
+    "chance_p_per_rule": 0.0806,
+    "chance_expected_flags": 2.66,
+    "any_flagged": true,
+    "note": "Rules use track bookkeeping only, no physics. Ties count as misses. A rule picking the true source in 3 or more cases is flagged as a leak."
   }
 }

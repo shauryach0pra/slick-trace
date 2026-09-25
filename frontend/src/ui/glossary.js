@@ -77,8 +77,8 @@ export const CAPTIONS = {
   // basemap
   basemap: 'The real map under this case: satellite imagery when an Esri key is set, otherwise the '
     + 'real coastline on a plain sea. Nothing from the case is drawn on it yet.',
-  basemapGeography: 'The case’s own coastline and sensitive areas are synthetic and do not follow the '
-    + 'real coast, so later overlays are drawn against both.',
+  basemapGeography: 'The case uses this real coastline. Its vessels, slick and sensitive areas are '
+    + 'synthetic, placed on real geography: at sea, or along the shore where that is where they belong.',
 
   // ask
   ask: 'Answers come from fixed question templates over this case’s files, each with its source cited. '

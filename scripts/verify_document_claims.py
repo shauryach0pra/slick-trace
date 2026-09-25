@@ -14,14 +14,16 @@ sp, sa = V["attribution"]["source_present"], V["attribution"]["source_absent"]
 
 check("source-present n",        sp["n"], 7)
 check("method top-1",            sp["method_top1"], 7)
-check("naive top-1",             sp["naive_top1"], 0)
-check("McNemar p",               sp["mcnemar"]["p_value"], 0.0156, 1e-6)
+check("naive top-1",             sp["naive_top1"], 1)
+check("McNemar p",               sp["mcnemar"]["p_value"], 0.0312, 1e-6)
 check("source-absent n",         sa["n"], 2)
-check("correct abstentions",     sa["correct_abstentions"], 2)
-check("false named",             sa["false_named_attributions"], 0)
+check("correct abstentions",     sa["correct_abstentions"], 1)
+check("false named",             sa["false_named_attributions"], 1)
 check("NLP total",               V["nlp"]["n"], 40)
 check("NLP passed",              V["nlp"]["n_pass"], 40)
 check("NLP refusals",            V["nlp"]["n_refusal"], 11)
+check("leak audit rules flagged", sum(r["flagged"] for r in V["leak_audit"]["rules"]), 2)
+check("no rule near 7/7",        max(r["hits"] for r in V["leak_audit"]["rules"]) < 6, True)
 
 d = V["detection"]
 check("classical val IoU",       round(d["baseline_val"]["iou_on_oil"],3), 0.857, 0.002)
@@ -52,11 +54,11 @@ check("max scene IoU <= 0.99", max(ious) <= 0.99, True)
 
 check("assumptions",
       int(subprocess.run("grep -c '^### A' docs/assumptions_register.md",
-          shell=True, capture_output=True, text=True).stdout.strip()), 20)
+          shell=True, capture_output=True, text=True).stdout.strip()), 22)
 
 t = subprocess.run("python3 -m pytest tests/ -q 2>&1 | tail -2",
                    shell=True, capture_output=True, text=True).stdout
-check("230 tests pass", "230 passed" in t, True)
+check("294 tests pass", "294 passed" in t, True)
 
 for f in ("data/geo/coastline_mumbai.json", "data/detection/unet.pt",
           "slicktrace_core/adapters/marinecadastre.py",

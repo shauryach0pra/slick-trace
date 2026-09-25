@@ -3,49 +3,49 @@
   "method": "naive_nearest_at_observation",
   "ranking": [
     {
-      "vessel_key": "419369344",
-      "distance_deg": 0.004208053264996832
+      "vessel_key": "419643687",
+      "distance_deg": 0.0036887183687575958
     },
     {
-      "vessel_key": "419255379",
-      "distance_deg": 0.01880882868020559
+      "vessel_key": "419918411",
+      "distance_deg": 0.21887318584830417
     },
     {
-      "vessel_key": "419569999",
-      "distance_deg": 0.15250328436842972
+      "vessel_key": "419224568",
+      "distance_deg": 0.2272446581772797
     },
     {
-      "vessel_key": "419629253",
-      "distance_deg": 0.21888760108289787
+      "vessel_key": "419407863",
+      "distance_deg": 0.31034208430867094
     },
     {
-      "vessel_key": "419625471",
-      "distance_deg": 0.364219491833351
+      "vessel_key": "419933538",
+      "distance_deg": 0.3620010562971935
     },
     {
-      "vessel_key": "419462109",
-      "distance_deg": 0.3942121319872146
+      "vessel_key": "419603105",
+      "distance_deg": 0.3703941234231861
     },
     {
-      "vessel_key": "419243120",
-      "distance_deg": 0.4054824322917781
+      "vessel_key": "419602854",
+      "distance_deg": 0.5239227846164871
     },
     {
-      "vessel_key": "419623942",
-      "distance_deg": 0.4753494916002182
+      "vessel_key": "419745959",
+      "distance_deg": 0.704594889507279
     },
     {
-      "vessel_key": "419302866",
-      "distance_deg": 0.4773609820538372
+      "vessel_key": "419334550",
+      "distance_deg": 0.7091991858676439
     },
     {
-      "vessel_key": "419210002",
-      "distance_deg": 0.7358725506973481
+      "vessel_key": "419298967",
+      "distance_deg": 0.7376240164000053
     },
     {
-      "vessel_key": "419644041",
-      "distance_deg": 0.7412360108515558
+      "vessel_key": "419202023",
+      "distance_deg": 0.7991311278072316
     }
   ],
-  "top_candidate_id": "419369344"
+  "top_candidate_id": "419643687"
 }

@@ -32,10 +32,10 @@
   "state_rule": "Membership is decided per queried time (inside, outside, no_data) and then summarised. candidate: inside the envelope at one or more queried times. excluded: track data at every queried time and never inside. unassessed: never inside where track data exists, and no track data at one or more queried times. Hours without data are missing evidence; they cannot exclude a vessel.",
   "assessments": [
     {
-      "vessel_key": "419680736",
+      "vessel_key": "419378324",
       "status": "unassessed",
       "first_entry_hours_before": null,
-      "reason": "no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
+      "reason": "no track data at 13 of 25 queried times; track data 11 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
       "inside_at": [],
       "hourly_state": [
         "outside",
@@ -49,7 +49,7 @@
         "outside",
         "outside",
         "outside",
-        "no_data",
+        "outside",
         "no_data",
         "no_data",
         "no_data",
@@ -64,63 +64,20 @@
         "no_data",
         "no_data"
       ],
-      "hours_with_data": 11,
+      "hours_with_data": 12,
       "data_intervals_hours_before": [
         [
-          10.0,
+          11.0,
           0.0
         ]
       ]
     },
     {
-      "vessel_key": "419348914",
-      "status": "unassessed",
-      "first_entry_hours_before": null,
-      "reason": "no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
-      "inside_at": [],
-      "hourly_state": [
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "outside",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data"
-      ],
-      "hours_with_data": 11,
-      "data_intervals_hours_before": [
-        [
-          10.0,
-          0.0
-        ]
-      ]
-    },
-    {
-      "vessel_key": "419554138",
+      "vessel_key": "419586236",
       "status": "candidate",
       "first_entry_hours_before": 10.0,
-      "reason": "inside envelope at 4 of 25 queried times",
+      "reason": "inside envelope at 2 of 25 queried times",
       "inside_at": [
-        7.0,
-        8.0,
         9.0,
         10.0
       ],
@@ -132,8 +89,8 @@
         "outside",
         "outside",
         "outside",
-        "inside",
-        "inside",
+        "outside",
+        "outside",
         "inside",
         "inside",
         "no_data",
@@ -160,65 +117,17 @@
       ]
     },
     {
-      "vessel_key": "419336692",
+      "vessel_key": "419919665",
       "status": "candidate",
-      "first_entry_hours_before": 9.0,
-      "reason": "inside envelope at 7 of 25 queried times",
+      "first_entry_hours_before": 1.0,
+      "reason": "inside envelope at 2 of 25 queried times",
       "inside_at": [
-        3.0,
-        4.0,
-        5.0,
-        6.0,
-        7.0,
-        8.0,
-        9.0
-      ],
-      "hourly_state": [
-        "no_data",
-        "no_data",
-        "no_data",
-        "inside",
-        "inside",
-        "inside",
-        "inside",
-        "inside",
-        "inside",
-        "inside",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data",
-        "no_data"
-      ],
-      "hours_with_data": 7,
-      "data_intervals_hours_before": [
-        [
-          9.0,
-          3.0
-        ]
-      ]
-    },
-    {
-      "vessel_key": "419824090",
-      "status": "candidate",
-      "first_entry_hours_before": 0.0,
-      "reason": "inside envelope at 1 of 25 queried times",
-      "inside_at": [
-        0.0
+        0.0,
+        1.0
       ],
       "hourly_state": [
         "inside",
-        "outside",
+        "inside",
         "outside",
         "no_data",
         "no_data",
@@ -252,10 +161,10 @@
       ]
     },
     {
-      "vessel_key": "419580940",
+      "vessel_key": "419785821",
       "status": "unassessed",
       "first_entry_hours_before": null,
-      "reason": "no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
+      "reason": "no track data at 10 of 25 queried times; track data 14 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
       "inside_at": [],
       "hourly_state": [
         "outside",
@@ -269,6 +178,53 @@
         "outside",
         "outside",
         "outside",
+        "outside",
+        "outside",
+        "outside",
+        "outside",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data"
+      ],
+      "hours_with_data": 15,
+      "data_intervals_hours_before": [
+        [
+          14.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "vessel_key": "419282834",
+      "status": "candidate",
+      "first_entry_hours_before": 9.0,
+      "reason": "inside envelope at 5 of 25 queried times",
+      "inside_at": [
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0
+      ],
+      "hourly_state": [
+        "outside",
+        "outside",
+        "outside",
+        "outside",
+        "outside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "no_data",
         "no_data",
         "no_data",
         "no_data",
@@ -284,10 +240,65 @@
         "no_data",
         "no_data"
       ],
-      "hours_with_data": 11,
+      "hours_with_data": 10,
       "data_intervals_hours_before": [
         [
-          10.0,
+          9.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "vessel_key": "419146624",
+      "status": "candidate",
+      "first_entry_hours_before": 12.0,
+      "reason": "inside envelope at 13 of 25 queried times",
+      "inside_at": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0
+      ],
+      "hourly_state": [
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "inside",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data",
+        "no_data"
+      ],
+      "hours_with_data": 13,
+      "data_intervals_hours_before": [
+        [
+          12.0,
           0.0
         ]
       ]

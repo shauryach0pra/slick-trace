@@ -53,7 +53,7 @@ slicktrace/
 │   ├── eval_unet.py      # U-Net evaluation on test splits
 │   ├── fit_calibration.py # Ensemble calibration against held-out set
 │   └── verify_document_claims.py # Document claim verification
-├── tests/                # Comprehensive test suite (217 tests)
+├── tests/                # Comprehensive test suite (294 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
 ```
@@ -67,7 +67,7 @@ slicktrace/
 - NumPy and SciPy for numerical computations and particle tracking
 - Matplotlib for visualization and envelope generation
 - Pydantic for data validation and schema enforcement
-- Pytest for comprehensive testing (217 tests covering invariants, API, and NLP)
+- Pytest for comprehensive testing (294 tests covering invariants, API, NLP and benchmark fairness)
 
 **Frontend:**
 - React 19 with Vite for modern build tooling
@@ -219,7 +219,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 | Determinism | regenerate, diff analysis artifacts | byte-identical, 9 cases, verified in CI on Ubuntu x86-64 |
 | Test suite | `python3 -m pytest tests/ -q` | 217 passed, 5 skipped |
 | Dependency pins | every `==` vs installed | all match |
-| Validation | `python3 scripts/run_validation.py` | 7/7 attribution (naive 0/7, exact McNemar p = 0.0156), 2/2 abstentions, 40/40 NLP |
+| Validation | `python3 scripts/run_validation.py` | 7/7 attribution (naive 1/7, exact McNemar p = 0.0312), 1/2 abstentions, 2 of 33 leak-audit rules flagged, 40/40 NLP |
 | Acceptance | `python3 scripts/smoke_test.py` | 6/6 |
 | API | 16 endpoints + 404 paths | pass, no 500s |
 | Frontend | `npm run lint && npm run build` | 0 errors, 2 warnings |
@@ -233,8 +233,8 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 ### Key Features
 
 **Attribution Accuracy:**
-- Forward replay achieves 7/7 Top-1 on source-present cases vs 0/7 for naive proximity (exact McNemar p = 0.0156)
-- Correctly abstains on 2/2 source-absent cases
+- Forward replay achieves 7/7 Top-1 on source-present cases vs 1/7 for naive proximity (exact McNemar p = 0.0312), on a benchmark audited for leaked answers (assumptions register A21)
+- Abstains on 1 of 2 source-absent cases; in the other a passer-by clears the fit gate and is named, a known limitation recorded in the assumptions register (A10)
 - Uses shared ensemble perturbations for fair candidate comparison
 - Dispersion grows with elapsed drift time in both generator and simulator
 
@@ -257,7 +257,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 **Security & Privacy:**
 - Ground truth never exposed to API or UI
 - `_strip_truth` middleware removes any stray ground-truth fields
-- Neutral vessel identifiers prevent answer leakage
+- Neutral vessel identifiers and role-independent track bookkeeping prevent answer leakage, checked by a leak audit in every validation
 - No outbound network calls in served application
 - Self-hosted fonts for offline capability
 
@@ -302,7 +302,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 This system runs on synthetic data by design: the generator owns the ground
 truth, which is what makes the decoy, absent-source and crowded-traffic families
 testable at all. No real dataset can tell you which vessel actually caused a
-given slick, so the measured 7/7 against 0/7 could not be produced on real
+given slick, so the measured 7/7 against 1/7 could not be produced on real
 imagery.
 
 The path to real data is an adapter, not a rewrite — every pipeline stage reads
