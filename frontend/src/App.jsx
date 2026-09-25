@@ -14,6 +14,7 @@ import ForecastPanel from './ForecastPanel';
 import CoveragePanel from './CoveragePanel';
 import NextObservationPanel from './NextObservationPanel';
 import ThemeToggle from './ThemeToggle';
+import ConclusionGraph from './ConclusionGraph';
 
 export default function App() {
   const [incidents, setIncidents] = useState([]);
@@ -140,6 +141,8 @@ export default function App() {
                 </a>
               </div>
             )}
+            <ConclusionGraph key={incidentId} attribution={attribution} naive={naiveBaseline}
+                             report={report} detection={detection} fragility={fragility} />
             <AskConsole incidentId={incidentId} api={api} />
           </div>
         </div>

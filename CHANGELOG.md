@@ -108,6 +108,15 @@ motion and reduced transparency are honoured. Shell rules moved out of
 `dashboard.css`, whose translucent white fills now use a token so dark mode
 holds. No data, request or case logic changed.
 
+**Conclusion graph rebuilt from real fields.** The graph removed on 25 September
+for reading fields no artifact has returns as the same side-scrolling chain, in
+pipeline order:
+detection, historical filtering, forward replay beside the proximity baseline,
+rank fragility, finding. Each value is an artifact field (status_counts,
+discrimination, lead_retained_fraction, smallest_flip, abstention gate); a stage
+whose artifact has not loaded says so. It now shows what the old one hid: on
+case_0009 the top two candidates are not separated.
+
 ---
 
 ## 13 September 2026
