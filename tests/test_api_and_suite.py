@@ -113,6 +113,53 @@ def test_envelope_rejects_out_of_range_time():
     assert client.get(f"/api/incidents/{CASE}/envelope?hours_before=999").status_code == 422
 
 
+def test_envelope_timeline_agrees_with_historical_mapping():
+    """The replay and the historical filtering come from one membership pass:
+    every frame's per-vessel state must equal that vessel's hourly_state."""
+    for cid in sorted(os.listdir(os.path.join("data", "cases"))):
+        case_dir = os.path.join("data", "cases", cid)
+        with open(os.path.join(case_dir, "envelope_timeline.json")) as f:
+            tl = json.load(f)
+        with open(os.path.join(case_dir, "historical_mapping.json")) as f:
+            hm = json.load(f)
+        assert [fr["hours_before_acquisition"] for fr in tl["frames"]] == hm["hours_queried"]
+        assert tl["inclusion_radius_deg"] == hm["inclusion_radius_deg"]
+        by_key = {a["vessel_key"]: a for a in hm["assessments"]}
+        for i, frame in enumerate(tl["frames"]):
+            for v in frame["vessels"]:
+                a = by_key[v["vessel_key"]]
+                assert v["at_this_time"] == a["hourly_state"][i], (cid, v["vessel_key"], i)
+                assert v["overall_status"] == a["status"]
+
+
+def test_envelope_endpoints_do_not_simulate_at_request_time(monkeypatch):
+    """Serving the replay, or answering a time-window question, must not rerun
+    the backward simulation, the membership pass or the density estimate."""
+    import backend.app as api_module
+    import slicktrace_core.envelope_density as density_module
+    import slicktrace_core.hindcast as hindcast_module
+    import slicktrace_core.nlp_query as nlp_module
+
+    def refuse(*_args, **_kwargs):
+        raise AssertionError("simulation at request time")
+
+    for mod in (hindcast_module, api_module, nlp_module):
+        for name in ("build_backward_envelope", "vessel_hourly_states", "assess_vessels"):
+            monkeypatch.setattr(mod, name, refuse, raising=False)
+    for mod in (density_module, api_module, nlp_module):
+        monkeypatch.setattr(mod, "density_contours", refuse, raising=False)
+
+    timeline = client.get(f"/api/incidents/{CASE}/envelope-timeline").json()
+    assert len(timeline["frames"]) == 25
+    for h in (0, 7, 24):
+        resp = client.get(f"/api/incidents/{CASE}/envelope?hours_before={h}")
+        assert resp.status_code == 200
+        assert resp.json()["time_utc"] == timeline["frames"][h]["time_utc"]
+    answer = client.post(f"/api/incidents/{CASE}/ask", json={
+        "question": "Which vessels crossed the likely origin zone from 02:00 to 05:00 UTC?"}).json()
+    assert answer["supported"] and "hourly_state" in answer["citations"][0]
+
+
 def test_ask_endpoint_returns_filters_and_citations():
     resp = client.post(f"/api/incidents/{CASE}/ask",
                        json={"question": "What is the top candidate and why?"})

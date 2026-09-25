@@ -34,9 +34,7 @@ from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
-import numpy as np
-from scipy.spatial import cKDTree
+from slicktrace_core.hindcast import _parse
 
 
 @dataclass
@@ -64,7 +62,6 @@ class CaseKB:
         self.coverage = self._load_optional("coverage_result.json")
         self.next_observation = self._load_optional("next_observation_result.json")
         self.tracks_by_key = {t["vessel_key"]: t for t in self.manifest["tracks"]}
-        self._envelope_snapshots = None  # computed lazily, only if a time-window query needs it
 
     def _load_optional(self, fname):
         path = os.path.join(self.case_dir, fname)
@@ -72,12 +69,6 @@ class CaseKB:
             return None
         with open(path) as f:
             return json.load(f)
-
-    @property
-    def envelope_snapshots(self):
-        if self._envelope_snapshots is None:
-            self._envelope_snapshots = build_backward_envelope(self.manifest)
-        return self._envelope_snapshots
 
 
 # ---------------------------------------------------------------- parsing --
@@ -168,31 +159,36 @@ def _resolve_time_window_vessels(kb: CaseKB, question: str) -> QueryResult:
     overlapping = [(s, e) for s, e in candidates if e >= window_start and s <= acquired]
     t_start, t_end = overlapping[0] if overlapping else candidates[0]
 
-    inclusion_radius = 0.045
+    # Per-time membership is read, not recomputed: historical_mapping.json holds
+    # every vessel's state at every queried hour, decided once in the pipeline
+    # by the same pass the historical filtering summarises.
+    hm = kb.historical_mapping
+    if not hm or "hours_queried" not in hm:
+        return QueryResult(question, "time_window_vessels", supported=False,
+                            answer="This case's historical mapping predates per-time envelope "
+                                   "membership. Rerun scripts/run_pipeline.py to produce it.")
+    states = {a["vessel_key"]: a["hourly_state"] for a in hm["assessments"]}
     hits = []
-    for snap in kb.envelope_snapshots:
-        if not (t_start <= snap.time_utc <= t_end):
+    for i, hours_before in enumerate(hm["hours_queried"]):
+        t = acquired - timedelta(hours=hours_before)
+        if not (t_start <= t <= t_end):
             continue
-        tree = cKDTree(np.column_stack([snap.particles_lon, snap.particles_lat]))
         for tr in kb.manifest["tracks"]:
-            pos = _interp_track_position(tr["fixes"], snap.time_utc)
-            if pos is None:
-                continue
-            dist, _ = tree.query([pos[0], pos[1]])
-            if dist <= inclusion_radius:
-                hits.append((tr["vessel_key"], snap.time_utc, float(dist)))
+            vessel_states = states.get(tr["vessel_key"])
+            if vessel_states and vessel_states[i] == "inside":
+                hits.append((tr["vessel_key"], t))
 
     filters = {"time_start_utc": t_start.isoformat(), "time_end_utc": t_end.isoformat(),
-               "inclusion_radius_deg": inclusion_radius}
+               "inclusion_radius_deg": hm["inclusion_radius_deg"]}
     if not hits:
         answer = (f"No vessels were found inside the origin envelope between "
                   f"{t_start.strftime('%H:%M')} and {t_end.strftime('%H:%M')} UTC.")
     else:
         seen = sorted({h[0] for h in hits})
-        detail = "; ".join(f"{v} at {t.strftime('%H:%M')} UTC" for v, t, _ in hits)
+        detail = "; ".join(f"{v} at {t.strftime('%H:%M')} UTC" for v, t in hits)
         answer = f"Vessels inside the origin envelope in this window: {', '.join(seen)}. ({detail})"
-    citations = [f"historical_mapping (recomputed) incident={kb.manifest['incident_id']}"] + \
-                [f"vessel={v} snapshot_time={t.isoformat()}" for v, t, _ in hits]
+    citations = [f"historical_mapping.json field=hourly_state incident={kb.manifest['incident_id']}"] + \
+                [f"vessel={v} snapshot_time={t.isoformat()}" for v, t in hits]
     return QueryResult(question, "time_window_vessels", filters, answer, citations)
 
 

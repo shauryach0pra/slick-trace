@@ -54,6 +54,11 @@ jobs:
       # a different OS and architecture, and that is what the reproducibility
       # claim rests on.
       #
+      # envelope_timeline.json is what the time slider shows. Its contours come
+      # from a kernel density estimate whose last digit can depend on the
+      # platform's linear algebra; coordinates are rounded to 5 decimals so the
+      # file should still match, and this diff is what establishes that.
+      #
       # Three categories are excluded, with reasons rather than silently:
       #   *.png   PNG encoding depends on the zlib build, so identical pixels
       #           serialise to a different byte stream on Ubuntu than on macOS.
@@ -72,6 +77,7 @@ jobs:
             'data/cases/*/attribution_result.json' \
             'data/cases/*/fragility_result.json' \
             'data/cases/*/historical_mapping.json' \
+            'data/cases/*/envelope_timeline.json' \
             'data/cases/*/coverage_result.json' \
             'data/cases/*/forecast_result.json' \
             'data/cases/*/next_observation_result.json' \

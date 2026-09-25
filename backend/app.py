@@ -2,11 +2,14 @@
 Slick Trace backend — wires slicktrace_core into a real API.
 
 Endpoints are intentionally thin: each reads artifacts already produced by the
-pipeline stages, or recomputes a cheap derived view (the backward envelope for
-the time slider), rather than re-implementing logic. This mirrors the
-masterplan's "versioned analysis services" architecture (p.13) — detection,
-hindcast, candidate replay, confidence checks and forecast stay separate,
-callable stages.
+pipeline stages rather than re-implementing logic. The time slider is served
+from envelope_timeline.json, which the historical-mapping stage writes; nothing
+is simulated per request. Three request-time views remain and are named here:
+/tracks resolves MMSI identity and AIS field quality, /probe reads the forcing
+file for one point, and /report assembles the committed artifacts with this
+session's query log. This mirrors the masterplan's "versioned analysis
+services" architecture (p.13) — detection, hindcast, candidate replay,
+confidence checks and forecast stay separate, callable stages.
 
 GROUND-TRUTH DISCIPLINE
     `truth.json` is never loaded here, and `_strip_truth` removes any field
@@ -32,7 +35,6 @@ from pydantic import BaseModel
 
 from slicktrace_core.ais_quality import validate_track
 from slicktrace_core.identity import parse_mmsi
-from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
 from slicktrace_core.nlp_query import CaseKB, ask as ask_nlp
 from slicktrace_core.report import build_report, render_markdown
 from slicktrace_core.case_contract import build_case
@@ -43,7 +45,6 @@ DATA_ROOT = os.path.join(REPO_ROOT, "data", "cases")
 app = FastAPI(title="Slick Trace API", version="0.2.0")
 
 _kb_cache: dict[str, CaseKB] = {}
-_envelope_cache: dict[str, list] = {}
 _query_log: dict[str, list[dict]] = {}
 
 
@@ -339,84 +340,41 @@ def probe_forcing(incident_id: str,
 def get_envelope(incident_id: str,
                  hours_before: float = Query(0.0, ge=0.0, le=24.0),
                  max_particles: int = Query(300, ge=20, le=600)):
-    """State of the backward origin envelope at one point in time, plus every
-    vessel's interpolated position then.
+    """The backward origin envelope at one queried hour, plus every vessel's
+    position and membership then.
 
-    This is what makes the UTC control a live instrument rather than a
-    pre-rendered filmstrip: the reviewer drags the slider and watches
-    candidates enter and leave the envelope. Three vessels excluded and two
-    retained is an argument; watching the exclusion happen as time rewinds is
-    the evidence.
+    Served from envelope_timeline.json, which the historical-mapping stage
+    writes from the same snapshots and membership pass it summarises. Nothing
+    is simulated here: the frame nearest the requested time is returned, so the
+    slider shows exactly the 25 hourly states the pipeline computed and the
+    determinism check covers.
     """
-    m = _load_json(incident_id, "manifest.json")
-    if m is None:
-        raise HTTPException(404, "manifest not found")
-
-    if incident_id not in _envelope_cache:
-        _envelope_cache[incident_id] = build_backward_envelope(m)
-    snapshots = _envelope_cache[incident_id]
-
-    snap = min(snapshots, key=lambda s: abs(s.hours_before_acquisition - hours_before))
-    hm = _load_json(incident_id, "historical_mapping.json") or {}
-    status_by_vessel = {a["vessel_key"]: a["status"] for a in hm.get("assessments", [])}
-
-    # Probability contours over the particle cloud. A cloud of dots says
-    # "somewhere around here"; contours enclosing 50/75/90% of the density say
-    # how much of the probability sits where, which is the judgement the
-    # envelope exists to support.
-    from slicktrace_core.envelope_density import density_contours
-    contours = density_contours(snap.particles_lon, snap.particles_lat)
-
-    import numpy as np
-    from scipy.spatial import cKDTree
-    tree = cKDTree(np.column_stack([snap.particles_lon, snap.particles_lat]))
-    inclusion_radius = 0.045
-
-    vessels = []
-    for t in m["tracks"]:
-        pos = _interp_track_position(t["fixes"], snap.time_utc)
-        if pos is None:
-            vessels.append({"vessel_key": t["vessel_key"], "lon": None, "lat": None,
-                            "in_envelope": None, "overall_status": status_by_vessel.get(
-                                t["vessel_key"], "unassessed"),
-                            "at_this_time": "no_data"})
-            continue
-        dist, _ = tree.query([pos[0], pos[1]])
-        vessels.append({
-            "vessel_key": t["vessel_key"],
-            "lon": round(float(pos[0]), 5), "lat": round(float(pos[1]), 5),
-            "distance_to_envelope_deg": round(float(dist), 5),
-            "in_envelope": bool(dist <= inclusion_radius),
-            "overall_status": status_by_vessel.get(t["vessel_key"], "unassessed"),
-            "at_this_time": "inside" if dist <= inclusion_radius else "outside",
-        })
-
-    step = max(1, len(snap.particles_lon) // max_particles)
+    tl = _require(incident_id, "envelope_timeline.json", "envelope timeline")
+    frame = min(tl["frames"], key=lambda f: abs(f["hours_before_acquisition"] - hours_before))
+    step = max(1, len(frame["particles"]) // max_particles)
     return {
         "incident_id": incident_id,
-        "hours_before_acquisition": snap.hours_before_acquisition,
-        "time_utc": snap.time_utc.isoformat(),
-        "acquired_utc": m["acquired_utc"],
-        "layer_status": "modelled" if snap.hours_before_acquisition > 0 else "observed",
-        "hindcast": snap.hours_before_acquisition > 0,
-        "inclusion_radius_deg": inclusion_radius,
-        "particles": [[round(float(lo), 5), round(float(la), 5)]
-                      for lo, la in zip(snap.particles_lon[::step], snap.particles_lat[::step])],
-        # Contours are computed on the full particle set, not the decimated one
-        # sent to the client: subsampling for bandwidth should not change where
-        # the probability mass is said to be.
-        "density_contours": contours,
-        "density_note": ("Contours enclose 50/75/90% of the estimated density over the "
-                          "backward particles. They describe where this transport model "
-                          "places the mass and inherit its assumptions; a tight contour "
-                          "means the model is confident, not that the answer is certain."),
-        "vessels": vessels,
-        "note": ("Envelope width grows with hours-back because release time, duration "
-                 "and diffusivity are unknown. It is not converging on a point source. "
-                 "At the longest lookbacks the outer contour runs past the frame: the "
-                 "envelope genuinely extends beyond the imagery, and is drawn clipped "
-                 "rather than truncated to fit."),
+        "hours_before_acquisition": frame["hours_before_acquisition"],
+        "time_utc": frame["time_utc"],
+        "acquired_utc": tl["acquired_utc"],
+        "layer_status": frame["layer_status"],
+        "hindcast": frame["hindcast"],
+        "inclusion_radius_deg": tl["inclusion_radius_deg"],
+        "particles": frame["particles"][::step],
+        # Contours were computed on the full particle set, not the decimated one
+        # sent to the client: subsampling for bandwidth does not move the mass.
+        "density_contours": frame["density_contours"],
+        "density_note": tl["density_note"],
+        "vessels": frame["vessels"],
+        "note": tl["note"],
     }
+
+
+@app.get("/api/incidents/{incident_id}/envelope-timeline")
+def get_envelope_timeline(incident_id: str):
+    """All 25 hourly frames at once, so an interface can scrub without a
+    request per step."""
+    return _require(incident_id, "envelope_timeline.json", "envelope timeline")
 
 
 # ------------------------------------------------------------------- ask --

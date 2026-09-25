@@ -5,10 +5,10 @@ import MetricInfo from './MetricInfo';
  * Live historical map with a draggable UTC control (masterplan p.8, p.13).
  *
  * This replaces the earlier static filmstrip. The distinction is the whole
- * demonstration: three vessels excluded and two retained is an argument;
- * watching the exclusion happen as time rewinds is the evidence. The slider
- * queries the backward envelope for the requested time rather than stepping
- * through pre-rendered frames, so a reviewer can stop anywhere.
+ * demonstration: vessels filtered out and vessels retained is an argument;
+ * watching membership change as time rewinds is the evidence. The slider
+ * selects one of the 25 hourly states the pipeline computed and serves
+ * (envelope_timeline.json); nothing is interpolated between them.
  *
  * Accessibility: the slider is a native range input, so it is keyboard
  * operable (arrows, Home, End) with no extra handling, and the same state is

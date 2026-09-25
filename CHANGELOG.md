@@ -39,6 +39,23 @@ incident; each section equals what its per-stage endpoint already serves, a
 missing stage is an actionable 404, and a contract mismatch is a 500 naming it.
 Nothing in the interface reads it yet. Three tests added; 215 pass.
 
+**Time-slider replay served from an artifact, not computed per request.**
+`/api/incidents/{id}/envelope` rebuilt the backward simulation, re-ran the
+density contours and re-tested every vessel on each request, with its own copy
+of the 0.045° inclusion radius; the query console did the same for time-window
+questions with a third copy. None of it was covered by the determinism check.
+The historical-mapping stage now also writes `envelope_timeline.json` (25 hourly
+frames: particles, 50/75/90% contours, every vessel's position and membership)
+from the same snapshots and per-time pass it summarises. `/envelope` serves the
+nearest frame, `/envelope-timeline` serves all 25, and time-window questions
+read `hourly_state` from `historical_mapping.json`. The served API no longer
+reads the ground-truth mask at request time; the pipeline still seeds the
+hindcast from it. Measured: every frame's per-vessel state equals the historical
+mapping's in all nine cases; the old and new `/envelope` agree on every field
+for all 25 hours of all nine cases, contours to the 5-decimal rounding the
+artifact applies; the NLP suite returns the same 40 answers. CI now diffs the
+new artifact. Two tests added; 217 pass.
+
 ---
 
 ## 13 September 2026

@@ -365,7 +365,7 @@ def time_template_query() -> dict | None:
 
     kb = CaseKB(case_dir)
     ask(kb, cheap_q)
-    ask(kb, heavy_q)  # prime the envelope cache
+    ask(kb, heavy_q)  # prime
 
     def median_ms(question, n=20):
         samples = []
@@ -794,9 +794,9 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
               f"{nlp_timing['cold_ms']:.1f} ms | < 2 s |")
             w(f"| Template query, warm — lookup intent (median of {nlp_timing['n_warm']}) | "
               f"{nlp_timing['warm_median_ms']:.2f} ms | < 2 s |")
-            w(f"| Time-window query, cold — fresh KB + envelope build | "
+            w(f"| Time-window query, cold — fresh KB, reads per-time state | "
               f"{nlp_timing['heavy_cold_ms']:.1f} ms | < 2 s |")
-            w(f"| Time-window query, warm — envelope cached (median of {nlp_timing['n_warm']}) | "
+            w(f"| Time-window query, warm (median of {nlp_timing['n_warm']}) | "
               f"{nlp_timing['heavy_warm_median_ms']:.1f} ms | < 2 s |")
         w("")
         stage_totals = {}
@@ -806,9 +806,11 @@ def render(attr, nlp, cov, nxt, det, nlp_timing=None) -> str:
         ranked = sorted(stage_totals.items(), key=lambda kv: -kv[1])[:3]
         w("Dominant stages across the run: "
           + ", ".join(f"{s} {v:.1f} s" for s, v in ranked)
-          + ". Cold and warm query times are reported separately because the "
-            "backward envelope is cached after its first computation, and quoting "
-            "only the warm number would overstate what a reviewer sees on first load.")
+          + ". Cold and warm query times are reported separately because a fresh "
+            "knowledge base loads the case's artifacts on first use, and quoting "
+            "only the warm number would overstate what a reviewer sees on first load. "
+            "Time-window queries read per-time envelope membership from "
+            "historical_mapping.json; nothing is simulated at query time.")
         w("")
         if rt["regenerated_from_seeds"]:
             w("> This run regenerated every case from its seed before timing, so the figures "

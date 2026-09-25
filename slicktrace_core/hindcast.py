@@ -186,7 +186,7 @@ def _describe_intervals(runs: list[list[float]]) -> str:
 
 
 def assess_vessels(manifest: dict, snapshots: list[EnvelopeSnapshot],
-                    inclusion_radius_deg: float = INCLUSION_RADIUS_DEG) -> list[VesselAssessment]:
+                    inclusion_radius_deg: float = INCLUSION_RADIUS_DEG, hourly=None) -> list[VesselAssessment]:
     """Summarise each vessel's per-time membership into one of three states.
 
       candidate   inside the envelope at one or more queried times
@@ -198,7 +198,7 @@ def assess_vessels(manifest: dict, snapshots: list[EnvelopeSnapshot],
     are missing evidence, and a vessel cannot be cleared on the strength of
     them (A7). Before 25 Sep 2026 a single covered time was enough to exclude.
     """
-    hourly = vessel_hourly_states(manifest, snapshots, inclusion_radius_deg)
+    hourly = hourly or vessel_hourly_states(manifest, snapshots, inclusion_radius_deg)
     hours = [s.hours_before_acquisition for s in snapshots]
     n = len(snapshots)
     results = []
@@ -238,7 +238,8 @@ def run_historical_mapping(case_dir: str, hours_back: int = 24) -> dict:
     with open(os.path.join(case_dir, "manifest.json")) as f:
         manifest = json.load(f)
     snapshots = build_backward_envelope(manifest, hours_back=hours_back)
-    assessments = assess_vessels(manifest, snapshots)
+    hourly = vessel_hourly_states(manifest, snapshots)
+    assessments = assess_vessels(manifest, snapshots, hourly=hourly)
 
     out = {
         "incident_id": manifest["incident_id"],
@@ -251,6 +252,12 @@ def run_historical_mapping(case_dir: str, hours_back: int = 24) -> dict:
     out_path = os.path.join(case_dir, "historical_mapping.json")
     with open(out_path, "w") as f:
         json.dump(out, f, indent=2, default=str)
+
+    # Same snapshots, same membership pass: the replay the interface scrubs
+    # through is this stage's output, not a second computation that could drift.
+    from slicktrace_core.envelope_timeline import write_envelope_timeline
+    write_envelope_timeline(case_dir, manifest, snapshots, hourly, assessments,
+                            INCLUSION_RADIUS_DEG)
     return out
 
 
