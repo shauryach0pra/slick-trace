@@ -34,6 +34,11 @@ is checked against `CASE_PLAN`: nine cases across five families (decoy x3,
 moving_discharge x2, absent_source x2, crowded, along_track_ribbon). Not yet
 served or read by the interface. Thirteen tests added; 212 pass.
 
+**Case served.** `GET /api/incidents/{id}/case` returns the contract for one
+incident; each section equals what its per-stage endpoint already serves, a
+missing stage is an actionable 404, and a contract mismatch is a 500 naming it.
+Nothing in the interface reads it yet. Three tests added; 215 pass.
+
 ---
 
 ## 13 September 2026

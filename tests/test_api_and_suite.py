@@ -159,3 +159,40 @@ def test_missing_stage_returns_actionable_404(tmp_path):
     finally:
         import shutil
         shutil.rmtree(empty, ignore_errors=True)
+
+
+# ------------------------------------------------------------------ case --
+
+def test_case_endpoint_serves_the_contract_for_every_case():
+    from slicktrace_core.case_contract import Case, build_case
+    ids = [i["incident_id"] for i in client.get("/api/incidents").json()]
+    assert len(ids) == 9
+    for iid in ids:
+        resp = client.get(f"/api/incidents/{iid}/case")
+        assert resp.status_code == 200, iid
+        Case.model_validate(resp.json())
+        assert resp.json() == build_case(os.path.join("data", "cases", iid)).model_dump(mode="json")
+
+
+def test_case_endpoint_sections_equal_the_per_stage_endpoints():
+    """Verbatim means verbatim: each section is byte-for-byte what its own
+    endpoint already serves."""
+    case = client.get(f"/api/incidents/{CASE}/case").json()
+    for section, path in (("baseline", "naive-baseline"), ("attribution", "attribution"),
+                          ("fragility", "fragility"), ("coverage", "coverage"),
+                          ("forecast", "forecast"), ("next_observation", "next-observation")):
+        assert case[section] == client.get(f"/api/incidents/{CASE}/{path}").json(), section
+
+
+def test_case_endpoint_missing_stage_returns_actionable_404():
+    empty = os.path.join("data", "cases", "_tmp_case_only_manifest")
+    os.makedirs(empty, exist_ok=True)
+    try:
+        with open(os.path.join(empty, "manifest.json"), "w") as f:
+            json.dump({"incident_id": "_tmp_case_only_manifest", "tracks": []}, f)
+        resp = client.get("/api/incidents/_tmp_case_only_manifest/case")
+        assert resp.status_code == 404
+        assert "run_pipeline" in resp.json()["detail"]
+    finally:
+        import shutil
+        shutil.rmtree(empty, ignore_errors=True)

@@ -35,6 +35,7 @@ from slicktrace_core.identity import parse_mmsi
 from slicktrace_core.hindcast import _interp_track_position, _parse, build_backward_envelope
 from slicktrace_core.nlp_query import CaseKB, ask as ask_nlp
 from slicktrace_core.report import build_report, render_markdown
+from slicktrace_core.case_contract import build_case
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(REPO_ROOT, "data", "cases")
@@ -95,6 +96,26 @@ def _require(incident_id: str, fname: str, stage: str) -> dict:
         raise HTTPException(404, f"{stage} has not been computed for this incident. "
                                  f"Run scripts/run_pipeline.py to produce it.")
     return _strip_truth(out)
+
+
+# ------------------------------------------------------------------ case --
+
+@app.get("/api/incidents/{incident_id}/case")
+def get_case(incident_id: str):
+    """The whole incident as one validated object (slicktrace_core.case_contract).
+
+    Assembled from the committed artifacts; nothing here computes. A missing
+    optional stage comes back null. An artifact that no longer matches the
+    contract is a 500 naming the mismatch, never a silently partial payload.
+    """
+    case_dir = _case_dir(incident_id)
+    try:
+        case = build_case(case_dir)
+    except FileNotFoundError as e:
+        raise HTTPException(404, f"{e}. Run scripts/run_pipeline.py to produce it.")
+    except ValueError as e:  # includes pydantic's ValidationError
+        raise HTTPException(500, f"{incident_id} does not match the Case contract: {e}")
+    return _strip_truth(case.model_dump(mode="json"))
 
 
 # ------------------------------------------------------------- incidents --
