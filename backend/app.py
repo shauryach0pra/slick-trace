@@ -131,6 +131,12 @@ def get_forecast_contours(incident_id: str):
     return _require(incident_id, "forecast_contours.json", "forecast contours")
 
 
+@app.get("/api/incidents/{incident_id}/track-display")
+def get_track_display(incident_id: str):
+    """Per-vessel gap windows and a rendering-only smoothed path."""
+    return _require(incident_id, "track_display.json", "track display")
+
+
 # ------------------------------------------------------------- incidents --
 
 @app.get("/api/incidents")

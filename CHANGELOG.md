@@ -83,6 +83,19 @@ across the nine envelope timelines joined two lobes into one polygon with a fals
 edge between them. Levels are now split at each loop; the single-loop rings are
 unchanged. Six tests added; 223 pass.
 
+**Track display: gap windows, rendering-only paths, no invented vessel type.**
+A new pipeline stage writes `track_display.json`. Per vessel it records every
+window inside the declared AIS window with no usable position report (leading,
+internal, trailing), counting sentinel positions as missing and wording them as
+no position reported rather than as an outage; a test holds the leading and
+trailing windows to exactly the hours the hindcast marks `no_data`. It adds a
+centripetal Catmull-Rom path through the fixes for drawing, never across a gap,
+with its largest departure from the straight segments stated; every analysis
+still uses the original fixes. Vessel type is `null` with the reason: an MMSI
+does not encode ship type and the source carries no AIS static data. Served at
+`/track-display` and carried in the Case contract, schema 3.
+`scripts/track_summary.py` prints the per-case table. Seven tests added; 230 pass.
+
 ---
 
 ## 13 September 2026

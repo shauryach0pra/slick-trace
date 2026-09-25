@@ -7,7 +7,8 @@ seeds and recomputes every artifact the API, the UI and the report read.
 Nothing shown to a reviewer needs a file that this script cannot produce.
 
 Stages, in dependency order:
-    generate -> detect + characterise -> historical mapping -> naive baseline
+    generate -> detect + characterise -> historical mapping -> track display
+             -> naive baseline
              -> attribution
              -> fragility -> coverage -> forecast -> next observation
              -> investigation report
@@ -34,6 +35,7 @@ from slicktrace_core.hindcast import run_historical_mapping
 from slicktrace_core.next_observation import run_next_observation
 from slicktrace_core.report import export_report
 from slicktrace_core.synth_generator import CASE_PLAN, generate_all
+from slicktrace_core.track_display import run_track_display
 
 
 def run_case(case_dir: str, skip: set[str]) -> dict:
@@ -41,6 +43,7 @@ def run_case(case_dir: str, skip: set[str]) -> dict:
     stages = [
         ("detection", lambda: run_detection(case_dir)),
         ("historical_mapping", lambda: run_historical_mapping(case_dir)),
+        ("track_display", lambda: run_track_display(case_dir)),
         ("naive_baseline", lambda: run_naive_baseline(case_dir)),
         ("attribution", lambda: run_attribution(case_dir)),
         ("fragility", lambda: run_fragility(case_dir)),

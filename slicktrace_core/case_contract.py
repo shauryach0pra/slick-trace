@@ -32,7 +32,7 @@ from typing import Annotated, Literal, Optional
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, model_validator
 
-SCHEMA_VERSION = "2"   # 2: adds replay_footprints and forecast_contours
+SCHEMA_VERSION = "3"   # 2: replay_footprints, forecast_contours; 3: track_display
 
 # Must equal the families in synth_generator.CASE_PLAN; a test holds them together.
 Family = Literal["decoy", "moving_discharge", "absent_source", "crowded", "along_track_ribbon"]
@@ -459,10 +459,42 @@ class ForecastContours(_Strict):
     note: str
 
 
+# ---------------------------------------------------------- track display --
+
+class TrackGap(_Strict):
+    kind: Literal["leading", "internal", "trailing", "no_fixes"]
+    start_utc: IsoUtc
+    end_utc: IsoUtc
+    hours: float
+
+
+class DisplayVessel(_Strict):
+    vessel_key: str
+    vessel_type: None = None          # never inferred; see vessel_type_source
+    vessel_type_source: str
+    n_fixes: int
+    n_usable_fixes: int
+    internal_gap_threshold_minutes: Optional[float] = None
+    gaps: list[TrackGap]
+    hours_without_position: float
+    n_display_points: int
+    max_display_deviation_m: int
+    display_path: list[tuple[float, float, IsoUtc, bool]]
+
+
+class TrackDisplay(_Strict):
+    incident_id: str
+    ais_window_start_utc: IsoUtc
+    ais_window_end_utc: IsoUtc
+    gap_rule: str
+    display_rule: str
+    vessels: list[DisplayVessel]
+
+
 # ------------------------------------------------------------------- case --
 
 class Case(_Strict):
-    schema_version: Literal["2"] = SCHEMA_VERSION
+    schema_version: Literal["3"] = SCHEMA_VERSION
     meta: Meta
     geography: Geography
     slick: Optional[Slick] = None
@@ -476,12 +508,14 @@ class Case(_Strict):
     next_observation: Optional[NextObservation] = None
     replay_footprints: Optional[ReplayFootprints] = None
     forecast_contours: Optional[ForecastContours] = None
+    track_display: Optional[TrackDisplay] = None
 
     @model_validator(mode="after")
     def _pieces_agree(self) -> "Case":
         iid = self.meta.incident_id
         for name in ("baseline", "attribution", "fragility", "coverage", "forecast",
-                     "next_observation", "replay_footprints", "forecast_contours"):
+                     "next_observation", "replay_footprints", "forecast_contours",
+                     "track_display"):
             section = getattr(self, name)
             if section is not None and section.incident_id != iid:
                 raise ValueError(f"{name} belongs to {section.incident_id}, not {iid}")
@@ -517,6 +551,10 @@ class Case(_Strict):
             if [h.horizon_hours for h in self.forecast_contours.horizons] != \
                     [h.horizon_hours for h in self.forecast.horizons]:
                 raise ValueError("forecast contours do not cover the forecast horizons")
+
+        if self.track_display is not None:
+            if [v.vessel_key for v in self.track_display.vessels] != keys:
+                raise ValueError("track display does not describe exactly the case's vessels")
         return self
 
 
@@ -575,4 +613,5 @@ def build_case(case_dir: str) -> Case:
         "next_observation": _load(case_dir, "next_observation_result.json"),
         "replay_footprints": _load(case_dir, "replay_footprints.json"),
         "forecast_contours": _load(case_dir, "forecast_contours.json"),
+        "track_display": _load(case_dir, "track_display.json"),
     })
