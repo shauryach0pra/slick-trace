@@ -12,7 +12,6 @@ import AskConsole from './AskConsole';
 import ForecastPanel from './ForecastPanel';
 import CoveragePanel from './CoveragePanel';
 import NextObservationPanel from './NextObservationPanel';
-import ConclusionGraph from './ConclusionGraph';
 
 export default function App() {
   const [incidents, setIncidents] = useState([]);
@@ -128,17 +127,6 @@ export default function App() {
                 </a>
               </div>
             )}
-            <ConclusionGraph 
-              attribution={attribution} 
-              naive={naiveBaseline}
-              historical={historical} 
-              manifest={manifest} 
-              detection={detection} 
-              fragility={fragility} 
-              forecast={forecast} 
-              coverage={coverage} 
-              nextObs={nextObs} 
-            />
             <AskConsole incidentId={incidentId} api={api} />
           </div>
         </div>

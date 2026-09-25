@@ -13,6 +13,18 @@ const ROWS = [
   ['mistaken_promotion_rate', 'mistaken_promotion_n', 'Mistaken promotion', false],
 ];
 
+// A null rate means its denominator was zero: nothing was there to measure.
+// Multiplying null by 100 in JavaScript gives 0, which would print a rate of
+// 0.0% that no run produced.
+function Rate({ value, n }) {
+  return (
+    <>
+      {value == null ? 'not measured' : `${(value * 100).toFixed(1)}%`}{' '}
+      <span className="cov-n">({n})</span>
+    </>
+  );
+}
+
 export default function CoveragePanel({ coverage }) {
   if (!coverage) return null;
   const { selective, coverage_failure: failure } = coverage.conditions;
@@ -45,14 +57,8 @@ export default function CoveragePanel({ coverage }) {
                   {higherIsBetter ? ' higher is better' : ' lower is better'}
                 </span>
               </th>
-              <td>
-                {(selective[rateKey] * 100).toFixed(1)}%{' '}
-                <span className="cov-n">({selective[nKey]})</span>
-              </td>
-              <td>
-                {(failure[rateKey] * 100).toFixed(1)}%{' '}
-                <span className="cov-n">({failure[nKey]})</span>
-              </td>
+              <td><Rate value={selective[rateKey]} n={selective[nKey]} /></td>
+              <td><Rate value={failure[rateKey]} n={failure[nKey]} /></td>
             </tr>
           ))}
         </tbody>

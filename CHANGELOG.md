@@ -61,6 +61,15 @@ families, 197 tests and a 4/4 against 0/4 headline. `CASE_PLAN` defines nine
 cases across five families (along_track_ribbon was missing), 217 tests pass,
 and validation reports 7/7 against 0/7, exact McNemar p = 0.0156.
 
+**Interface: three displays that showed values nothing computed.**
+`CoveragePanel` printed a null rate (denominator zero, e.g. mistaken promotion
+on absent-source cases, 0/0) as 0.0%; it now reads "not measured".
+`ConclusionGraph` read three fields no artifact has (`detection.iou`,
+`historical.candidates`, `fragility.flip_delta`), so it showed "N/A" and
+"0 candidates" on every case and "Source: null" on abstentions, and drew
+attribution before historical mapping; it is removed, as the verdict band
+already states the finding. `api.js` no longer defines `detection` twice.
+
 ---
 
 ## 13 September 2026

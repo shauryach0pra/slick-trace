@@ -18,7 +18,6 @@ export const api = {
   naiveBaseline: (id) => j(`/incidents/${id}/naive-baseline`),
   tracks: (id) => j(`/incidents/${id}/tracks`),
   detection: (id) => j(`/incidents/${id}/detection`),
-  detection: (id) => j(`/incidents/${id}/detection`),
   fragility: (id) => j(`/incidents/${id}/fragility`),
   forecast: (id) => j(`/incidents/${id}/forecast`),
   coverage: (id) => j(`/incidents/${id}/coverage`),
