@@ -55,9 +55,9 @@ export const METRIC_TEXT = {
   candidateStates: {
     title: 'Candidate, excluded, unassessed',
     body: 'Candidate: track data present and inside the backward envelope at some time. ' +
-      'Excluded: track data present throughout, never inside. Unassessed: no track data ' +
-      'covering the window at all. Unassessed is missing evidence, not exoneration, which ' +
-      'is why it is never merged into excluded.',
+      'Excluded: track data at every queried time, never inside. Unassessed: never inside ' +
+      'where data exists, but no track data for part or all of the window. Those hours are ' +
+      'missing evidence, not exoneration, which is why a partly covered vessel is never excluded.',
   },
   hindcastEnvelope: {
     title: 'Backward origin envelope',

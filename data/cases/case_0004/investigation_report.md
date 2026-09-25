@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T07:36:05.996092+00:00 · git `b2e2dab4` · Darwin 25.2.0 (arm64)
+Generated 2026-09-25T17:00:14.529357+00:00 · git `b9e663d` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -28,23 +28,23 @@ This is an investigative lead for a human analyst. It is not a legal finding, an
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 6 excluded, 5 candidate.
+Backward window: 24 h. Outcomes: 6 unassessed, 5 candidate.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
-| `419243120` | excluded | track data present throughout window; never inside the backward envelope |
-| `419302866` | excluded | track data present throughout window; never inside the backward envelope |
-| `419623942` | excluded | track data present throughout window; never inside the backward envelope |
-| `419462109` | excluded | track data present throughout window; never inside the backward envelope |
+| `419243120` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
+| `419302866` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
+| `419623942` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
+| `419462109` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419255379` | candidate | inside envelope at 7 of 25 queried times |
 | `419369344` | candidate | inside envelope at 1 of 25 queried times |
-| `419644041` | excluded | track data present throughout window; never inside the backward envelope |
+| `419644041` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419569999` | candidate | inside envelope at 9 of 25 queried times |
 | `419625471` | candidate | inside envelope at 5 of 25 queried times |
-| `419210002` | excluded | track data present throughout window; never inside the backward envelope |
+| `419210002` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419629253` | candidate | inside envelope at 4 of 25 queried times |
 
-> `unassessed` means no track data covered the queried window. That is missing evidence, not exoneration, and it is reported separately from `excluded` for exactly that reason.
+> `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
 ## Candidate comparison
 
@@ -109,7 +109,7 @@ Most informative tested window: **+24 h** (disagreement score 0.5664). hypotheti
 | Artefact | SHA-256 |
 | --- | --- |
 | `manifest.json` | `99b78ee35fdf39c1…` |
-| `historical_mapping.json` | `3417dd211ee36dfb…` |
+| `historical_mapping.json` | `dc767a04af4e5bc1…` |
 | `naive_baseline_result.json` | `14b543d5039bd2bc…` |
 | `attribution_result.json` | `dfdc747b975e31f6…` |
 | `fragility_result.json` | `2d3e164441df2589…` |

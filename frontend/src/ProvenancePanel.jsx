@@ -10,7 +10,7 @@
 const STATE_COPY = {
   candidate: ['Candidate', 'compatible with the origin envelope at some time'],
   excluded: ['Excluded', 'track present throughout; never compatible'],
-  unassessed: ['Unassessed', 'no track data covering the queried window'],
+  unassessed: ['Unassessed', 'never inside where data exists; no track data for part or all of the window'],
 };
 
 export default function ProvenancePanel({ report, manifest }) {

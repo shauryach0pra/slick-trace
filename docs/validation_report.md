@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-14T07:36:17.621534+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-25T17:00:29.000674+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -194,13 +194,13 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | --- | --- | --- |
 | Slowest single case, all stages | 3.2 s (case_0004) | ≤ 5 min |
 | Mean per case | 2.3 s | — |
-| Full run, 9 cases | 20.3 s | — |
+| Full run, 9 cases | 20.7 s | — |
 | Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
 | Time-window query, cold — fresh KB + envelope build | 1.6 ms | < 2 s |
 | Time-window query, warm — envelope cached (median of 20) | 0.3 ms | < 2 s |
 
-Dominant stages across the run: fragility 10.9 s, attribution 8.5 s, detection 0.3 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
+Dominant stages across the run: fragility 10.9 s, attribution 8.7 s, detection 0.4 s. Cold and warm query times are reported separately because the backward envelope is cached after its first computation, and quoting only the warm number would overstate what a reviewer sees on first load.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 

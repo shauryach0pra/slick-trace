@@ -55,9 +55,9 @@ NLP_SUITE: list[dict] = [
     {"category": "comparison", "question": "Why is {candidate} ranked above {candidate2}?",
      "candidate_index": 0, "candidate2_index": 1,
      "expect_intent": "candidate_comparison", "expect_supported": True},
-    # two vessels that were EXCLUDED during historical filtering are not in the
-    # ranking at all; the correct behaviour is to say so, not to invent a
-    # comparison between them
+    # two vessels filtered out during historical filtering (excluded or
+    # unassessed) are not in the ranking at all; the correct behaviour is to say
+    # so, not to invent a comparison between them
     {"category": "refusal_underspecified",
      "question": "Why is {excluded} ranked above {excluded2}?",
      "excluded_index": 0, "excluded2_index": 1,

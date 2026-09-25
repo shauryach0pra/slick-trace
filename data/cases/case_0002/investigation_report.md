@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T07:36:01.517656+00:00 · git `b2e2dab4` · Darwin 25.2.0 (arm64)
+Generated 2026-09-25T17:00:10.055170+00:00 · git `b9e663d` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -28,18 +28,18 @@ This is an investigative lead for a human analyst. It is not a legal finding, an
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 4 candidate, 2 excluded.
+Backward window: 24 h. Outcomes: 4 candidate, 2 unassessed.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
 | `419858938` | candidate | inside envelope at 10 of 25 queried times |
 | `419883006` | candidate | inside envelope at 5 of 25 queried times |
-| `419482780` | excluded | track data present throughout window; never inside the backward envelope |
+| `419482780` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419105092` | candidate | inside envelope at 3 of 25 queried times |
 | `419453172` | candidate | inside envelope at 1 of 25 queried times |
-| `419907832` | excluded | track data present throughout window; never inside the backward envelope |
+| `419907832` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 
-> `unassessed` means no track data covered the queried window. That is missing evidence, not exoneration, and it is reported separately from `excluded` for exactly that reason.
+> `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
 ## Candidate comparison
 
@@ -103,7 +103,7 @@ Most informative tested window: **+3 h** (disagreement score 0.9286). hypothetic
 | Artefact | SHA-256 |
 | --- | --- |
 | `manifest.json` | `6630f311828d3ea8…` |
-| `historical_mapping.json` | `331133bd62189f3e…` |
+| `historical_mapping.json` | `74cb2723bbd26b49…` |
 | `naive_baseline_result.json` | `496620c0411fe70e…` |
 | `attribution_result.json` | `86c7817d6eac76f8…` |
 | `fragility_result.json` | `f21610a9085547df…` |

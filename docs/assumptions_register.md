@@ -116,7 +116,7 @@ reported as fragile, with the specific value that flipped it.
 
 ### A6 · Track interpolation is bounded; gaps are marked, never filled
 
-**Where:** `slicktrace_core/hindcast.py:109` (`_interp_track_position`)
+**Where:** `slicktrace_core/hindcast.py:112` (`_interp_track_position`)
 **Enforced by:** `tests/test_invariants.py:190`
 
 **Why.** AIS gaps are common. Unbounded interpolation invents vessel history and
@@ -127,16 +127,17 @@ or outside the origin envelope on the strength of data that does not exist —
 producing both false candidates and false exclusions.
 
 **How it is bounded.** Interpolation is confined strictly within a track's own
-observed time range; outside it the function returns `None` and the vessel is
-recorded as `unassessed` rather than guessed at. A single universal gap
+observed time range; outside it the function returns `None`, that queried time
+is recorded as `no_data` in the vessel's `hourly_state`, and a vessel with any
+`no_data` time cannot be summarised as `excluded` (A7). A single universal gap
 threshold is not treated as proof of an outage.
 
 ---
 
 ### A7 · `unassessed` is not `excluded`
 
-**Where:** `slicktrace_core/hindcast.py:24, 56, 149`
-**Enforced by:** `tests/test_invariants.py:97, 110`
+**Where:** `slicktrace_core/hindcast.py:24, 56, 222, 227`
+**Enforced by:** `tests/test_invariants.py:97, 110, 341, 362`
 
 **Why.** "No track data covering the queried window" and "data present
 throughout, never compatible" are different findings.
@@ -145,9 +146,16 @@ throughout, never compatible" are different findings.
 evidence into exoneration — the most consequential honesty failure available to
 this system, because it would clear a vessel on the basis of an absence.
 
-**How it is bounded.** Three distinct states throughout the pipeline, the API,
-the map (by shape as well as colour), the text-equivalent table and the
-investigation report, which states the distinction in words.
+**How it is bounded.** Membership is decided per queried time first (`inside`,
+`outside` or `no_data`, persisted as `hourly_state`) and only then summarised.
+`excluded` requires track data at every queried time; partial coverage is
+summarised as `unassessed`, with the span the data covers stated. Until
+25 September 2026 a single covered time was enough to exclude, and the reason
+string claimed coverage throughout the window: all 26 vessels then labelled
+`excluded` had data at 11 of 25 queried times. The three states are carried
+through the pipeline, the API, the text-equivalent table and the investigation
+report, which states the distinction in words. The live map draws per-time
+state; a vessel with no position at the selected time is not drawn.
 
 ---
 

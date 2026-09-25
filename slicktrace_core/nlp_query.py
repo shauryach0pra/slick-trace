@@ -234,7 +234,7 @@ def _resolve_candidate_comparison(kb: CaseKB, question: str) -> QueryResult:
     if a is None or b is None:
         return QueryResult(question, "candidate_comparison", supported=False,
                             answer=f"One of {a_key}, {b_key} was not part of the attribution ranking "
-                                   f"(it may have been excluded during historical filtering).")
+                                   f"(it may have been filtered out as excluded or unassessed).")
 
     answer = (f"{a_key} ranks above {b_key}: mean IoU {a['mean_iou']:.2f} vs {b['mean_iou']:.2f}, "
               f"mean loss {a['mean_loss']:.3f} vs {b['mean_loss']:.3f}, winning {a['ensemble_win_count']}/"
@@ -276,10 +276,17 @@ def _resolve_candidate_list(kb: CaseKB, question: str) -> QueryResult:
         return QueryResult(question, "candidate_list", supported=False,
                             answer="No historical mapping has been computed for this incident yet.")
     cands = [a for a in kb.historical_mapping["assessments"] if a["status"] == "candidate"]
-    excluded = [a for a in kb.historical_mapping["assessments"] if a["status"] == "excluded"]
-    answer = (f"{len(cands)} candidate(s) survived historical filtering: "
-              f"{', '.join(a['vessel_key'] for a in cands)}. "
-              f"{len(excluded)} excluded: {', '.join(a['vessel_key'] for a in excluded)}.")
+    by_state = {s: [a["vessel_key"] for a in kb.historical_mapping["assessments"] if a["status"] == s]
+                for s in ("candidate", "excluded", "unassessed")}
+
+    def _keys(state: str) -> str:
+        return ", ".join(by_state[state]) or "none"
+
+    answer = (f"{len(cands)} candidate(s) survived historical filtering: {_keys('candidate')}. "
+              f"{len(by_state['excluded'])} excluded (track data at every queried time, never "
+              f"inside): {_keys('excluded')}. {len(by_state['unassessed'])} unassessed (never "
+              f"inside where data exists, but data missing at some queried times; missing "
+              f"evidence is not exoneration): {_keys('unassessed')}.")
     citations = [f"historical_mapping.json vessel={a['vessel_key']}" for a in cands]
     return QueryResult(question, "candidate_list", {}, answer, citations)
 

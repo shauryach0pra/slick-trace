@@ -334,3 +334,50 @@ def test_smallest_flip_is_actually_the_smallest():
             continue
         flipped = [g for g in frag["grid"] if g["flipped"]]
         assert frag["smallest_flip"]["magnitude"] == min(g["magnitude"] for g in flipped)
+
+
+# ------------------------------------------------- per-time coverage (A7) --
+
+def test_excluded_requires_track_data_at_every_queried_time():
+    """`excluded` clears a vessel, so it must rest on data at every queried
+    time. Until 25 Sep 2026 one covered time was enough, and every vessel then
+    labelled excluded in the benchmark had data at 11 of 25."""
+    for cid in ALL_CASE_IDS:
+        hm = _load(cid, "historical_mapping.json")
+        hours = hm["hours_queried"]
+        for a in hm["assessments"]:
+            states = a["hourly_state"]
+            assert len(states) == len(hours)
+            assert set(states) <= {"inside", "outside", "no_data"}
+            assert a["inside_at"] == [h for h, s in zip(hours, states) if s == "inside"]
+            assert a["hours_with_data"] == sum(s != "no_data" for s in states)
+            if a["status"] == "candidate":
+                assert "inside" in states
+            elif a["status"] == "excluded":
+                assert "no_data" not in states, f"{cid} {a['vessel_key']} excluded on partial data"
+            else:
+                assert "inside" not in states and "no_data" in states
+
+
+def test_partial_coverage_is_unassessed_not_excluded():
+    """Two vessels far from the slick: one tracked across the whole backward
+    window, one only for its last five hours. The first is excluded. The second
+    has no evidence for most of the window and must not be."""
+    from slicktrace_core.hindcast import assess_vessels
+    manifest = json.loads(json.dumps(_load("case_0001", "manifest.json")))
+    acquired = _parse(manifest["acquired_utc"])
+
+    def track(key, hours):
+        return {"vessel_key": key,
+                "fixes": [{"t_utc": (acquired - timedelta(hours=h)).isoformat(),
+                           "lon": 73.05, "lat": 18.45, "sog_knots": 0.0, "cog_deg": 0.0,
+                           "interpolated": False} for h in range(hours, -1, -1)]}
+
+    manifest["tracks"] = [track("900000001", 24), track("900000002", 5)]
+    got = {a.vessel_key: a for a in assess_vessels(manifest, build_backward_envelope(manifest))}
+    assert got["900000001"].status == "excluded"
+    partial = got["900000002"]
+    assert partial.status == "unassessed"
+    assert partial.hours_with_data == 6
+    assert partial.data_intervals_hours_before == [[5.0, 0.0]]
+    assert "no track data at 19 of 25" in partial.reason

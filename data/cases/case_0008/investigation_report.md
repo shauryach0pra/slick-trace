@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T07:36:14.304618+00:00 · git `b2e2dab4` · Darwin 25.2.0 (arm64)
+Generated 2026-09-25T17:00:22.899577+00:00 · git `b9e663d` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -28,18 +28,18 @@ This is an investigative lead for a human analyst. It is not a legal finding, an
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 3 candidate, 3 excluded.
+Backward window: 24 h. Outcomes: 3 candidate, 3 unassessed.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
 | `419125223` | candidate | inside envelope at 10 of 25 queried times |
 | `419253638` | candidate | inside envelope at 5 of 25 queried times |
-| `419969551` | excluded | track data present throughout window; never inside the backward envelope |
-| `419521453` | excluded | track data present throughout window; never inside the backward envelope |
-| `419289212` | excluded | track data present throughout window; never inside the backward envelope |
+| `419969551` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
+| `419521453` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
+| `419289212` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419847031` | candidate | inside envelope at 1 of 25 queried times |
 
-> `unassessed` means no track data covered the queried window. That is missing evidence, not exoneration, and it is reported separately from `excluded` for exactly that reason.
+> `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
 ## Candidate comparison
 
@@ -102,7 +102,7 @@ Most informative tested window: **+3 h** (disagreement score 0.9486). hypothetic
 | Artefact | SHA-256 |
 | --- | --- |
 | `manifest.json` | `ecdff223bc816a33…` |
-| `historical_mapping.json` | `fc78f3e5bcd37aaf…` |
+| `historical_mapping.json` | `0eecfb9064021a19…` |
 | `naive_baseline_result.json` | `07beddef0455aca4…` |
 | `attribution_result.json` | `a613e7e09d67ac74…` |
 | `fragility_result.json` | `b9191a4ec9ba394c…` |

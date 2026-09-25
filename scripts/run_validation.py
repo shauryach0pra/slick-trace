@@ -239,8 +239,11 @@ def score_nlp() -> dict:
     kbs: dict[str, CaseKB] = {}
     default_kb = CaseKB(os.path.join(CASES_ROOT, "case_0001"))
     ranked = [r["vessel_key"] for r in (default_kb.attribution or {}).get("ranking", [])]
+    # {excluded} in the suite means "filtered out before ranking": excluded or
+    # unassessed. Keying it on status == "excluded" alone would silently change
+    # the question whenever the state rule moves a vessel between the two.
     excluded = [a["vessel_key"] for a in (default_kb.historical_mapping or {}).get("assessments", [])
-                if a["status"] == "excluded"]
+                if a["status"] != "candidate"]
     suite = resolve_suite(list(default_kb.tracks_by_key), ranked, excluded)
     for item in suite:
         cid = item.get("incident_id", "case_0001")

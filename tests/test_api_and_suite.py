@@ -22,8 +22,9 @@ CASE_DIR = os.path.join("data", "cases", CASE)
 def _suite():
     kb = CaseKB(CASE_DIR)
     ranked = [r["vessel_key"] for r in (kb.attribution or {}).get("ranking", [])]
+    # filtered out before ranking: excluded or unassessed (see run_validation.py)
     excluded = [a["vessel_key"] for a in (kb.historical_mapping or {}).get("assessments", [])
-                if a["status"] == "excluded"]
+                if a["status"] != "candidate"]
     return kb, resolve_suite(list(kb.tracks_by_key), ranked, excluded)
 
 

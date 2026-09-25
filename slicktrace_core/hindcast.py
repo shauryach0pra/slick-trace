@@ -20,8 +20,8 @@ attribution pipeline (p.10), stopping short of forward-replay ranking
 
 Three explicit outcomes per vessel (never just candidate/excluded):
   - "candidate":   was inside the envelope at some queried time
-  - "excluded":    track data covers the window, but never entered it
-  - "unassessed":  track has no data covering the queried window at all
+  - "excluded":    track data at EVERY queried time, and never inside
+  - "unassessed":  never inside, and no track data at some or all times
 """
 
 from __future__ import annotations
@@ -57,6 +57,9 @@ class VesselAssessment:
     first_entry_hours_before: float | None = None  # earliest time (backward) found inside
     reason: str = ""
     inside_at: list[float] = field(default_factory=list)  # hours_before values where inside
+    hourly_state: list[str] = field(default_factory=list)  # per queried time: inside | outside | no_data
+    hours_with_data: int = 0  # queried times at which the track has a position
+    data_intervals_hours_before: list[list[float]] = field(default_factory=list)  # [from, to] runs with data
 
 
 def _mask_to_lonlat_particles(mask_path: str, bbox: dict, img_size: int,
@@ -121,43 +124,113 @@ def _interp_track_position(fixes: list[dict], t: datetime) -> tuple[float, float
     return (fixes[0]["lon"], fixes[0]["lat"])  # exact match at an endpoint
 
 
-def assess_vessels(manifest: dict, snapshots: list[EnvelopeSnapshot],
-                    inclusion_radius_deg: float = 0.045) -> list[VesselAssessment]:
-    """Test every candidate vessel's position, at every backward snapshot
-    time, against the particle cloud (nearest-particle distance — NOT a
-    convex hull, so disjoint/diffuse envelope lobes aren't falsely bridged)."""
-    trees = {
-        snap.hours_before_acquisition: cKDTree(np.column_stack([snap.particles_lon, snap.particles_lat]))
-        for snap in snapshots
-    }
+INCLUSION_RADIUS_DEG = 0.045  # nearest-particle distance, degrees; see vessel_hourly_states
 
+STATE_RULE = (
+    "Membership is decided per queried time (inside, outside, no_data) and then "
+    "summarised. candidate: inside the envelope at one or more queried times. "
+    "excluded: track data at every queried time and never inside. unassessed: never "
+    "inside where track data exists, and no track data at one or more queried times. "
+    "Hours without data are missing evidence; they cannot exclude a vessel."
+)
+
+
+def vessel_hourly_states(manifest: dict, snapshots: list[EnvelopeSnapshot],
+                         inclusion_radius_deg: float = INCLUSION_RADIUS_DEG) -> dict[str, list[dict]]:
+    """Every vessel's position and envelope membership at every queried time.
+
+    One of three states per time: `inside`, `outside`, or `no_data` where the
+    track has no position (bounded interpolation, A6). Membership is the
+    nearest-particle distance - NOT a convex hull, so disjoint or diffuse
+    envelope lobes aren't falsely bridged.
+    """
+    trees = [cKDTree(np.column_stack([s.particles_lon, s.particles_lat])) for s in snapshots]
+    out: dict[str, list[dict]] = {}
+    for tr in manifest["tracks"]:
+        rows = []
+        for snap, tree in zip(snapshots, trees):
+            pos = _interp_track_position(tr["fixes"], snap.time_utc)
+            if pos is None:
+                rows.append({"hours_before": snap.hours_before_acquisition, "lon": None,
+                             "lat": None, "distance_deg": None, "state": "no_data"})
+                continue
+            dist, _ = tree.query([pos[0], pos[1]])
+            rows.append({"hours_before": snap.hours_before_acquisition,
+                         "lon": float(pos[0]), "lat": float(pos[1]), "distance_deg": float(dist),
+                         "state": "inside" if dist <= inclusion_radius_deg else "outside"})
+        out[tr["vessel_key"]] = rows
+    return out
+
+
+def _data_intervals(hours: list[float], states: list[str]) -> list[list[float]]:
+    """Contiguous runs of queried times with track data, each as [from, to] in
+    hours before acquisition (from >= to)."""
+    runs: list[list[float]] = []
+    lo = hi = None
+    for h, s in zip(hours, states):
+        if s == "no_data":
+            if lo is not None:
+                runs.append([hi, lo])
+                lo = hi = None
+            continue
+        lo = h if lo is None else lo
+        hi = h
+    if lo is not None:
+        runs.append([hi, lo])
+    return runs
+
+
+def _describe_intervals(runs: list[list[float]]) -> str:
+    return "; ".join(f"{a:g} h before acquisition" if a == b
+                     else f"{a:g} h to {b:g} h before acquisition" for a, b in runs)
+
+
+def assess_vessels(manifest: dict, snapshots: list[EnvelopeSnapshot],
+                    inclusion_radius_deg: float = INCLUSION_RADIUS_DEG) -> list[VesselAssessment]:
+    """Summarise each vessel's per-time membership into one of three states.
+
+      candidate   inside the envelope at one or more queried times
+      excluded    track data at EVERY queried time, and never inside
+      unassessed  never inside where data exists, and no track data at one or
+                  more queried times - including a track with no data at all
+
+    Partial coverage is never summarised as excluded: the hours without data
+    are missing evidence, and a vessel cannot be cleared on the strength of
+    them (A7). Before 25 Sep 2026 a single covered time was enough to exclude.
+    """
+    hourly = vessel_hourly_states(manifest, snapshots, inclusion_radius_deg)
+    hours = [s.hours_before_acquisition for s in snapshots]
+    n = len(snapshots)
     results = []
     for tr in manifest["tracks"]:
         vkey = tr["vessel_key"]
-        any_data = False
-        inside_at = []
-        for snap in snapshots:
-            pos = _interp_track_position(tr["fixes"], snap.time_utc)
-            if pos is None:
-                continue
-            any_data = True
-            dist, _ = trees[snap.hours_before_acquisition].query([pos[0], pos[1]])
-            if dist <= inclusion_radius_deg:
-                inside_at.append(snap.hours_before_acquisition)
-
-        if not any_data:
-            results.append(VesselAssessment(vkey, "unassessed",
-                                             reason="no track data covers the queried backward window"))
-        elif inside_at:
-            results.append(VesselAssessment(vkey, "candidate",
-                                             first_entry_hours_before=max(inside_at),
-                                             reason=f"inside envelope at {len(inside_at)} of "
-                                                    f"{len(snapshots)} queried times",
-                                             inside_at=sorted(inside_at)))
+        states = [row["state"] for row in hourly[vkey]]
+        inside_at = [h for h, s in zip(hours, states) if s == "inside"]
+        with_data = sum(1 for s in states if s != "no_data")
+        runs = _data_intervals(hours, states)
+        coverage = {"hourly_state": states, "hours_with_data": with_data,
+                    "data_intervals_hours_before": runs}
+        if inside_at:
+            results.append(VesselAssessment(
+                vkey, "candidate", first_entry_hours_before=max(inside_at),
+                reason=f"inside envelope at {len(inside_at)} of {n} queried times",
+                inside_at=sorted(inside_at), **coverage))
+        elif with_data == 0:
+            results.append(VesselAssessment(
+                vkey, "unassessed",
+                reason="no track data covers the queried backward window", **coverage))
+        elif with_data == n:
+            results.append(VesselAssessment(
+                vkey, "excluded",
+                reason=f"track data at all {n} queried times; never inside the backward envelope",
+                **coverage))
         else:
-            results.append(VesselAssessment(vkey, "excluded",
-                                             reason="track data present throughout window; "
-                                                    "never inside the backward envelope"))
+            results.append(VesselAssessment(
+                vkey, "unassessed",
+                reason=(f"no track data at {n - with_data} of {n} queried times; track data "
+                        f"{_describe_intervals(runs)}, never inside the backward envelope. "
+                        f"Hours without data cannot exclude a vessel"),
+                **coverage))
     return results
 
 
@@ -170,6 +243,9 @@ def run_historical_mapping(case_dir: str, hours_back: int = 24) -> dict:
     out = {
         "incident_id": manifest["incident_id"],
         "hours_back": hours_back,
+        "hours_queried": [s.hours_before_acquisition for s in snapshots],
+        "inclusion_radius_deg": INCLUSION_RADIUS_DEG,
+        "state_rule": STATE_RULE,
         "assessments": [a.__dict__ for a in assessments],
     }
     out_path = os.path.join(case_dir, "historical_mapping.json")

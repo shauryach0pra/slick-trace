@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-14T07:36:07.867097+00:00",
+  "generated_utc": "2026-09-25T17:00:16.400361+00:00",
   "incident_id": "case_0005",
   "scene": {
     "scene_id": "case_0005_S1SYN_20260910T043000",
@@ -35,16 +35,50 @@
   "historical_filtering": {
     "hours_back": 24,
     "status_counts": {
-      "excluded": 3,
+      "unassessed": 3,
       "candidate": 3
     },
     "assessments": [
       {
         "vessel_key": "419420729",
-        "status": "excluded",
+        "status": "unassessed",
         "first_entry_hours_before": null,
-        "reason": "track data present throughout window; never inside the backward envelope",
-        "inside_at": []
+        "reason": "no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
+        "inside_at": [],
+        "hourly_state": [
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 11,
+        "data_intervals_hours_before": [
+          [
+            10.0,
+            0.0
+          ]
+        ]
       },
       {
         "vessel_key": "419958088",
@@ -53,6 +87,40 @@
         "reason": "inside envelope at 1 of 25 queried times",
         "inside_at": [
           0.0
+        ],
+        "hourly_state": [
+          "inside",
+          "outside",
+          "outside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 3,
+        "data_intervals_hours_before": [
+          [
+            2.0,
+            0.0
+          ]
         ]
       },
       {
@@ -68,21 +136,123 @@
           7.0,
           8.0,
           9.0
+        ],
+        "hourly_state": [
+          "no_data",
+          "no_data",
+          "no_data",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 7,
+        "data_intervals_hours_before": [
+          [
+            9.0,
+            3.0
+          ]
         ]
       },
       {
         "vessel_key": "419672961",
-        "status": "excluded",
+        "status": "unassessed",
         "first_entry_hours_before": null,
-        "reason": "track data present throughout window; never inside the backward envelope",
-        "inside_at": []
+        "reason": "no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
+        "inside_at": [],
+        "hourly_state": [
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 11,
+        "data_intervals_hours_before": [
+          [
+            10.0,
+            0.0
+          ]
+        ]
       },
       {
         "vessel_key": "419941459",
-        "status": "excluded",
+        "status": "unassessed",
         "first_entry_hours_before": null,
-        "reason": "track data present throughout window; never inside the backward envelope",
-        "inside_at": []
+        "reason": "no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
+        "inside_at": [],
+        "hourly_state": [
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 11,
+        "data_intervals_hours_before": [
+          [
+            10.0,
+            0.0
+          ]
+        ]
       },
       {
         "vessel_key": "419931279",
@@ -95,13 +265,47 @@
           8.0,
           9.0,
           10.0
+        ],
+        "hourly_state": [
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "inside",
+          "outside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 11,
+        "data_intervals_hours_before": [
+          [
+            10.0,
+            0.0
+          ]
         ]
       }
     ],
     "state_meaning": {
       "candidate": "track data present and inside the backward envelope at some queried time",
-      "excluded": "track data present throughout the window, never inside the envelope",
-      "unassessed": "no track data covering the queried window \u2014 missing evidence, NOT exoneration"
+      "excluded": "track data at every queried time, never inside the envelope",
+      "unassessed": "never inside where track data exists, but no track data at one or more queried times \u2014 missing evidence, NOT exoneration"
     }
   },
   "attribution": {
@@ -2170,14 +2374,14 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "b2e2dab4",
+    "git_revision": "b9e663d",
     "python": "3.12.14",
     "platform": "Darwin 25.2.0 (arm64)",
     "argv0": "run_pipeline.py"
   },
   "checksums_sha256": {
     "manifest.json": "d4d486332d5b0e0e8d0b66dffff2c06f47a206b6c9e1ec1548e996438e0d2caa",
-    "historical_mapping.json": "8b0db748bf35d28f41932766b63afdab4023ebc79450b8fde155ac007806fc22",
+    "historical_mapping.json": "d5a5b4ca587ec271a1bc465688ce40e79f31154cf49d0b6c46864507f5bd1a20",
     "naive_baseline_result.json": "470dcd6df19d123a06fa850a5b9419d97289788898bc34da9a4381c2b52cdc01",
     "attribution_result.json": "6a754ccc86d4f17da25e1b8c0f44cd2dd0062adc59991b75b1b3031fea210ddc",
     "fragility_result.json": "fe88c99a1a7b55bfc30039a70413a5eac4fce082b5de6d8a51fba50cfe8560d6",

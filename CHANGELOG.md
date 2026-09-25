@@ -5,6 +5,28 @@ rather than guessing.
 
 ---
 
+## 25 September 2026
+
+**Historical filtering: partial coverage no longer counts as exclusion.**
+`slicktrace_core/hindcast.py` marked a vessel `excluded` if it had a position at
+any one of the 25 queried times and was never inside the envelope, and the
+reason string then claimed track data "present throughout window". Every one of
+the 26 vessels excluded across the nine cases had data at 11 of 25 queried
+times: generated tracks cover the last ten hours of a 24-hour window. Membership
+is now decided per queried time (`inside`, `outside`, `no_data`, persisted as
+`hourly_state` with `hours_with_data` and `data_intervals_hours_before`) and
+only then summarised; `excluded` requires data at every queried time, as A7
+always defined it. The 26 vessels are now `unassessed`, with the span their data
+covers stated. Candidate sets, rankings, fragility and the headline are
+unchanged (7/7 against 0/7, exact McNemar p = 0.0156), because neither state is
+replayed. No vessel in the benchmark now qualifies as excluded: that needs
+tracks spanning the window the manifest declares, a generator change not made
+here. The NLP suite's "filtered out before ranking" question now draws on
+excluded or unassessed vessels, so it resolves to the same two vessels as
+before. Two invariant tests added; 199 pass.
+
+---
+
 ## 13 September 2026
 
 **Detect and characterise (PS part (a)) — new pipeline stage.**

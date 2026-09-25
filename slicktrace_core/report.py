@@ -115,9 +115,9 @@ def build_report(case_dir: str, query_history: list[dict] | None = None) -> dict
             "assessments": hm.get("assessments", []),
             "state_meaning": {
                 "candidate": "track data present and inside the backward envelope at some queried time",
-                "excluded": "track data present throughout the window, never inside the envelope",
-                "unassessed": "no track data covering the queried window — missing evidence, "
-                              "NOT exoneration",
+                "excluded": "track data at every queried time, never inside the envelope",
+                "unassessed": "never inside where track data exists, but no track data at one or "
+                              "more queried times — missing evidence, NOT exoneration",
             },
         },
         "attribution": {
@@ -214,9 +214,10 @@ def render_markdown(report: dict) -> str:
     for asmt in hf["assessments"]:
         w(f"| `{asmt['vessel_key']}` | {asmt['status']} | {asmt['reason']} |")
     w("")
-    w("> `unassessed` means no track data covered the queried window. That is missing "
-      "evidence, not exoneration, and it is reported separately from `excluded` for "
-      "exactly that reason.")
+    w("> `unassessed` means the track had no data at one or more queried times and was "
+      "never inside the envelope where it did. Those hours are missing evidence, not "
+      "exoneration, so the vessel is not `excluded`: that state requires data at every "
+      "queried time.")
     w("")
 
     w("## Candidate comparison")

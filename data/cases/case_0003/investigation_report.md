@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-14T07:36:02.786051+00:00 · git `b2e2dab4` · Darwin 25.2.0 (arm64)
+Generated 2026-09-25T17:00:11.354204+00:00 · git `b9e663d` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -26,17 +26,17 @@ Generated 2026-09-14T07:36:02.786051+00:00 · git `b2e2dab4` · Darwin 25.2.0 (a
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 3 excluded, 2 candidate.
+Backward window: 24 h. Outcomes: 3 unassessed, 2 candidate.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
-| `419383191` | excluded | track data present throughout window; never inside the backward envelope |
-| `419279137` | excluded | track data present throughout window; never inside the backward envelope |
+| `419383191` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
+| `419279137` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419876898` | candidate | inside envelope at 4 of 25 queried times |
-| `419807748` | excluded | track data present throughout window; never inside the backward envelope |
+| `419807748` | unassessed | no track data at 14 of 25 queried times; track data 10 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
 | `419769953` | candidate | inside envelope at 1 of 25 queried times |
 
-> `unassessed` means no track data covered the queried window. That is missing evidence, not exoneration, and it is reported separately from `excluded` for exactly that reason.
+> `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
 ## Candidate comparison
 
@@ -98,7 +98,7 @@ Most informative tested window: **+3 h** (disagreement score 1.0). hypothetical 
 | Artefact | SHA-256 |
 | --- | --- |
 | `manifest.json` | `ac936583396881e2…` |
-| `historical_mapping.json` | `39e1a2934072dc40…` |
+| `historical_mapping.json` | `89ae17563f55b780…` |
 | `naive_baseline_result.json` | `fedf1188f395724a…` |
 | `attribution_result.json` | `182cfa47167af72f…` |
 | `fragility_result.json` | `251152903d437682…` |
