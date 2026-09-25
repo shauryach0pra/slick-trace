@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-25T17:38:01.757931+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-25T18:15:46.916833+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -192,15 +192,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 3.7 s (case_0004) | ≤ 5 min |
-| Mean per case | 2.7 s | — |
-| Full run, 9 cases | 24.5 s | — |
+| Slowest single case, all stages | 3.9 s (case_0004) | ≤ 5 min |
+| Mean per case | 3.0 s | — |
+| Full run, 9 cases | 27.3 s | — |
 | Template query, cold — fresh KB + lookup intent | 0.6 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
 | Time-window query, cold — fresh KB, reads per-time state | 0.6 ms | < 2 s |
 | Time-window query, warm (median of 20) | 0.0 ms | < 2 s |
 
-Dominant stages across the run: fragility 11.0 s, attribution 8.6 s, historical_mapping 3.9 s. Cold and warm query times are reported separately because a fresh knowledge base loads the case's artifacts on first use, and quoting only the warm number would overstate what a reviewer sees on first load. Time-window queries read per-time envelope membership from historical_mapping.json; nothing is simulated at query time.
+Dominant stages across the run: fragility 10.9 s, attribution 8.8 s, historical_mapping 3.9 s. Cold and warm query times are reported separately because a fresh knowledge base loads the case's artifacts on first use, and quoting only the warm number would overstate what a reviewer sees on first load. Time-window queries read per-time envelope membership from historical_mapping.json; nothing is simulated at query time.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 

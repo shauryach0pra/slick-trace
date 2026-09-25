@@ -15,8 +15,9 @@ Rules this module keeps
     result.
 
 What is deliberately absent
-  * No forecast envelope polygon: forecast_result.json stores horizon areas
-    and centroids only. Persisting contours is separate work.
+  * No forecast envelope polygon inside `forecast`: forecast_result.json
+    stores horizon areas and centroids. The contours are their own artifact,
+    carried in `forecast_contours`.
   * No vessel type: no source or generated track carries one.
   * No not-testable fragility or not-applicable next-observation variant: both
     branches return without writing a file, so no artifact ever has that shape.
@@ -31,7 +32,7 @@ from typing import Annotated, Literal, Optional
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, model_validator
 
-SCHEMA_VERSION = "1"
+SCHEMA_VERSION = "2"   # 2: adds replay_footprints and forecast_contours
 
 # Must equal the families in synth_generator.CASE_PLAN; a test holds them together.
 Family = Literal["decoy", "moving_discharge", "absent_source", "crowded", "along_track_ribbon"]
@@ -414,10 +415,54 @@ class NextObservation(_Strict):
     scope_note: str
 
 
+# ------------------------------------------------------- display geometry --
+
+class Footprint(_Strict):
+    vessel_key: str
+    candidate_id: str
+    rank: int
+    release_start: IsoUtc
+    duration_hours: float
+    is_continuous: bool
+    release_start_position: Optional[LonLat] = None
+    release_end_position: Optional[LonLat] = None
+    nominal_iou: float
+    polygons: list[list[LonLat]]
+
+
+class ReplayFootprints(_Strict):
+    incident_id: str
+    variant: Literal["nominal"]
+    scored_against: str
+    coordinate_convention: str
+    footprints: list[Footprint]
+    note: str
+
+
+class DensityContour(_Strict):
+    fraction: float
+    polygons: list[list[LonLat]]
+
+
+class ForecastContourHorizon(_Strict):
+    horizon_hours: int
+    valid_utc: IsoUtc
+    density_contours: list[DensityContour]
+
+
+class ForecastContours(_Strict):
+    incident_id: str
+    issued_from_utc: IsoUtc
+    n_particles_per_horizon: int
+    coordinate_decimals: int
+    horizons: list[ForecastContourHorizon]
+    note: str
+
+
 # ------------------------------------------------------------------- case --
 
 class Case(_Strict):
-    schema_version: Literal["1"] = SCHEMA_VERSION
+    schema_version: Literal["2"] = SCHEMA_VERSION
     meta: Meta
     geography: Geography
     slick: Optional[Slick] = None
@@ -429,12 +474,14 @@ class Case(_Strict):
     coverage: Optional[Coverage] = None
     forecast: Optional[Forecast] = None
     next_observation: Optional[NextObservation] = None
+    replay_footprints: Optional[ReplayFootprints] = None
+    forecast_contours: Optional[ForecastContours] = None
 
     @model_validator(mode="after")
     def _pieces_agree(self) -> "Case":
         iid = self.meta.incident_id
         for name in ("baseline", "attribution", "fragility", "coverage", "forecast",
-                     "next_observation"):
+                     "next_observation", "replay_footprints", "forecast_contours"):
             section = getattr(self, name)
             if section is not None and section.incident_id != iid:
                 raise ValueError(f"{name} belongs to {section.incident_id}, not {iid}")
@@ -459,6 +506,17 @@ class Case(_Strict):
                                  "historical-mapping candidates")
             if not {r.vessel_key for r in self.attribution.ranking} <= set(candidates):
                 raise ValueError("ranking contains a vessel that is not a candidate")
+
+        if self.replay_footprints is not None and self.attribution is not None:
+            drawn = [(f.vessel_key, f.candidate_id) for f in self.replay_footprints.footprints]
+            ranked = [(r.vessel_key, r.candidate_id) for r in self.attribution.ranking]
+            if drawn != ranked:
+                raise ValueError("replay footprints do not follow the attribution ranking")
+
+        if self.forecast_contours is not None and self.forecast is not None:
+            if [h.horizon_hours for h in self.forecast_contours.horizons] != \
+                    [h.horizon_hours for h in self.forecast.horizons]:
+                raise ValueError("forecast contours do not cover the forecast horizons")
         return self
 
 
@@ -515,4 +573,6 @@ def build_case(case_dir: str) -> Case:
         "coverage": _load(case_dir, "coverage_result.json"),
         "forecast": _load(case_dir, "forecast_result.json"),
         "next_observation": _load(case_dir, "next_observation_result.json"),
+        "replay_footprints": _load(case_dir, "replay_footprints.json"),
+        "forecast_contours": _load(case_dir, "forecast_contours.json"),
     })

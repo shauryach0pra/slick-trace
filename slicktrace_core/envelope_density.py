@@ -28,6 +28,24 @@ DEFAULT_LEVELS = (0.5, 0.75, 0.9)
 MIN_PARTICLES = 12
 
 
+def rings_of(contour_set) -> list[list[list[float]]]:
+    """Every loop of a contour set as its own ring.
+
+    Since matplotlib 3.8 each level comes back as one Path holding all of its
+    loops, separated by MOVETO codes. Taking the vertices whole joins disjoint
+    lobes into a single polygon with a false edge between them; splitting at
+    each MOVETO keeps them apart and leaves single-loop rings unchanged.
+    """
+    rings = []
+    for path in contour_set.get_paths():
+        codes = path.codes
+        starts = np.flatnonzero(codes == path.MOVETO) if codes is not None else np.array([0])
+        for seg in np.split(path.vertices, starts[1:]):
+            if len(seg) >= 4:
+                rings.append(seg.tolist())
+    return rings
+
+
 def density_contours(lon, lat, levels=DEFAULT_LEVELS, grid: int = 80) -> list[dict]:
     """Contours enclosing the given fractions of estimated probability mass.
 
@@ -71,9 +89,7 @@ def density_contours(lon, lat, levels=DEFAULT_LEVELS, grid: int = 80) -> list[di
         for frac in levels:
             thr = float(flat[min(int(np.searchsorted(cum, frac)), flat.size - 1)])
             cs = ax.contour(X, Y, Z, levels=[thr])
-            rings = [p.vertices.tolist() for p in cs.get_paths()
-                     if len(p.vertices) >= 4]
-            out.append({"fraction": frac, "polygons": rings})
+            out.append({"fraction": frac, "polygons": rings_of(cs)})
     finally:
         plt.close(fig)
     return out

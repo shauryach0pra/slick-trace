@@ -438,6 +438,12 @@ def run_attribution(case_dir: str, candidate_vessel_keys: list[str] | None = Non
     }
     with open(os.path.join(case_dir, "attribution_result.json"), "w") as f:
         json.dump(out, f, indent=2, default=str)
+
+    # The footprint each ranked candidate's best hypothesis draws under the
+    # nominal forcing member, rasterised exactly as scored, for the map.
+    from slicktrace_core.display_geometry import write_replay_footprints
+    write_replay_footprints(case_dir, manifest, out["ranking"], tracks_by_key, u, v,
+                            acquired, bbox, observed_mask)
     return out
 
 

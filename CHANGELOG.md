@@ -70,6 +70,19 @@ on absent-source cases, 0/0) as 0.0%; it now reads "not measured".
 attribution before historical mapping; it is removed, as the verdict band
 already states the finding. `api.js` no longer defines `detection` twice.
 
+**Display geometry computed in the pipeline.** The attribution stage now also
+writes `replay_footprints.json`: for every ranked candidate, the footprint its
+best hypothesis produces under the nominal forcing member, rasterised exactly as
+scored and traced to lon/lat. The forecast stage writes `forecast_contours.json`:
+50/75/90% contours over the particles behind each horizon's figures. Both are
+served (`/replay-footprints`, `/forecast-contours`) and carried in the Case
+contract, now schema 2; `attribution_result.json` and `forecast_result.json` are
+unchanged. Fixed on the way: since matplotlib 3.8 a contour level returns all of
+its loops in one path, and `density_contours` took it whole, so 4 of 675 rings
+across the nine envelope timelines joined two lobes into one polygon with a false
+edge between them. Levels are now split at each loop; the single-loop rings are
+unchanged. Six tests added; 223 pass.
+
 ---
 
 ## 13 September 2026

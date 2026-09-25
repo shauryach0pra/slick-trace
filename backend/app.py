@@ -119,6 +119,18 @@ def get_case(incident_id: str):
     return _strip_truth(case.model_dump(mode="json"))
 
 
+@app.get("/api/incidents/{incident_id}/replay-footprints")
+def get_replay_footprints(incident_id: str):
+    """Each ranked candidate's nominal replayed footprint, traced for the map."""
+    return _require(incident_id, "replay_footprints.json", "replay footprints")
+
+
+@app.get("/api/incidents/{incident_id}/forecast-contours")
+def get_forecast_contours(incident_id: str):
+    """50/75/90% density contours for each forecast horizon, for the map."""
+    return _require(incident_id, "forecast_contours.json", "forecast contours")
+
+
 # ------------------------------------------------------------- incidents --
 
 @app.get("/api/incidents")

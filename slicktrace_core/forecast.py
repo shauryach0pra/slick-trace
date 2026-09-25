@@ -89,6 +89,7 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
     sensitive = manifest.get("sensitive_areas", [])
 
     horizons = []
+    particles_by_horizon = []  # the same particles, kept for forecast_contours.json
     first_contact = {a["name"]: None for a in sensitive}
     first_shore_contact = None
 
@@ -103,6 +104,7 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
             all_lat.append(lat)
         lon_h = np.concatenate(all_lon)
         lat_h = np.concatenate(all_lat)
+        particles_by_horizon.append((lon_h, lat_h))
 
         xs, ys = lonlat_to_px(lon_h, lat_h, bbox, img_size)
         grid = np.zeros((img_size, img_size), dtype=np.int32)
@@ -153,6 +155,9 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
     }
     with open(os.path.join(case_dir, "forecast_result.json"), "w") as f:
         json.dump(out, f, indent=2, default=str)
+
+    from slicktrace_core.display_geometry import write_forecast_contours
+    write_forecast_contours(case_dir, out, particles_by_horizon)
     return out
 
 
