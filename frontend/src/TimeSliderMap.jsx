@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import MetricInfo from './MetricInfo';
+import { Badge, Card } from './ui/primitives';
+import { CAPTIONS } from './ui/glossary';
 
 /**
  * Live historical map with a draggable UTC control (masterplan p.8, p.13).
@@ -118,13 +120,9 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
   const inside = (envelope?.vessels ?? []).filter((v) => v.at_this_time === 'inside');
 
   return (
-    <div className="panel">
-      <div className="panel-head">
-        <h2>Historical Replay</h2>
-        <span className={envelope?.hindcast ? 'tag tag-amber' : 'tag tag-teal'}>
-          {envelope?.hindcast ? 'Modelled' : 'Observed'}
-        </span>
-      </div>
+    <Card title="Historical Replay" caption={CAPTIONS.replay}
+          badge={<Badge tone={envelope?.hindcast ? 'warning' : 'accent'}>
+            {envelope?.hindcast ? 'modelled' : 'observed'}</Badge>}>
 
       <svg viewBox={`0 0 ${W} ${H}`} className="track-map probe-target" role="img"
            onClick={onMapClick}
@@ -301,6 +299,6 @@ export default function TimeSliderMap({ incidentId, api, tracksData, topCandidat
         {envelope?.note ?? 'Envelope width grows with hours-back because release time, ' +
           'duration and diffusivity are unknown.'}
       </p>
-    </div>
+    </Card>
   );
 }

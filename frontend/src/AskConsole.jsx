@@ -33,11 +33,7 @@ export default function AskConsole({ incidentId, api }) {
   }
 
   return (
-    <div className="panel console-panel">
-      <div className="panel-head">
-        <h2>Ask Slick Trace</h2>
-        <span className="tag">grounded query — no free-form generation</span>
-      </div>
+    <>
       {history.length === 0 && (
         <div className="suggestions-section">
           <p>Try a question, or pick one below.</p>
@@ -76,6 +72,6 @@ export default function AskConsole({ incidentId, api }) {
         />
         <button type="submit" disabled={busy}>Ask</button>
       </form>
-    </div>
+    </>
   );
 }

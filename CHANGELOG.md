@@ -117,6 +117,20 @@ discrimination, lead_retained_fraction, smallest_flip, abstention gate); a stage
 whose artifact has not loaded says so. It now shows what the old one hid: on
 case_0009 the top two candidates are not separated.
 
+**Interface: generic, schema-driven cards.** Every panel is rebuilt from shared
+primitives (Card, Stat, BarList, Badge, CaptionList, EmptyState) and reads the Case
+contract from `/case`, plus `/report` for status counts and checksums and `/tracks`
+for the map; a response for a case no longer selected is dropped. Every non-obvious
+number carries a plain-language caption, visible by default, each checked against
+the code that computes it. Fixed on the way: the finding said "tested N release
+hypotheses" where N was candidate vessels; "Top Pick Right/Wrong" needed ground
+truth the interface does not have and now says how the baseline relates to forward
+replay; red and green verdict colours are gone; the next-observation card reads the
+artifact's recommended window instead of recomputing it; a null shoreline fraction
+reads "not modelled"; the scene card carries the note that downstream stages are
+seeded from the generator mask; card state resets on case switch. Recharts is
+replaced by native bars (bundle 619 KB to 271 KB).
+
 ---
 
 ## 13 September 2026

@@ -11,6 +11,8 @@ async function j(path, opts) {
 
 export const api = {
   listIncidents: () => j('/incidents'),
+  // the whole incident as one validated object (slicktrace_core.case_contract)
+  case: (id) => j(`/incidents/${id}/case`),
   manifest: (id) => j(`/incidents/${id}/manifest`),
   sceneUrl: (id) => `${BASE}/incidents/${id}/scene`,
   historicalMapping: (id) => j(`/incidents/${id}/historical-mapping`),
