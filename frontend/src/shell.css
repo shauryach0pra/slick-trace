@@ -1,0 +1,668 @@
+/*
+ * App shell, in the manner of a native macOS window: a unified translucent
+ * toolbar, a vibrant source-list sidebar with one selection that slides
+ * between rows, a content column of sections divided by hairlines rather than
+ * boxed cards, and a translucent inspector.
+ *
+ * Tokens come from index.css. Nothing here is case-specific: panels keep
+ * their own internal styles in dashboard.css and inherit the theme through
+ * the aliased legacy variables.
+ */
+
+/* ----------------------------------------------------------------- window */
+
+.app-shell {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--window-bg);
+}
+
+.finder-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.finder-content {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- toolbar */
+
+.topbar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 52px;
+  padding: 0 var(--space-4) 0 var(--space-5);
+  flex-shrink: 0;
+  background: var(--material-bar);
+  -webkit-backdrop-filter: var(--blur-material);
+  backdrop-filter: var(--blur-material);
+  border-bottom: 1px solid var(--separator);
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.003em;
+  color: var(--label-1);
+}
+
+.wordmark-mark {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  border-radius: 5px;
+}
+
+.wordmark-sub {
+  font-weight: var(--font-weight-normal);
+  color: var(--label-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.topbar-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------------------------------------------------------------- badges */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: 999px;
+  background: var(--fill-hover);
+  color: var(--label-2);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.005em;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.tag-teal,
+.tag-amber,
+.tag-green,
+.tag-red {
+  font-variant-caps: normal;
+}
+
+.tag-teal::before,
+.tag-amber::before,
+.tag-green::before,
+.tag-red::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.tag-teal  { color: var(--accent);        background: var(--accent-soft); }
+.tag-amber { color: var(--status-orange); background: var(--status-orange-soft); }
+.tag-green { color: var(--status-green);  background: var(--status-green-soft); }
+.tag-red   { color: var(--status-red);    background: var(--status-red-soft); }
+
+/* ---------------------------------------------------------------- sidebar */
+
+.finder-sidebar {
+  width: 264px;
+  min-width: 264px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding: var(--space-3) 10px var(--space-4);
+  background: var(--material-sidebar);
+  -webkit-backdrop-filter: var(--blur-material);
+  backdrop-filter: var(--blur-material);
+  border-right: 1px solid var(--separator);
+}
+
+.case-switcher {
+  display: flex;
+  flex-direction: column;
+}
+
+.case-switcher-label {
+  display: block;
+  padding: 6px 10px 6px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.01em;
+  color: var(--label-3);
+}
+
+.case-list-wrap {
+  position: relative;
+}
+
+.case-list {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* One selection that travels between rows instead of colours swapping. */
+.case-highlight {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--h, 0px);
+  transform: translateY(var(--y, 0px));
+  border-radius: 7px;
+  background: var(--accent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), inset 0 0.5px 0 rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.case-highlight.is-ready {
+  opacity: 1;
+  transition: transform var(--dur-base) var(--ease-spring),
+              height var(--dur-base) var(--ease-spring),
+              opacity var(--dur-fast) ease;
+}
+
+.case-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--label-1);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+  transition: background-color var(--dur-fast) ease,
+              color var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-spring);
+}
+
+.case-item:hover:not(.is-active) {
+  background: var(--fill-hover);
+}
+
+.case-item:active {
+  transform: scale(0.98);
+  transition-duration: var(--dur-fast), var(--dur-fast), var(--dur-fast);
+}
+
+.case-item.is-active {
+  color: var(--on-accent);
+}
+
+.case-item:focus-visible {
+  outline: 3px solid var(--accent-ring);
+  outline-offset: 0;
+}
+
+.case-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.case-id {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.case-description {
+  font-size: var(--font-size-xs);
+  color: var(--label-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.case-item.is-active .case-description {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.case-indicator {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12);
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.indicator-known   { background: var(--status-green); }
+.indicator-unknown { background: var(--status-orange); }
+
+.case-item.is-active .indicator-known,
+.case-item.is-active .indicator-unknown {
+  background: var(--on-accent);
+}
+
+/* ---------------------------------------------------------------- content */
+
+.finder-features {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-7) var(--space-8);
+  background: var(--content-bg);
+}
+
+.finder-features > * {
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+/* Sections, not cards: no border, fill or shadow; hairlines between them. */
+.panel {
+  flex-shrink: 0;
+  padding: var(--space-6) 0;
+  border: 0;
+  border-top: 1px solid var(--separator);
+  border-radius: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: 14px;
+}
+
+.panel-head h2 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.012em;
+  color: var(--label-1);
+}
+
+/* Section titles pin while their section scrolls beneath, on the same
+   material as the toolbar. In flow the material is indistinguishable from
+   the page; it only reads as glass once content passes under it. */
+.finder-features .panel > .panel-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-3)) 14px;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  background: var(--material-header);
+  -webkit-backdrop-filter: var(--blur-material);
+  backdrop-filter: var(--blur-material);
+}
+
+.finder-features .panel {
+  padding-top: var(--space-6);
+}
+
+.finder-features > .verdict {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+/* -------------------------------------------------------------- inspector */
+
+.finder-details {
+  width: 340px;
+  min-width: 340px;
+  flex-shrink: 0;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5);
+  background: var(--material-sidebar);
+  -webkit-backdrop-filter: var(--blur-material);
+  backdrop-filter: var(--blur-material);
+  border-left: 1px solid var(--separator);
+}
+
+.finder-details .panel {
+  padding: 0;
+  border-top: 0;
+}
+
+.finder-details .console-panel {
+  flex: 1;
+  min-height: 320px;
+  padding: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 0;
+}
+
+.report-buttons {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.report-button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: 7px;
+  background: var(--control-bg);
+  color: var(--label-1);
+  box-shadow: var(--shadow-control);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: default;
+  transition: transform var(--dur-base) var(--ease-spring),
+              background-color var(--dur-fast) ease;
+}
+
+.report-button:hover {
+  background: var(--control-bg-hover);
+}
+
+.report-button:active {
+  transform: scale(0.97);
+  background: var(--control-bg-pressed);
+  transition-duration: var(--dur-fast);
+}
+
+/* Panel controls: same springs, no lifts, no colour flashes. */
+.suggestion,
+.frag-step,
+.console-input-row button,
+.probe-close,
+.metric-info-trigger {
+  transition: transform var(--dur-base) var(--ease-spring),
+              background-color var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              color var(--dur-fast) ease;
+}
+
+.suggestion {
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  padding: 9px 12px;
+  font-size: var(--font-size-sm);
+  color: var(--label-1);
+  cursor: default;
+}
+
+.suggestion:hover {
+  background: var(--fill-pressed);
+  box-shadow: none;
+  transform: none;
+}
+
+.frag-step {
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  cursor: default;
+}
+
+.frag-step:hover {
+  background: var(--fill-hover);
+  transform: none;
+}
+
+.console-input-row {
+  border-top: 1px solid var(--separator);
+  padding-top: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.console-input-row input {
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--control-bg);
+  box-shadow: var(--shadow-control);
+  font-size: var(--font-size-sm);
+  transition: box-shadow var(--dur-fast) ease;
+}
+
+.console-input-row input:focus {
+  outline: none;
+  box-shadow: var(--shadow-control), 0 0 0 3px var(--accent-ring);
+}
+
+.console-input-row button {
+  height: 28px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.12), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  cursor: default;
+}
+
+.console-input-row button:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.12), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  transform: none;
+}
+
+.suggestion:active,
+.frag-step:active,
+.console-input-row button:active:not(:disabled),
+.probe-close:active,
+.metric-info-trigger:active {
+  transform: scale(0.96);
+  transition-duration: var(--dur-fast);
+}
+
+/* ------------------------------------------------------------- popovers */
+
+.metric-info-popover {
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--elevated-bg);
+  box-shadow: var(--shadow-float);
+  padding: 10px 12px;
+  animation: popover-in var(--dur-base) var(--ease-spring);
+}
+
+@keyframes popover-in {
+  from { opacity: 0; transform: translateY(-3px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------------- theme control */
+
+.theme-toggle {
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 30px;
+  height: 24px;
+  padding: 2px;
+  border-radius: 7px;
+  background: var(--fill-hover);
+  box-shadow: inset 0 0 0 0.5px var(--separator);
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: 30px;
+  border-radius: 5px;
+  background: var(--control-bg);
+  box-shadow: var(--shadow-control);
+  transform: translateX(calc(var(--i, 0) * 30px));
+  transition: transform var(--dur-base) var(--ease-spring);
+  pointer-events: none;
+}
+
+.theme-seg {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--label-2);
+  cursor: default;
+  transition: color var(--dur-fast) ease, transform var(--dur-base) var(--ease-spring);
+}
+
+.theme-seg:hover {
+  color: var(--label-1);
+}
+
+.theme-seg:active {
+  transform: scale(0.92);
+  transition-duration: var(--dur-fast);
+}
+
+.theme-seg[aria-checked="true"] {
+  color: var(--label-1);
+}
+
+.theme-seg svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ----------------------------------------------------------------- notices */
+
+.error-banner {
+  flex-shrink: 0;
+  margin: var(--space-3) var(--space-5) 0;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--status-red-soft);
+  color: var(--status-red);
+  font-size: var(--font-size-sm);
+}
+
+/* -------------------------------------------- materials without vibrancy */
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .topbar { background: var(--solid-bar); }
+  .finder-sidebar, .finder-details { background: var(--solid-sidebar); }
+  .finder-features .panel > .panel-head { background: var(--content-bg); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .topbar { background: var(--solid-bar); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .finder-sidebar, .finder-details {
+    background: var(--solid-sidebar); backdrop-filter: none; -webkit-backdrop-filter: none;
+  }
+  .finder-features .panel > .panel-head {
+    background: var(--content-bg); backdrop-filter: none; -webkit-backdrop-filter: none;
+  }
+}
+
+/* ------------------------------------------------------------- narrow widths */
+
+/* Stacked: one scroll container for the whole page, so the columns flow one
+   after another instead of each clipping its own content. */
+@media (max-width: 1100px) {
+  .finder-layout {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .finder-content {
+    flex: none;
+    flex-direction: column;
+    overflow: visible;
+  }
+  .finder-sidebar {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-height: 220px;
+    border-right: 0;
+    border-bottom: 1px solid var(--separator);
+  }
+  .finder-features {
+    flex: none;
+    min-height: auto;
+    overflow: visible;
+    padding: 0 var(--space-5) var(--space-6);
+  }
+  .finder-details {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    overflow: visible;
+    border-left: 0;
+    border-top: 1px solid var(--separator);
+  }
+  .console-panel { height: 420px; }
+}
+
+@media (max-width: 620px) {
+  .topbar { height: auto; flex-wrap: wrap; padding: 10px 14px; }
+  .topbar-trailing { width: 100%; justify-content: space-between; margin-left: 0; }
+  .wordmark-sub { display: none; }
+}

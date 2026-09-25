@@ -96,6 +96,18 @@ does not encode ship type and the source carries no AIS static data. Served at
 `/track-display` and carried in the Case contract, schema 3.
 `scripts/track_summary.py` prints the per-case table. Seven tests added; 230 pass.
 
+**Interface: a native macOS design system and shell.** Tokens for light and dark
+(system colours, vibrancy materials, separators, labels) with the legacy variable
+names aliased onto them, so every panel follows the theme unedited; an
+appearance control (System, Light, Dark) applied before first paint. System
+fonts replace the web fonts. The shell is a translucent toolbar, a vibrant
+sidebar whose single selection slides between rows, sections divided by
+hairlines with sticky translucent headers instead of boxed cards, and a
+translucent inspector. Hover and press use a lightly damped spring; reduced
+motion and reduced transparency are honoured. Shell rules moved out of
+`dashboard.css`, whose translucent white fills now use a token so dark mode
+holds. No data, request or case logic changed.
+
 ---
 
 ## 13 September 2026

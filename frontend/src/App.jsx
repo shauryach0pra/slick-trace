@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './dashboard.css';
+import './shell.css';
 import { api } from './api';
 import CaseSwitcher from './CaseSwitcher';
 import ProvenancePanel from './ProvenancePanel';
@@ -12,6 +13,7 @@ import AskConsole from './AskConsole';
 import ForecastPanel from './ForecastPanel';
 import CoveragePanel from './CoveragePanel';
 import NextObservationPanel from './NextObservationPanel';
+import ThemeToggle from './ThemeToggle';
 
 export default function App() {
   const [incidents, setIncidents] = useState([]);
@@ -64,13 +66,24 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="wordmark">Slick Trace<span className="wordmark-sub">/ source attribution</span></div>
-        {manifest && (
-          <div className="topbar-meta">
-            <span className="tag tag-teal">{manifest.case_state?.replace('_', ' ') ?? 'potential slick'}</span>
-            {manifest.provenance?.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
-          </div>
-        )}
+        <div className="wordmark">
+          <svg className="wordmark-mark" viewBox="0 0 18 18" aria-hidden="true">
+            <rect width="18" height="18" rx="5" fill="var(--accent)" />
+            <path d="M9 3.6s-3.1 3.9-3.1 5.9a3.1 3.1 0 0 0 6.2 0C12.1 7.5 9 3.6 9 3.6Z" fill="#fff" />
+            <path d="M3.8 14c1.2-.9 2.3-.9 3.5 0s2.3.9 3.5 0 2.3-.9 3.4 0" stroke="#fff"
+                  strokeWidth="1.2" fill="none" strokeLinecap="round" opacity=".85" />
+          </svg>
+          Slick Trace<span className="wordmark-sub">Source attribution</span>
+        </div>
+        <div className="topbar-trailing">
+          {manifest && (
+            <div className="topbar-meta">
+              <span className="tag tag-teal">{manifest.case_state?.replace('_', ' ') ?? 'potential slick'}</span>
+              {manifest.provenance?.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
+            </div>
+          )}
+          <ThemeToggle />
+        </div>
       </header>
 
       {error && <div className="error-banner">Failed to load incident data: {error}</div>}

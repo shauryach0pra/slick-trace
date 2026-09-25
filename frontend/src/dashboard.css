@@ -1,146 +1,18 @@
-.app-shell {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+/* shell rules live in shell.css */
 
 /* macOS Finder three-column layout */
-.finder-layout {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
-}
 
 /* .finder-sidebar base box model lives in the consolidated macOS-Finder
    sidebar block at the end of this file; it supersedes this rule. */
-.finder-sidebar {
-  width: 300px;
-  min-width: 300px;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid var(--line-subtle);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  flex-shrink: 0;
-}
 
-.finder-content {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  min-height: 0;
-}
 
-.finder-features {
-  flex: 1;
-  min-width: 0;
-  overflow-y: auto;
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-right: 1px solid var(--line-subtle);
-  min-height: 0;
-  background: linear-gradient(180deg, var(--ink-950) 0%, var(--ink-975) 100%);
-}
 
-.finder-details {
-  width: 380px;
-  min-width: 380px;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 28px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  flex-shrink: 0;
-  min-height: 0;
-  border-left: 1px solid var(--line-subtle);
-}
 
-.topbar {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--line-subtle);
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  flex-shrink: 0;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
-}
 
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
-  letter-spacing: -0.02em;
-  color: var(--text-hi);
-}
 
-.wordmark-sub {
-  font-weight: var(--font-weight-normal);
-  font-size: var(--font-size-sm);
-  color: var(--text-mid);
-  margin-left: 8px;
-  opacity: 0.7;
-}
 
-.topbar-meta {
-  display: flex;
-  gap: 8px;
-}
 
-.tag {
-  font-family: var(--font-body);
-  font-size: var(--font-size-xxs);
-  font-weight: var(--font-weight-medium);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line-subtle);
-  color: var(--text-mid);
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  background: var(--ink-800);
-}
-.tag-teal { 
-  color: var(--teal); 
-  border-color: var(--teal-subtle); 
-  background: var(--teal-subtle);
-}
-.tag-amber { 
-  color: var(--amber); 
-  border-color: var(--amber-subtle); 
-  background: var(--amber-subtle);
-}
-.tag-green { 
-  color: var(--green); 
-  border-color: var(--green-subtle); 
-  background: var(--green-subtle);
-}
-.tag-red { 
-  color: var(--red); 
-  border-color: var(--red-subtle); 
-  background: var(--red-subtle);
-}
 
-.error-banner {
-  margin: 12px 28px 0;
-  padding: 10px 14px;
-  border: 1px solid var(--red);
-  color: var(--red);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  flex-shrink: 0;
-}
 
 .grid {
   flex: 1;
@@ -160,73 +32,14 @@
   min-width: 0;
 }
 
-.panel {
-  border: 1px solid var(--line-subtle);
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 20px;
-  border-radius: var(--radius-md);
-  flex-shrink: 0;
-  box-shadow: var(--shadow-subtle);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
 
-.panel:hover {
-  box-shadow: var(--shadow-medium);
-  border-color: var(--line);
-}
 
 /* Report buttons section */
-.report-buttons {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-}
 
-.report-button {
-  flex: 1;
-  padding: 10px 16px;
-  border: 1px solid var(--line-subtle);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--text-hi);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  box-shadow: var(--shadow-subtle);
-}
 
-.report-button:hover {
-  background: var(--ink-950);
-  border-color: var(--teal);
-  box-shadow: var(--shadow-medium);
-  transform: translateY(-1px);
-}
 
-.report-button:focus-visible {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
-}
 
-.panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  margin-bottom: 16px;
-}
 
-.panel-head h2 {
-  font-size: var(--font-size-md);
-  color: var(--text-hi);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.01em;
-}
 
 /* --- scene panel --- */
 .scene-img {
@@ -288,7 +101,7 @@
   color: var(--text-hi);
   font-weight: var(--font-weight-medium);
 }
-.legend span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background: rgba(255, 255, 255, 0.5); border-radius: var(--radius-sm); border: 1px solid var(--line-subtle); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background: var(--surface-raised); border-radius: var(--radius-sm); border: 1px solid var(--line-subtle); }
 .legend i { width: 8px; height: 8px; display: inline-block; flex-shrink: 0; }
 
 /* --- ask console --- */
@@ -298,7 +111,7 @@
   height: 100%;
   min-height: 200px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--surface-raised);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
@@ -332,7 +145,7 @@
 }
 .suggestion {
   text-align: left;
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--surface-raised);
   border: 1px solid var(--line-subtle);
   color: var(--text-hi);
   padding: 10px 14px;
@@ -346,7 +159,7 @@
 .suggestion:hover { 
   border-color: var(--teal); 
   color: var(--text-hi);
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface-raised);
   box-shadow: var(--shadow-subtle);
 }
 
@@ -370,7 +183,7 @@
 .console-input-row .prompt { color: var(--teal); font-family: var(--font-mono); }
 .console-input-row input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface-raised);
   border: 1px solid var(--line-subtle);
   color: var(--text-hi);
   font-family: var(--font-mono);
@@ -409,34 +222,6 @@
   box-shadow: none;
 }
 
-@media (max-width: 1100px) {
-  .finder-layout {
-    flex-direction: column;
-    height: auto;
-  }
-  .finder-sidebar {
-    width: 100%;
-    min-width: 0;
-    border-right: none;
-    border-bottom: 1px solid var(--line-subtle);
-    max-height: 200px;
-    background: rgba(255, 255, 255, 0.9);
-  }
-  .finder-content {
-    flex-direction: column;
-  }
-  .finder-features {
-    border-right: none;
-    border-bottom: 1px solid var(--line-subtle);
-    background: var(--ink-975);
-  }
-  .finder-details {
-    width: 100%;
-    min-width: 0;
-    background: rgba(255, 255, 255, 0.9);
-  }
-  .console-panel { height: 420px; }
-}
 
 /* ===================================================================
    Live historical replay, rank fragility, and inline metric help.
@@ -634,7 +419,7 @@
   padding: 8px 12px;
   border: 1px solid var(--line-subtle);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface-raised);
   color: var(--text-hi);
   font-family: var(--font-body);
   font-size: var(--font-size-sm);
@@ -664,7 +449,7 @@
   font-weight: var(--font-weight-medium);
   padding: 6px 10px;
   border: 1px solid var(--line-subtle);
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--surface-raised);
   color: var(--text-mid);
   cursor: pointer;
   border-radius: var(--radius-sm);
@@ -673,7 +458,7 @@
 .frag-step:hover { 
   color: var(--text-mid); 
   border-color: var(--teal);
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface-raised);
 }
 .frag-step:focus-visible { 
   outline: none; 
@@ -776,23 +561,9 @@
   .metric-info-popover { width: min(260px, 70vw); }
 }
 
-/* Adding the investigation-report link gave .topbar-meta a fourth tag, which
-   squeezed the wordmark until the subtitle wrapped onto its own line on
-   narrow viewports. Let the two halves stack instead of compressing, and
-   keep the wordmark on one line. */
-.topbar {
-  flex-wrap: wrap;
-  gap: 8px 16px;
-}
 
-.wordmark { white-space: nowrap; }
 
-.topbar-meta { flex-wrap: wrap; }
 
-@media (max-width: 620px) {
-  .topbar { padding: 14px 18px; }
-  .topbar-meta { width: 100%; }
-}
 
 /* --- Forecast, coverage and next-observation panels --- */
 
@@ -863,113 +634,20 @@
 
 /* --- Case switcher (macOS Finder sidebar style) --- */
 
-.case-switcher {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 
-.case-switcher-label {
-  display: block;
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-dim);
-  margin: 4px 0 6px;
-  padding: 0 8px;
-}
 
-.case-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-x: visible;
-  flex-wrap: nowrap;
-}
 
-.case-item {
-  width: calc(100% - 8px);
-  text-align: left;
-  cursor: default;
-  border: none;
-  border-radius: var(--radius-md);
-  background: transparent;
-  color: var(--text-hi);
-  font: inherit;
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.15s ease;
-  margin: 2px 4px;
-}
 
-.case-item:hover {
-  background: rgba(0, 0, 0, 0.04);
-  border-radius: var(--radius-sm);
-}
 
-.case-item:focus-visible {
-  outline: none;
-  background: rgba(0, 122, 255, 0.1);
-  border-radius: var(--radius-sm);
-}
 
-.case-item.is-active {
-  background: var(--teal);
-  color: white;
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-subtle);
-}
 
-.case-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.28;
-}
 
-.case-id {
-  font-family: var(--font-body);
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  color: inherit;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
-.case-description {
-  font-size: 11px;
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--text-dim);
-}
 
-.case-item.is-active .case-description {
-  color: rgba(255, 255, 255, 0.78);
-}
 
 /* Leading status dot, Finder-icon position: small, fixed, never truncates */
-.case-indicator {
-  flex: 0 0 auto;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
 
-.indicator-known { background: var(--green); }
-.indicator-unknown { background: var(--amber); }
 
-.case-item.is-active .indicator-known,
-.case-item.is-active .indicator-unknown {
-  background: #ffffff;
-}
 
 /* --- Unknown-source outcome banner --- */
 
@@ -990,7 +668,7 @@
   padding: 1.4rem 1.6rem 1.2rem;
   border: 1px solid var(--line-subtle);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface-raised);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   flex-shrink: 0;
@@ -1012,10 +690,6 @@
   background: var(--green-subtle);
 }
 
-/* Verdict as panel in finder layout */
-.finder-features .verdict {
-  margin-bottom: 0;
-}
 
 .verdict-content {
   display: flex;
@@ -1101,7 +775,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(2px);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface-raised);
 }
 
 
@@ -1349,7 +1023,7 @@
   width: 100%;
   height: 200px;
   position: relative;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface-raised);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
@@ -1376,7 +1050,7 @@
 .probe-readout {
   margin-top: 12px;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface-raised);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--line-subtle);

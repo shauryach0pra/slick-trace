@@ -1,39 +1,174 @@
-@import '@fontsource/space-grotesk/500.css';
-@import '@fontsource/space-grotesk/600.css';
-@import '@fontsource/ibm-plex-sans/400.css';
-@import '@fontsource/ibm-plex-sans/500.css';
-@import '@fontsource/ibm-plex-mono/400.css';
-@import '@fontsource/ibm-plex-mono/500.css';
+/*
+ * Slick Trace design tokens.
+ *
+ * Semantic tokens first (window, materials, labels, separators, fills,
+ * accent, status), then the legacy names the panel styles were written
+ * against, aliased onto them so every panel follows the theme without being
+ * edited. Light is the default; dark applies when the system asks for it and
+ * the user has not chosen light, or whenever the user has chosen dark.
+ * index.html sets data-theme before first paint, so there is no flash.
+ *
+ * System fonts only: nothing is fetched, which keeps the offline guarantee.
+ */
 
 :root {
-  /* macOS Finder Light Theme Colors */
-  --ink-975: #f5f5f7;
-  --ink-950: #ffffff;
-  --ink-900: #fafafa;
-  --ink-800: #f5f5f7;
-  --ink-700: #e8e8ed;
-  --line: #d1d1d6;
-  --line-subtle: #e5e5ea;
-  --teal: #007AFF;
-  --teal-dim: #0056b3;
-  --teal-subtle: rgba(0, 122, 255, 0.1);
-  --amber: #FF9500;
-  --amber-subtle: rgba(255, 149, 0, 0.1);
-  --red: #FF3B30;
-  --red-subtle: rgba(255, 59, 48, 0.1);
-  --green: #34C759;
-  --green-subtle: rgba(52, 199, 89, 0.1);
-  --text-hi: #000000;
-  --text-mid: #333333;
-  --text-dim: #666666;
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+  color-scheme: light;
 
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
-  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, 'Menlo', 'Monaco', monospace;
+  /* surfaces */
+  --window-bg: #ececec;
+  --content-bg: #ffffff;
+  --elevated-bg: #f5f5f7;
+  --material-sidebar: rgba(232, 232, 235, 0.72);
+  --material-bar: rgba(246, 246, 248, 0.78);
+  --material-header: rgba(255, 255, 255, 0.78);
+  --solid-sidebar: #e8e8eb;
+  --solid-bar: #f6f6f8;
+  --surface-raised: rgba(255, 255, 255, 0.72);
+  --surface-sunken: rgba(0, 0, 0, 0.035);
+  --control-bg: #ffffff;
+  --control-bg-hover: #fbfbfc;
+  --control-bg-pressed: #ececee;
 
-  /* Typography Scale - macOS inspired */
+  /* labels and lines */
+  --label-1: rgba(0, 0, 0, 0.88);
+  --label-2: rgba(0, 0, 0, 0.60);
+  --label-3: rgba(0, 0, 0, 0.38);
+  --label-strong: rgba(0, 0, 0, 0.74);
+  --separator: rgba(0, 0, 0, 0.10);
+  --separator-strong: rgba(0, 0, 0, 0.16);
+  --fill-hover: rgba(0, 0, 0, 0.05);
+  --fill-pressed: rgba(0, 0, 0, 0.09);
+
+  /* accent and status: the system colours the status dots already use */
+  --accent: #007aff;
+  --accent-hover: #0068da;
+  --accent-soft: rgba(0, 122, 255, 0.12);
+  --accent-ring: rgba(0, 122, 255, 0.42);
+  --on-accent: #ffffff;
+  --status-green: #34c759;
+  --status-green-soft: rgba(52, 199, 89, 0.14);
+  --status-orange: #ff9500;
+  --status-orange-soft: rgba(255, 149, 0, 0.14);
+  --status-red: #ff3b30;
+  --status-red-soft: rgba(255, 59, 48, 0.12);
+
+  /* depth: only floating things cast shadows */
+  --shadow-control: 0 0 0 0.5px rgba(0, 0, 0, 0.14), 0 1px 1.5px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08),
+                  0 12px 32px rgba(0, 0, 0, 0.12);
+  --blur-material: saturate(180%) blur(24px);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --window-bg: #1b1b1d;
+  --content-bg: #1e1e20;
+  --elevated-bg: #2c2c2e;
+  --material-sidebar: rgba(44, 44, 47, 0.62);
+  --material-bar: rgba(40, 40, 43, 0.72);
+  --material-header: rgba(30, 30, 32, 0.78);
+  --solid-sidebar: #2a2a2d;
+  --solid-bar: #28282b;
+  --surface-raised: rgba(255, 255, 255, 0.06);
+  --surface-sunken: rgba(255, 255, 255, 0.04);
+  --control-bg: rgba(255, 255, 255, 0.10);
+  --control-bg-hover: rgba(255, 255, 255, 0.14);
+  --control-bg-pressed: rgba(255, 255, 255, 0.19);
+  --label-1: rgba(255, 255, 255, 0.88);
+  --label-2: rgba(255, 255, 255, 0.60);
+  --label-3: rgba(255, 255, 255, 0.34);
+  --label-strong: rgba(255, 255, 255, 0.76);
+  --separator: rgba(255, 255, 255, 0.10);
+  --separator-strong: rgba(255, 255, 255, 0.17);
+  --fill-hover: rgba(255, 255, 255, 0.07);
+  --fill-pressed: rgba(255, 255, 255, 0.12);
+  --accent: #0a84ff;
+  --accent-hover: #409cff;
+  --accent-soft: rgba(10, 132, 255, 0.22);
+  --accent-ring: rgba(10, 132, 255, 0.55);
+  --status-green: #30d158;
+  --status-green-soft: rgba(48, 209, 88, 0.18);
+  --status-orange: #ff9f0a;
+  --status-orange-soft: rgba(255, 159, 10, 0.18);
+  --status-red: #ff453a;
+  --status-red-soft: rgba(255, 69, 58, 0.18);
+  --shadow-control: 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 1px 1.5px rgba(0, 0, 0, 0.35);
+  --shadow-float: 0 0 0 0.5px rgba(255, 255, 255, 0.10), 0 2px 6px rgba(0, 0, 0, 0.30),
+                  0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* "System": dark whenever the OS is dark and the user has not forced light */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --window-bg: #1b1b1d;
+    --content-bg: #1e1e20;
+    --elevated-bg: #2c2c2e;
+    --material-sidebar: rgba(44, 44, 47, 0.62);
+    --material-bar: rgba(40, 40, 43, 0.72);
+    --material-header: rgba(30, 30, 32, 0.78);
+    --solid-sidebar: #2a2a2d;
+    --solid-bar: #28282b;
+    --surface-raised: rgba(255, 255, 255, 0.06);
+    --surface-sunken: rgba(255, 255, 255, 0.04);
+    --control-bg: rgba(255, 255, 255, 0.10);
+    --control-bg-hover: rgba(255, 255, 255, 0.14);
+    --control-bg-pressed: rgba(255, 255, 255, 0.19);
+    --label-1: rgba(255, 255, 255, 0.88);
+    --label-2: rgba(255, 255, 255, 0.60);
+    --label-3: rgba(255, 255, 255, 0.34);
+    --label-strong: rgba(255, 255, 255, 0.76);
+    --separator: rgba(255, 255, 255, 0.10);
+    --separator-strong: rgba(255, 255, 255, 0.17);
+    --fill-hover: rgba(255, 255, 255, 0.07);
+    --fill-pressed: rgba(255, 255, 255, 0.12);
+    --accent: #0a84ff;
+    --accent-hover: #409cff;
+    --accent-soft: rgba(10, 132, 255, 0.22);
+    --accent-ring: rgba(10, 132, 255, 0.55);
+    --status-green: #30d158;
+    --status-green-soft: rgba(48, 209, 88, 0.18);
+    --status-orange: #ff9f0a;
+    --status-orange-soft: rgba(255, 159, 10, 0.18);
+    --status-red: #ff453a;
+    --status-red-soft: rgba(255, 69, 58, 0.18);
+    --shadow-control: 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 1px 1.5px rgba(0, 0, 0, 0.35);
+    --shadow-float: 0 0 0 0.5px rgba(255, 255, 255, 0.10), 0 2px 6px rgba(0, 0, 0, 0.30),
+                    0 12px 32px rgba(0, 0, 0, 0.45);
+  }
+}
+
+:root {
+  /* legacy names used throughout the panel styles, aliased to the tokens */
+  --ink-975: var(--window-bg);
+  --ink-950: var(--content-bg);
+  --ink-900: var(--surface-sunken);
+  --ink-800: var(--elevated-bg);
+  --ink-700: var(--fill-pressed);
+  --line: var(--separator-strong);
+  --line-subtle: var(--separator);
+  --teal: var(--accent);
+  --teal-dim: var(--accent-hover);
+  --teal-subtle: var(--accent-soft);
+  --amber: var(--status-orange);
+  --amber-subtle: var(--status-orange-soft);
+  --red: var(--status-red);
+  --red-subtle: var(--status-red-soft);
+  --green: var(--status-green);
+  --green-subtle: var(--status-green-soft);
+  --text-hi: var(--label-1);
+  --text-mid: var(--label-strong);
+  --text-dim: var(--label-2);
+  --shadow-subtle: none;
+  --shadow-medium: var(--shadow-float);
+
+  /* type: San Francisco where available; the browser picks Text or Display by size */
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+                  "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+               "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
   --font-size-xl: 22px;
   --font-size-lg: 17px;
   --font-size-md: 15px;
@@ -42,17 +177,41 @@
   --font-size-xs: 11px;
   --font-size-xxs: 10px;
   --font-size-xxxs: 9px;
-
-  /* Font Weights */
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
-  
-  /* macOS Corner Radius */
+
+  /* 4-point spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+
+  /* radii: controls 6, sections and popovers 10, window-level groups 12 */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 10px;
   --radius-xl: 12px;
+  --radius-window: 14px;
+
+  /* motion: a lightly damped spring (3.8% overshoot, settled by the end) */
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 280ms;
+  --dur-slow: 420ms;
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: linear(0, 0.032 3%, 0.112 6%, 0.258 10%, 0.420 14%, 0.574 18%, 0.738 23%,
+                          0.862 28%, 0.960 34%, 1.013 40%, 1.036 47%, 1.036 55%, 1.021 65%,
+                          1.006 78%, 1);
+  }
 }
 
 * {
@@ -66,43 +225,48 @@ html, body, #root {
 }
 
 body {
-  background: var(--ink-975);
-  color: var(--text-hi);
+  background: var(--window-bg);
+  color: var(--label-1);
   font-family: var(--font-body);
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: var(--font-size-base);
+  line-height: 1.38;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
 a {
-  color: var(--teal);
+  color: var(--accent);
 }
 
-button {
+button, input, select, textarea {
   font-family: var(--font-body);
 }
 
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
 ::selection {
-  background: var(--teal-dim);
+  background: var(--accent-soft);
 }
 
 :focus-visible {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
+  outline: 3px solid var(--accent-ring);
+  outline-offset: 1px;
 }
 
-/* macOS-style scrollbars */
+/* overlay-style scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 11px;
+  height: 11px;
 }
 
 ::-webkit-scrollbar-track {
@@ -110,18 +274,25 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--line);
-  border-radius: 4px;
-  border: 2px solid transparent;
+  background: var(--label-3);
+  border-radius: 6px;
+  border: 3px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
-  border: 2px solid transparent;
+  background: var(--label-2);
+  border: 3px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
