@@ -25,6 +25,15 @@ here. The NLP suite's "filtered out before ranking" question now draws on
 excluded or unassessed vessels, so it resolves to the same two vessels as
 before. Two invariant tests added; 199 pass.
 
+**Canonical Case contract.** `slicktrace_core/case_contract.py` defines one
+validated object per incident, assembled verbatim from the committed artifacts
+(manifest, historical mapping, detection, baseline, attribution, fragility,
+coverage, forecast, next observation) and never from the truth sidecar.
+Unknown fields are rejected, so artifact drift fails the suite. The family label
+is checked against `CASE_PLAN`: nine cases across five families (decoy x3,
+moving_discharge x2, absent_source x2, crowded, along_track_ribbon). Not yet
+served or read by the interface. Thirteen tests added; 212 pass.
+
 ---
 
 ## 13 September 2026
