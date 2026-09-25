@@ -74,6 +74,12 @@ export const CAPTIONS = {
   seed: 'The number that regenerates this synthetic case exactly.',
   checksums: 'File fingerprints showing the artifacts were not altered, not that the observation is true.',
 
+  // basemap
+  basemap: 'The real map under this case: satellite imagery when an Esri key is set, otherwise the '
+    + 'real coastline on a plain sea. Nothing from the case is drawn on it yet.',
+  basemapGeography: 'The case’s own coastline and sensitive areas are synthetic and do not follow the '
+    + 'real coast, so later overlays are drawn against both.',
+
   // ask
   ask: 'Answers come from fixed question templates over this case’s files, each with its source cited. '
     + 'Questions outside those templates are declined.',

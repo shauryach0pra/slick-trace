@@ -131,6 +131,14 @@ reads "not modelled"; the scene card carries the note that downstream stages are
 seeded from the generator mask; card state resets on case switch. Recharts is
 replaced by native bars (bundle 619 KB to 271 KB).
 
+**Scene map: MapLibre GL JS basemap, framed on real coordinates.** A Scene Map
+card shows the selected case's extent (`meta.bbox`, EPSG:4326) on Esri World
+Imagery when `VITE_ARCGIS_API_KEY` is set in `frontend/.env.local` (gitignored),
+and on the real coastline over a plain sea when it is not. If imagery tiles fail
+(key rejected, referrer not allowed, offline) the map falls back and says so.
+Basemap only: no case data is drawn on it yet. Esri attribution is shown as its
+terms require.
+
 ---
 
 ## 13 September 2026
