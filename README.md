@@ -53,7 +53,7 @@ slicktrace/
 │   ├── eval_unet.py      # U-Net evaluation on test splits
 │   ├── fit_calibration.py # Ensemble calibration against held-out set
 │   └── verify_document_claims.py # Document claim verification
-├── tests/                # Comprehensive test suite (197 tests)
+├── tests/                # Comprehensive test suite (217 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
 ```
@@ -67,7 +67,7 @@ slicktrace/
 - NumPy and SciPy for numerical computations and particle tracking
 - Matplotlib for visualization and envelope generation
 - Pydantic for data validation and schema enforcement
-- Pytest for comprehensive testing (197 tests covering invariants, API, and NLP)
+- Pytest for comprehensive testing (217 tests covering invariants, API, and NLP)
 
 **Frontend:**
 - React 19 with Vite for modern build tooling
@@ -203,8 +203,8 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 - Docker uses named volumes at `/app/data` for persistent incident storage
 
 **Pipeline Configuration:**
-- Case families: `decoy`, `moving_discharge`, `absent_source`, `crowded`
-- Eight independently seeded cases defined in `CASE_PLAN`
+- Case families: `decoy`, `moving_discharge`, `absent_source`, `crowded`, `along_track_ribbon`
+- Nine independently seeded cases defined in `CASE_PLAN` (decoy x3, moving_discharge x2, absent_source x2, crowded, along_track_ribbon)
 - Attribution uses 6-member ensemble for wind/current/diffusivity perturbations
 - IoU gate prevents false positives on low-confidence matches
 
@@ -216,10 +216,10 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 |-------|---------|--------|
 | Syntax + imports | `py_compile`, import graph | pass |
 | Startup check | `python3 scripts/startup_check.py` | pass |
-| Determinism | regenerate, diff analysis artifacts | byte-identical, 8 cases, verified in CI on Ubuntu x86-64 |
-| Test suite | `python3 -m pytest tests/ -q` | 197 passed |
+| Determinism | regenerate, diff analysis artifacts | byte-identical, 9 cases, verified in CI on Ubuntu x86-64 |
+| Test suite | `python3 -m pytest tests/ -q` | 217 passed, 5 skipped |
 | Dependency pins | every `==` vs installed | all match |
-| Validation | `python3 scripts/run_validation.py` | 4/4 attribution, 2/2 abstentions, 40/40 NLP |
+| Validation | `python3 scripts/run_validation.py` | 7/7 attribution (naive 0/7, exact McNemar p = 0.0156), 2/2 abstentions, 40/40 NLP |
 | Acceptance | `python3 scripts/smoke_test.py` | 6/6 |
 | API | 16 endpoints + 404 paths | pass, no 500s |
 | Frontend | `npm run lint && npm run build` | 0 errors, 2 warnings |
@@ -233,7 +233,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 ### Key Features
 
 **Attribution Accuracy:**
-- Forward replay achieves 4/4 Top-1 on source-present cases vs 0/4 for naive proximity
+- Forward replay achieves 7/7 Top-1 on source-present cases vs 0/7 for naive proximity (exact McNemar p = 0.0156)
 - Correctly abstains on 2/2 source-absent cases
 - Uses shared ensemble perturbations for fair candidate comparison
 - Dispersion grows with elapsed drift time in both generator and simulator
@@ -302,7 +302,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 This system runs on synthetic data by design: the generator owns the ground
 truth, which is what makes the decoy, absent-source and crowded-traffic families
 testable at all. No real dataset can tell you which vessel actually caused a
-given slick, so the measured 4/4 against 0/4 could not be produced on real
+given slick, so the measured 7/7 against 0/7 could not be produced on real
 imagery.
 
 The path to real data is an adapter, not a rewrite — every pipeline stage reads
@@ -343,7 +343,7 @@ dataset are recorded in `docs/licence_and_data_rights.md`.
 Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
 
 Built and maintained by one person. Continuity does not rest on a second reader
-being available: nine cases regenerate byte-identically from fixed seeds, 197
+being available: nine cases regenerate byte-identically from fixed seeds, 217
 automated tests run on every regeneration, and a scripted acceptance check
 verifies the frozen case against declared tolerances. A no-obligation handover —
 code, manifests, assumptions register, licence appendix and validation report —

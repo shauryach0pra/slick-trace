@@ -56,6 +56,11 @@ for all 25 hours of all nine cases, contours to the 5-decimal rounding the
 artifact applies; the NLP suite returns the same 40 answers. CI now diffs the
 new artifact. Two tests added; 217 pass.
 
+**README brought in line with the repository.** It stated eight cases, four
+families, 197 tests and a 4/4 against 0/4 headline. `CASE_PLAN` defines nine
+cases across five families (along_track_ribbon was missing), 217 tests pass,
+and validation reports 7/7 against 0/7, exact McNemar p = 0.0156.
+
 ---
 
 ## 13 September 2026
