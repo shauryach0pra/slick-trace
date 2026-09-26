@@ -395,6 +395,13 @@ chips; definitions fold into "How this is measured". Shared viz primitives (gaug
 disclosure) are added for the next steps. Fixed: the reveal's leader row no longer scales out
 of line, and Ask shows each answer from its first line.
 
+**Design step 2a: Observed Scene and Rank Fragility.** Observed Scene pairs the radar image
+with a slick fingerprint: the shape drawn to its measured axes and bearing, north up, a
+counting area, compact facts and an elongation bar. Rank Fragility shows every tested change
+as one dot, smallest first - blue where the leader held, amber where it flipped, the smallest
+flip ringed, each described on hover - beside the share that held. Notes fold into "How this
+is measured" in both.
+
 ---
 
 ## 13 September 2026

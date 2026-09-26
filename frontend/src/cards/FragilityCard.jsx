@@ -1,5 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Badge, Card, EmptyState, Stat, StatGrid } from '../ui/primitives';
+import { Badge, Card, EmptyState } from '../ui/primitives';
+import { HowMeasured } from '../ui/viz';
+import { useCountUp } from '../ui/useCountUp';
+import './fragility.css';
 import './whatIf.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
@@ -34,74 +37,103 @@ export default function FragilityCard({ fragility, attribution }) {
   const selected = pointId ? fragility.grid.find((g) => g.point_id === pointId) : null;
   const label = (k) => fragility.axes[k]?.label ?? k;
 
+  const pct = Math.round(fragility.lead_retained_fraction * 100);
+  const change = flip ? Object.entries(flip.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ') : null;
   return (
     <Card title="Rank Fragility"
           badge={<Badge tone={fragility.flip_found ? 'warning' : 'accent'}>
             {fragility.flip_found ? 'lead can flip' : 'lead held'}</Badge>}
-          caption="What would have to change in the assumptions for a different vessel to lead."
-          footnote={`${fragility.interpretation_note} ${fragility.coverage_note}`}>
-      <StatGrid cols={2}>
-        <Stat label={unnamed ? 'Unnamed leader (no source was named)' : 'Leader'} mono
-              value={fragility.baseline_top} caption="The vessel with the best fit before any change." />
-        <Stat label="Lead held"
-              value={`${Math.round(fragility.lead_retained_fraction * 100)}% of ${fragility.n_points_tested}`}
-              caption={C.leadHeld} />
-      </StatGrid>
-
-      {flip ? (
-        <div className="flip-box">
-          <StatGrid cols={2}>
-            <Stat label="Smallest change that flips the lead"
-                  value={Object.entries(flip.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ')}
-                  caption={`Magnitude ${flip.magnitude}. ${C.magnitude}`} />
-            <Stat label="Leader under that change" mono value={flip.top_candidate}
-                  caption={`IoU ${flip.top_iou.toFixed(3)}; ${fragility.baseline_top} is now at IoU ${flip.baseline_candidate_iou.toFixed(3)}. `
-                    + (flip.top_iou < flip.baseline_candidate_iou ? C.lossRanking : C.meanIou)} />
-          </StatGrid>
-          <WhatIf fragility={fragility} attribution={attribution} flip={flip} on={whatIf} setOn={setWhatIf} label={label} />
+          caption="Does the leader survive small changes to the model's assumptions?">
+      <div className="fr">
+        <FlipMatrix fragility={fragility} label={label} />
+        <div className="fr-hero">
+          <span className="fr-big"><Count value={pct} />%</span>
+          <span className="fr-hero-label">of {fragility.n_points_tested} tested changes kept
+            {' '}<b className="mono">{fragility.baseline_top}</b>{unnamed ? ' (unnamed best fit)' : ''} in the lead</span>
+          <div className="fr-legend">
+            <span><i className="is-held" />lead held</span><span><i className="is-flip" />lead flipped</span>
+            {flip && <span><i className="is-first" />smallest flip</span>}
+          </div>
+          {flip ? (
+            <span className="fr-flip">Smallest change that flips it: <b>{change}</b>
+              <em>{flip.top_candidate} leads instead · magnitude {flip.magnitude}</em></span>
+          ) : <span className="fr-flip is-held">No tested change moved the leader.</span>}
         </div>
-      ) : (
-        <p className="card-caption" style={{ marginTop: 'var(--space-4)' }}>
-          No tested perturbation changed the leader.
-        </p>
-      )}
+      </div>
 
-      <div style={{ marginTop: 'var(--space-5)' }}>
+      {flip && <WhatIf fragility={fragility} attribution={attribution} flip={flip} on={whatIf} setOn={setWhatIf} label={label} />}
+
+      <div className="fr-explore">
         <div className="ui-row">
-          <label className="stat-label" htmlFor="frag-axis">Try one setting</label>
+          <label className="fr-explore-label" htmlFor="frag-axis">Explore one setting</label>
           <select id="frag-axis" className="ui-select" value={axis}
                   onChange={(e) => { setAxis(e.target.value); setPointId(null); }}>
-            {AXIS_ORDER.filter((a) => fragility.axes[a]).map((a) => (
-              <option key={a} value={a}>{label(a)}</option>
+            {AXIS_ORDER.filter((x) => fragility.axes[x]).map((x) => (
+              <option key={x} value={x}>{label(x)}</option>
             ))}
           </select>
         </div>
-        <p className="stat-caption">{C.sweep} Outlined values change the leader.</p>
-        <div className="chip-steps" role="group" aria-label={`Tested values for ${label(axis)}`}
-             style={{ marginTop: 'var(--space-2)' }}>
-          {points.map((p) => (
-            <button key={p.point_id} type="button"
-                    className={`chip${pointId === p.point_id ? ' is-active' : ''}${p.flipped ? ' is-flag' : ''}`}
-                    aria-pressed={pointId === p.point_id}
-                    onClick={() => setPointId(pointId === p.point_id ? null : p.point_id)}>
-              {String(p.changed_axes[axis])}
-              <span className="visually-hidden">{p.flipped ? ' changes the leader' : ' leader unchanged'}</span>
+        <div className="chip-steps" role="group" aria-label={`Tested values for ${label(axis)}`} style={{ marginTop: 'var(--space-2)' }}>
+          {points.map((pt) => (
+            <button key={pt.point_id} type="button"
+                    className={`chip${pointId === pt.point_id ? ' is-active' : ''}${pt.flipped ? ' is-flag' : ''}`}
+                    aria-pressed={pointId === pt.point_id}
+                    onClick={() => setPointId(pointId === pt.point_id ? null : pt.point_id)}>
+              {String(pt.changed_axes[axis])}
+              <span className="visually-hidden">{pt.flipped ? ' changes the leader' : ' leader unchanged'}</span>
             </button>
           ))}
         </div>
         {selected && (
-          <div style={{ marginTop: 'var(--space-4)' }}>
-            <StatGrid cols={3}>
-              <Stat label="Leader under this setting" mono value={selected.top_candidate}
-                    caption={selected.flipped ? 'A different vessel leads.' : 'Same leader as before.'} />
-              <Stat label="Leader IoU" value={selected.top_iou.toFixed(3)} caption={C.meanIou} />
-              <Stat label="Margin over next vessel" value={selected.loss_margin ?? '—'} caption={C.lossMargin} />
-            </StatGrid>
-          </div>
+          <p className="fr-selected">
+            <b className="mono">{selected.top_candidate}</b> leads{selected.flipped ? ' — a different vessel' : ' — the same leader'}
+            {' '}· IoU {selected.top_iou.toFixed(3)}{selected.loss_margin != null ? ` · margin ${selected.loss_margin}` : ''}
+          </p>
         )}
       </div>
+
+      <HowMeasured>
+        <dl>
+          <dt>Lead held</dt><dd>{C.leadHeld}</dd>
+          <dt>Magnitude</dt><dd>{C.magnitude}</dd>
+          <dt>Ranking</dt><dd>{C.lossRanking}</dd>
+          <dt>Explore one setting</dt><dd>{C.sweep}</dd>
+          <dt>What this is and is not</dt><dd>{fragility.interpretation_note} {fragility.coverage_note}</dd>
+        </dl>
+      </HowMeasured>
     </Card>
   );
+}
+
+/**
+ * Every tested change as one dot, smallest change first: blue where the leader
+ * held, amber where it flipped, the smallest flip ringed. Hover or focus a dot
+ * for that change.
+ */
+function FlipMatrix({ fragility, label }) {
+  const [hover, setHover] = useState(null);
+  const pts = [...(fragility.grid ?? [])].sort((x, y) => x.magnitude - y.magnitude || x.point_id.localeCompare(y.point_id));
+  const firstId = fragility.smallest_flip?.point_id;
+  const describe = (pt) => `${Object.entries(pt.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ')} · `
+    + `${pt.flipped ? `${pt.top_candidate} leads` : 'leader held'} · magnitude ${pt.magnitude}`;
+  return (
+    <div className="fr-matrix-wrap">
+      <div className="fr-matrix" role="list" aria-label={`${pts.length} tested changes, smallest first`}
+           onMouseLeave={() => setHover(null)}>
+        {pts.map((pt, i) => (
+          <span key={pt.point_id} role="listitem" tabIndex={0} aria-label={describe(pt)}
+                className={`fr-dot${pt.flipped ? ' is-flip' : ''}${pt.point_id === firstId ? ' is-first' : ''}`}
+                style={{ '--i': i }} onMouseEnter={() => setHover(pt)} onFocus={() => setHover(pt)} onBlur={() => setHover(null)} />
+        ))}
+      </div>
+      <span className="fr-axis"><span>smallest change</span><span>largest</span></span>
+      <p className={`fr-readout${hover ? ' is-on' : ''}`}>{hover ? describe(hover) : 'Hover a dot to see that change.'}</p>
+    </div>
+  );
+}
+
+function Count({ value }) {
+  return useCountUp(value, { decimals: 0, duration: 1000 });
 }
 
 /**

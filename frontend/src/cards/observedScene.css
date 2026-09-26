@@ -1,0 +1,37 @@
+/* Observed Scene: the image, and the slick's fingerprint beside it. */
+.os { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--space-5); align-items: stretch; }
+.os-scene { position: relative; border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 0.5px var(--separator-strong); }
+.os-scene .scene-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.os-stamp { position: absolute; left: 10px; bottom: 10px; padding: 3px 9px; border-radius: 999px; font-family: var(--font-mono);
+            font-size: var(--font-size-xxs); color: #fff; background: rgba(0, 0, 0, 0.55);
+            -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.os-print { display: flex; flex-direction: column; justify-content: center; gap: var(--space-4); padding: 16px; border-radius: 14px; background: var(--fill-pressed); }
+.os-eyebrow { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--label-2); }
+.os-print-row { display: flex; align-items: center; gap: var(--space-4); }
+.os-glyph { flex: none; width: 118px; height: 118px; overflow: visible; }
+.os-glyph-ring { fill: none; stroke: var(--separator-strong); stroke-width: 0.8; stroke-dasharray: 1.5 2.5; }
+.os-glyph-tick { stroke: var(--label-2); stroke-width: 1.4; stroke-linecap: round; }
+.os-glyph-n { font-size: 6px; font-weight: 700; text-anchor: middle; fill: var(--label-2); font-family: var(--font-body); }
+.os-glyph-shape { fill: rgba(10, 132, 255, 0.16); stroke: #64d2ff; stroke-width: 1.6; stroke-dasharray: 100; stroke-dashoffset: 100;
+                  animation: os-draw 1100ms 200ms cubic-bezier(0.22, 1, 0.36, 1) forwards; filter: drop-shadow(0 0 4px rgba(100, 210, 255, 0.5)); }
+.os-glyph-axis { stroke: var(--label-2); stroke-width: 0.7; stroke-dasharray: 2 2; opacity: 0; animation: os-fade 400ms 900ms forwards; }
+@keyframes os-draw { to { stroke-dashoffset: 0; } }
+@keyframes os-fade { to { opacity: 1; } }
+.os-hero { display: flex; flex-direction: column; min-width: 0; }
+.os-big { font-family: var(--font-display); font-size: 40px; font-weight: 600; letter-spacing: -0.03em; line-height: 1;
+          font-variant-numeric: tabular-nums; color: var(--label-1); }
+.os-big small { font-size: 16px; font-weight: 500; color: var(--label-2); letter-spacing: 0; }
+.os-hero-label { margin-top: 4px; font-size: var(--font-size-xs); color: var(--label-2); }
+.os-facts { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 10px; font-size: var(--font-size-xs); color: var(--label-2); }
+.os-facts b { color: var(--label-1); font-weight: var(--font-weight-semibold); font-variant-numeric: tabular-nums; }
+.os-elong { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: var(--font-size-xxs); color: var(--label-3); }
+.os-elong-track { position: relative; flex: 1; height: 4px; border-radius: 2px; background: linear-gradient(90deg, rgba(100, 210, 255, 0.25), rgba(100, 210, 255, 0.7)); }
+.os-elong-track i { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #fff;
+                    box-shadow: 0 0 0 2px #0a84ff, 0 1px 3px rgba(0, 0, 0, 0.3); }
+.os-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.os-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: var(--font-size-xs);
+           color: var(--label-1); background: var(--card-bg, var(--content-bg)); box-shadow: inset 0 0 0 0.5px var(--separator); }
+.os-chip.is-truth i { width: 12px; height: 12px; border-radius: 50%;
+                      background: conic-gradient(var(--status-green) calc(var(--v) * 360deg), var(--fill-pressed) 0); }
+@media (max-width: 900px) { .os { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .os-glyph-shape { animation: none; stroke-dashoffset: 0; } .os-glyph-axis { animation: none; opacity: 1; } }
