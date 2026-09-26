@@ -495,6 +495,14 @@ stage, down to the one named - or none - with its provenance as four compact chi
 Observation gains a time axis from the image, ghost tracks behind each window's disagreement and a
 satellite over the recommended window, with the two vessels it would separate as chips.
 
+**Case Finding as one designed object, and the cards in story order.** Case Finding is a single
+hero in the manner of a macOS widget: the answer on the left, Fitness-style rings on the right -
+the fit with the gate marked and the forcing variants won, or for an abstention the best fit
+against the gate it needed - over a slowly drifting glow, blue or amber, with the proximity pick on
+a slim strip below. Named and abstaining cases share the layout. The case's cards now run in the
+order the story is told: the finding, the naive-versus-replay reveal, the replay map, rank
+fragility, forward exposure, the observed scene, the next observation, then methodology.
+
 ---
 
 ## 13 September 2026
