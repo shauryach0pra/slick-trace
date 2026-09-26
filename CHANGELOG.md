@@ -267,6 +267,28 @@ first bug before it shipped.
 **Popover close button centred.** The close button's cross is now an SVG icon centred
 by grid instead of a text glyph, which fonts set off-centre.
 
+**Conclusion graph, rebuilt.** A vertical pipeline for the inspector column: a glowing
+spine with a luminous node per stage, glass cards beside it, and particles flowing
+down the path in the direction of the analysis. Stages come from the artifacts - no
+fixed node count or positions; layout and edges are measured from the rendered cards
+- and the proximity baseline branches off forward replay on a dashed curve. The
+confirmed path glows blue and turns amber where the evidence weakens or stops.
+Hovering or focusing a stage shows what it computes in plain language; clicking it
+scrolls to its evidence card. Motion is off under reduced-motion settings.
+
+**Conclusion graph as a sideways strip again,** keeping the glass cards and flowing
+particle edges, with snapping and faded edges. Fixed: a stage's caption showed twice -
+once unplaced, then above the card - because its entrance animation overrode the
+transform that positioned it; the jump-to-evidence highlight hugged the card's edge
+and was clipped, and is now a ring drawn outside the card, above its sticky header.
+
+**Conclusion graph: level connectors, a cropped window, no hover caption.** Connectors
+were measured while the cards' entrance animation still offset them, so they came out
+slightly slanted; they are now measured from layout positions and are exactly level.
+The graph window is cropped to the main row of cards and scrolls both ways - the
+proximity baseline is scrolled down to rather than leaving empty space. The hover
+caption is gone; each stage's description stays as its accessible label.
+
 ---
 
 ## 13 September 2026
