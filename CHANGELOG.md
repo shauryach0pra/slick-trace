@@ -556,6 +556,11 @@ shown enlarged.
 **Coverage's text lines up.** Every rate's title is two deliberate lines, so the titles, the values
 and the hints each sit level across the three columns.
 
+**Case Finding, compact.** One surface instead of three stacked boxes: the named vessel, its
+sentence and a smaller gauge, with the three facts as a slim strip along its foot split by
+hairlines, and the proximity pick as one quiet line beneath. A quarter shorter (447 to 339 px),
+with the same content; an abstention uses the same layout in amber.
+
 ---
 
 ## 13 September 2026

@@ -1,47 +1,56 @@
-/* Case Finding: the named vessel beside its fit, three facts, the proximity pick set aside. */
-.cf2-hero { display: flex; align-items: center; gap: var(--space-6); padding: 18px 22px; border-radius: 18px;
-            background: radial-gradient(420px 220px at 85% 50%, rgba(10, 132, 255, 0.18), transparent 70%),
-                        linear-gradient(135deg, rgba(10, 132, 255, 0.10), rgba(100, 210, 255, 0.03));
-            box-shadow: inset 0 0 0 0.5px rgba(10, 132, 255, 0.35); }
-.cf2.is-abstain .cf2-hero { background: radial-gradient(420px 220px at 85% 50%, rgba(255, 159, 10, 0.16), transparent 70%),
-                                        linear-gradient(135deg, rgba(255, 159, 10, 0.08), rgba(255, 214, 10, 0.02));
-                            box-shadow: inset 0 0 0 0.5px rgba(255, 159, 10, 0.4); }
-.cf2-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-.cf2-eyebrow { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.08em; color: var(--label-2); }
-.cf2-key { font-family: var(--font-mono); font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1;
-           overflow-wrap: anywhere; background: linear-gradient(90deg, #0a84ff, #64d2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.cf2.is-abstain .cf2-key { font-family: var(--font-display); background: none; color: var(--status-orange); }
-.cf2-why { font-size: var(--font-size-sm); line-height: 1.45; color: var(--label-2); max-width: 46ch; }
+/* Case Finding, compact: one surface - the vessel and its gauge, a slim stat strip - then one quiet line. */
+.cf4-surface { position: relative; overflow: hidden; border-radius: 16px;
+               background: linear-gradient(135deg, rgba(10, 132, 255, 0.13), rgba(10, 132, 255, 0.03) 60%, rgba(100, 210, 255, 0.06));
+               box-shadow: inset 0 0 0 0.5px rgba(100, 180, 255, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
+.cf4.is-abstain .cf4-surface { background: linear-gradient(135deg, rgba(255, 159, 10, 0.13), rgba(255, 159, 10, 0.03) 60%, rgba(255, 214, 10, 0.05));
+                               box-shadow: inset 0 0 0 0.5px rgba(255, 190, 90, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+.cf4-top { display: flex; align-items: center; gap: var(--space-5); padding: 16px 20px 14px; }
+.cf4-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cf4-eyebrow { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.09em; color: var(--label-2); }
+.cf4.is-abstain .cf4-eyebrow { color: #ffb340; }
+.cf4-key { font-family: var(--font-mono); font-size: clamp(22px, 2.4vw, 30px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1;
+           overflow-wrap: anywhere; background: linear-gradient(95deg, #0a84ff, #64d2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cf4.is-abstain .cf4-key { font-family: var(--font-display); letter-spacing: -0.02em; background: linear-gradient(95deg, #ff9f0a, #ffd60a);
+                           -webkit-background-clip: text; background-clip: text; }
+.cf4-line { max-width: 52ch; font-size: var(--font-size-xs); line-height: 1.45; color: var(--label-2); }
+.cf4 .fitg { flex: none; }
 
-.cf2-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
-.cf2-tile { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 12px 14px; border-radius: 14px; background: var(--fill-pressed); }
-.cf2-tile-label { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.06em; color: var(--label-3); }
-.cf2-tile-big { font-family: var(--font-display); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; color: var(--label-1); font-variant-numeric: tabular-nums; }
-.cf2-tile-big small { font-size: 14px; font-weight: 500; color: var(--label-3); letter-spacing: 0; }
-.cf2-tile-sub { font-size: var(--font-size-xs); color: var(--label-2); }
-.cf2-tile-sub.is-warn { color: var(--status-orange); }
-.cf2-pips { display: flex; gap: 5px; margin-top: 2px; }
-.cf2-pips i { width: 9px; height: 9px; border-radius: 50%; background: var(--label-3); opacity: 0.4;
+/* the three facts as a slim strip along the foot of the surface, split by hairlines */
+.cf4-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 0.5px solid rgba(128, 170, 255, 0.22); }
+.cf4.is-abstain .cf4-stats { border-top-color: rgba(255, 190, 90, 0.26); }
+.cf4-stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 10px 20px 12px; }
+.cf4-stat + .cf4-stat { box-shadow: inset 0.5px 0 0 rgba(128, 170, 255, 0.22); }
+.cf4.is-abstain .cf4-stat + .cf4-stat { box-shadow: inset 0.5px 0 0 rgba(255, 190, 90, 0.26); }
+.cf4-stat-label { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--label-3);
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cf4-stat-value { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2; color: var(--label-1); font-variant-numeric: tabular-nums; }
+.cf4-stat-value small { font-size: 12px; font-weight: 500; color: var(--label-3); letter-spacing: 0; }
+.cf4.is-abstain .cf4-stat-value { color: #ffb340; }
+.cf4-stat-sub { font-size: var(--font-size-xxs); color: var(--label-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cf4-stat-sub.is-warn { color: var(--status-orange); }
+.cf4-pips { display: flex; gap: 4px; margin-top: 3px; }
+.cf4-pips i { width: 7px; height: 7px; border-radius: 50%; background: var(--label-3); opacity: 0.4;
               animation: cf-pip 420ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards; animation-delay: calc(500ms + var(--i) * 70ms); }
-.cf2-pips i.is-won { background: #64d2ff; opacity: 1; box-shadow: 0 0 6px rgba(100, 210, 255, 0.7); }
+.cf4-pips i.is-won { background: #64d2ff; opacity: 1; box-shadow: 0 0 5px rgba(100, 210, 255, 0.7); }
 @keyframes cf-pip { from { transform: scale(0); } }
 
-.cf2-naive { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin-top: 14px; padding: 10px 14px; border-radius: 12px;
-             box-shadow: inset 0 0 0 0.5px var(--separator-strong); }
-.cf2-naive-label { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.06em; color: var(--label-3); }
-.cf2-naive-key { position: relative; font-family: var(--font-mono); font-size: var(--font-size-md); color: var(--label-1); }
-.cf2-naive-key > span { position: relative; }
-.cf2-naive.is-struck .cf2-naive-key { color: var(--label-2); }
-.cf2-naive.is-struck .cf2-naive-key > span::after { content: ""; position: absolute; left: -2px; right: -2px; top: 54%; height: 1.5px; background: var(--status-orange);
+/* the proximity pick: one quiet line beneath */
+.cf4-naive { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 12px 2px 0; font-size: var(--font-size-xs); color: var(--label-2); }
+.cf4-naive-label { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--label-3); }
+.cf4-naive-key { position: relative; font-family: var(--font-mono); font-size: var(--font-size-sm); color: var(--label-1); }
+.cf4-naive-key > span { position: relative; }
+.cf4-naive.is-struck .cf4-naive-key { color: var(--label-2); }
+.cf4-naive.is-struck .cf4-naive-key > span::after { content: ""; position: absolute; left: -2px; right: -2px; top: 54%; height: 1.5px; background: var(--status-orange);
                                                     transform-origin: left; animation: cf-strike 520ms 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
 @keyframes cf-strike { from { transform: scaleX(0); } }
-.cf2-naive-sub { font-size: var(--font-size-xs); color: var(--label-2); }
-.cf2-foot { margin: 14px 0 0; font-size: var(--font-size-sm); color: var(--label-2); }
-@media (max-width: 900px) { .cf2-hero { flex-direction: column; align-items: flex-start; } .cf2-tiles { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .cf2-pips i, .cf2-naive.is-struck .cf2-naive-key > span::after { animation: none; } }
-
-/* the abstention in the same layout as every other case, in amber */
-.cf2.is-abstain .cf2-eyebrow { color: #ffb340; }
-.cf2.is-abstain .cf2-key { background: linear-gradient(90deg, #ff9f0a, #ffd60a); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.cf2.is-abstain .cf2-tile { background: rgba(255, 159, 10, 0.08); box-shadow: inset 0 0 0 0.5px rgba(255, 159, 10, 0.3); }
-.cf2.is-abstain .cf2-tile-big { color: #ffb340; }
+.cf4-verdict { margin-left: auto; padding: 1px 9px; border-radius: 999px; font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold);
+               color: var(--status-orange); background: rgba(255, 159, 10, 0.12); }
+.cf4-verdict.is-agree { color: var(--status-green); background: rgba(48, 209, 88, 0.12); }
+.cf4-verdict.is-neutral { color: var(--label-2); background: rgba(128, 128, 128, 0.14); }
+@media (max-width: 900px) { .cf4-top { flex-direction: column; align-items: flex-start; } .cf4-stats { grid-template-columns: 1fr; } .cf4-stat + .cf4-stat { box-shadow: inset 0 0.5px 0 rgba(128, 170, 255, 0.22); } }
+@media (prefers-reduced-motion: reduce) { .cf4-pips i, .cf4-naive.is-struck .cf4-naive-key > span::after { animation: none; } }
+/* tighter: the sentence uses the width, and the top sits closer to its content */
+.cf4-top { padding: 12px 20px 10px; }
+.cf4-line { max-width: 78ch; }
+.cf4 .fitg-num { font-size: 22px; }
+.cf4 .fitg-label { font-size: 8px; }
