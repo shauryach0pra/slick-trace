@@ -58,7 +58,7 @@ check("assumptions",
 
 t = subprocess.run("python3 -m pytest tests/ -q 2>&1 | tail -2",
                    shell=True, capture_output=True, text=True).stdout
-check("337 tests pass", "337 passed" in t, True)
+check("338 tests pass", "338 passed" in t, True)
 
 for f in ("data/geo/coastline_mumbai.json", "data/detection/unet.pt",
           "slicktrace_core/adapters/marinecadastre.py",

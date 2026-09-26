@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { FAMILY_LABEL } from './families';
 
 /**
  * Case switcher across the full generated benchmark.
@@ -13,13 +14,6 @@ import { useLayoutEffect, useRef, useState } from 'react';
  * from the row itself, so it follows any change in row height or font size.
  */
 
-const FAMILY_LABEL = {
-  decoy: 'nearest vessel is a decoy',
-  moving_discharge: 'discharge while under way',
-  absent_source: 'source not in the scene',
-  crowded: 'crowded traffic',
-  along_track_ribbon: 'ribbon laid along track',
-};
 
 export default function CaseSwitcher({ incidents, active, onSelect }) {
   const wrapRef = useRef(null);

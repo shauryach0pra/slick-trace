@@ -1,9 +1,10 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import './dashboard.css';
 import './shell.css';
 import { api } from './api';
 import { useCase } from './useCase';
 import CaseSwitcher from './CaseSwitcher';
+import Overview from './Overview';
 import { attachStickyHeaders } from './stickyHeaders';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
@@ -23,7 +24,24 @@ const Tour = lazy(() => import('./tour/Tour'));
 
 export default function App() {
   const [incidents, setIncidents] = useState([]);
-  const [incidentId, setIncidentId] = useState('case_0001');
+  // Routes live in the URL hash, so Back and Forward work: #/overview (the
+  // default) or #/case/<id>. The last case opened stays loaded behind the
+  // overview, so returning to it is instant.
+  const parseRoute = () => {
+    const m = window.location.hash.match(/^#\/case\/([\w-]+)/);
+    return m ? { view: 'case', id: m[1] } : { view: 'overview', id: null };
+  };
+  const [route, setRoute] = useState(parseRoute);
+  useEffect(() => {
+    const on = () => setRoute(parseRoute());
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, []);
+  const [lastCase, setLastCase] = useState(route.id ?? 'case_0001');
+  if (route.id && route.id !== lastCase) setLastCase(route.id);
+  const incidentId = route.id ?? lastCase;
+  const openCase = useCallback((id) => { window.location.hash = `#/case/${id}`; }, []);
+  const openOverview = useCallback(() => { window.location.hash = '#/overview'; }, []);
   const { case: c, report, tracks, error } = useCase(incidentId);
 
   useEffect(() => {
@@ -46,7 +64,7 @@ export default function App() {
   const meta = vc?.meta;
 
   // scroll-edge effect on the pinned card headers; the column remounts per case
-  useEffect(() => attachStickyHeaders(document.querySelector('.finder-features')), [vid]);
+  useEffect(() => attachStickyHeaders(document.querySelector('.finder-features')), [vid, route.view]);
 
   return (
     <div className="app-shell">
@@ -61,7 +79,7 @@ export default function App() {
           Slick Trace<span className="wordmark-sub">Source attribution</span>
         </div>
         <div className="topbar-trailing">
-          {meta && (
+          {meta && route.view === 'case' && (
             <div className="topbar-meta">
               <span className="tag tag-teal">{meta.case_state.replace('_', ' ')}</span>
               {meta.provenance.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
@@ -77,15 +95,20 @@ export default function App() {
       {error && <div className="error-banner">Failed to load incident data: {error}</div>}
       {touring && incidents.length > 0 && (
         <Suspense fallback={null}>
-          <Tour incidents={incidents} api={api} selectCase={setIncidentId} onExit={() => setTouring(false)} />
+          <Tour incidents={incidents} api={api} selectCase={openCase} onExit={() => setTouring(false)} />
         </Suspense>
       )}
 
       <div className="finder-layout">
         <aside className="finder-sidebar">
-          <CaseSwitcher incidents={incidents} active={incidentId} onSelect={setIncidentId} />
+          <button type="button" className={`nav-overview${route.view === 'overview' ? ' is-active' : ''}`} onClick={openOverview}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
+            Overview
+          </button>
+          <CaseSwitcher incidents={incidents} active={route.view === 'case' ? incidentId : null} onSelect={openCase} />
         </aside>
 
+        {route.view === 'overview' ? <Overview api={api} onOpen={openCase} /> : (
         <div className={`finder-content${leaving ? ' is-leaving' : ''}`} data-case={vid}>
           {/* Evidence column, in the order a reviewer needs it: finding first. */}
           <div className="finder-features" key={vid}>
@@ -123,6 +146,7 @@ export default function App() {
             {vid && <AskSlickTraceCard key={`ask-${vid}`} incidentId={vid} api={api} />}
           </div>
         </div>
+        )}
       </div>
     </div>
   );

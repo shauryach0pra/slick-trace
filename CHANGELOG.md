@@ -339,6 +339,13 @@ an amber-rimmed surface, with a meter placing every replayed candidate's fit aga
 gate so it is visible that none reaches it. Its note no longer claims declining was "the
 correct output": the interface has no ground truth to know that.
 
+**Mission control overview.** A new default view (#/overview) shows every case as a tile:
+its outcome dot, its family, and its one-line finding - produced by the same rule as the
+Case Finding card (findingText.js) from the fields a new /api/overview copies out of each
+case's artifacts, so the two can never say different things. A tile opens its case
+(#/case/<id>); Back and Forward move between them, and an Overview control in the sidebar
+returns. A test checks the overview's fields against every case's artifacts.
+
 ---
 
 ## 13 September 2026

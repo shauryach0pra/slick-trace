@@ -1,4 +1,5 @@
 import { Badge, Card, Stat } from '../ui/primitives';
+import { findingHeadline } from '../findingText';
 import { CAPTIONS as C } from '../ui/glossary';
 
 /**
@@ -63,13 +64,7 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
           </div>
         </div>
       )}
-      <p className="finding-line">
-        {unknown
-          ? `No vessel is named. Forward replay tested ${nCandidates} candidate vessel${nCandidates === 1 ? '' : 's'}, and none fit the observed slick well enough to reach the gate.`
-          : differs
-            ? 'The nearest vessel is not supported by forward replay; the best physical fit is another vessel.'
-            : 'The nearest vessel is also the best physical fit under forward replay.'}
-      </p>
+      <p className="finding-line">{findingHeadline({ unknown, nCandidates, differs })}</p>
 
       <div className="finding-compare">
         <div className={`finding-side${differs || unknown ? ' is-muted' : ''}`}>

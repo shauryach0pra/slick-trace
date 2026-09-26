@@ -178,6 +178,42 @@ def list_incidents():
     return out
 
 
+@app.get("/api/overview")
+def get_overview():
+    """Every case with just what its headline finding needs, for the overview grid.
+
+    The fields are copied from attribution_result.json and
+    naive_baseline_result.json - the same ones the Case Finding card reads - so
+    the overview's one-line finding is produced by the same rule as the card's,
+    not written separately. Nothing here summarises beyond selecting fields.
+    """
+    out = []
+    for row in list_incidents():
+        iid = row["incident_id"]
+        at = _load_json(iid, "attribution_result.json")
+        nb = _load_json(iid, "naive_baseline_result.json")
+        finding = None
+        if at is not None:
+            rk = at.get("ranking") or []
+            top = rk[0] if rk else None
+            near = (nb or {}).get("ranking") or []
+            finding = {
+                "unknown_source": at["unknown_source"],
+                "abstention_iou_gate": at["abstention_iou_gate"],
+                "n_candidates": len(at.get("candidates_considered") or []),
+                "top_candidate_id": at.get("top_candidate_id"),
+                "best": None if top is None else {
+                    "vessel_key": top["vessel_key"], "mean_iou": top["mean_iou"],
+                    "ensemble_win_count": top["ensemble_win_count"], "n_ensemble": top["n_ensemble"]},
+                "runner_up_mean_iou": rk[1]["mean_iou"] if len(rk) > 1 else None,
+                "discrimination": at.get("discrimination"),
+                "nearest": None if not near else {
+                    "vessel_key": near[0]["vessel_key"], "distance_deg": near[0]["distance_deg"]},
+            }
+        out.append({**row, "finding": finding})
+    return out
+
+
 @app.get("/api/incidents/{incident_id}/manifest")
 def get_manifest(incident_id: str):
     m = _load_json(incident_id, "manifest.json")

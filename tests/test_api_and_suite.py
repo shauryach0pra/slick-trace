@@ -266,3 +266,23 @@ def test_probe_reports_the_current_the_model_advects_with():
     assert abs(r["current"]["speed_km_per_h"] - speed_ms * 3.6) < 0.001
     bearing = (math.degrees(math.atan2(float(f["u"]), float(f["v"]))) + 360) % 360
     assert abs(r["current"]["bearing_deg_from_north"] - bearing) < 0.1
+
+
+def test_overview_serves_each_case_finding_from_its_artifacts():
+    """The overview's per-case fields are the artifacts' own, for every case."""
+    import json, os
+    rows = client.get("/api/overview").json()
+    assert [r["incident_id"] for r in rows] == [r["incident_id"] for r in client.get("/api/incidents").json()]
+    for r in rows:
+        d = os.path.join("data", "cases", r["incident_id"])
+        at = json.load(open(os.path.join(d, "attribution_result.json")))
+        nb = json.load(open(os.path.join(d, "naive_baseline_result.json")))
+        f = r["finding"]
+        assert f["unknown_source"] == at["unknown_source"]
+        assert f["top_candidate_id"] == at["top_candidate_id"]
+        assert f["abstention_iou_gate"] == at["abstention_iou_gate"]
+        assert f["n_candidates"] == len(at["candidates_considered"])
+        assert f["best"]["vessel_key"] == at["ranking"][0]["vessel_key"]
+        assert f["best"]["mean_iou"] == at["ranking"][0]["mean_iou"]
+        assert f["nearest"]["vessel_key"] == nb["ranking"][0]["vessel_key"]
+        assert f["discrimination"] == at["discrimination"]
