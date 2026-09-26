@@ -6,6 +6,7 @@ import { useCase } from './useCase';
 import CaseSwitcher from './CaseSwitcher';
 import Overview from './Overview';
 import FamilyChips from './FamilyChips';
+import ConfidenceBadge from './ConfidenceBadge';
 import { attachStickyHeaders } from './stickyHeaders';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
@@ -88,6 +89,7 @@ export default function App() {
               {meta.provenance.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
             </div>
           )}
+          {route.view === 'case' && vc && <ConfidenceBadge key={`conf-${vid}`} attribution={vc.attribution} />}
           <button type="button" className={`tour-btn${touring ? ' is-on' : ''}`} onClick={() => setTouring((t) => !t)}>
             {touring ? 'Exit Tour' : 'Start Tour'}
           </button>
@@ -125,7 +127,7 @@ export default function App() {
                 <ObservedSceneCard meta={meta} slick={vc.slick} sceneUrl={api.sceneUrl(vid)}
                                    nVessels={vc.vessels.length} />
                 <HistoricalReplayCard incidentId={vid} api={api} c={vc} tracks={shown.tracks} />
-                <FragilityCard fragility={vc.fragility} />
+                <FragilityCard fragility={vc.fragility} attribution={vc.attribution} />
                 <ForecastCard forecast={vc.forecast} />
                 <CoverageCard coverage={vc.coverage} />
                 <ProvenanceCard meta={meta} report={shown.report} />

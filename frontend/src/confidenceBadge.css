@@ -1,0 +1,27 @@
+.conf-badge {
+  display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px;
+  border: 0; border-radius: 999px; cursor: default; font: inherit; font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium); color: var(--label-1); background: var(--control-bg); box-shadow: var(--shadow-control);
+  transition: background-color var(--dur-fast) ease, transform var(--dur-base) var(--ease-spring);
+}
+.conf-badge:hover, .conf-badge.is-open { background: var(--control-bg-hover); }
+.conf-badge:active { transform: scale(0.97); }
+.conf-badge:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 2px; }
+.conf-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px rgba(10, 132, 255, 0.6); }
+.conf-badge.is-abstain .conf-dot { background: var(--status-orange); box-shadow: 0 0 8px rgba(255, 159, 10, 0.6); }
+
+.conf-pop {
+  position: fixed; z-index: 1000; width: 340px; transform: translateX(-100%);
+  padding: 12px 14px 10px; border-radius: 12px; color: #eef2f7; background: rgba(22, 26, 34, 0.9);
+  -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.2), 0 18px 44px rgba(0, 0, 0, 0.5);
+  font-size: 12.5px; line-height: 1.45;
+}
+.conf-pop > * { animation: popover-in var(--dur-base) var(--ease-spring); }
+.conf-row { display: grid; grid-template-columns: 104px 1fr; gap: 10px; padding: 6px 0; border-top: 0.5px solid rgba(255, 255, 255, 0.08); }
+.conf-row:first-child { border-top: 0; }
+.conf-k { color: rgba(238, 242, 247, 0.55); }
+.conf-v b { color: #fff; font-family: var(--font-mono); font-weight: 600; }
+.conf-link { margin-top: 8px; width: 100%; padding: 6px 8px; border: 0; border-radius: 8px; cursor: default; font: inherit;
+             font-size: 12.5px; font-weight: 600; color: #fff; background: rgba(255, 255, 255, 0.1); }
+.conf-link:hover { background: rgba(255, 255, 255, 0.18); }

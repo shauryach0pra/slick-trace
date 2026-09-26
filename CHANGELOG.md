@@ -357,6 +357,19 @@ The filter chips now appear only above the overview grid; the sidebar lists ever
 **Next Observation closes each case.** It is now the last card, after Provenance, framed
 "What to check next"; it shows only its computed recommendation, unchanged.
 
+**One provenance and confidence badge.** A single pill in the top bar for every open case -
+"Lead · not proof" or "Abstains" - opens a popover with the fit-gate status from the
+attribution result, the investigative-lead framing, and that the pipeline is grounded:
+physics-based particle tracking and rule-based templates, no language model in the loop.
+It links to the provenance card. The synthetic-case tag stays separate.
+
+**Fragility: "What if conditions were slightly different?"** Where a tested change flips the
+lead, the fragility card toggles between the ranking as tested and with the smallest such
+change, animating the two vessels that swap, with their fits, tested ranks and loss, and
+the margin. Every value is from fragility_result.json and attribution_result.json. Each
+tested change stores only its leader and the tested leader's fit, so the rest of the
+ranking under it is not shown, and the card says so.
+
 ---
 
 ## 13 September 2026

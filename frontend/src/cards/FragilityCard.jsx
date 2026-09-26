@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Badge, Card, EmptyState, Stat, StatGrid } from '../ui/primitives';
+import './whatIf.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
 /**
@@ -11,8 +12,9 @@ import { CAPTIONS as C } from '../ui/glossary';
  */
 const AXIS_ORDER = ['current_u_bias', 'current_v_bias', 'diffusivity_scale', 'mask_threshold', 'duration_shift_h'];
 
-export default function FragilityCard({ fragility }) {
+export default function FragilityCard({ fragility, attribution }) {
   const [axis, setAxis] = useState('current_u_bias');
+  const [whatIf, setWhatIf] = useState(false);
   const [pointId, setPointId] = useState(null);
 
   const points = useMemo(() => (fragility?.grid ?? [])
@@ -56,6 +58,7 @@ export default function FragilityCard({ fragility }) {
                   caption={`IoU ${flip.top_iou.toFixed(3)}; ${fragility.baseline_top} is now at IoU ${flip.baseline_candidate_iou.toFixed(3)}. `
                     + (flip.top_iou < flip.baseline_candidate_iou ? C.lossRanking : C.meanIou)} />
           </StatGrid>
+          <WhatIf fragility={fragility} attribution={attribution} flip={flip} on={whatIf} setOn={setWhatIf} label={label} />
         </div>
       ) : (
         <p className="card-caption" style={{ marginTop: 'var(--space-4)' }}>
@@ -98,5 +101,55 @@ export default function FragilityCard({ fragility }) {
         )}
       </div>
     </Card>
+  );
+}
+
+/**
+ * "What if conditions were slightly different?" - the tested ranking against the
+ * smallest tested change that flips the lead, for the two vessels that swap.
+ * Ranking is by loss (lower is better); IoU is shown alongside. Each tested change
+ * stores only its leader and the tested leader's fit, so only those two rows are
+ * shown under it - the rest of that ranking was not stored.
+ */
+function WhatIf({ fragility, attribution, flip, on, setOn, label }) {
+  const a = fragility.baseline_top, b = flip.top_candidate;
+  const rank = (k) => (attribution?.ranking ?? []).findIndex((r) => r.vessel_key === k) + 1;
+  const iou0 = (k) => (attribution?.ranking ?? []).find((r) => r.vessel_key === k)?.mean_iou;
+  const loss0 = fragility.nominal_mean_losses ?? {};
+  const change = Object.entries(flip.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ');
+  const rows = [
+    { key: a, pos: on ? 1 : 0, iou: on ? flip.baseline_candidate_iou : iou0(a),
+      note: on ? 'now behind' : `#${rank(a)} as tested · loss ${loss0[a]?.toFixed(3) ?? '—'}`, lead: !on },
+    { key: b, pos: on ? 0 : 1, iou: on ? flip.top_iou : iou0(b),
+      note: on ? `leads by a loss margin of ${flip.loss_margin}` : `#${rank(b)} as tested · loss ${loss0[b]?.toFixed(3) ?? '—'}`, lead: on },
+  ];
+  return (
+    <div className="whatif">
+      <div className="whatif-head">
+        <span className="whatif-q">What if conditions were slightly different?</span>
+        <div className="whatif-seg" role="group" aria-label="Show the ranking as tested or with the smallest flipping change">
+          <button type="button" className={!on ? 'is-on' : ''} aria-pressed={!on} onClick={() => setOn(false)}>As tested</button>
+          <button type="button" className={on ? 'is-on' : ''} aria-pressed={on} onClick={() => setOn(true)}>With {change}</button>
+        </div>
+      </div>
+      <div className="whatif-rows" role="table" aria-label="The two vessels that swap">
+        {rows.map((r) => (
+          <div key={r.key} role="row" className={`whatif-row${r.lead ? ' is-lead' : ''}`}
+               style={{ transform: `translateY(${r.pos * 46}px)`, '--w': Math.max(0, Math.min(1, r.iou ?? 0)) }}>
+            <span className="whatif-pos" role="cell">{r.pos + 1}</span>
+            <span className="whatif-key" role="cell">{r.key}</span>
+            <span className="whatif-track" role="cell" aria-hidden="true"><span className="whatif-fill" /></span>
+            <span className="whatif-iou" role="cell">{r.iou != null ? r.iou.toFixed(3) : '—'}</span>
+            <span className="whatif-note" role="cell">{r.note}</span>
+          </div>
+        ))}
+      </div>
+      <p className="whatif-foot">
+        {on ? `With ${change} (magnitude ${flip.magnitude}), ${b} leads instead of ${a}. `
+          : `As tested, ${a} leads. `}
+        Ranked by loss; the bar is mean IoU. Only these two vessels' fits are stored for each tested change, so the
+        rest of the ranking under it is not shown.
+      </p>
+    </div>
   );
 }
