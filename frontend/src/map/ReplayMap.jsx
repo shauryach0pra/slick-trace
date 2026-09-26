@@ -25,9 +25,14 @@ const ENV_LEVELS = [
   { pct: 75, fill: 0.11, line: 0.55, width: 1.0, dash: null },
   { pct: 50, fill: 0.2, line: 0.95, width: 1.6, dash: null },
 ];
+// Oil as it looks on water: a dark brown-black film where it is thick, and a
+// thin iridescent sheen - blue, violet, gold - where it thins at the edges.
+// (An orange glow was a heat-map convention; oil is not orange.)
 const OIL = ['interpolate', ['linear'], ['heatmap-density'],
-  0, 'rgba(0,0,0,0)', 0.12, 'rgba(80,30,0,0.3)', 0.3, 'rgba(190,80,0,0.58)',
-  0.55, 'rgba(255,140,20,0.8)', 0.8, 'rgba(255,200,70,0.92)', 1, 'rgba(255,244,200,0.97)'];
+  // lone, far-drifted particles stay faint; the sheen marks the film's edge
+  0, 'rgba(0,0,0,0)', 0.1, 'rgba(90,200,255,0.07)', 0.2, 'rgba(190,120,255,0.2)',
+  0.3, 'rgba(255,196,120,0.36)', 0.4, 'rgba(72,50,32,0.72)', 0.6, 'rgba(34,24,15,0.87)',
+  1, 'rgba(10,7,5,0.95)'];
 
 // Overlay ink follows the SURFACE underneath, not the UI theme: satellite
 // imagery is dark in either theme; the offline sea follows the theme.
@@ -67,12 +72,14 @@ function addLayers(map, bbox) {
   ['a', 'b'].forEach((buf) => { src(`env-${buf}`); src(`env-pts-${buf}`); });
 
   const kind = ['match', ['get', 'kind'], 'fishery', '#64d2ff', 'mangrove', '#30d158', '#ffffff'];
-  const lit = ['case', ['get', 'hit'], '#ffb340', kind];
-  map.addLayer({ id: 'areas-fill', type: 'fill', source: 'areas', paint: { 'fill-color': lit, 'fill-opacity': 0 } });
+  // an area keeps its own colour; oil reaching it adds a hazard outline
+  map.addLayer({ id: 'areas-fill', type: 'fill', source: 'areas', paint: { 'fill-color': kind, 'fill-opacity': 0 } });
   map.addLayer({ id: 'areas-glow', type: 'line', source: 'areas', filter: ['==', ['get', 'hit'], true],
-    paint: { 'line-color': '#ffb340', 'line-width': 7, 'line-blur': 5, 'line-opacity': 0 } });
+    paint: { 'line-color': '#ff5a36', 'line-width': 7, 'line-blur': 5, 'line-opacity': 0 } });
   map.addLayer({ id: 'areas-line', type: 'line', source: 'areas',
-    paint: { 'line-color': lit, 'line-width': 1.2, 'line-opacity': 0, 'line-dasharray': [2, 2] } });
+    paint: { 'line-color': kind, 'line-width': 1.2, 'line-opacity': 0, 'line-dasharray': [2, 2] } });
+  map.addLayer({ id: 'areas-hit', type: 'line', source: 'areas', filter: ['==', ['get', 'hit'], true],
+    paint: { 'line-color': '#ff6a45', 'line-width': 1.8, 'line-opacity': 0 } });
 
   // origin envelope: two buffers so one hour can cross-fade into the next
   for (const buf of ['a', 'b']) {
@@ -96,9 +103,9 @@ function addLayers(map, bbox) {
   }
 
   map.addLayer({ id: 'fc-fill', type: 'fill', source: 'fc-contours',
-    paint: { 'fill-color': '#ff9f0a', 'fill-opacity': ['match', ['get', 'pct'], 50, 0.16, 75, 0.1, 0.06] } });
+    paint: { 'fill-color': '#0a0806', 'fill-opacity': ['match', ['get', 'pct'], 50, 0.2, 75, 0.13, 0.07] } });
   map.addLayer({ id: 'fc-lines', type: 'line', source: 'fc-contours',
-    paint: { 'line-color': '#ffb340', 'line-width': ['match', ['get', 'pct'], 50, 1.6, 1],
+    paint: { 'line-color': 'rgba(228,220,255,1)', 'line-width': ['match', ['get', 'pct'], 50, 1.4, 0.9],
              'line-opacity': ['match', ['get', 'pct'], 50, 0.9, 75, 0.6, 0.38] } });
   map.addLayer({ id: 'oil-heat', type: 'heatmap', source: 'oil',
     paint: { 'heatmap-weight': 1,
@@ -117,8 +124,8 @@ function addLayers(map, bbox) {
              'heatmap-color': OIL, 'heatmap-opacity': 0.92,
              'heatmap-opacity-transition': { duration: 300 } } });
   map.addLayer({ id: 'oil-stranded', type: 'circle', source: 'oil-stranded',
-    paint: { 'circle-radius': 2.4, 'circle-color': '#ff453a', 'circle-opacity': 0.95,
-             'circle-stroke-color': 'rgba(255,255,255,0.85)', 'circle-stroke-width': 0.6 } });
+    paint: { 'circle-radius': 2.8, 'circle-color': '#1a120b', 'circle-opacity': 0.95,
+             'circle-stroke-color': '#ffcf85', 'circle-stroke-width': 1.3 } });
 
   map.addLayer({ id: 'slick-fill', type: 'fill', source: 'slick',
     paint: { 'fill-color': '#05070a', 'fill-opacity': 0, 'fill-opacity-transition': { duration: 400 } } });
@@ -239,9 +246,10 @@ function drawScene(map, P, tau, prevTau, ctx) {
   setDataIf(map, ctx, 'areas', hits.join(','), () => fc((ctx.areas ?? []).map((a, i) => ({ type: 'Feature',
     properties: { kind: a.kind, name: a.name, hit: hits[i] },
     geometry: { type: 'Polygon', coordinates: [closed(a.polygon)] } }))));
-  paintIf(map, ctx, 'areas-fill', 'fill-opacity', ['*', aw, ['case', ['get', 'hit'], 0.3, 0.12]]);
+  paintIf(map, ctx, 'areas-fill', 'fill-opacity', ['*', aw, ['case', ['get', 'hit'], 0.22, 0.12]]);
   paintIf(map, ctx, 'areas-line', 'line-opacity', 0.9 * aw);
-  paintIf(map, ctx, 'areas-glow', 'line-opacity', 0.55 * aw);
+  paintIf(map, ctx, 'areas-glow', 'line-opacity', 0.6 * aw);
+  paintIf(map, ctx, 'areas-hit', 'line-opacity', aw);
   (ctx.areas ?? []).forEach((a, i) => {
     const m = ctx.areaLabels.current[a.name];
     if (!m) return;
@@ -446,7 +454,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau
                                          `env-${b}-glow`, `env-pts-${b}`]),
     oil: ['oil-heat', 'oil-heat-fc', 'oil-stranded'],
     vessels: ['trails', 'trails-lead', 'gaps', 'proj'],
-    areas: ['areas-fill', 'areas-glow', 'areas-line'],
+    areas: ['areas-fill', 'areas-glow', 'areas-line', 'areas-hit'],
     forecast: ['fc-fill', 'fc-lines'],
   };
   useEffect(() => {

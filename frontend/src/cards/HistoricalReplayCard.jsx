@@ -168,6 +168,7 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
         <li><i className="lg-env" /> origin envelope 50 / 75 / 90%</li>
         <li><i className="lg-oil" /> modelled oil</li>
         <li><i className="lg-stranded" /> stranded on the coast</li>
+        <li><i className="lg-hit" /> oil reaches a sensitive area</li>
         <li><i className="lg-slick" /> observed slick</li>
         <li><i className="lg-gap" /> AIS gap or projected track</li>
         <li><i className="lg-area is-fishery" /> fishing ground (synthetic, after the image)</li>

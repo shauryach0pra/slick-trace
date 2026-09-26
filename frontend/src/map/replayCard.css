@@ -32,8 +32,10 @@
 .lg-ship.is-lead { background: #0a84ff; box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.35); }
 .lg-env { width: 14px; height: 10px; border-radius: 3px; background: rgba(90, 200, 250, 0.3); box-shadow: inset 0 0 0 1.2px #5ac8fa; }
 .lg-oil { width: 14px; height: 10px; border-radius: 5px;
-          background: radial-gradient(closest-side, #fff0b4, #ff9614 55%, rgba(200, 90, 0, 0.2)); }
-.lg-stranded { width: 7px; height: 7px; border-radius: 50%; background: #ff453a; }
+          background: radial-gradient(closest-side, #0a0705 35%, #48321f 58%, rgba(255, 196, 120, 0.7) 72%,
+                                      rgba(190, 120, 255, 0.6) 84%, rgba(90, 200, 255, 0.45) 100%); }
+.lg-stranded { width: 7px; height: 7px; border-radius: 50%; background: #1a120b; box-shadow: 0 0 0 1.3px #ffcf85; }
+.lg-hit { width: 14px; height: 10px; border-radius: 2px; box-shadow: 0 0 0 1.5px #ff6a45, 0 0 6px rgba(255, 90, 54, 0.6); }
 .lg-slick { width: 14px; height: 10px; border-radius: 3px; background: rgba(5, 7, 10, 0.35); box-shadow: inset 0 0 0 1.5px var(--label-1); }
 .lg-gap { width: 16px; height: 0; border-top: 1.5px dotted var(--label-2); }
 .lg-area { width: 14px; height: 10px; border-radius: 2px; border: 1px dashed #30d158; background: rgba(48, 209, 88, 0.14); }

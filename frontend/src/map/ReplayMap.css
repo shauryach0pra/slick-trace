@@ -192,8 +192,10 @@
 }
 
 /* projected after the image: an outlined hull, no fill - a projection, not an observation */
-.ship[data-state="projected"] .ship-body { fill: rgba(255, 255, 255, 0.08); stroke: rgba(255, 255, 255, 0.85); stroke-dasharray: 2 1.5; }
-.ship[data-state="projected"].is-lead .ship-body { fill: rgba(10, 132, 255, 0.25); stroke: #8fc7ff; }
+/* solid dark hull, bright dashed outline and a shadow: readable over oil, sea or land */
+.ship[data-state="projected"] .ship-hull { filter: drop-shadow(0 0 2.5px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 1px rgba(0, 0, 0, 0.9)); }
+.ship[data-state="projected"] .ship-body { fill: rgba(18, 22, 30, 0.94); stroke: rgba(255, 255, 255, 0.95); stroke-width: 1.2; stroke-dasharray: 2.2 1.4; }
+.ship[data-state="projected"].is-lead .ship-body { fill: #0b3a78; stroke: #9fd0ff; }
 .ship[data-state="projected"] .ship-bridge { fill: rgba(255, 255, 255, 0.35); }
 .ship[data-state="projected"] .ship-wake { opacity: 0; }
 
@@ -227,7 +229,16 @@
   transition: opacity var(--dur-base) ease, box-shadow var(--dur-base) ease, color var(--dur-base) ease;
 }
 .area-label.is-fishery { color: #cdf1ff; box-shadow: 0 0 0 0.5px rgba(100, 210, 255, 0.7); }
-.area-label.is-hit { color: #ffd48a; box-shadow: 0 0 0 0.75px rgba(255, 179, 64, 0.95), 0 0 12px rgba(255, 150, 20, 0.45); }
+.area-label.is-hit {
+  color: #ffd3c6;
+  box-shadow: 0 0 0 1px rgba(255, 106, 69, 0.95), 0 0 12px rgba(255, 90, 54, 0.5);
+  animation: hazard 1.6s ease-in-out infinite;
+}
+@keyframes hazard {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(255, 106, 69, 0.95), 0 0 6px rgba(255, 90, 54, 0.35); }
+  50% { box-shadow: 0 0 0 1px rgba(255, 106, 69, 1), 0 0 16px rgba(255, 90, 54, 0.7); }
+}
+@media (prefers-reduced-motion: reduce) { .area-label.is-hit { animation: none; } }
 .area-label.is-hidden { visibility: hidden; }
 
 /* layer toggle */

@@ -39,10 +39,11 @@ export const CAPTIONS = {
   pixelSpacing: 'Ground distance covered by one image pixel.',
 
   // replay map
-  replayMap: 'Press play or drag the time bar. Before the image, the cyan area is where the slick could '
+  replayMap: 'Press play or drag the time bar. Before the image, the cyan rings show where the slick could '
     + 'have drifted from, widening as release time and spreading grow more uncertain; for a named vessel, '
-    + 'the glow is its best-fitting release replayed. At the image, the white outline is the detected '
-    + 'slick. After it, the glow is the modelled drift, and red dots are oil stranded on the coast.',
+    + 'the dark film is its best-fitting release replayed. At the image, the white outline is the detected '
+    + 'slick. After it, the dark film is the modelled drift, gold-rimmed dots are oil stranded on the coast, '
+    + 'and a sensitive area outlined in red is one the oil reaches.',
   probeRange: 'The forcing probe covers the 24 hours before the image. Pick an hour at or before it.',
 
   // fragility

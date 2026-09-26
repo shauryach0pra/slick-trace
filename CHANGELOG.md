@@ -219,6 +219,14 @@ hour the forecast first reaches them; the envelope is captioned; a layer toggle.
 Re-earned: 7/7 against naive 0/7, McNemar p = 0.0156, abstentions 1/2; leak audit
 3 of 33 flagged (about 2.7 by chance).
 
+**Oil drawn as oil.** Modelled oil on the replay map is now a dark brown-black film
+with a thin iridescent sheen where it thins at the edges, as oil looks on water; the
+orange heat-map glow it replaced is not what oil looks like. Stranded oil is dark
+droplets with a gold rim. A sensitive area the oil reaches keeps its own colour and
+gains a red-orange hazard outline and a pulsing badge, instead of turning the oil's
+colour. Projected ships after the image have a solid dark hull with a bright dashed
+outline, so they stay visible over the oil.
+
 ---
 
 ## 13 September 2026
