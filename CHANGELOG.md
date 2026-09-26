@@ -370,6 +370,16 @@ the margin. Every value is from fragility_result.json and attribution_result.jso
 tested change stores only its leader and the tested leader's fit, so the rest of the
 ranking under it is not shown, and the card says so.
 
+**Forcing and the ensemble fan on the map.** A new artifact, ensemble_fan.json, replays every
+ranked candidate's best release under the six forcing variants forward replay scores - the
+same variants, seeds and scoring - so it reproduces each candidate's mean IoU and win count
+in attribution_result.json exactly (tested), and its final oil rasterises to the scored
+footprints. The map draws the top three candidates' six member drift paths as faint
+bundles, the leader's in blue, with each member's variant and fit on hover; and the forcing
+itself - one uniform current, the same everywhere, labelled so - as a subtle arrow field and
+a small rose of the six variants. No wind is in the inputs, and the spatial variation the
+generator applies is not shown. Both have Layers toggles. 357 tests pass.
+
 ---
 
 ## 13 September 2026

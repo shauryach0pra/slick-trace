@@ -68,7 +68,7 @@ function addLayers(map, bbox) {
   map.addLayer({ id: 'outside', type: 'fill', source: 'outside', paint: { 'fill-color': '#000', 'fill-opacity': 0.4 } },
                'coast');
 
-  ['areas', 'slick', 'gaps', 'lastseen', 'proj', 'fc-contours', 'oil', 'oil-fc', 'oil-stranded'].forEach((id) => src(id));
+  ['areas', 'slick', 'gaps', 'lastseen', 'proj', 'fc-contours', 'oil', 'oil-fc', 'oil-stranded', 'forcing', 'fan', 'fan-ends'].forEach((id) => src(id));
   src('trails', { lineMetrics: true });
   src('trails-lead', { lineMetrics: true });
   ['a', 'b'].forEach((buf) => { src(`env-${buf}`); src(`env-pts-${buf}`); });
@@ -139,6 +139,17 @@ function addLayers(map, bbox) {
   map.addLayer({ id: 'slick-ants', type: 'line', source: 'slick',
     paint: { 'line-color': '#ffffff', 'line-width': 1.6, 'line-opacity': 0.7, 'line-dasharray': ANTS[0] } });
 
+  // the uniform current the model advects with, and each candidate's six-variant drift
+  map.addLayer({ id: 'forcing-arrows', type: 'line', source: 'forcing', layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: { 'line-color': 'rgba(210,225,240,0.42)', 'line-width': 1.2 } });
+  map.addLayer({ id: 'fan-lines', type: 'line', source: 'fan', layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: { 'line-color': ['case', ['get', 'lead'], '#5ac8fa', 'rgba(220,226,235,1)'],
+             'line-width': ['case', ['get', 'lead'], 1.5, 1.1],
+             'line-opacity': ['case', ['get', 'lead'], 0.75, 0.35] } });
+  map.addLayer({ id: 'fan-ends', type: 'circle', source: 'fan-ends',
+    paint: { 'circle-radius': ['case', ['get', 'lead'], 2.6, 2], 'circle-color': ['case', ['get', 'lead'], '#5ac8fa', 'rgba(220,226,235,0.7)'],
+             'circle-stroke-color': 'rgba(0,0,0,0.5)', 'circle-stroke-width': 0.5 } });
+  map.addLayer({ id: 'fan-hit', type: 'line', source: 'fan', paint: { 'line-color': '#000', 'line-width': 10, 'line-opacity': 0 } });
   map.addLayer({ id: 'proj', type: 'line', source: 'proj',
     paint: { 'line-color': 'rgba(255,255,255,0.55)', 'line-width': 1.2, 'line-dasharray': [2, 2] } });
   map.addLayer({ id: 'gaps', type: 'line', source: 'gaps', layout: { 'line-cap': 'round' },
@@ -424,7 +435,30 @@ function placeShips(map, ships, ctx) {
   ms.forEach((m, key) => { if (!seen.has(key)) { m.el.style.display = 'none'; m.visible = false; } });
 }
 
-export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, timeline, tau, label, onPick, onMode, onShowRanking }) {
+/** The model's forcing: one uniform current, and the six variants that perturb it. */
+function ForcingRose({ forcing }) {
+  const kn = Math.hypot(forcing.u_ms, forcing.v_ms) * 1.943844;
+  const bearing = Math.round(((Math.atan2(forcing.u_ms, forcing.v_ms) * 180) / Math.PI + 360) % 360);
+  const S = 150;                                           // px per m/s, for the drawing only
+  const vec = (u, v) => [40 + u * S, 40 - v * S];
+  return (
+    <div className="rmap-forcing" aria-label={`Model forcing: one uniform current, ${kn.toFixed(2)} knots toward ${bearing} degrees, with six variants`}>
+      <svg viewBox="0 0 80 80" width="80" height="80" aria-hidden="true">
+        <circle cx="40" cy="40" r="34" className="fr-ring" />
+        {forcing.variants.filter((x) => x.du_ms || x.dv_ms).map((x) => {
+          const [ex, ey] = vec(forcing.u_ms + x.du_ms, forcing.v_ms + x.dv_ms);
+          return <line key={x.name} x1="40" y1="40" x2={ex} y2={ey} className="fr-var" />;
+        })}
+        {(() => { const [ex, ey] = vec(forcing.u_ms, forcing.v_ms); return <line x1="40" y1="40" x2={ex} y2={ey} className="fr-nom" markerEnd="url(#fr-head)" />; })()}
+        <defs><marker id="fr-head" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0 0L6 3L0 6Z" className="fr-headfill" /></marker></defs>
+      </svg>
+      <span><strong>Uniform current</strong>{kn.toFixed(2)} kn toward {bearing}° · 6 forcing variants</span>
+    </div>
+  );
+}
+
+export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, timeline, tau, label, onPick, onMode, onShowRanking, fan }) {
   const el = useRef(null);
   const mapRef = useRef(null);
   const markers = useRef(new Map());
@@ -521,6 +555,8 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     const hrs = (p) => Math.round(((p.end ?? p.until) - (p.start ?? p.since)) / 360e3) / 10;
     hint('gaps-hit', (p) => `<strong>AIS gap ${hhmm(p.start)}–${hhmm(p.end)} UTC (${hrs(p)} h)</strong><br>`
       + 'No position was reported. These hours count neither for nor against this vessel.');
+    hint('fan-hit', (p) => `<strong>${esc(p.vessel)} · ${esc(p.variant)}</strong><br>Fit under this forcing variant: IoU ${p.iou}`
+      + (p.won ? '. The best of all candidates under this variant.' : '.') + '<br>One of the six runs forward replay scored.');
     hint('lastseen', (p) => `<strong>AIS off since ${hhmm(p.since)} UTC</strong><br>Last reported position; `
       + `reporting resumes at ${hhmm(p.until)} UTC. No position is shown for the hours between.`);
     // the observed slick: what the detection artifact says about it
@@ -576,6 +612,8 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
                                          `env-${b}-glow`, `env-pts-${b}`]),
     oil: ['oil-heat', 'oil-heat-fc', 'oil-stranded'],
     vessels: ['trails', 'trails-lead', 'gaps', 'gaps-hit', 'lastseen', 'lastseen-dot', 'proj'],
+    fan: ['fan-lines', 'fan-ends', 'fan-hit'],
+    forcing: ['forcing-arrows'],
     areas: ['areas-fill', 'areas-glow', 'areas-line', 'areas-hit'],
     forecast: ['fc-fill', 'fc-lines'],
   };
@@ -624,6 +662,46 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     }, 100);
     return () => clearInterval(id);
   }, [ready]);
+
+  // the forcing field and the ensemble fan, from ensemble_fan.json
+  const fanOn = tau <= 0;
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map) return;
+    const f = fan?.forcing;
+    const arrows = [];
+    if (f) {
+      // one uniform current: the same arrow at every grid point (direction from u, v)
+      const sp = Math.hypot(f.u_ms, f.v_ms) || 1, ux = f.u_ms / sp, vy = f.v_ms / sp;
+      const W = bbox.max_lon - bbox.min_lon, Hh = bbox.max_lat - bbox.min_lat, L = Math.min(W, Hh) * 0.055;
+      const k = Math.cos(((bbox.min_lat + bbox.max_lat) / 2) * Math.PI / 180);
+      for (let i = 1; i <= 5; i += 1) {
+        for (let j = 1; j <= 5; j += 1) {
+          const x = bbox.min_lon + (W * i) / 6, y = bbox.min_lat + (Hh * j) / 6;
+          const tx = x + (ux * L) / k, ty = y + vy * L;
+          const hx = -ux * 0.35 * L, hy = -vy * 0.35 * L, c = Math.cos(0.5), s = Math.sin(0.5);
+          arrows.push([[x, y], [tx, ty]],
+            [[tx, ty], [tx + (hx * c - hy * s) / k, ty + (hx * s + hy * c)]],
+            [[tx, ty], [tx + (hx * c + hy * s) / k, ty + (-hx * s + hy * c)]]);
+        }
+      }
+    }
+    map.getSource('forcing')?.setData(fc(arrows.map((a) => ({ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: a } }))));
+    const lines = [], ends = [];
+    if (fan && fanOn) {
+      const lead = fan.named ? fan.top_candidate_id : null;
+      for (const c of fan.candidates.slice(0, 3)) {
+        for (const m of c.members) {
+          if (m.path.length < 1) continue;
+          const props = { lead: c.vessel_key === lead, vessel: c.vessel_key, variant: m.variant, iou: m.iou, won: m.won };
+          if (m.path.length > 1) lines.push({ type: 'Feature', properties: props, geometry: { type: 'LineString', coordinates: m.path } });
+          ends.push({ type: 'Feature', properties: props, geometry: { type: 'Point', coordinates: m.path[m.path.length - 1] } });
+        }
+      }
+    }
+    map.getSource('fan')?.setData(fc(lines));
+    map.getSource('fan-ends')?.setData(fc(ends));
+  }, [ready, fan, fanOn, bbox]);
 
   // things that do not change with time
   useEffect(() => {
@@ -676,6 +754,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
         <span className="rmap-phase">{label}</span>
       </div>
       <div className="rmap-sweep" aria-hidden="true"><span /></div>
+      {fan?.forcing && !hidden.forcing && <ForcingRose forcing={fan.forcing} />}
       <div className="rmap-layers">
         <button type="button" className="rmap-layers-btn" aria-expanded={layersOpen}
                 onClick={() => setLayersOpen((o) => !o)} title="Layers">
@@ -684,7 +763,8 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
         {layersOpen && (
           <div className="rmap-layers-pop" role="group" aria-label="Map layers">
             {[['envelope', 'Origin envelope'], ['oil', 'Oil'], ['vessels', 'Vessels and tracks'],
-              ['areas', 'Sensitive areas'], ['forecast', 'Forecast contours']].map(([k, name]) => (
+              ['areas', 'Sensitive areas'], ['forecast', 'Forecast contours'], ['fan', 'Ensemble drift'],
+              ['forcing', 'Forcing current']].map(([k, name]) => (
               <label key={k}><input type="checkbox" checked={!hidden[k]}
                 onChange={() => setHidden((h) => ({ ...h, [k]: !h[k] }))} />{name}</label>
             ))}

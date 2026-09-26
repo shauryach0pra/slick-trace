@@ -53,7 +53,7 @@ slicktrace/
 │   ├── eval_unet.py      # U-Net evaluation on test splits
 │   ├── fit_calibration.py # Ensemble calibration against held-out set
 │   └── verify_document_claims.py # Document claim verification
-├── tests/                # Comprehensive test suite (338 tests)
+├── tests/                # Comprehensive test suite (357 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
 ```
@@ -67,7 +67,7 @@ slicktrace/
 - NumPy and SciPy for numerical computations and particle tracking
 - Matplotlib for visualization and envelope generation
 - Pydantic for data validation and schema enforcement
-- Pytest for comprehensive testing (338 tests covering invariants, API, NLP and benchmark fairness)
+- Pytest for comprehensive testing (357 tests covering invariants, API, NLP and benchmark fairness)
 
 **Frontend:**
 - React 19 with Vite for modern build tooling

@@ -48,6 +48,7 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
     api.replayTimeline(incidentId).then(put('replay')).catch(() => put('replay')(null));
     api.forecastTimeline(incidentId).then(put('forecast')).catch(() => put('forecast')(null));
     api.trackDisplay(incidentId).then(put('display')).catch(() => put('display')(null));
+    api.ensembleFan(incidentId).then(put('fan')).catch(() => put('fan')(null));
     return () => { live = false; };
   }, [api, incidentId]);
 
@@ -168,7 +169,7 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
         {timeline ? (
           <ReplayMap bbox={c.meta.bbox} coastline={c.geography?.coastline} slickInfo={slickInfo} onShowRanking={showRanking}
                      areas={c.geography?.sensitive_areas} slick={c.slick?.polygon}
-                     timeline={timeline} tau={tau} label={label} onPick={onPick} />
+                     timeline={timeline} tau={tau} label={label} onPick={onPick} fan={data.fan} />
         ) : <div className="rmap rmap-loading">Loading replay…</div>}
       </Suspense>
 
@@ -213,6 +214,8 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
         <li><i className="lg-hit" /> oil reaches a sensitive area</li>
         <li><i className="lg-slick" /> observed slick</li>
         <li><i className="lg-gap" /> AIS gap or projected track</li>
+        <li><i className="lg-fan" /> ensemble drift: the six forcing variants forward replay scored</li>
+        <li><i className="lg-forcing" /> forcing: one uniform current</li>
         <li><i className="lg-area is-fishery" /> fishing ground (synthetic, after the image)</li>
         <li><i className="lg-area" /> mangrove fringe (synthetic, after the image)</li>
       </ul>

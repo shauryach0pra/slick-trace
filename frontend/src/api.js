@@ -25,6 +25,7 @@ export const api = {
   replayTimeline: (id) => j(`/incidents/${id}/replay-timeline`),
   forecastTimeline: (id) => j(`/incidents/${id}/forecast-timeline`),
   trackDisplay: (id) => j(`/incidents/${id}/track-display`),
+  ensembleFan: (id) => j(`/incidents/${id}/ensemble-fan`),
   detection: (id) => j(`/incidents/${id}/detection`),
   fragility: (id) => j(`/incidents/${id}/fragility`),
   forecast: (id) => j(`/incidents/${id}/forecast`),

@@ -144,6 +144,13 @@ def get_replay_timeline(incident_id: str):
     return _require(incident_id, "replay_timeline.json", "replay timeline")
 
 
+@app.get("/api/incidents/{incident_id}/ensemble-fan")
+def get_ensemble_fan(incident_id: str):
+    """Each ranked candidate's best release under the six forcing variants attribution
+    scored, and the uniform current the model uses, for the map."""
+    return _require(incident_id, "ensemble_fan.json", "ensemble fan")
+
+
 @app.get("/api/incidents/{incident_id}/forecast-timeline")
 def get_forecast_timeline(incident_id: str):
     """Modelled drift after the image, every hour to +24 h, for the map."""

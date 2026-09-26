@@ -320,3 +320,15 @@
 .rfloat-close:active { transform: scale(0.9); }
 .rfloat-close:hover { background: rgba(255, 255, 255, 0.2); }
 .rfloat.is-hint .rfloat-card { padding: 7px 10px; font-size: 11.5px; }
+
+/* the model's forcing: a small rose above the scale bar */
+.rmap-forcing { position: absolute; left: 10px; bottom: 38px; z-index: 2; display: flex; align-items: center; gap: 8px;
+                padding: 6px 10px 6px 6px; border-radius: 10px; pointer-events: none;
+                background: var(--material-header); -webkit-backdrop-filter: var(--blur-material); backdrop-filter: var(--blur-material);
+                box-shadow: var(--shadow-control); font-size: var(--font-size-xxs); color: var(--label-2); }
+.rmap-forcing strong { display: block; font-size: var(--font-size-xs); color: var(--label-1); }
+.rmap-forcing svg { width: 52px; height: 52px; }
+.fr-ring { fill: none; stroke: var(--separator-strong); stroke-width: 1; }
+.fr-var { stroke: #5ac8fa; stroke-width: 1.2; opacity: 0.6; stroke-linecap: round; }
+.fr-nom { stroke: var(--label-1); stroke-width: 2; stroke-linecap: round; }
+.fr-headfill { fill: var(--label-1); }

@@ -47,3 +47,7 @@
 .lg-glyph .ship-bridge { fill: rgba(40, 46, 56, 0.85); }
 .lg-glyph .ship-deck { stroke: rgba(0, 0, 0, 0.35); stroke-width: 0.7; fill: none; }
 .rmap-legend .lg-note { flex-basis: 100%; color: var(--label-3); font-size: var(--font-size-xxs); }
+.lg-fan { width: 16px; height: 10px; background: linear-gradient(170deg, transparent 40%, #5ac8fa 42% 50%, transparent 52%),
+          linear-gradient(185deg, transparent 40%, #5ac8fa 42% 50%, transparent 52%), linear-gradient(200deg, transparent 40%, #5ac8fa 42% 50%, transparent 52%); opacity: 0.8; }
+.lg-forcing { width: 16px; height: 0; border-top: 1.5px solid var(--label-2); position: relative; }
+.lg-forcing::after { content: ""; position: absolute; right: -1px; top: -4.5px; border: 3.5px solid transparent; border-left-color: var(--label-2); }

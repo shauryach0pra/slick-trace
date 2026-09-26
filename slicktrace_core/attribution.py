@@ -458,6 +458,9 @@ def run_attribution(case_dir: str, candidate_vessel_keys: list[str] | None = Non
     # The same run, hour by hour, for the leading candidate of a named case.
     from slicktrace_core.replay_timeline import write_replay_timeline
     write_replay_timeline(case_dir, manifest, out, tracks_by_key, u, v)
+    # every ranked candidate under all six forcing variants, and the forcing itself, for the map
+    from slicktrace_core.ensemble_fan import write_ensemble_fan
+    write_ensemble_fan(case_dir, manifest, out, tracks_by_key, u, v, observed_mask)
     return out
 
 
