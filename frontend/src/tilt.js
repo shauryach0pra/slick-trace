@@ -7,7 +7,7 @@
  * panels never swing. The Replay Map card does not rotate at all - a skewed map
  * would put clicks off target - but keeps the light. Off with reduced motion.
  */
-const SELECTOR = '.finder-features > .panel, .finder-details > .cg, .finder-details > .panel, .ov-tile';
+const SELECTOR = '.finder-features > .panel, .finder-features > .card-row > .panel, .finder-details > .cg, .finder-details > .panel, .ov-tile';
 
 export function attachTilt() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {};

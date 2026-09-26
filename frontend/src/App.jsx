@@ -132,8 +132,11 @@ export default function App() {
                 <HistoricalReplayCard incidentId={vid} api={api} c={vc} tracks={shown.tracks} />
                 <FragilityCard fragility={vc.fragility} attribution={vc.attribution} />
                 <ForecastCard forecast={vc.forecast} />
-                <CoverageCard coverage={vc.coverage} />
-                <ProvenanceCard meta={meta} report={shown.report} />
+                {/* two supporting cards, side by side */}
+                <div className="card-row">
+                  <CoverageCard coverage={vc.coverage} />
+                  <ProvenanceCard meta={meta} report={shown.report} attribution={vc.attribution} />
+                </div>
                 {/* the case closes on what to check next */}
                 <NextObservationCard nextObs={vc.next_observation} closing />
               </>

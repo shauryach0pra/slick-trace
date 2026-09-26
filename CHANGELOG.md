@@ -408,6 +408,12 @@ modelled spread and each sensitive area's share (with the shoreline) as lines th
 forcing mode kept visible. Next Observation shows the recommended window large beside a bar
 timeline of disagreement per window, the recommendation lit. Shared SVG charts are added.
 
+**Design step 2c: the supporting cards, side by side.** Coverage-Aware Matching shows each rate
+as paired bars (vessels hidden, area goes dark) marked with which direction is better. Traffic
+Filtering and Provenance shows a funnel from every vessel in the scene to the one named - or
+none, when the system abstains - with excluded and unassessed vessels as chips and the run's
+provenance as a compact list. The two sit in one row, with the same card treatment and tilt.
+
 ---
 
 ## 13 September 2026

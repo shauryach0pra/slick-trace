@@ -1,4 +1,6 @@
-import { Badge, Card, CaptionList } from '../ui/primitives';
+import { Badge, Card } from '../ui/primitives';
+import { HowMeasured } from '../ui/viz';
+import './supporting.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
 /**
@@ -12,12 +14,23 @@ const ROWS = [
   ['mistaken_promotion_rate', 'mistaken_promotion_n', 'Mistaken promotion'],
 ];
 
-function Rate({ value, n }) {
+// which direction is better for each rate
+const BETTER = { hidden_ais_recovery_rate: 'higher', false_unmatched_alert_rate: 'lower', mistaken_promotion_rate: 'lower' };
+
+function Pair({ label, better, rows }) {
   return (
-    <>
-      {value == null ? <span className="muted">not measured</span> : `${(value * 100).toFixed(1)}%`}
-      <span className="sub">{n}</span>
-    </>
+    <div className="cv-pair">
+      <div className="cv-pair-head"><b>{label}</b><span className={`cv-better is-${better}`}>{better} is better</span></div>
+      {rows.map((r) => (
+        <div key={r.name} className={`cv-bar-row tone-${r.tone}`}>
+          <span className="cv-name">{r.name}</span>
+          <span className="cv-track">{r.value == null
+            ? <i className="cv-none">not measured</i>
+            : <i className="cv-fill" style={{ '--w': r.value }} />}</span>
+          <span className="cv-val">{r.value == null ? '—' : `${Math.round(r.value * 100)}%`}<em>{r.n}</em></span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -27,34 +40,26 @@ export default function CoverageCard({ coverage }) {
   const op = coverage.operating_point;
   return (
     <Card title="Coverage-Aware Matching" badge={<Badge tone="accent">tested</Badge>}
-          caption="How well radar contacts are matched to AIS records when some AIS is deliberately hidden, one vessel at a time or a whole area at once."
-          footnote={`Operating point: match gate ${op.gate_radius_deg}°, detector miss rate ${op.detector_miss_rate}, hidden fraction ${op.hide_fraction_selective}, ${selective.n_runs} runs per condition.`}>
-      <table className="ui-table">
-        <caption className="visually-hidden">Matching rates under selective hiding and simulated coverage failure</caption>
-        <thead>
-          <tr><th scope="col">Rate</th><th scope="col">Vessels hidden</th><th scope="col">Area goes dark</th></tr>
-        </thead>
-        <tbody>
-          {ROWS.map(([rk, nk, label]) => (
-            <tr key={rk}>
-              <th scope="row">{label}</th>
-              <td><Rate value={selective[rk]} n={selective[nk]} /></td>
-              <td><Rate value={failure[rk]} n={failure[nk]} /></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <CaptionList items={[
-        ['Hidden-AIS recovery', C.hiddenRecovery],
-        ['False unmatched alert', C.falseAlert],
-        ['Mistaken promotion', C.mistakenPromotion],
-        ['Match gate', C.gateRadius],
-        ['Not measured', C.notMeasured],
-      ]} />
-      <details className="text-equivalent">
-        <summary>What these rates do and do not establish</summary>
-        <ul className="cov-limits">{coverage.limits.map((l) => <li key={l}>{l}</li>)}</ul>
-      </details>
+          caption="Matching radar contacts to AIS when some AIS is hidden.">
+      <div className="cv-key">
+        <span><i className="tone-a" />vessels hidden</span><span><i className="tone-b" />area goes dark</span>
+      </div>
+      {ROWS.map(([rk, nk, label]) => (
+        <Pair key={rk} label={label} better={BETTER[rk]}
+              rows={[{ name: 'vessels hidden', tone: 'a', value: selective[rk], n: selective[nk] },
+                     { name: 'area goes dark', tone: 'b', value: failure[rk], n: failure[nk] }]} />
+      ))}
+      <HowMeasured>
+        <dl>
+          <dt>Hidden-AIS recovery</dt><dd>{C.hiddenRecovery}</dd>
+          <dt>False unmatched alert</dt><dd>{C.falseAlert}</dd>
+          <dt>Mistaken promotion</dt><dd>{C.mistakenPromotion}</dd>
+          <dt>Match gate</dt><dd>{C.gateRadius} {op.gate_radius_deg}°.</dd>
+          <dt>Not measured</dt><dd>{C.notMeasured}</dd>
+          <dt>Operating point</dt><dd>Detector miss rate {op.detector_miss_rate}, hidden fraction {op.hide_fraction_selective}, {selective.n_runs} runs per condition.</dd>
+          <dt>What these rates do and do not establish</dt><dd><ul className="cov-limits">{coverage.limits.map((l) => <li key={l}>{l}</li>)}</ul></dd>
+        </dl>
+      </HowMeasured>
     </Card>
   );
 }
