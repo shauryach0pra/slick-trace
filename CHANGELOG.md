@@ -314,6 +314,12 @@ callout. Advance is manual: Space, the arrows, Next, or a click. Start Tour / Ex
 always available. Switching case keeps the previous case on screen, dimmed, until the next
 has loaded, then fades it in, instead of blanking and reloading.
 
+**Pinned card headers: a scroll-edge effect instead of a translucent material.** The
+sticky headers carried a permanent blurred material that smeared whatever scrolled
+under it - map imagery especially - into a textured band. A header is now clear at
+rest, and only while its card's content passes beneath it takes the pane's own solid
+background, a hairline and a soft fade below, as macOS and iOS do.
+
 ---
 
 ## 13 September 2026

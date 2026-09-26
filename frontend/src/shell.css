@@ -333,19 +333,30 @@
   color: var(--label-1);
 }
 
-/* Section titles pin while their section scrolls beneath, on the same
-   material as the toolbar. In flow the material is indistinguishable from
-   the page; it only reads as glass once content passes under it. */
+/* Section titles pin while their section scrolls beneath - with a scroll-edge
+   effect, not a translucent material. At rest the header is clear. While its
+   card's content passes under it (is-stuck, set by stickyHeaders.js) it takes
+   the pane's own solid background, a hairline, and a soft fade below, so
+   content dissolves under it instead of being smeared into a blurred band. */
 .finder-features .panel > .panel-head {
   position: sticky;
   top: 0;
   z-index: 3;
   margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-3)) 14px;
   padding: var(--space-3) var(--space-3) var(--space-2);
-  background: var(--material-header);
-  -webkit-backdrop-filter: var(--blur-material);
-  backdrop-filter: var(--blur-material);
+  background: transparent;
+  transition: background-color 160ms ease, box-shadow 160ms ease;
 }
+.finder-features .panel > .panel-head::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 18px; pointer-events: none;
+  background: linear-gradient(to bottom, var(--content-bg), color-mix(in srgb, var(--content-bg) 0%, transparent));
+  opacity: 0; transition: opacity 160ms ease;
+}
+.finder-features .panel > .panel-head.is-stuck {
+  background: var(--content-bg);
+  box-shadow: 0 0.5px 0 var(--separator);
+}
+.finder-features .panel > .panel-head.is-stuck::after { opacity: 1; }
 
 .finder-features .panel {
   padding-top: var(--space-6);
@@ -608,7 +619,6 @@
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .topbar { background: var(--solid-bar); }
   .finder-sidebar, .finder-details { background: var(--solid-sidebar); }
-  .finder-features .panel > .panel-head { background: var(--content-bg); }
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -616,9 +626,7 @@
   .finder-sidebar, .finder-details {
     background: var(--solid-sidebar); backdrop-filter: none; -webkit-backdrop-filter: none;
   }
-  .finder-features .panel > .panel-head {
-    background: var(--content-bg); backdrop-filter: none; -webkit-backdrop-filter: none;
-  }
+  .finder-features .panel > .panel-head, .finder-features .panel > .panel-head::after { transition: none; }
 }
 
 /* ------------------------------------------------------------- narrow widths */

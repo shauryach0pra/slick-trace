@@ -4,6 +4,7 @@ import './shell.css';
 import { api } from './api';
 import { useCase } from './useCase';
 import CaseSwitcher from './CaseSwitcher';
+import { attachStickyHeaders } from './stickyHeaders';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
 import CaseFindingCard from './cards/CaseFindingCard';
@@ -29,6 +30,7 @@ export default function App() {
     api.listIncidents().then(setIncidents).catch(() => setIncidents([]));
   }, []);
 
+
   const [touring, setTouring] = useState(false);
 
   // Cross-fade between cases: the last fully loaded case stays on screen (dimmed)
@@ -42,6 +44,9 @@ export default function App() {
   const vc = shown?.c;
   const leaving = !!shown && shown.id !== incidentId;
   const meta = vc?.meta;
+
+  // scroll-edge effect on the pinned card headers; the column remounts per case
+  useEffect(() => attachStickyHeaders(document.querySelector('.finder-features')), [vid]);
 
   return (
     <div className="app-shell">
