@@ -1,14 +1,14 @@
 # Validation report
 
-Generated 2026-09-26T12:22:33.625989+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-26T13:02:05.903801+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
 ## Leak audit - can a rule with no physics find the source
 
-Each rule looks only at track bookkeeping - fix count, first and last fix, span, actual speed, straightness, reported-vs-actual speed, closest approach to the slick - and names one vessel per case, lowest, second-lowest, highest or second-highest on that attribute. Ties count as misses. Rules and the flag threshold were fixed before the generator was changed. A rule that names the true source in 3 or more of the 7 source-present cases is flagged. A rule picking at random reaches that with probability 0.0806, so about 2.66 of 33 rules are expected to flag by luck alone.
+Each rule looks only at track bookkeeping - fix count, first and last fix, span, actual speed, straightness, reported-vs-actual speed, closest approach to the slick - and names one vessel per case, lowest, second-lowest, highest or second-highest on that attribute. Ties count as misses. Rules and the flag threshold were fixed before the generator was changed. A rule that names the true source in 3 or more of the 7 source-present cases is flagged. A rule picking at random reaches that with probability 0.0806, so about 2.82 of 35 rules are expected to flag by luck alone.
 
-**3 of 33 rules flagged.**
+**3 of 35 rules flagged.**
 
 | Rule | Source named | Flagged |
 | --- | --- | --- |
@@ -211,15 +211,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 20.7 s (case_0004) | ≤ 5 min |
-| Mean per case | 14.6 s | — |
-| Full run, 9 cases | 131.5 s | — |
-| Template query, cold — fresh KB + lookup intent | 0.7 ms | < 2 s |
+| Slowest single case, all stages | 23.0 s (case_0004) | ≤ 5 min |
+| Mean per case | 15.3 s | — |
+| Full run, 9 cases | 137.5 s | — |
+| Template query, cold — fresh KB + lookup intent | 1.2 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
 | Time-window query, cold — fresh KB, reads per-time state | 0.7 ms | < 2 s |
 | Time-window query, warm (median of 20) | 0.0 ms | < 2 s |
 
-Dominant stages across the run: attribution 80.9 s, forecast 25.3 s, fragility 20.0 s. Cold and warm query times are reported separately because a fresh knowledge base loads the case's artifacts on first use, and quoting only the warm number would overstate what a reviewer sees on first load. Time-window queries read per-time envelope membership from historical_mapping.json; nothing is simulated at query time.
+Dominant stages across the run: attribution 84.3 s, forecast 26.6 s, fragility 21.1 s. Cold and warm query times are reported separately because a fresh knowledge base loads the case's artifacts on first use, and quoting only the warm number would overstate what a reviewer sees on first load. Time-window queries read per-time envelope membership from historical_mapping.json; nothing is simulated at query time.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 

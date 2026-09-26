@@ -32,7 +32,7 @@ from typing import Annotated, Literal, Optional
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, model_validator
 
-SCHEMA_VERSION = "3"   # 2: replay_footprints, forecast_contours; 3: track_display
+SCHEMA_VERSION = "4"   # 2: replay_footprints, forecast_contours; 3: track_display; 4: AIS static data per vessel
 
 # Must equal the families in synth_generator.CASE_PLAN; a test holds them together.
 Family = Literal["decoy", "moving_discharge", "absent_source", "crowded", "along_track_ribbon"]
@@ -170,6 +170,10 @@ class Vessel(_Strict):
     identity_valid_from: Optional[IsoUtc] = None
     identity_valid_to: Optional[IsoUtc] = None
     fixes: list[Fix]
+    # AIS static data (message 5), as the vessel reports it; absent means not reported
+    ship_type_code: Optional[int] = None
+    ship_type: Optional[str] = None
+    static_source: Optional[str] = None
     missing_intervals: list[tuple[IsoUtc, IsoUtc]]
     provenance: TrackProvenance
     # from historical_mapping.assessments[]
@@ -470,7 +474,7 @@ class TrackGap(_Strict):
 
 class DisplayVessel(_Strict):
     vessel_key: str
-    vessel_type: None = None          # never inferred; see vessel_type_source
+    vessel_type: Optional[str] = None  # from AIS static data, never inferred; see vessel_type_source
     vessel_type_source: str
     n_fixes: int
     n_usable_fixes: int
@@ -494,7 +498,7 @@ class TrackDisplay(_Strict):
 # ------------------------------------------------------------------- case --
 
 class Case(_Strict):
-    schema_version: Literal["3"] = SCHEMA_VERSION
+    schema_version: Literal["4"] = SCHEMA_VERSION
     meta: Meta
     geography: Geography
     slick: Optional[Slick] = None

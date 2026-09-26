@@ -227,6 +227,18 @@ gains a red-orange hazard outline and a pulsing badge, instead of turning the oi
 colour. Projected ships after the image have a solid dark hull with a bright dashed
 outline, so they stay visible over the oil.
 
+**Vessels by type.** Each vessel now carries synthetic AIS static data (message 5)
+with a ship type drawn from its behaviour - loitering vessels mostly fishing boats,
+tugs and ships at anchor; vessels under way mostly cargo ships, tankers and passenger
+ships - never from its role, and from a separate random stream, so no track, slick
+or analysis result changed (A24). The map draws each type with its own original
+top-down silhouette (tanker, cargo, passenger, fishing, tug; a generic hull when not
+reported), also in the legend, tooltips and text table. Two rules were added to the
+leak audit before it ran - the only vessel of its type, and the only tanker - and
+both name the source in 0 of 7 cases. The case contract is schema 4. Fixed: legend
+glyphs inherited the map markers' positioning and invisibly blocked clicks on the
+card. 7/7 against naive 0/7 unchanged; 330 tests pass; verifier 38/38.
+
 ---
 
 ## 13 September 2026

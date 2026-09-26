@@ -647,6 +647,20 @@
         "cases": []
       },
       {
+        "rule": "only vessel of its ship type",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
+        "rule": "the only tanker (tankers carry oil)",
+        "hits": 0,
+        "n": 7,
+        "flagged": false,
+        "cases": []
+      },
+      {
         "rule": "lowest fix count",
         "hits": 0,
         "n": 7,
@@ -896,7 +910,7 @@
       }
     ],
     "chance_p_per_rule": 0.0806,
-    "chance_expected_flags": 2.66,
+    "chance_expected_flags": 2.82,
     "any_flagged": true,
     "note": "Rules use track bookkeeping only, no physics. Ties count as misses. A rule picking the true source in 3 or more cases is flagged as a leak."
   }

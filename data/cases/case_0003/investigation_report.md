@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-26T12:21:08.846513+00:00 · git `7e10f46` · Darwin 25.2.0 (arm64)
+Generated 2026-09-26T13:00:36.354496+00:00 · git `1ed6b8c` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -102,7 +102,7 @@ Most informative tested window: **+3 h** (disagreement score 0.9178). hypothetic
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `d984b38484da1031…` |
+| `manifest.json` | `1ff45cd57416e0cd…` |
 | `historical_mapping.json` | `748c15129fabdb2c…` |
 | `naive_baseline_result.json` | `ec0c618119c3a020…` |
 | `attribution_result.json` | `13dd40672ab6431e…` |

@@ -1,6 +1,7 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import TimeScrubber from '../map/TimeScrubber';
 import { prepare } from '../map/timeline';
+import { SHIP_TYPES, TYPE_LABEL, glyph } from '../map/shipGlyphs';
 import '../map/replayCard.css';
 import { Badge, Card } from '../ui/primitives';
 import { CAPTIONS as C } from '../ui/glossary';
@@ -161,7 +162,10 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
       )}
 
       <ul className="rmap-legend" aria-label="Map legend">
-        <li><i className="lg-ship" /> vessel (symbol, not to scale)</li>
+        {SHIP_TYPES.map((ty) => (
+          <li key={ty}><i className="lg-glyph" dangerouslySetInnerHTML={{ __html: glyph(ty) }} /> {ty}</li>
+        ))}
+        <li className="lg-note">vessel symbols by AIS ship type (synthetic static data), not to scale</li>
         <li><i className="lg-ship is-projected" /> projected after the image</li>
         <li><i className="lg-ship is-inside" /> inside origin envelope</li>
         {leadKey && <li><i className="lg-ship is-lead" /> leading candidate</li>}
@@ -181,12 +185,13 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
           <table className="ui-table">
             <caption className="visually-hidden">Vessel positions and envelope membership at the selected hour</caption>
             <thead><tr><th scope="col">Vessel</th><th scope="col">At this hour</th>
-              <th scope="col">Overall</th><th scope="col">Distance to envelope</th></tr></thead>
+              <th scope="col">Type</th><th scope="col">Overall</th><th scope="col">Distance to envelope</th></tr></thead>
             <tbody>
               {envFrame.vessels.map((v) => (
                 <tr key={v.vessel_key}>
                   <td className="cg-mono">{v.vessel_key}{v.vessel_key === leadKey ? ' (leading candidate)' : ''}</td>
                   <td>{t > 0 ? 'projected from last course and speed (no AIS after the image)' : (v.lon === null ? 'no track data' : STATE_LABEL[v.at_this_time] ?? v.at_this_time)}</td>
+                  <td>{TYPE_LABEL[display?.vessels?.find((d) => d.vessel_key === v.vessel_key)?.vessel_type] ?? TYPE_LABEL.other}</td>
                   <td>{v.overall_status}</td>
                   <td>{v.distance_to_envelope_deg ?? '—'}</td>
                 </tr>

@@ -50,11 +50,15 @@ def _features(track, slick_c):
         "straightness": round((net / path) if path > 0 else 1.0, 3),
         "speed_mismatch_kn": round(abs(reported_kn - actual_kn), 1),
         "nearest_to_slick_km": round(min(_km(p, slick_c) for p in pts), 1),
+        "ship_type": track.get("ship_type"),
     }
 
 
 def _pick(values, how):
     """Key of the single vessel the rule selects, or None on a tie."""
+    if how.startswith("only:"):                     # the one vessel of a given type
+        keys = [k for k, v in values.items() if v == how[5:]]
+        return keys[0] if len(keys) == 1 else None
     if how == "unique":
         counts = {}
         for v in values.values():
@@ -73,7 +77,9 @@ def _pick(values, how):
     return keys[0] if len(keys) == 1 else None
 
 
-RULES = [("only vessel with a unique fix count", "n_fixes", "unique")]
+RULES = [("only vessel with a unique fix count", "n_fixes", "unique"),
+         ("only vessel of its ship type", "ship_type", "unique"),
+         ("the only tanker (tankers carry oil)", "ship_type", "only:tanker")]
 for _label, _feat in [("fix count", "n_fixes"), ("first fix time", "first_fix"),
                       ("last fix time", "last_fix"), ("track span", "span_h"),
                       ("actual speed", "actual_speed_kn"), ("straightness", "straightness"),

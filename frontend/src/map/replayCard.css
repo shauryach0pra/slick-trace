@@ -40,3 +40,10 @@
 .lg-gap { width: 16px; height: 0; border-top: 1.5px dotted var(--label-2); }
 .lg-area { width: 14px; height: 10px; border-radius: 2px; border: 1px dashed #30d158; background: rgba(48, 209, 88, 0.14); }
 .lg-area.is-fishery { border-color: #64d2ff; background: rgba(100, 210, 255, 0.14); }
+
+.lg-glyph { width: 7px; height: 18px; display: inline-block; }
+.lg-glyph svg { display: block; width: 100%; height: 100%; pointer-events: none; }
+.lg-glyph .ship-body { fill: #e5e7eb; stroke: rgba(0, 0, 0, 0.55); stroke-width: 0.9; }
+.lg-glyph .ship-bridge { fill: rgba(40, 46, 56, 0.85); }
+.lg-glyph .ship-deck { stroke: rgba(0, 0, 0, 0.35); stroke-width: 0.7; fill: none; }
+.rmap-legend .lg-note { flex-basis: 100%; color: var(--label-3); font-size: var(--font-size-xxs); }

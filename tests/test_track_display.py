@@ -96,11 +96,17 @@ def test_sentinel_position_counts_as_missing():
     assert all(f["lat"] != 91.0 for f in usable)
 
 
-def test_vessel_type_is_not_invented():
+def test_vessel_type_comes_from_static_data_not_inference():
+    """Type is what the vessel's AIS static message reports, labelled with its
+    source; with no static data it stays 'not reported' - never inferred."""
     for cid in CASES:
+        static = {t["vessel_key"]: t.get("ship_type") for t in _load(cid, "manifest.json")["tracks"]}
         for v in _load(cid, "track_display.json")["vessels"]:
-            assert v["vessel_type"] is None
-            assert v["vessel_type_source"].startswith("not reported")
+            assert v["vessel_type"] == static[v["vessel_key"]]
+            if v["vessel_type"] is None:
+                assert v["vessel_type_source"].startswith("not reported")
+            else:
+                assert v["vessel_type_source"] == "AIS static message 5 (synthetic)"
 
 
 def test_track_display_endpoint_equals_case_section():

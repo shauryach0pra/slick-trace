@@ -54,7 +54,7 @@ check("max scene IoU <= 0.99", max(ious) <= 0.99, True)
 
 check("assumptions",
       int(subprocess.run("grep -c '^### A' docs/assumptions_register.md",
-          shell=True, capture_output=True, text=True).stdout.strip()), 23)
+          shell=True, capture_output=True, text=True).stdout.strip()), 24)
 
 t = subprocess.run("python3 -m pytest tests/ -q 2>&1 | tail -2",
                    shell=True, capture_output=True, text=True).stdout

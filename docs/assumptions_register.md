@@ -634,6 +634,30 @@ eight times the work; the slowest case takes about 25 s, within the 5 min budget
 
 ---
 
+### A24 · Ship type comes from AIS static data, and cannot name the source
+
+**The assumption.** A vessel's type on the map is what its AIS static message
+would report, and knowing it does not help find the polluter.
+
+**Why it was needed.** An MMSI does not encode ship type; real AIS broadcasts it
+separately, in static message 5. The data had no static messages, so type was
+"not reported" for every vessel. Drawing typed vessels meant adding static data,
+and adding it naively - making the polluter a tanker, say - would hand over the
+answer.
+
+**How it is bounded.** The generator publishes a type code per vessel as
+synthetic static data, labelled "AIS static message 5 (synthetic)" wherever it
+appears. It is drawn from behaviour alone - loitering vessels are mostly fishing
+boats, tugs and ships at anchor; vessels under way mostly cargo ships, tankers
+and passenger ships - never from role, and from a separate random stream, so
+no track, slick or analysis result changed. Two rules were added to the leak
+audit before it was run: "the only vessel of its type" and "the only tanker",
+the shortcut a naive analyst might take because tankers carry oil. Both name
+the source in 0 of 7 cases. A vessel without static data would stay "not
+reported"; a type is never inferred.
+
+---
+
 ## Assumptions this system does *not* make
 
 Recorded because their absence is deliberate and a reviewer may look for them:

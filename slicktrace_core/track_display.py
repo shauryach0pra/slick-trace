@@ -21,9 +21,9 @@ must not compute itself.
                 truth. max_display_deviation_m says how far the curve strays
                 from those straight segments.
 
-  vessel_type   Not reported. An MMSI does not encode ship type; that is AIS
-                static data (message 5), which this source does not carry. The
-                field says so rather than inferring one.
+  vessel_type   As the vessel's AIS static message (message 5) reports it, with
+                its source. Never inferred: an MMSI does not encode ship type,
+                so a vessel without static data stays "not reported".
 """
 
 from __future__ import annotations
@@ -163,8 +163,8 @@ def run_track_display(case_dir: str) -> dict:
         path, deviation = display_path(usable, gaps, lat0)
         vessels.append({
             "vessel_key": tr["vessel_key"],
-            "vessel_type": None,
-            "vessel_type_source": VESSEL_TYPE_SOURCE,
+            "vessel_type": tr.get("ship_type"),
+            "vessel_type_source": tr.get("static_source") or VESSEL_TYPE_SOURCE,
             "n_fixes": len(tr["fixes"]),
             "n_usable_fixes": len(usable),
             "internal_gap_threshold_minutes": threshold,

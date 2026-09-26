@@ -1367,6 +1367,9 @@
           "interpolated": false
         }
       ],
+      "ship_type_code": 52,
+      "ship_type": "tug",
+      "static_source": "AIS static message 5 (synthetic)",
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
@@ -1774,6 +1777,9 @@
           "interpolated": false
         }
       ],
+      "ship_type_code": 30,
+      "ship_type": "fishing",
+      "static_source": "AIS static message 5 (synthetic)",
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
@@ -2125,6 +2131,9 @@
           "interpolated": false
         }
       ],
+      "ship_type_code": 70,
+      "ship_type": "cargo",
+      "static_source": "AIS static message 5 (synthetic)",
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
@@ -2324,6 +2333,9 @@
           "interpolated": false
         }
       ],
+      "ship_type_code": 70,
+      "ship_type": "cargo",
+      "static_source": "AIS static message 5 (synthetic)",
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
@@ -2459,6 +2471,9 @@
           "interpolated": false
         }
       ],
+      "ship_type_code": 60,
+      "ship_type": "passenger",
+      "static_source": "AIS static message 5 (synthetic)",
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",
@@ -2562,6 +2577,9 @@
           "interpolated": false
         }
       ],
+      "ship_type_code": 70,
+      "ship_type": "cargo",
+      "static_source": "AIS static message 5 (synthetic)",
       "missing_intervals": [],
       "provenance": {
         "status": "synthetic",

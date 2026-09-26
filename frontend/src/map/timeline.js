@@ -24,6 +24,7 @@ export function prepare({ acquiredUtc, env, replay, forecast, display, tracks, l
   const fixesByKey = new Map((tracks?.tracks ?? []).map((t) => [t.vessel_key, t.fixes.map((f) => ({ t: ms(f.t_utc), sog: f.sog_knots }))]));
   const vessels = (display?.vessels ?? []).map((v) => ({
     key: v.vessel_key,
+    type: v.vessel_type ?? 'other',
     lead: v.vessel_key === leadKey,
     pts: v.display_path.map((p) => [p[0], p[1], ms(p[2])]),
     gaps: v.gaps.filter((g) => g.kind === 'internal').map((g) => [ms(g.start_utc), ms(g.end_utc)]),
@@ -157,7 +158,7 @@ export function shipsAt(P, tau) {
       (v.lead ? lead : others).push(...segs);
       gaps.push(...gapsUpTo(v, t));
       if (at) {
-        ships.push({ key: v.key, lon: at.pos[0], lat: at.pos[1], cog: at.heading, sog: sogAt(v.fixes, t),
+        ships.push({ key: v.key, type: v.type, lon: at.pos[0], lat: at.pos[1], cog: at.heading, sog: sogAt(v.fixes, t),
                      lead: v.lead, state: stateOf.get(v.key) === 'inside' ? 'inside' : 'outside' });
       }
     } else {
@@ -167,7 +168,7 @@ export function shipsAt(P, tau) {
       const pr = projectAfter(v, tau, P.land);
       if (!pr) continue;
       projected.push(pr.path);
-      ships.push({ key: v.key, lon: pr.pos[0], lat: pr.pos[1], cog: pr.heading, sog: pr.sog,
+      ships.push({ key: v.key, type: v.type, lon: pr.pos[0], lat: pr.pos[1], cog: pr.heading, sog: pr.sog,
                    lead: v.lead, state: 'projected' });
     }
   }

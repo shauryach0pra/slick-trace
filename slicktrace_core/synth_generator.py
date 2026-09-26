@@ -149,6 +149,15 @@ TRACK_STEP_MIN = 30
 AIS_WINDOW_H = 24.0
 # A genuine AIS gap - transponder switched off, then on - for any vessel, any role.
 DARK_P = 0.15
+# AIS static data (message 5): ship type, as real AIS broadcasts it. Drawn from
+# behaviour alone - loitering vessels are mostly fishing boats, tugs and ships
+# at anchor; vessels under way are mostly cargo ships, tankers and passenger
+# ships - never from role, and from a separate random stream so no track,
+# slick or analysis result changes.
+SHIP_TYPE_LABEL = {30: "fishing", 52: "tug", 60: "passenger", 70: "cargo", 80: "tanker"}
+LOITER_TYPES = ((30, 0.60), (52, 0.15), (70, 0.15), (80, 0.10))
+TRANSIT_TYPES = ((70, 0.40), (80, 0.25), (60, 0.15), (30, 0.10), (52, 0.10))
+STATIC_SOURCE = "AIS static message 5 (synthetic)"
 DARK_HOURS = (1.0, 3.0)
 LOITER_P = 0.4                        # share of vessels loitering (fishing, waiting, drifting)
 LOITER_SPEED_DEG_H = (0.002, 0.008)   # ~0.1-0.5 kn
@@ -171,6 +180,15 @@ IDENTIFIABLE_KM = 8.0
 
 def _track_start(rng: np.random.Generator, acquired: datetime) -> datetime:
     return acquired - timedelta(hours=AIS_WINDOW_H)
+
+
+def _static(spec, rng):
+    """Ship type as a vessel's AIS static message reports it."""
+    sog = [f["sog_knots"] for f in spec["fixes"]]
+    table = LOITER_TYPES if (sum(sog) / len(sog) if sog else 0.0) < 1.0 else TRANSIT_TYPES
+    codes, p = zip(*table)
+    code = int(rng.choice(codes, p=p))
+    return {"ship_type_code": code, "ship_type": SHIP_TYPE_LABEL[code], "static_source": STATIC_SOURCE}
 
 
 def _published(fixes, bbox, rng):
@@ -495,6 +513,7 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
                  and len(s["published"]) >= 2]
 
     identity_from = (acquired - timedelta(days=365)).isoformat()
+    type_rng = np.random.default_rng([int(seed), 5])     # separate stream: see SHIP_TYPE_LABEL
     tracks = [{
         "vessel_key": s["vessel_key"],
         "mmsi": s["vessel_key"],
@@ -503,6 +522,7 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
         "identity_valid_from": identity_from,
         "identity_valid_to": None,
         "fixes": s["published"],
+        **_static(s, type_rng),
         "missing_intervals": [],
         "provenance": {"status": DataStatus.SYNTHETIC.value,
                        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"},

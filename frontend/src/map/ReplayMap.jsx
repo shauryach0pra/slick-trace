@@ -3,6 +3,7 @@ import { AttributionControl, Map as MapLibreMap, Marker, NavigationControl, Scal
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EMPTY, KEY, baseStyle, currentTheme, repaintBase } from './mapStyle';
 import { envelopeAt, forecastContoursAt, oilAt, shipsAt } from './timeline';
+import { TYPE_LABEL, glyph } from './shipGlyphs';
 import './ReplayMap.css';
 
 /**
@@ -156,15 +157,11 @@ function paintInk(map, surface) {
   map.setPaintProperty('outside', 'fill-opacity', ink.outside);
 }
 
-function shipElement(key) {
+function shipElement(key, type) {
   const el = document.createElement('div');
   el.className = 'ship';
-  el.innerHTML = '<div class="ship-rot"><div class="ship-wake"></div>'
-    + '<svg class="ship-hull" viewBox="0 0 12 34" aria-hidden="true">'
-    + '<path class="ship-body" d="M6 0.6C8.7 5.8 10.4 11.5 10.4 19.5V30.4Q10.4 33.4 6 33.4Q1.6 33.4 1.6 30.4V19.5C1.6 11.5 3.3 5.8 6 0.6Z"/>'
-    + '<path class="ship-deck" d="M6 5.5V19"/>'
-    + '<rect class="ship-bridge" x="3.1" y="21.5" width="5.8" height="5.4" rx="1.1"/></svg></div>'
-    + '<div class="ship-label"></div>';
+  el.dataset.type = type ?? 'other';
+  el.innerHTML = `<div class="ship-rot"><div class="ship-wake"></div>${glyph(type)}</div><div class="ship-label"></div>`;
   el.title = key;
   return el;
 }
@@ -327,7 +324,7 @@ function placeShips(map, ships, ctx) {
     seen.add(s.key);
     let m = ms.get(s.key);
     if (!m) {
-      const node = shipElement(s.key);
+      const node = shipElement(s.key, s.type);
       m = { el: node, marker: new Marker({ element: node }).setLngLat([s.lon, s.lat]).addTo(map), visible: false };
       ms.set(s.key, m);
     }
@@ -344,7 +341,7 @@ function placeShips(map, ships, ctx) {
     const text = s.lead ? `${s.key} · leading candidate${s.state === 'projected' ? ' · projected' : ''}` : '';
     const lbl = m.el.querySelector('.ship-label');
     if (lbl.textContent !== text) lbl.textContent = text;
-    m.el.title = `${s.key}${s.state === 'projected' ? ': projected from last course and speed, not observed'
+    m.el.title = `${s.key} · ${TYPE_LABEL[s.type] ?? TYPE_LABEL.other}${s.state === 'projected' ? ': projected from last course and speed, not observed'
       : s.state === 'inside' ? ': inside the origin envelope' : ''}${s.sog != null ? ` · ${s.sog} kn reported` : ''}`;
   }
   ms.forEach((m, key) => { if (!seen.has(key)) { m.el.style.display = 'none'; m.visible = false; } });

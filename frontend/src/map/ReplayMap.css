@@ -60,12 +60,13 @@
   transform: rotate(var(--cog, 0deg));
   transition: transform var(--dur-base) var(--ease-out);
 }
-.ship-hull {
+/* markers only: the legend reuses the glyphs and must not inherit this */
+.ship .ship-hull {
   position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible;
   filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 0.7));
 }
 .ship-body { fill: #e5e7eb; stroke: rgba(0, 0, 0, 0.65); stroke-width: 0.9; }
-.ship-deck { stroke: rgba(0, 0, 0, 0.28); stroke-width: 0.7; }
+.ship-deck { stroke: rgba(0, 0, 0, 0.3); stroke-width: 0.7; fill: none; }
 .ship-bridge { fill: rgba(40, 46, 56, 0.85); }
 .ship[data-state="inside"] .ship-body { fill: #7fdcff; }
 .ship[data-state="ended"] { opacity: 0.45; }
