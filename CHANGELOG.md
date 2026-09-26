@@ -419,6 +419,11 @@ chips - Vessels, Oil, Areas, Model - each opening its entries in the map's own s
 guide and the note for the current hour move into "How to read this map", and the vessel table
 into its own disclosure.
 
+**Design: the inspector and the reveal card.** The Conclusion Graph's footnote folds away. Ask
+Slick Trace gets a one-line caption, suggestion chips that stay after the first answer, readable
+questions instead of a terminal prompt, and a rounded field with a send button; the refusal still
+declines. Naive vs Forward-Replay gets a short caption for each state, with its definitions folded.
+
 ---
 
 ## 13 September 2026

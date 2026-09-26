@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { HowMeasured } from './ui/viz';
 import './ConclusionGraph.css';
 
 /**
@@ -221,8 +222,10 @@ export default function ConclusionGraph(props) {
           ))}
         </div>
       </div>
-      <p className="cg-foot">Click a stage to jump to its evidence. Scroll sideways for every stage, and down for the
-        proximity baseline. Replay and fragility are scored against the generator's slick mask, not the detected outline.</p>
+      <HowMeasured title="How to read this graph">
+        <p>Click a stage to jump to its evidence. Scroll sideways for every stage, and down for the proximity baseline.</p>
+        <p>Replay and fragility are scored against the generator's slick mask, not the detected outline.</p>
+      </HowMeasured>
     </section>
   );
 }

@@ -46,20 +46,10 @@ export default function AskConsole({ incidentId, api }) {
 
   return (
     <>
-      {history.length === 0 && (
-        <div className="suggestions-section">
-          <p>Try a question, or pick one below.</p>
-          <div className="suggestions">
-            {SUGGESTIONS.map((s) => (
-              <button key={s} className="suggestion" onClick={() => submit(s)}>{s}</button>
-            ))}
-          </div>
-        </div>
-      )}
       <div className="console-history" ref={scrollRef}>
         {history.map((r, i) => (
           <div className="console-entry" key={i}>
-            <div className="console-q">&gt;&gt;&gt; {r.question}</div>
+            <div className="console-q">{r.question}</div>
             <div className={`console-tag ${r.supported ? 'ok' : 'refused'}`}>
               {r.supported ? `answered · ${r.intent.replaceAll('_', ' ')}` : 'declined · no matching template'}
             </div>
@@ -71,15 +61,18 @@ export default function AskConsole({ incidentId, api }) {
         ))}
         {busy && <div className="console-entry console-busy">running query…</div>}
       </div>
-      <form className="console-input-row" onSubmit={(e) => { e.preventDefault(); submit(input); }}>
-        <span className="prompt">&gt;</span>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about candidates, routes, or the forcing field…"
-          disabled={busy}
-        />
-        <button type="submit" disabled={busy}>Ask</button>
+      {/* suggestions stay, so a demo can keep asking */}
+      <div className="ask-suggest" role="group" aria-label="Suggested questions">
+        {SUGGESTIONS.map((s) => (
+          <button key={s} type="button" className="ask-chip" disabled={busy} onClick={() => submit(s)}>{s}</button>
+        ))}
+      </div>
+      <form className="ask-field" onSubmit={(e) => { e.preventDefault(); submit(input); }}>
+        <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about this case…"
+               disabled={busy} aria-label="Ask a question about this case" />
+        <button type="submit" className="ask-send" disabled={busy || !input.trim()} aria-label="Ask">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" /></svg>
+        </button>
       </form>
     </>
   );

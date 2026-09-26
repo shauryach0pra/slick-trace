@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Badge, Card } from '../ui/primitives';
 import { CAPTIONS as C } from '../ui/glossary';
+import { HowMeasured } from '../ui/viz';
 import './rankingReveal.css';
 
 /**
@@ -107,7 +108,8 @@ export default function RankingRevealCard({ attribution, baseline, vessels }) {
     : <Badge tone={unknown ? 'warning' : 'accent'}>{unknown ? 'abstained' : 'named'}</Badge>;
   return (
     <Card title="Naive vs Forward-Replay" badge={badge}
-          caption={revealed ? C.replayMethod : C.baselineMethod} className={`rv-card${unknown && revealed ? ' is-abstain' : ''}`}>
+          caption={revealed ? 'Which vessel’s drifted release best matches the slick.' : 'The shortcut: the vessel nearest the slick when the image was taken.'}
+          className={`rv-card${unknown && revealed ? ' is-abstain' : ''}`}>
       <div className="rv-controls">
         {phase === 0
           ? <button type="button" className="rv-btn is-primary" onClick={reveal}>Reveal forward-replay result</button>
@@ -131,10 +133,17 @@ export default function RankingRevealCard({ attribution, baseline, vessels }) {
       {revealed && !unknown && phase >= 3 && (
         <p className="rv-note">
           {agree ? `Proximity and forward replay pick the same vessel, ${leadKey}.`
-            : `Forward replay names ${leadKey}; the vessel nearest the slick at image time, ${naiveKey}, is not supported by the replay.`}
-          {' '}Computed by the pipeline; this view reveals it.
+            : `Forward replay names ${leadKey}; the nearest vessel, ${naiveKey}, is not supported.`}
         </p>
       )}
+      <HowMeasured>
+        <dl>
+          <dt>Proximity</dt><dd>{C.baselineMethod}</dd>
+          <dt>Forward replay</dt><dd>{C.replayMethod}</dd>
+          <dt>Fit gate</dt><dd>Below a mean IoU of {gate} no vessel is named.</dd>
+          <dt>What the reveal does</dt><dd>It shows results the pipeline already computed; nothing is re-run.</dd>
+        </dl>
+      </HowMeasured>
     </Card>
   );
 }
