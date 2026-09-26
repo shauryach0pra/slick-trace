@@ -1,4 +1,7 @@
-import { Badge, Card, EmptyState, Stat, StatGrid } from '../ui/primitives';
+import { Badge, Card, EmptyState } from '../ui/primitives';
+import { HowMeasured } from '../ui/viz';
+import { BarTimeline } from '../ui/charts';
+import './nextObservation.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
 /**
@@ -20,31 +23,37 @@ export default function NextObservationCard({ nextObs, closing = false }) {
     );
   }
   const rec = nextObs.recommended_window;
+  const A = nextObs.hypothesis_a.vessel_key, B = nextObs.hypothesis_b.vessel_key;
   return (
     <Card title="Next Observation" badge={<Badge tone="warning">advisory</Badge>} {...frame}
-          caption={`When one more image would best tell ${nextObs.hypothesis_a.vessel_key} and ${nextObs.hypothesis_b.vessel_key} apart.`}
-          footnote={`${rec.schedule_status}. ${nextObs.scope_note} ${nextObs.method_note}`}>
-      <StatGrid cols={3}>
-        <Stat label="Recommended window" value={`+${rec.horizon_hours} h`}
-              caption={`${hhmm(rec.valid_utc)}. ${C.recommended}`} />
-        <Stat label="Disagreement then" value={`${Math.round(rec.disagreement_score * 100)}%`}
-              caption={C.disagreement} />
-        <Stat label="Predicted overlap then" value={rec.predicted_overlap_iou.toFixed(3)}
-              caption={C.overlapIou} />
-      </StatGrid>
-      <div style={{ marginTop: 'var(--space-5)' }}>
-        <div className="stat-label">Every tested window</div>
-        <div className="chip-steps" role="list" style={{ marginTop: 'var(--space-2)' }}>
-          {nextObs.windows.map((w) => (
-            <span key={w.horizon_hours} role="listitem"
-                  className={`chip${w.horizon_hours === rec.horizon_hours ? ' is-active' : ''}`}>
-              +{w.horizon_hours} h · {Math.round(w.disagreement_score * 100)}%
-              <span className="visually-hidden">{w.horizon_hours === rec.horizon_hours ? ' recommended' : ''}</span>
-            </span>
-          ))}
+          caption={`When one more image would best tell ${A} and ${B} apart.`}>
+      <div className="no">
+        <div className="no-hero">
+          <span className="no-eyebrow">Recommended window</span>
+          <span className="no-big">+{rec.horizon_hours}<small> h</small></span>
+          <span className="no-time">{hhmm(rec.valid_utc)}</span>
+          <div className="no-facts">
+            <span><b>{Math.round(rec.disagreement_score * 100)}%</b> disagreement</span>
+            <span><b>{rec.predicted_overlap_iou.toFixed(2)}</b> predicted overlap</span>
+          </div>
         </div>
-        <p className="stat-caption">Hours after the image, with the disagreement at each; the recommended one is filled.</p>
+        <figure className="no-fig">
+          <figcaption>How differently the two explanations predict the slick, by window</figcaption>
+          <BarTimeline highlight={rec.horizon_hours} format={(v) => `${Math.round(v * 100)}%`}
+                       bars={nextObs.windows.map((w) => ({ key: w.horizon_hours, label: `+${w.horizon_hours} h`, value: w.disagreement_score }))}
+                       ariaLabel={`Disagreement by window: ${nextObs.windows.map((w) => `plus ${w.horizon_hours} hours ${Math.round(w.disagreement_score * 100)} percent`).join(', ')}; recommended plus ${rec.horizon_hours} hours`} />
+        </figure>
       </div>
+      <p className="no-foot">Recommends which evidence would be most telling; it does not task a satellite.</p>
+      <HowMeasured>
+        <dl>
+          <dt>Recommended window</dt><dd>{C.recommended}</dd>
+          <dt>Disagreement</dt><dd>{C.disagreement}</dd>
+          <dt>Predicted overlap</dt><dd>{C.overlapIou}</dd>
+          <dt>Schedule</dt><dd>{rec.schedule_status}.</dd>
+          <dt>What this is and is not</dt><dd>{nextObs.scope_note} {nextObs.method_note}</dd>
+        </dl>
+      </HowMeasured>
     </Card>
   );
 }

@@ -402,6 +402,12 @@ as one dot, smallest first - blue where the leader held, amber where it flipped,
 flip ringed, each described on hover - beside the share that held. Notes fold into "How this
 is measured" in both.
 
+**Design step 2b: Forward Exposure and Next Observation as charts.** Forward Exposure shows the
+modelled spread and each sensitive area's share (with the shoreline) as lines that draw in over
++6, +12 and +24 h, with chips for the earliest area reached and first shoreline contact, and the
+forcing mode kept visible. Next Observation shows the recommended window large beside a bar
+timeline of disagreement per window, the recommendation lit. Shared SVG charts are added.
+
 ---
 
 ## 13 September 2026
