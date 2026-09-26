@@ -831,3 +831,5 @@ repository before recording anything.
 
 Plus: host matrix, SPOC confirmation of the official rubric, the demo video, the
 presentation, a named maintainer in the README, and one outside conversation.
+
+**Case Finding: natural space under its title** - 22 px between the title and the surface below.

@@ -54,3 +54,7 @@
 .cf4-line { max-width: 78ch; }
 .cf4 .fitg-num { font-size: 22px; }
 .cf4 .fitg-label { font-size: 8px; }
+
+/* natural breathing space under the Case Finding title: 22 px (touching margins collapse,
+   so this is the whole gap) */
+.cf4-surface { margin-top: 22px; }
