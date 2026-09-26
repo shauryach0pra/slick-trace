@@ -58,3 +58,10 @@
 .fx-hero-big { font-size: 36px; margin: 4px 0 2px; }
 .fx-shares { justify-content: flex-start; gap: 16px; }
 .fx-shares .fx-when { margin-top: auto; font-family: var(--font-mono); font-size: var(--font-size-xs); color: var(--label-3); }
+
+/* the share bars fill slowly - a gentle start, a soft landing - one after another, as their numbers
+   count up; the same motion carries them to new values when the hour changes */
+.fx-share-track i { transition: width 1300ms cubic-bezier(0.6, 0, 0.25, 1); transition-delay: calc(var(--k, 0) * 140ms); }
+@media (prefers-reduced-motion: reduce) { .fx-share-track i { transition: none; } }
+/* bar and number move together on one curve (ease-in-out cubic), with no stagger to fall out of step */
+.fx-share-track i { transition: width 1300ms cubic-bezier(0.65, 0, 0.35, 1); transition-delay: 0ms; }

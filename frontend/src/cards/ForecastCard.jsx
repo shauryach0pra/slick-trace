@@ -19,6 +19,8 @@ const TONES = ['cyan', 'green', 'orange'];
 
 export default function ForecastCard({ forecast }) {
   const [hi, setHi] = useState(0);
+  // the share bars fill, and their numbers count up, when the share panel itself is on screen
+  const [sharesRef, sharesSeen] = useInView({ threshold: 0.5 });
   if (!forecast) return null;
   const hs = forecast.horizons;
   const h = hs[Math.min(hi, hs.length - 1)];
@@ -60,13 +62,13 @@ export default function ForecastCard({ forecast }) {
                      series={[{ name: 'Modelled spread (km²)', tone: 'accent', area: true, values: hs.map((x) => x.envelope_area_km2) }]}
                      ariaLabel={`Modelled spread: ${hs.map((x) => `${x.envelope_area_km2} square kilometres at plus ${x.horizon_hours} hours`).join(', ')}`} />
         </div>
-        <div className="fx-shares">
+        <div className="fx-shares" ref={sharesRef}>
           <span className="fx-hero-label">Share of modelled oil at +{h.horizon_hours} h</span>
-          {shares.map((x) => (
+          {shares.map((x, k) => (
             <div key={x.name} className={`fx-share tone-${x.tone}`}>
               <span className="fx-share-name">{x.name}</span>
-              <span className="fx-share-track"><i style={{ '--w': Math.min(1, x.v) }} /></span>
-              <span className="fx-share-val">{x.v > 0 && x.v < 0.005 ? '<1' : Math.round(x.v * 100)}%</span>
+              <span className="fx-share-track"><i style={{ '--w': sharesSeen ? Math.min(1, x.v) : 0, '--k': k }} /></span>
+              <span className="fx-share-val"><ShareVal v={x.v} run={sharesSeen} /></span>
             </div>
           ))}
           <span className="fx-when">{hhmm(h.valid_utc)}</span>
@@ -89,4 +91,14 @@ export default function ForecastCard({ forecast }) {
 function Count({ value }) {
   const [ref, seen] = useInView();
   return <span ref={ref}>{useCountUp(value, { decimals: 0, duration: 700, run: seen })}</span>;
+}
+
+// the bar's own curve (CSS cubic-bezier(0.65, 0, 0.35, 1)), so the number moves in step with it
+const easeInOutCubic = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+
+/** A share that counts up with its bar; one too small to count shows as "<1%". */
+function ShareVal({ v, run }) {
+  const tiny = v > 0 && v < 0.005;
+  const n = useCountUp(tiny ? null : Math.round(v * 100), { decimals: 0, duration: 1300, run, easing: easeInOutCubic });
+  return <>{tiny ? '<1' : n}%</>;
 }

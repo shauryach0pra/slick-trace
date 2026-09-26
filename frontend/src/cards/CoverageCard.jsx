@@ -1,5 +1,7 @@
 import { Badge, Card } from '../ui/primitives';
 import { HowMeasured } from '../ui/viz';
+import { useCountUp } from '../ui/useCountUp';
+import { useInView } from '../ui/useInView';
 import './supporting.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
@@ -22,7 +24,7 @@ const RATE = {
 };
 
 /** A rate under both conditions as two concentric rings: outer, vessels hidden; inner, area goes dark. */
-function Rings({ outer, inner, title, lines, better, nOuter, nInner }) {
+function Rings({ outer, inner, title, lines, better, nOuter, nInner, col = 0, run = false }) {
   const ring = (r, v, cls) => {
     const c = 2 * Math.PI * r;
     return (
@@ -36,7 +38,7 @@ function Rings({ outer, inner, title, lines, better, nOuter, nInner }) {
   };
   const pct = (v) => (v == null ? '—' : `${Math.round(v * 100)}%`);
   return (
-    <figure className="cv-rate">
+    <figure className="cv-rate" style={{ '--c': col }}>
       <svg viewBox="-50 -50 100 100" role="img" aria-label={`${title}: vessels hidden ${pct(outer)} (${nOuter}), area goes dark ${pct(inner)} (${nInner}); ${better} is better`}>
         <defs>
           <linearGradient id={`cv-b-${title.length}`} x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#0a84ff" /><stop offset="1" stopColor="#64d2ff" /></linearGradient>
@@ -47,7 +49,7 @@ function Rings({ outer, inner, title, lines, better, nOuter, nInner }) {
       </svg>
       <figcaption>
         <b>{lines ? <>{lines[0]}<br />{lines[1]}</> : title}</b>
-        <span className="cv-vals"><i className="is-outer" title={`vessels hidden: ${nOuter}`}>{pct(outer)}</i><i className="is-inner" title={`area goes dark: ${nInner}`}>{pct(inner)}</i></span>
+        <span className="cv-vals"><i className="is-outer" title={`vessels hidden: ${nOuter}`}><Pct v={outer} run={run} /></i><i className="is-inner" title={`area goes dark: ${nInner}`}><Pct v={inner} run={run} /></i></span>
         <span className={`cv-better is-${better}`}>{better === 'higher' ? '↑' : '↓'} {better} is better</span>
       </figcaption>
     </figure>
@@ -55,15 +57,17 @@ function Rings({ outer, inner, title, lines, better, nOuter, nInner }) {
 }
 
 export default function CoverageCard({ coverage }) {
+  // the rings fill when they themselves are on screen - the card's top entering is too early
+  const [ringsRef, ringsSeen] = useInView({ threshold: 0.6 });
   if (!coverage) return null;
   const { selective, coverage_failure: failure } = coverage.conditions;
   const op = coverage.operating_point;
   return (
     <Card title="Coverage-Aware Matching" badge={<Badge tone="accent">tested</Badge>}
           caption="Matching radar contacts to AIS when some AIS is hidden.">
-      <div className="cv-rings">
-        {ROWS.map(([rk, nk]) => (
-          <Rings key={rk} title={RATE[rk].title} lines={RATE[rk].lines} better={RATE[rk].better}
+      <div ref={ringsRef} className={`cv-rings${ringsSeen ? ' is-playing' : ''}`}>
+        {ROWS.map(([rk, nk], col) => (
+          <Rings key={rk} col={col} run={ringsSeen} title={RATE[rk].title} lines={RATE[rk].lines} better={RATE[rk].better}
                  outer={selective[rk]} inner={failure[rk]} nOuter={selective[nk]} nInner={failure[nk]} />
         ))}
       </div>
@@ -84,4 +88,10 @@ export default function CoverageCard({ coverage }) {
       </HowMeasured>
     </Card>
   );
+}
+
+/** A percentage that counts up from 0 as the rings fill, once the card is seen. */
+function Pct({ v, run }) {
+  const n = useCountUp(v == null ? null : Math.round(v * 100), { decimals: 0, duration: 1700, run });
+  return <span>{v == null ? '—' : `${n}%`}</span>;
 }
