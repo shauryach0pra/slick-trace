@@ -429,3 +429,13 @@ button.chip:active {
 .gate-scale span:last-child { transform: translateX(-100%); }
 .gate-scale .is-gate { color: var(--status-orange); font-weight: var(--font-weight-semibold); }
 .gate-caption { margin: 6px 0 0; font-size: var(--font-size-xs); color: var(--label-2); }
+
+/* a card's eyebrow, and the closing card of a case */
+.panel-title { display: flex; flex-direction: column; gap: 2px; }
+.panel-eyebrow { margin: 0; font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold);
+                 letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.finder-features .panel.is-closing { position: relative; margin-top: var(--space-6); }
+.finder-features .panel.is-closing::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(10, 132, 255, 0.55), transparent);
+}

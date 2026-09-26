@@ -354,6 +354,9 @@ the open case was filtered out of the list; it now shows no selection then.
 
 The filter chips now appear only above the overview grid; the sidebar lists every case.
 
+**Next Observation closes each case.** It is now the last card, after Provenance, framed
+"What to check next"; it shows only its computed recommendation, unchanged.
+
 ---
 
 ## 13 September 2026

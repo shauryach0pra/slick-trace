@@ -8,18 +8,20 @@ import { CAPTIONS as C } from '../ui/glossary';
  */
 const hhmm = (s) => s.replace('T', ' ').replace(':00+00:00', ' UTC');
 
-export default function NextObservationCard({ nextObs }) {
+// closing: shown as the last card of a case, framed as what to check next
+export default function NextObservationCard({ nextObs, closing = false }) {
+  const frame = closing ? { eyebrow: 'What to check next', className: 'is-closing' } : {};
   if (!nextObs) return null;
   if (!nextObs.applicable) {
     return (
-      <Card title="Next Observation" badge={<Badge>not applicable</Badge>}>
+      <Card title="Next Observation" badge={<Badge>not applicable</Badge>} {...frame}>
         <EmptyState>Not applicable for this incident: {nextObs.reason}</EmptyState>
       </Card>
     );
   }
   const rec = nextObs.recommended_window;
   return (
-    <Card title="Next Observation" badge={<Badge tone="warning">advisory</Badge>}
+    <Card title="Next Observation" badge={<Badge tone="warning">advisory</Badge>} {...frame}
           caption={`When one more image would best tell ${nextObs.hypothesis_a.vessel_key} and ${nextObs.hypothesis_b.vessel_key} apart.`}
           footnote={`${rec.schedule_status}. ${nextObs.scope_note} ${nextObs.method_note}`}>
       <StatGrid cols={3}>

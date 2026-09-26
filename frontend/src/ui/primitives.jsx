@@ -10,11 +10,13 @@
 
 import './ui.css';
 
-export function Card({ title, badge, caption, footnote, className = '', children }) {
+export function Card({ title, badge, caption, footnote, eyebrow, className = '', children }) {
   return (
     <section className={`panel card ${className}`.trim()}>
       <div className="panel-head">
-        <h2>{title}</h2>
+        {/* the eyebrow sits inside the header, above the title: the header is pulled
+            up by a negative margin, so a line placed above it would be overlapped */}
+        {eyebrow ? <div className="panel-title"><div className="panel-eyebrow">{eyebrow}</div><h2>{title}</h2></div> : <h2>{title}</h2>}
         {badge}
       </div>
       {caption && <p className="card-caption">{caption}</p>}
