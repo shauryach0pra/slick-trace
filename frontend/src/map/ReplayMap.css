@@ -358,3 +358,26 @@
                 color: rgba(255, 255, 255, 0.92); background: rgba(20, 22, 26, 0.62); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
                 -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .rmap-forcing svg { width: 12px; height: 12px; fill: none; stroke: #64d2ff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the map's popups (a ship's details, gap hints, the observed slick) and floating cards on the same
+   surface as the dashboard's cards: their colour, hairline edge and soft shadow, the theme's text
+   colours, and pointers to match - no tinted glass */
+.rpop .maplibregl-popup-content, .rfloat-card {
+  background: var(--card-bg); color: var(--label-1); -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 14px;
+  box-shadow: 0 0 0 0.5px var(--separator-strong), 0 14px 36px rgba(0, 0, 0, 0.26), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+.rpop.maplibregl-popup-anchor-bottom .maplibregl-popup-tip, .rpop.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.rpop.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip { border-top-color: var(--card-bg); }
+.rpop.maplibregl-popup-anchor-top .maplibregl-popup-tip, .rpop.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.rpop.maplibregl-popup-anchor-top-right .maplibregl-popup-tip { border-bottom-color: var(--card-bg); }
+.rpop.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--card-bg); }
+.rpop.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--card-bg); }
+.rpop .maplibregl-popup-close-button { color: var(--label-2); }
+.rpop-type, .rpop-row span:first-child, .rpop-note { color: var(--label-2); }
+.rpop-row { border-top-color: var(--separator); }
+.rpop-head .ship-body { fill: var(--label-2); stroke: var(--separator-strong); }
+.rpop-lead { color: var(--accent); background: rgba(10, 132, 255, 0.14); box-shadow: inset 0 0 0 0.5px rgba(10, 132, 255, 0.5); }
+.rfloat-arrow { background: var(--card-bg); box-shadow: 0.5px 0.5px 0 var(--separator-strong); }
+.rfloat.is-below .rfloat-arrow { box-shadow: -0.5px -0.5px 0 var(--separator-strong); }
+.rfloat-close { background: var(--fill-pressed); color: var(--label-2); }
+.rfloat-close:hover { background: var(--fill-hover); }
