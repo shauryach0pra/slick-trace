@@ -1,4 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { HowMeasured } from '../ui/viz';
 import TimeScrubber from '../map/TimeScrubber';
 import { prepare } from '../map/timeline';
 import { SHIP_TYPES, TYPE_LABEL, glyph } from '../map/shipGlyphs';
@@ -162,9 +163,8 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
   if (!c) return null;
   const tone = t === 0 ? 'accent' : 'warning';
   return (
-    <Card title="Replay Map" caption={C.replayMap}
-          badge={<Badge tone={tone}>{t === 0 ? 'observed' : 'modelled'}</Badge>}
-          footnote={note}>
+    <Card title="Replay Map" caption="Play the 24 hours before and after the image."
+          badge={<Badge tone={tone}>{t === 0 ? 'observed' : 'modelled'}</Badge>}>
       <Suspense fallback={<div className="rmap rmap-loading">Loading map…</div>}>
         {timeline ? (
           <ReplayMap bbox={c.meta.bbox} coastline={c.geography?.coastline} slickInfo={slickInfo} onShowRanking={showRanking}
@@ -200,29 +200,16 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
         </div>
       )}
 
-      <ul className="rmap-legend" aria-label="Map legend">
-        {SHIP_TYPES.map((ty) => (
-          <li key={ty}><i className="lg-glyph" dangerouslySetInnerHTML={{ __html: glyph(ty) }} /> {ty}</li>
-        ))}
-        <li className="lg-note">vessel symbols by AIS ship type (synthetic static data), not to scale</li>
-        <li><i className="lg-ship is-projected" /> projected after the image</li>
-        <li><i className="lg-ship is-inside" /> inside origin envelope</li>
-        {leadKey && <li><i className="lg-ship is-lead" /> leading candidate</li>}
-        <li><i className="lg-env" /> origin envelope 50 / 75 / 90%</li>
-        <li><i className="lg-oil" /> modelled oil</li>
-        <li><i className="lg-stranded" /> stranded on the coast</li>
-        <li><i className="lg-hit" /> oil reaches a sensitive area</li>
-        <li><i className="lg-slick" /> observed slick</li>
-        <li><i className="lg-gap" /> AIS gap or projected track</li>
-        <li><i className="lg-fan" /> ensemble drift: the six forcing variants forward replay scored</li>
-        <li><i className="lg-forcing" /> forcing: one uniform current</li>
-        <li><i className="lg-area is-fishery" /> fishing ground (synthetic, after the image)</li>
-        <li><i className="lg-area" /> mangrove fringe (synthetic, after the image)</li>
-      </ul>
-
+      <MapLegend leadKey={leadKey} />
+      <HowMeasured title="How to read this map">
+        <dl>
+          <dt>Reading the map</dt><dd>{C.replayMap}</dd>
+          {note && <><dt>At this hour</dt><dd>{note}</dd></>}
+        </dl>
+      </HowMeasured>
       {envFrame && (
-        <details className="text-equivalent">
-          <summary>Vessel states at this hour (text equivalent)</summary>
+        <details className="howto">
+          <summary><span className="howto-chev" aria-hidden="true" />Vessel states at this hour</summary>
           <table className="ui-table">
             <caption className="visually-hidden">Vessel positions and envelope membership at the selected hour</caption>
             <thead><tr><th scope="col">Vessel</th><th scope="col">At this hour</th>
@@ -244,3 +231,56 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
     </Card>
   );
 }
+
+/**
+ * The legend as four groups - Vessels, Oil, Areas, Model - each opening its
+ * entries, instead of one long list under the map. Symbols are the map's own.
+ */
+function MapLegend({ leadKey }) {
+  const [open, setOpen] = useState(null);
+  const groups = [
+    { key: 'vessels', name: 'Vessels', icon: <i className="lg-glyph" dangerouslySetInnerHTML={{ __html: glyph('tanker') }} />, entries: [
+      ...SHIP_TYPES.map((ty) => [<i key={ty} className="lg-glyph" dangerouslySetInnerHTML={{ __html: glyph(ty) }} />, ty]),
+      [<i key="p" className="lg-ship is-projected" />, 'projected after the image'],
+      [<i key="i" className="lg-ship is-inside" />, 'inside the origin envelope'],
+      ...(leadKey ? [[<i key="l" className="lg-ship is-lead" />, 'leading candidate']] : []),
+      [<i key="g" className="lg-gap" />, 'AIS gap or projected track'],
+    ], note: 'Symbols by AIS ship type (synthetic static data), not to scale.' },
+    { key: 'oil', name: 'Oil', icon: <i className="lg-oil" />, entries: [
+      [<i key="s" className="lg-slick" />, 'observed slick'],
+      [<i key="o" className="lg-oil" />, 'modelled oil'],
+      [<i key="t" className="lg-stranded" />, 'stranded on the coast'],
+      [<i key="h" className="lg-hit" />, 'oil reaches a sensitive area'],
+    ] },
+    { key: 'areas', name: 'Areas', icon: <i className="lg-env" />, entries: [
+      [<i key="e" className="lg-env" />, 'origin envelope, 50 / 75 / 90%'],
+      [<i key="f" className="lg-area is-fishery" />, 'fishing ground'],
+      [<i key="m" className="lg-area" />, 'mangrove fringe'],
+    ], note: 'Sensitive areas are synthetic and appear after the image.' },
+    { key: 'model', name: 'Model', icon: <i className="lg-fan" />, entries: [
+      [<i key="d" className="lg-fan" />, 'ensemble drift: the six forcing variants forward replay scored'],
+      [<i key="c" className="lg-forcing" />, 'forcing: one uniform current'],
+    ] },
+  ];
+  const g = groups.find((x) => x.key === open);
+  return (
+    <div className="lgx">
+      <div className="lgx-chips" role="group" aria-label="Map legend">
+        <span className="lgx-title">Legend</span>
+        {groups.map((x) => (
+          <button key={x.key} type="button" className={`lgx-chip${open === x.key ? ' is-on' : ''}`} aria-expanded={open === x.key}
+                  onClick={() => setOpen(open === x.key ? null : x.key)}>
+            {x.icon}{x.name}<span className="lgx-n">{x.entries.length}</span>
+          </button>
+        ))}
+      </div>
+      {g && (
+        <div className="lgx-panel" key={g.key}>
+          <ul>{g.entries.map(([icon, label]) => <li key={label}>{icon}<span>{label}</span></li>)}</ul>
+          {g.note && <p>{g.note}</p>}
+        </div>
+      )}
+    </div>
+  );
+}
+

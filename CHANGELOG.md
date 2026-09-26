@@ -414,6 +414,11 @@ Filtering and Provenance shows a funnel from every vessel in the scene to the on
 none, when the system abstains - with excluded and unassessed vessels as chips and the run's
 provenance as a compact list. The two sit in one row, with the same card treatment and tilt.
 
+**Design step 5: the Replay Map's text.** The caption is one line; the fifteen-entry legend is four
+chips - Vessels, Oil, Areas, Model - each opening its entries in the map's own symbols; the reading
+guide and the note for the current hour move into "How to read this map", and the vessel table
+into its own disclosure.
+
 ---
 
 ## 13 September 2026
