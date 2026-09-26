@@ -52,13 +52,13 @@ export function EmptyState({ children }) {
  * rows: [{ key, value, sub }]. max defaults to the largest value. marker draws
  * a tick at a fixed value (a gate) in every row. highlightKey marks one row.
  */
-export function BarList({ rows, max, marker, format, highlightKey, label }) {
+export function BarList({ rows, max, marker, format, highlightKey, label, idPrefix }) {
   const scale = max ?? Math.max(...rows.map((r) => r.value), 1e-9);
   const pct = (v) => `${Math.max(0, Math.min(1, v / scale)) * 100}%`;
   return (
     <div className="barlist" role="table" aria-label={label}>
       {rows.map((r, i) => (
-        <div role="row" key={r.key} style={{ '--i': i }}
+        <div role="row" key={r.key} id={idPrefix ? `${idPrefix}${r.key}` : undefined} style={{ '--i': i }}
              className={`bar-row${r.key === highlightKey ? ' is-top' : ''}`}>
           <span role="cell" className="bar-key">{r.key}</span>
           <span role="cell" className="bar-track" aria-hidden="true">

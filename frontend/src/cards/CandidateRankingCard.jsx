@@ -21,7 +21,7 @@ export default function CandidateRankingCard({ kind, attribution, baseline }) {
       <Card title="Proximity Baseline"
             badge={relation && <Badge>{relation}</Badge>}
             caption={C.baselineMethod}>
-        <BarList label="Distance from each vessel to the slick at image time"
+        <BarList label="Distance from each vessel to the slick at image time" idPrefix="rank-naive-"
                  rows={baseline.ranking.map((r) => ({ key: r.vessel_key, value: r.distance_deg }))}
                  format={(v) => `${v.toFixed(3)}°`} highlightKey={baseline.top_candidate_id} />
         <p className="card-foot">{C.distance} Shorter bar is nearer; the nearest is highlighted.</p>
@@ -38,7 +38,7 @@ export default function CandidateRankingCard({ kind, attribution, baseline }) {
       {attribution.ranking.length === 0 ? (
         <EmptyState>No candidate survived historical filtering, so none was replayed.</EmptyState>
       ) : (
-        <BarList label="Mean IoU of each candidate's best replayed release"
+        <BarList label="Mean IoU of each candidate's best replayed release" idPrefix="rank-replay-"
                  rows={attribution.ranking.map((r) => ({
                    key: r.vessel_key, value: r.mean_iou,
                    sub: `${r.ensemble_win_count}/${r.n_ensemble}`,

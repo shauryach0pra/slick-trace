@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { AttributionControl, Map as MapLibreMap, Marker, NavigationControl, ScaleControl } from 'maplibre-gl';
+import { Floater } from './floater';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EMPTY, KEY, baseStyle, currentTheme, repaintBase } from './mapStyle';
-import { envelopeAt, forecastContoursAt, oilAt, shipsAt } from './timeline';
+import { envelopeAt, forecastContoursAt, hhmm, oilAt, shipsAt } from './timeline';
 import { TYPE_LABEL, glyph } from './shipGlyphs';
 import './ReplayMap.css';
 
@@ -67,7 +68,7 @@ function addLayers(map, bbox) {
   map.addLayer({ id: 'outside', type: 'fill', source: 'outside', paint: { 'fill-color': '#000', 'fill-opacity': 0.4 } },
                'coast');
 
-  ['areas', 'slick', 'gaps', 'proj', 'fc-contours', 'oil', 'oil-fc', 'oil-stranded'].forEach((id) => src(id));
+  ['areas', 'slick', 'gaps', 'lastseen', 'proj', 'fc-contours', 'oil', 'oil-fc', 'oil-stranded'].forEach((id) => src(id));
   src('trails', { lineMetrics: true });
   src('trails-lead', { lineMetrics: true });
   ['a', 'b'].forEach((buf) => { src(`env-${buf}`); src(`env-pts-${buf}`); });
@@ -134,12 +135,20 @@ function addLayers(map, bbox) {
     paint: { 'line-color': '#ffffff', 'line-width': 8, 'line-blur': 7, 'line-opacity': 0,
              'line-opacity-transition': { duration: 400 } } });
   map.addLayer({ id: 'slick-line', type: 'line', source: 'slick',
-    paint: { 'line-color': '#ffffff', 'line-width': 1.2, 'line-opacity': 0.6, 'line-dasharray': [2, 2] } });
+    paint: { 'line-color': '#ffffff', 'line-width': 1, 'line-opacity': 0.35 } });
+  map.addLayer({ id: 'slick-ants', type: 'line', source: 'slick',
+    paint: { 'line-color': '#ffffff', 'line-width': 1.6, 'line-opacity': 0.7, 'line-dasharray': ANTS[0] } });
 
   map.addLayer({ id: 'proj', type: 'line', source: 'proj',
     paint: { 'line-color': 'rgba(255,255,255,0.55)', 'line-width': 1.2, 'line-dasharray': [2, 2] } });
-  map.addLayer({ id: 'gaps', type: 'line', source: 'gaps',
-    paint: { 'line-color': 'rgba(255,255,255,0.5)', 'line-width': 1, 'line-dasharray': [1, 2] } });
+  map.addLayer({ id: 'gaps', type: 'line', source: 'gaps', layout: { 'line-cap': 'round' },
+    paint: { 'line-color': 'rgba(255,255,255,0.5)', 'line-width': 1.6, 'line-dasharray': [0.1, 2.4] } });
+  map.addLayer({ id: 'gaps-hit', type: 'line', source: 'gaps', paint: { 'line-color': '#000', 'line-width': 14, 'line-opacity': 0 } });
+  map.addLayer({ id: 'lastseen', type: 'circle', source: 'lastseen',
+    paint: { 'circle-radius': 7, 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': 'rgba(210,216,226,0.75)',
+             'circle-stroke-width': 1.2 } });
+  map.addLayer({ id: 'lastseen-dot', type: 'circle', source: 'lastseen',
+    paint: { 'circle-radius': 1.8, 'circle-color': 'rgba(210,216,226,0.9)' } });
   map.addLayer({ id: 'trails', type: 'line', source: 'trails', layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: { 'line-width': 1.3, 'line-gradient': trailGradient(INK.dark.trail) } });
   map.addLayer({ id: 'trails-lead', type: 'line', source: 'trails-lead', layout: { 'line-cap': 'round', 'line-join': 'round' },
@@ -181,6 +190,64 @@ function envWeight(map, buf, w, ctx) {
   }
   paintIf(map, ctx, `env-${buf}-glow`, 'line-opacity', 0.35 * w);
   paintIf(map, ctx, `env-pts-${buf}`, 'circle-opacity', 0.35 * w);
+}
+
+// marching ants on the observed slick's edge (the familiar MapLibre dash sequence)
+const ANTS = [[0, 4, 3], [0.5, 4, 2.5], [1, 4, 2], [1.5, 4, 1.5], [2, 4, 1], [2.5, 4, 0.5], [3, 4, 0],
+              [0, 0.5, 3, 3.5], [0, 1, 3, 3], [0, 1.5, 3, 2.5], [0, 2, 3, 2], [0, 2.5, 3, 1.5], [0, 3, 3, 1], [0, 3.5, 3, 0.5]];
+
+const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const STATUS_TEXT = { candidate: 'candidate: inside the origin envelope at some tested hour',
+                      excluded: 'excluded: track present throughout, never inside the envelope',
+                      unassessed: 'unassessed: no track data for part of the window' };
+
+/** The vessel popover's content at tau: what the artifacts say about it now. */
+function vesselCard(key, P, S, tau) {
+  const ship = S.ships.find((x) => x.key === key), ls = S.lastSeen.find((x) => x.key === key);
+  const v = P.vessels.find((x) => x.key === key), inf = P.info[key] ?? {};
+  const type = v?.type && v.type !== 'other' ? v.type : null;
+  let pos = null, now;
+  if (ship) {
+    pos = [ship.lon, ship.lat];
+    now = ship.state === 'projected' ? 'projected from its last course and speed (no AIS after the image)'
+      : ship.state === 'inside' ? 'inside the origin envelope' : 'outside the origin envelope';
+  } else if (ls) {
+    pos = [ls.lon, ls.lat];
+    now = `AIS off since ${hhmm(ls.since)} UTC: shown at its last reported position`;
+  } else {
+    return null;                                    // no report at this hour: nothing to point at
+  }
+  const when = hhmm(P.acq + tau * 3600e3);
+  const row = (k, val) => `<div class="rpop-row"><span>${k}</span><span>${val}</span></div>`;
+  const rank = inf.replayRank ? `#${inf.replayRank} of ${inf.replayOf} · mean IoU ${inf.iou.toFixed(3)}` : 'not replayed (not a candidate)';
+  const html = `<div class="rpop-head">${glyph(v?.type)}<div><div class="rpop-key">${esc(key)}</div>`
+    + `<div class="rpop-type">${type ? `${esc(type)} · AIS static data (synthetic)` : 'type not reported'}</div></div>`
+    + `${v?.lead ? '<span class="rpop-lead">leading candidate</span>' : ''}</div>`
+    + row(`At ${when} UTC`, esc(now))
+    + row('Position', `${pos[1].toFixed(4)}° N, ${pos[0].toFixed(4)}° E`)
+    + (ship?.sog != null && ship.state !== 'projected' ? row('Reported', `${ship.sog} kn, course ${Math.round(ship.cog)}°`) : '')
+    + row('Historical filtering', esc(STATUS_TEXT[inf.status] ?? inf.status ?? '—'))
+    + row('Forward replay', esc(rank))
+    + (inf.naiveRank ? row('Proximity baseline', `#${inf.naiveRank} of ${inf.naiveOf} nearest at the image`) : '')
+    + (() => {
+      // recorded internal AIS gaps so far (track_display.json) - listed here because
+      // a slow vessel's gap can be shorter on screen than its own symbol
+      const T = P.acq + Math.min(tau, 0) * 3600e3;
+      const gs = (v?.gaps ?? []).filter(([st]) => st < T);
+      return gs.length ? row('AIS gaps', gs.map(([st, en]) => `${hhmm(st)}–${hhmm(en)} UTC`).join(', ')
+        + '<br><span class="rpop-note">No position reported; these hours count neither for nor against this vessel.</span>') : '';
+    })()
+    + `<button type="button" class="rpop-link" data-act="rank">Show in ${inf.replayRank ? 'forward-replay' : 'proximity'} ranking →</button>`;
+  return { pos, html };
+}
+
+function updatePopover(map, P, S, tau, ctx) {
+  const key = ctx.selected.current;
+  const pop = ctx.popup.current;
+  if (!key || !pop) return;
+  const card = vesselCard(key, P, S, tau);
+  if (!card) { if (pop.el) pop.el.style.visibility = 'hidden'; return; }
+  pop.setHTML(card.html).at(card.pos);
 }
 
 // ---- drawing at a fractional hour (module scope: explicit about what it touches)
@@ -271,11 +338,11 @@ function drawScene(map, P, tau, prevTau, ctx) {
 
   // the observed image: emphasis around the image hour
   const strong = Math.abs(tau) < 0.5;
-  paintIf(map, ctx, 'slick-fill', 'fill-opacity', strong ? 0.3 : 0);
+  paintIf(map, ctx, 'slick-fill', 'fill-opacity', strong ? 0.3 : 0.07);
   paintIf(map, ctx, 'slick-glow', 'line-opacity', strong ? 0.55 : 0);
-  paintIf(map, ctx, 'slick-line', 'line-width', strong ? 2 : 1.2);
-  paintIf(map, ctx, 'slick-line', 'line-opacity', strong ? 1 : 0.55);
-  paintIf(map, ctx, 'slick-line', 'line-dasharray', strong ? [1, 0] : [2, 2]);
+  paintIf(map, ctx, 'slick-line', 'line-opacity', strong ? 0.9 : 0.35);
+  paintIf(map, ctx, 'slick-ants', 'line-width', strong ? 2.2 : 1.6);
+  paintIf(map, ctx, 'slick-ants', 'line-opacity', strong ? 1 : 0.7);
   const wasStrong = prevTau !== null && Math.abs(prevTau) < 0.5;
   if (strong && prevTau !== null && !wasStrong) scan(map, ctx);
 
@@ -287,9 +354,13 @@ function drawScene(map, P, tau, prevTau, ctx) {
   const S = shipsAt(P, tau);
   map.getSource('trails').setData(linesFc(S.trails.others));
   map.getSource('trails-lead').setData(linesFc(S.trails.lead));
-  setDataIf(map, ctx, 'gaps', S.gaps.length, () => linesFc(S.gaps));
+  setDataIf(map, ctx, 'gaps', S.gaps.length, () => fc(S.gaps.map((g) => ({ type: 'Feature',
+    properties: { key: g.key, start: g.start, end: g.end }, geometry: { type: 'LineString', coordinates: g.line } }))));
+  setDataIf(map, ctx, 'lastseen', S.lastSeen.map((l) => l.key).join(','), () => fc(S.lastSeen.map((l) => ({ type: 'Feature',
+    properties: { key: l.key, since: l.since, until: l.until }, geometry: { type: 'Point', coordinates: [l.lon, l.lat] } }))));
   setDataIf(map, ctx, 'proj', tau > 0 ? Math.round(tau * 12) : -1, () => linesFc(S.projected));
   placeShips(map, S.ships, ctx);
+  updatePopover(map, P, S, tau, ctx);
 }
 
 function scan(map, ctx) {
@@ -325,6 +396,12 @@ function placeShips(map, ships, ctx) {
     let m = ms.get(s.key);
     if (!m) {
       const node = shipElement(s.key, s.type);
+      node.tabIndex = 0;
+      node.setAttribute('role', 'button');
+      node.setAttribute('aria-label', `Vessel ${s.key}: show details`);
+      const open = (e) => { e.stopPropagation(); ctx.select(s.key); };
+      node.addEventListener('click', open);
+      node.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } });
       m = { el: node, marker: new Marker({ element: node }).setLngLat([s.lon, s.lat]).addTo(map), visible: false };
       ms.set(s.key, m);
     }
@@ -347,12 +424,22 @@ function placeShips(map, ships, ctx) {
   ms.forEach((m, key) => { if (!seen.has(key)) { m.el.style.display = 'none'; m.visible = false; } });
 }
 
-export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau, label, onPick, onMode }) {
+export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, timeline, tau, label, onPick, onMode, onShowRanking }) {
   const el = useRef(null);
   const mapRef = useRef(null);
   const markers = useRef(new Map());
   const envLabels = useRef({});
   const areaLabels = useRef({});
+  const selected = useRef(null);       // the vessel whose popover is open
+  const popup = useRef(null);
+  const popBody = useRef(null);
+  const [sel, setSel] = useState(0);   // bumps a redraw when the selection changes
+  const rankRef = useRef(onShowRanking);
+  useEffect(() => { rankRef.current = onShowRanking; }, [onShowRanking]);
+  const tlRef = useRef(timeline);
+  useEffect(() => { tlRef.current = timeline; }, [timeline]);
+  const slickRef = useRef(slickInfo);
+  useEffect(() => { slickRef.current = slickInfo; }, [slickInfo]);
   const [hidden, setHidden] = useState({});
   const [layersOpen, setLayersOpen] = useState(false);
   const envLoaded = useRef({ a: null, b: null });
@@ -416,7 +503,40 @@ export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau
       setReady(true);
     });
     map.on('zoom', sizeShips);
-    map.on('click', (e) => pickRef.current?.({ lon: e.lngLat.lng, lat: e.lngLat.lat }));
+    map.on('click', (e) => {
+      popup.current?.remove();                        // a click on open water closes the popovers
+      slickF?.remove();
+      pickRef.current?.({ lon: e.lngLat.lng, lat: e.lngLat.lat });
+    });
+    // hover labels: recorded AIS gaps and last-seen positions, from track_display.json
+    let hintF = null, slickF = null;          // floating popovers, above the whole app
+    const hint = (layer, text) => {
+      map.on('mousemove', layer, (e) => {
+        map.getCanvas().style.cursor = 'help';
+        if (!hintF) hintF = new Floater(map, { className: 'rpop is-hint', interactive: false, onClose: () => { hintF = null; } });
+        hintF.setHTML(text(e.features[0].properties)).at(e.lngLat);
+      });
+      map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; hintF?.remove(); });
+    };
+    const hrs = (p) => Math.round(((p.end ?? p.until) - (p.start ?? p.since)) / 360e3) / 10;
+    hint('gaps-hit', (p) => `<strong>AIS gap ${hhmm(p.start)}–${hhmm(p.end)} UTC (${hrs(p)} h)</strong><br>`
+      + 'No position was reported. These hours count neither for nor against this vessel.');
+    hint('lastseen', (p) => `<strong>AIS off since ${hhmm(p.since)} UTC</strong><br>Last reported position; `
+      + `reporting resumes at ${hhmm(p.until)} UTC. No position is shown for the hours between.`);
+    // the observed slick: what the detection artifact says about it
+    map.on('click', 'slick-fill', (e) => {
+      const s = slickRef.current;
+      if (!s) return;
+      slickF?.remove();
+      slickF = new Floater(map, { className: 'rpop', closeButton: true, onClose: () => { slickF = null; } });
+      slickF.setHTML(`<div class="rpop-key">Observed slick</div><div class="rpop-type">${esc(s.when)}</div>`
+          + `<div class="rpop-row"><span>Area</span><span>${esc(s.area)}</span></div>`
+          + `<div class="rpop-row"><span>Detector</span><span>${esc(s.detector)}</span></div>`
+          + `<div class="rpop-row"><span>Outline vs generator mask</span><span>${esc(s.iou)}</span></div>`)
+          .at(e.lngLat);
+    });
+    map.on('mouseenter', 'slick-fill', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'slick-fill', () => { map.getCanvas().style.cursor = ''; });
 
     const repaint = () => { repaintBase(map); paintInk(map, modeRef.current === 'imagery' ? 'dark' : currentTheme()); };
     const mo = new MutationObserver(repaint);
@@ -428,6 +548,11 @@ export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau
     const labels = envLabels.current;
     return () => {
       cancelAnimationFrame(raf.current);
+      popup.current?.remove();
+      popup.current = null;
+      selected.current = null;
+      hintF?.remove();
+      slickF?.remove();
       mo.disconnect();
       mq.removeEventListener('change', repaint);
       ms.forEach(({ marker }) => marker.remove());
@@ -450,7 +575,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau
     envelope: ['a', 'b'].flatMap((b) => [...ENV_LEVELS.flatMap((L) => [`env-${b}-fill-${L.pct}`, `env-${b}-line-${L.pct}`]),
                                          `env-${b}-glow`, `env-pts-${b}`]),
     oil: ['oil-heat', 'oil-heat-fc', 'oil-stranded'],
-    vessels: ['trails', 'trails-lead', 'gaps', 'proj'],
+    vessels: ['trails', 'trails-lead', 'gaps', 'gaps-hit', 'lastseen', 'lastseen-dot', 'proj'],
     areas: ['areas-fill', 'areas-glow', 'areas-line', 'areas-hit'],
     forecast: ['fc-fill', 'fc-lines'],
   };
@@ -461,6 +586,44 @@ export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau
       for (const id of ids) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', hidden[g] ? 'none' : 'visible');
     }
   }, [ready, hidden]);   // eslint-disable-line react-hooks/exhaustive-deps
+
+  // open the popover for a vessel; it follows the vessel and updates as time moves
+  function select(key) {
+    const map = mapRef.current;
+    if (!map) return;
+    popup.current?.remove();
+    const f = new Floater(map, { className: 'rpop', closeButton: true,
+      onClose: () => { if (popup.current === f) { popup.current = null; selected.current = null; } } });
+    const node = f.body;
+    node.classList.add('rpop-body');
+    node.addEventListener('click', (e) => {
+      if (!e.target.closest('[data-act="rank"]')) return;
+      const inf = tlRef.current?.info?.[key] ?? {};
+      rankRef.current?.(key, inf.replayRank ? 'replay' : 'naive');
+    });
+    popBody.current = node;
+    popup.current = f;
+    selected.current = key;
+    setSel((n) => n + 1);
+  }
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') popup.current?.remove(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
+
+  // marching ants on the observed slick's edge
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!ready || !map || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    let i = 0;
+    const id = setInterval(() => {
+      if (mapRef.current !== map || !map.getLayer('slick-ants')) return;
+      i = (i + 1) % ANTS.length;
+      map.setPaintProperty('slick-ants', 'line-dasharray', ANTS[i]);
+    }, 100);
+    return () => clearInterval(id);
+  }, [ready]);
 
   // things that do not change with time
   useEffect(() => {
@@ -492,12 +655,13 @@ export default function ReplayMap({ bbox, coastline, areas, slick, timeline, tau
         return;
       }
       lastDraw.current = now;
-      drawScene(map, timeline, at, lastTau.current, { el, mapRef, markers, envLabels, envLoaded, bbox, cache: cache.current, areas, areaLabels });
+      drawScene(map, timeline, at, lastTau.current, { el, mapRef, markers, envLabels, envLoaded, bbox, cache: cache.current, areas, areaLabels,
+        selected, popup, popBody, select });
       lastTau.current = at;
     };
     raf.current = requestAnimationFrame(run);
     return () => cancelAnimationFrame(raf.current);
-  }, [ready, timeline, tau, bbox, areas]);
+  }, [ready, timeline, tau, bbox, areas, sel]);   // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={`rmap${Object.entries(hidden).filter(([, v]) => v).map(([k]) => ` hide-${k}`).join('')}`}>

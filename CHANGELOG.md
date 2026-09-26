@@ -239,6 +239,34 @@ both name the source in 0 of 7 cases. The case contract is schema 4. Fixed: lege
 glyphs inherited the map markers' positioning and invisibly blocked clicks on the
 card. 7/7 against naive 0/7 unchanged; 330 tests pass; verifier 38/38.
 
+**Popovers, the observed slick, and AIS gaps on the map.** Clicking a vessel, or
+focusing it and pressing Enter, opens a popover that follows it and updates with the
+time bar: type (synthetic static data), position, reported speed and course, its
+status at that hour, its historical-filtering status, its forward-replay and
+proximity ranks, its recorded AIS gaps, and a link that scrolls to its ranking row.
+The observed slick has a marching-ants edge and a light fill at every hour, and a
+popover with the detection artifact's area and detector. Recorded internal AIS gaps
+are dotted and faded, with a hover label - no position was reported, and those hours
+count neither for nor against the vessel - and a last-seen ring while the
+transponder is off. Only gaps recorded in track_display.json are drawn.
+
+**Popovers float above the app.** The vessel, slick and gap popovers are no longer
+clipped by the map's frame or covered by its label: like macOS popovers they float
+above the whole window, anchored to their point, following it as the map moves, time
+plays or the page scrolls, flipping below when there is no room above and staying
+inside the window. A stranded share too small to show reads '<0.1%', not '0.0%'.
+
+**Fixed: the slick popover opened at the window's corner.** A damaged line left its
+placement call pointing at an undefined name, so the click threw and the popover was
+never positioned. It now opens at the clicked point. The jump to a ranking row used
+scrollIntoView, which could scroll the locked window itself and shift the whole app
+sideways; it now scrolls only the evidence column. The frontend lint now fails on
+any undefined name (no-undef, browser environment), which would have caught the
+first bug before it shipped.
+
+**Popover close button centred.** The close button's cross is now an SVG icon centred
+by grid instead of a text glyph, which fonts set off-centre.
+
 ---
 
 ## 13 September 2026

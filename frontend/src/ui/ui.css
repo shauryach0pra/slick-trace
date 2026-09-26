@@ -388,3 +388,8 @@ button.chip:active {
   .finding-arrow { display: none; }
   .bar-row { grid-template-columns: 84px minmax(0, 1fr) 96px; }
 }
+
+/* a ranking row reached from the map flashes once */
+.bar-row.is-flash { animation: row-flash 1.8s var(--ease-out); border-radius: 6px; }
+@keyframes row-flash { 0%, 30% { background: rgba(10, 132, 255, 0.28); box-shadow: 0 0 0 1px rgba(10, 132, 255, 0.7); }
+                        100% { background: transparent; box-shadow: none; } }

@@ -22,7 +22,8 @@ import { CAPTIONS as C } from '../ui/glossary';
  */
 const ReplayMap = lazy(() => import('../map/ReplayMap'));
 
-const pct = (x) => `${(x * 100).toFixed(x < 0.1 ? 1 : 0)}%`;
+// a tiny share is '<0.1%', never '0.0%'
+const pct = (x) => (x > 0 && x < 0.001 ? '<0.1%' : `${(x * 100).toFixed(x < 0.1 ? 1 : 0)}%`);
 const ms = (s) => new Date(s).getTime();
 
 const STATE_LABEL = { inside: 'inside the origin envelope', outside: 'outside the origin envelope',
@@ -95,6 +96,16 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
   const timeline = useMemo(() => (c && env && display && tracks ? prepare({
     acquiredUtc: acquired, env, replay, forecast, display, tracks, leadKey, coastline: c.geography?.coastline,
     contactH: c.forecast?.first_modelled_sensitive_contact_h,
+    info: Object.fromEntries((c.vessels ?? []).map((v) => {
+      const ri = c.attribution?.ranking?.findIndex((r) => r.vessel_key === v.vessel_key) ?? -1;
+      const ni = c.baseline?.ranking?.findIndex((r) => r.vessel_key === v.vessel_key) ?? -1;
+      return [v.vessel_key, {
+        status: v.status,
+        replayRank: ri >= 0 ? ri + 1 : null, replayOf: c.attribution?.ranking?.length ?? 0,
+        iou: ri >= 0 ? c.attribution.ranking[ri].mean_iou : null,
+        naiveRank: ni >= 0 ? ni + 1 : null, naiveOf: c.baseline?.ranking?.length ?? 0,
+      }];
+    })),
   }) : null), [c, env, replay, forecast, display, tracks, leadKey, acquired]);
 
   const label = t < 0
@@ -112,6 +123,28 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
     if (h >= min && h < 0) marks.push({ t: h, label: 'release' });
   }
 
+  const slickInfo = c?.slick?.geometry ? {
+    when: `detected in the radar image at ${acquired?.slice(11, 16)} UTC`,
+    area: `${c.slick.geometry.area_km2} km²`,
+    detector: c.slick.detector,
+    iou: c.slick.truth_agreement_iou != null ? `IoU ${c.slick.truth_agreement_iou} (synthetic benchmark)` : 'not measured',
+  } : null;
+
+  // the popover's "show in ranking": scroll to the vessel's row and flash it
+  const showRanking = useCallback((key, which) => {
+    const row = document.getElementById(`rank-${which}-${key}`);
+    if (!row) return;
+    // scroll only the evidence column: scrollIntoView can also scroll the locked
+    // window itself, which shifted the whole app sideways
+    const pane = row.closest('.finder-features');
+    if (pane) {
+      const top = row.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - pane.clientHeight / 2;
+      pane.scrollTo({ top, behavior: 'smooth' });
+    }
+    row.classList.remove('is-flash'); void row.offsetWidth; row.classList.add('is-flash');
+    setTimeout(() => row.classList.remove('is-flash'), 1900);
+  }, []);
+
   const onPick = useCallback(async ({ lon, lat }) => {
     if (t > 0) { setProbe({ note: C.probeRange }); return; }
     try {
@@ -128,7 +161,7 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
           footnote={note}>
       <Suspense fallback={<div className="rmap rmap-loading">Loading map…</div>}>
         {timeline ? (
-          <ReplayMap bbox={c.meta.bbox} coastline={c.geography?.coastline}
+          <ReplayMap bbox={c.meta.bbox} coastline={c.geography?.coastline} slickInfo={slickInfo} onShowRanking={showRanking}
                      areas={c.geography?.sensitive_areas} slick={c.slick?.polygon}
                      timeline={timeline} tau={tau} label={label} onPick={onPick} />
         ) : <div className="rmap rmap-loading">Loading replay…</div>}

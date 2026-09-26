@@ -16,7 +16,7 @@ const H = 3600e3;
 const ms = (s) => new Date(s).getTime();
 const KM_PER_DEG_LAT = 111.0;
 
-export function prepare({ acquiredUtc, env, replay, forecast, display, tracks, leadKey, coastline, contactH }) {
+export function prepare({ acquiredUtc, env, replay, forecast, display, tracks, leadKey, coastline, contactH, info }) {
   const acq = ms(acquiredUtc);
   const envByH = new Map((env?.frames ?? []).map((f) => [Math.round(f.hours_before_acquisition), f]));
   const repByH = new Map((replay?.named ? replay.frames : []).map((f) => [Math.round(f.hours_before_acquisition), f]));
@@ -42,6 +42,7 @@ export function prepare({ acquiredUtc, env, replay, forecast, display, tracks, l
     releaseFrom: repHours.length ? -Math.max(...repHours) : null,
     land: landTester(coastline),
     contactH: contactH ?? {},          // first modelled contact hour per sensitive area (forecast_result)
+    info: info ?? {},                  // per vessel: hindcast status and ranks, from the artifacts
   };
 }
 
@@ -110,14 +111,24 @@ function trailUpTo(v, t, pos) {
   return segs;
 }
 
+// Only the vessel's recorded internal gaps (track_display.json), and each one
+// carries its real window: nothing here invents or infers a gap.
 function gapsUpTo(v, t) {
   const out = [];
   for (let i = 1; i < v.pts.length && v.pts[i][2] <= t; i += 1) {
-    if (v.gaps.some(([s, e]) => s >= v.pts[i - 1][2] && e <= v.pts[i][2])) {
-      out.push([[v.pts[i - 1][0], v.pts[i - 1][1]], [v.pts[i][0], v.pts[i][1]]]);
-    }
+    const g = v.gaps.find(([s, e]) => s >= v.pts[i - 1][2] && e <= v.pts[i][2]);
+    if (g) out.push({ key: v.key, start: g[0], end: g[1], line: [[v.pts[i - 1][0], v.pts[i - 1][1]], [v.pts[i][0], v.pts[i][1]]] });
   }
   return out;
+}
+
+// inside a recorded gap: the last reported position, and when the gap began
+function lastSeenAt(v, t) {
+  const g = v.gaps.find(([s, e]) => t > s && t < e);
+  if (!g) return null;
+  let last = null;
+  for (const p of v.pts) { if (p[2] <= g[0]) last = p; else break; }
+  return last ? { key: v.key, lon: last[0], lat: last[1], since: g[0], until: g[1] } : null;
 }
 
 /** Dead reckoning after the image: from the last reported position, along the
@@ -150,13 +161,14 @@ export function shipsAt(P, tau) {
   const hb = Math.max(0, Math.round(-tau));
   const envF = P.envByH.get(hb);
   const stateOf = new Map((envF?.vessels ?? []).map((v) => [v.vessel_key, v.at_this_time]));
-  const ships = [], lead = [], others = [], gaps = [], projected = [];
+  const ships = [], lead = [], others = [], gaps = [], projected = [], lastSeen = [];
   for (const v of P.vessels) {
     if (tau <= 0) {
       const at = vesselAt(v, t);
       const segs = trailUpTo(v, t, at?.pos);
       (v.lead ? lead : others).push(...segs);
       gaps.push(...gapsUpTo(v, t));
+      if (!at) { const ls = lastSeenAt(v, t); if (ls) lastSeen.push(ls); }
       if (at) {
         ships.push({ key: v.key, type: v.type, lon: at.pos[0], lat: at.pos[1], cog: at.heading, sog: sogAt(v.fixes, t),
                      lead: v.lead, state: stateOf.get(v.key) === 'inside' ? 'inside' : 'outside' });
@@ -172,7 +184,7 @@ export function shipsAt(P, tau) {
                    lead: v.lead, state: 'projected' });
     }
   }
-  return { ships, trails: { lead, others }, gaps, projected };
+  return { ships, trails: { lead, others }, gaps, projected, lastSeen };
 }
 
 // ------------------------------------------------------------ oil
@@ -231,3 +243,5 @@ export function envelopeAt(P, tau) {
 export function forecastContoursAt(P, tau) {
   return tau >= 0.5 ? P.fcByH.get(Math.min(P.maxH, Math.max(1, Math.round(tau))))?.density_contours ?? null : null;
 }
+
+export const hhmm = (msTime) => new Date(msTime).toISOString().slice(11, 16);
