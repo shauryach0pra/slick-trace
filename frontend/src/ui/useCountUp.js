@@ -6,12 +6,12 @@ const reduce = () => typeof window !== 'undefined' && window.matchMedia('(prefer
  * A number that counts up to its value when it first appears. Under reduced
  * motion, or with no value, it simply shows the value.
  */
-export function useCountUp(value, { duration = 900, decimals = 2 } = {}) {
+export function useCountUp(value, { duration = 900, decimals = 2, run = true } = {}) {
   const still = reduce() || value == null;
   const [shown, setShown] = useState(0);
   const from = useRef(0);
   useEffect(() => {
-    if (still) return undefined;
+    if (still || !run) return undefined;
     let raf = 0;
     const start = performance.now(), a = from.current;
     const tick = (t) => {
@@ -21,7 +21,7 @@ export function useCountUp(value, { duration = 900, decimals = 2 } = {}) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [value, duration, still]);
+  }, [value, duration, still, run]);
   if (value == null) return '—';
   return Number(still ? value : shown).toFixed(decimals);
 }

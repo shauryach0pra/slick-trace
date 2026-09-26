@@ -14,23 +14,37 @@ const ROWS = [
   ['mistaken_promotion_rate', 'mistaken_promotion_n', 'Mistaken promotion'],
 ];
 
-// which direction is better for each rate
-const BETTER = { hidden_ais_recovery_rate: 'higher', false_unmatched_alert_rate: 'lower', mistaken_promotion_rate: 'lower' };
+const RATE = {
+  hidden_ais_recovery_rate: { title: 'Hidden AIS recovered', better: 'higher' },
+  false_unmatched_alert_rate: { title: 'False alerts', better: 'lower' },
+  mistaken_promotion_rate: { title: 'Mistaken promotions', better: 'lower' },
+};
 
-function Pair({ label, better, rows }) {
+/** A rate under both conditions as two concentric rings: outer, vessels hidden; inner, area goes dark. */
+function Rings({ outer, inner, title, better, nOuter, nInner }) {
+  const ring = (r, v, cls) => {
+    const c = 2 * Math.PI * r;
+    return (
+      <g className={cls}>
+        <circle r={r} className="cv-ring-track" />
+        {v == null ? <circle r={r} className="cv-ring-none" /> :
+          <circle r={r} className="cv-ring-arc" strokeDasharray={`${c * Math.max(0.004, Math.min(1, v))} ${c}`} transform="rotate(-90)" />}
+      </g>
+    );
+  };
+  const pct = (v) => (v == null ? '—' : `${Math.round(v * 100)}%`);
   return (
-    <div className="cv-pair">
-      <div className="cv-pair-head"><b>{label}</b><span className={`cv-better is-${better}`}>{better} is better</span></div>
-      {rows.map((r) => (
-        <div key={r.name} className={`cv-bar-row tone-${r.tone}`}>
-          <span className="cv-name">{r.name}</span>
-          <span className="cv-track">{r.value == null
-            ? <i className="cv-none">not measured</i>
-            : <i className="cv-fill" style={{ '--w': r.value }} />}</span>
-          <span className="cv-val">{r.value == null ? '—' : `${Math.round(r.value * 100)}%`}<em>{r.n}</em></span>
-        </div>
-      ))}
-    </div>
+    <figure className="cv-rate">
+      <svg viewBox="-50 -50 100 100" role="img" aria-label={`${title}: vessels hidden ${pct(outer)} (${nOuter}), area goes dark ${pct(inner)} (${nInner}); ${better} is better`}>
+        {ring(40, outer, 'is-outer')}
+        {ring(28, inner, 'is-inner')}
+      </svg>
+      <figcaption>
+        <b>{title}</b>
+        <span className="cv-vals"><i className="is-outer" title={`vessels hidden: ${nOuter}`}>{pct(outer)}</i><i className="is-inner" title={`area goes dark: ${nInner}`}>{pct(inner)}</i></span>
+        <span className={`cv-better is-${better}`}>{better} is better</span>
+      </figcaption>
+    </figure>
   );
 }
 
@@ -41,16 +55,18 @@ export default function CoverageCard({ coverage }) {
   return (
     <Card title="Coverage-Aware Matching" badge={<Badge tone="accent">tested</Badge>}
           caption="Matching radar contacts to AIS when some AIS is hidden.">
-      <div className="cv-key">
-        <span><i className="tone-a" />vessels hidden</span><span><i className="tone-b" />area goes dark</span>
+      <div className="cv-rings">
+        {ROWS.map(([rk, nk]) => (
+          <Rings key={rk} title={RATE[rk].title} better={RATE[rk].better}
+                 outer={selective[rk]} inner={failure[rk]} nOuter={selective[nk]} nInner={failure[nk]} />
+        ))}
       </div>
-      {ROWS.map(([rk, nk, label]) => (
-        <Pair key={rk} label={label} better={BETTER[rk]}
-              rows={[{ name: 'vessels hidden', tone: 'a', value: selective[rk], n: selective[nk] },
-                     { name: 'area goes dark', tone: 'b', value: failure[rk], n: failure[nk] }]} />
-      ))}
+      <div className="cv-key">
+        <span><i className="is-outer" />outer: vessels hidden</span><span><i className="is-inner" />inner: area goes dark</span>
+      </div>
       <HowMeasured>
         <dl>
+          <dt>Counts</dt><dd>{ROWS.map(([, nk, label]) => `${label}: vessels hidden ${selective[nk]}, area goes dark ${failure[nk]}`).join('; ')}.</dd>
           <dt>Hidden-AIS recovery</dt><dd>{C.hiddenRecovery}</dd>
           <dt>False unmatched alert</dt><dd>{C.falseAlert}</dd>
           <dt>Mistaken promotion</dt><dd>{C.mistakenPromotion}</dd>

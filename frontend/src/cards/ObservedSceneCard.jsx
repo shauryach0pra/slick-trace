@@ -1,6 +1,7 @@
 import { Badge, Card } from '../ui/primitives';
 import { HowMeasured } from '../ui/viz';
 import { useCountUp } from '../ui/useCountUp';
+import { useInView } from '../ui/useInView';
 import './observedScene.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
@@ -36,33 +37,33 @@ export default function ObservedSceneCard({ meta, slick, sceneUrl, nVessels }) {
             </svg>
           )}
           {slick && !slick.detected && <div className="scene-nodetect">No slick detected</div>}
-          <span className="os-stamp">{meta.acquired_utc.slice(11, 16)} UTC · {meta.acquired_utc.slice(0, 10)}</span>
+          {/* the scene's facts as a viewfinder HUD, on the image itself */}
+          <span className="os-hud is-top">
+            <span className="os-chip">{meta.pixel_spacing_m} m pixels</span>
+            <span className="os-chip">{nVessels} vessels tracked</span>
+          </span>
+          <span className="os-hud is-bottom">
+            <span className="os-chip is-mono">{meta.acquired_utc.slice(11, 16)} UTC · {meta.acquired_utc.slice(0, 10)}</span>
+            {slick?.truth_agreement_iou != null && (
+              <span className="os-chip is-truth"><i style={{ '--v': slick.truth_agreement_iou }} />{slick.truth_agreement_iou.toFixed(2)} match with the generator's mask</span>
+            )}
+          </span>
+          <span className="os-scanline" aria-hidden="true" />
         </div>
 
         {g && (
           <div className="os-print">
             <span className="os-eyebrow">Slick fingerprint</span>
-            <div className="os-print-row">
-              <ShapeGlyph major={g.major_axis_km} minor={g.minor_axis_km} bearing={g.orientation_deg_from_north} />
-              <div className="os-hero">
-                <span className="os-big"><Count value={g.area_km2} decimals={0} /><small> km²</small></span>
-                <span className="os-hero-label">sea surface covered</span>
-                <div className="os-facts">
-                  <span><b>{g.perimeter_km.toFixed(1)}</b> km edge</span>
-                  <span><b>{g.elongation.toFixed(2)}</b> elongation</span>
-                  <span><b>{g.orientation_deg_from_north.toFixed(0)}°</b> from north</span>
-                </div>
-                <ElongationBar value={g.elongation} />
-              </div>
+            <ShapeGlyph major={g.major_axis_km} minor={g.minor_axis_km} bearing={g.orientation_deg_from_north} />
+            <span className="os-big"><Count value={g.area_km2} decimals={0} /><small> km²</small></span>
+            <span className="os-hero-label">sea surface covered</span>
+            <div className="os-grid">
+              <div><b>{g.perimeter_km.toFixed(1)}</b><span>km edge</span></div>
+              <div><b>{g.major_axis_km.toFixed(1)} × {g.minor_axis_km.toFixed(1)}</b><span>km across</span></div>
+              <div><b>{g.orientation_deg_from_north.toFixed(0)}°</b><span>from north</span></div>
+              <div><b>{g.elongation.toFixed(2)}</b><span>elongation</span></div>
             </div>
-            <div className="os-chips">
-              {slick.truth_agreement_iou != null && (
-                <span className="os-chip is-truth"><i style={{ '--v': slick.truth_agreement_iou }} />
-                  {slick.truth_agreement_iou.toFixed(2)} match with the generator's mask</span>
-              )}
-              <span className="os-chip">{meta.pixel_spacing_m} m pixels</span>
-              <span className="os-chip">{nVessels} vessels tracked</span>
-            </div>
+            <ElongationBar value={g.elongation} />
           </div>
         )}
       </div>
@@ -113,5 +114,6 @@ function ElongationBar({ value }) {
 }
 
 function Count({ value, decimals }) {
-  return useCountUp(value, { decimals, duration: 1000 });
+  const [ref, seen] = useInView();
+  return <span ref={ref}>{useCountUp(value, { decimals, duration: 1000, run: seen })}</span>;
 }

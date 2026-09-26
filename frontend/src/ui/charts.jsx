@@ -7,7 +7,7 @@ import './charts.css';
  */
 
 /** A line (with optional soft area) over a few labelled x positions. */
-export function LineChart({ xs, series, yMax, yFormat = (v) => v, height = 150, ariaLabel }) {
+export function LineChart({ xs, series, yMax, yFormat = (v) => v, height = 150, ariaLabel, highlight = null }) {
   const gid = useId().replace(/:/g, '');
   const W = 420, H = height, L = 38, R = 14, T = 12, B = 26;
   const X = (i) => L + (xs.length === 1 ? 0.5 : i / (xs.length - 1)) * (W - L - R);
@@ -27,6 +27,7 @@ export function LineChart({ xs, series, yMax, yFormat = (v) => v, height = 150, 
           <text x={L - 6} y={Y(t) + 3} className="lc-ytick">{yFormat(t)}</text></g>
       ))}
       {xs.map((x, i) => <text key={x} x={X(i)} y={H - 8} className="lc-xtick">{x}</text>)}
+      {highlight != null && <line x1={X(highlight)} x2={X(highlight)} y1={T} y2={H - B} className="lc-guide" />}
       {series.map((s, si) => {
         const pts = s.values.map((v, i) => [X(i), Y(v ?? 0)]);
         const d = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0]},${p[1]}`).join(' ');
@@ -35,7 +36,7 @@ export function LineChart({ xs, series, yMax, yFormat = (v) => v, height = 150, 
             {s.area && <path d={`${d} L${pts[pts.length - 1][0]},${Y(0)} L${pts[0][0]},${Y(0)} Z`} className="lc-area" fill={`url(#lcf-${gid})`} />}
             <path d={d} className="lc-line" pathLength="100" />
             {pts.map((p, i) => (
-              <circle key={i} cx={p[0]} cy={p[1]} r="3.6" className="lc-dot" style={{ '--i': i }}>
+              <circle key={i} cx={p[0]} cy={p[1]} r={i === highlight ? 5.5 : 3.6} className={`lc-dot${i === highlight ? ' is-on' : ''}`} style={{ '--i': i }}>
                 <title>{`${s.name} at ${xs[i]}: ${yFormat(s.values[i] ?? 0)}`}</title>
               </circle>
             ))}

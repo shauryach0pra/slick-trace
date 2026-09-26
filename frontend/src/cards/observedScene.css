@@ -35,3 +35,31 @@
                       background: conic-gradient(var(--status-green) calc(var(--v) * 360deg), var(--fill-pressed) 0); }
 @media (max-width: 900px) { .os { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .os-glyph-shape { animation: none; stroke-dashoffset: 0; } .os-glyph-axis { animation: none; opacity: 1; } }
+
+/* ---- redesign: a viewfinder HUD on the image, and a fingerprint that fills its panel */
+.os-scene { min-height: 300px; }
+.os-hud { position: absolute; left: 12px; right: 12px; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; z-index: 2; }
+.os-hud.is-top { top: 12px; } .os-hud.is-bottom { bottom: 12px; }
+.os-hud .os-chip { color: #fff; background: rgba(8, 12, 18, 0.55); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+                   -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%); }
+.os-hud .os-chip.is-mono { font-family: var(--font-mono); }
+.os-stamp { display: none; }
+/* a slow radar sweep across the scene, once, when it comes into view */
+.os-scanline { position: absolute; inset: 0; pointer-events: none; z-index: 1;
+               background: linear-gradient(180deg, transparent 0%, rgba(100, 210, 255, 0.16) 48%, rgba(100, 210, 255, 0.34) 50%, transparent 52%);
+               background-size: 100% 220%; background-position: 0 120%; opacity: 0;
+               animation: os-sweep 2200ms 300ms cubic-bezier(0.45, 0, 0.2, 1) backwards; }
+@keyframes os-sweep { 0% { opacity: 1; background-position: 0 120%; } 90% { opacity: 1; } 100% { opacity: 0; background-position: 0 -20%; } }
+.scene-poly { filter: drop-shadow(0 0 6px rgba(100, 210, 255, 0.8)); }
+
+.os-print { align-items: center; text-align: center; gap: 6px; padding: 18px 18px 16px; }
+.os-print .os-eyebrow { align-self: stretch; text-align: left; }
+.os-print .os-glyph { width: 150px; height: 150px; margin: 4px 0 2px; }
+.os-print .os-big { font-size: 44px; }
+.os-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 12px; }
+.os-grid > div { display: flex; flex-direction: column; gap: 1px; padding: 8px 10px; border-radius: 10px; text-align: left;
+                 background: var(--card-bg, var(--content-bg)); box-shadow: inset 0 0 0 0.5px var(--separator); }
+.os-grid b { font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); color: var(--label-1); font-variant-numeric: tabular-nums; }
+.os-grid span { font-size: var(--font-size-xxs); color: var(--label-3); text-transform: uppercase; letter-spacing: 0.05em; }
+.os-print .os-elong { width: 100%; margin-top: 12px; }
+@media (prefers-reduced-motion: reduce) { .os-scanline { animation: none; } }

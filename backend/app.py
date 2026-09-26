@@ -216,9 +216,66 @@ def get_overview():
                 "discrimination": at.get("discrimination"),
                 "nearest": None if not near else {
                     "vessel_key": near[0]["vessel_key"], "distance_deg": near[0]["distance_deg"]},
+                "thumb": _overview_thumb(iid, top["vessel_key"] if top else None,
+                                         near[0]["vessel_key"] if near else None),
             }
         out.append({**row, "finding": finding})
     return out
+
+
+def _thin(points, limit):
+    """Every nth point so a path keeps its shape in at most `limit` points."""
+    if len(points) <= limit:
+        return points
+    step = len(points) / limit
+    return [points[int(i * step)] for i in range(limit)] + [points[-1]]
+
+
+def _overview_thumb(iid, lead_key, nearest_key):
+    """What an overview tile draws, selected from the case's own artifacts: the
+    detected slick's outline, the best-fitting vessel's track up to the image,
+    and where it and the proximity pick were at the image. Nothing is computed
+    beyond thinning points and picking the fix nearest the acquisition time."""
+    m = _load_json(iid, "manifest.json") or {}
+    det = _load_json(iid, "detection_result.json") or {}
+    td = _load_json(iid, "track_display.json") or {}
+    acquired = m.get("acquired_utc")
+    paths = {v["vessel_key"]: v.get("display_path") or [] for v in td.get("vessels", [])}
+
+    def before_image(key):
+        return [p for p in paths.get(key, []) if acquired and p[2] <= acquired]
+
+    def at_image(key):
+        pts = before_image(key)
+        return [pts[-1][0], pts[-1][1]] if pts else None
+
+    lead = before_image(lead_key)
+    return {
+        "slick": [[round(x, 4), round(y, 4)] for x, y in _thin(det.get("polygon") or [], 48)],
+        "lead_path": [[round(p[0], 4), round(p[1], 4)] for p in _thin(lead, 48)],
+        "lead_at_image": at_image(lead_key),
+        "nearest_at_image": at_image(nearest_key),
+    }
+
+
+@app.get("/api/benchmark")
+def get_benchmark():
+    """The benchmark summary from docs/validation_report.json, copied as it is:
+    forward replay against the proximity baseline on the source-present cases,
+    and how the source-absent cases came out."""
+    path = os.path.join(REPO_ROOT, "docs", "validation_report.json")
+    if not os.path.exists(path):
+        raise HTTPException(404, "validation report not generated - run scripts/run_validation.py")
+    with open(path) as f:
+        a = json.load(f)["attribution"]
+    sp, sa = a["source_present"], a["source_absent"]
+    return {
+        "n_cases": a["n_cases"],
+        "source_present": {"n": sp["n"], "method_top1": sp["method_top1"], "naive_top1": sp["naive_top1"],
+                           "p_value": sp["mcnemar"]["p_value"], "test": sp["mcnemar"]["test"]},
+        "source_absent": {"n": sa["n"], "correct_abstentions": sa["correct_abstentions"],
+                          "false_named_attributions": sa["false_named_attributions"]},
+    }
 
 
 @app.get("/api/incidents/{incident_id}/manifest")

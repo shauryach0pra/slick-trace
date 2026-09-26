@@ -13,58 +13,65 @@ const SUGGESTIONS = [
 ];
 
 export default function AskConsole({ incidentId, api }) {
+  // each exchange: the question at once, its reply when it arrives
   const [history, setHistory] = useState([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const scrollRef = useRef(null);
+  const nextId = useRef(0);
+
+  const reveal = (id) => requestAnimationFrame(() => requestAnimationFrame(() => {
+    // bring the exchange into view from its question, never cutting off the top
+    const box = scrollRef.current, el = box?.querySelector(`[data-ex="${id}"]`);
+    if (box && el) box.scrollTo({ top: box.scrollTop + el.getBoundingClientRect().top - box.getBoundingClientRect().top - 4, behavior: 'smooth' });
+  }));
 
   async function submit(question) {
-    if (!question.trim() || busy) return;
+    const q = question.trim();
+    if (!q || busy) return;
+    const id = nextId.current++;
     setBusy(true);
     setInput('');
+    setHistory((h) => [...h, { id, question: q, result: null }]);
+    reveal(id);
+    let result;
     try {
-      const result = await api.ask(incidentId, question);
-      setHistory((h) => [...h, result]);
+      result = await api.ask(incidentId, q);
     } catch (e) {
-      setHistory((h) => [...h, {
-        question, intent: 'error', supported: false,
-        answer: String(e.message ?? e), citations: [],
-      }]);
-    } finally {
-      setBusy(false);
-      requestAnimationFrame(() => {
-        // show the new answer from its first line - scrolling to the bottom hid the top of long answers
-        requestAnimationFrame(() => {
-          const box = scrollRef.current;
-          const entries = box?.querySelectorAll('.console-entry:not(.console-busy)');
-          const last = entries?.[entries.length - 1];
-          if (box && last) box.scrollTo({ top: box.scrollTop + last.getBoundingClientRect().top - box.getBoundingClientRect().top - 6, behavior: 'smooth' });
-        });
-      });
+      result = { question: q, intent: 'error', supported: false, answer: String(e.message ?? e), citations: [] };
     }
+    setHistory((h) => h.map((x) => (x.id === id ? { ...x, result } : x)));
+    setBusy(false);
+    reveal(id);
   }
 
   return (
     <>
-      <div className="console-history" ref={scrollRef}>
-        {history.map((r, i) => (
-          <div className="console-entry" key={i}>
-            <div className="console-q">{r.question}</div>
-            <div className={`console-tag ${r.supported ? 'ok' : 'refused'}`}>
-              {r.supported ? `answered · ${r.intent.replaceAll('_', ' ')}` : 'declined · no matching template'}
-            </div>
-            <div className="console-a">{r.answer}</div>
-            {r.citations?.length > 0 && (
-              <div className="console-cites">cites: {r.citations[0]}{r.citations.length > 1 ? ` (+${r.citations.length - 1} more)` : ''}</div>
+      <div className="ask-chat" ref={scrollRef} aria-live="polite">
+        {history.length === 0 && <p className="ask-empty">Pick a question below, or ask your own.</p>}
+        {history.map(({ id, question, result: r }) => (
+          <div className="ask-ex" key={id} data-ex={id}>
+            <div className="ask-q">{question}</div>
+            {!r ? (
+              <div className="ask-a is-pending" aria-label="Answering"><i /><i /><i /></div>
+            ) : (
+              <div className={`ask-a${r.supported ? '' : ' is-declined'}`}>
+                <span className={`ask-tag ${r.supported ? 'ok' : 'refused'}`}>
+                  {r.supported ? `answered · ${r.intent.replaceAll('_', ' ')}` : 'declined · no matching template'}
+                </span>
+                <p>{r.answer}</p>
+                {r.citations?.length > 0 && (
+                  <span className="ask-cites">cites: {r.citations[0]}{r.citations.length > 1 ? ` (+${r.citations.length - 1} more)` : ''}</span>
+                )}
+              </div>
             )}
           </div>
         ))}
-        {busy && <div className="console-entry console-busy">running query…</div>}
       </div>
-      {/* suggestions stay, so a demo can keep asking */}
+      {/* suggestions stay, so a demo can keep asking; a tap sends at once */}
       <div className="ask-suggest" role="group" aria-label="Suggested questions">
-        {SUGGESTIONS.map((s) => (
-          <button key={s} type="button" className="ask-chip" disabled={busy} onClick={() => submit(s)}>{s}</button>
+        {SUGGESTIONS.map((q) => (
+          <button key={q} type="button" className="ask-chip" disabled={busy} onClick={() => submit(q)}>{q}</button>
         ))}
       </div>
       <form className="ask-field" onSubmit={(e) => { e.preventDefault(); submit(input); }}>

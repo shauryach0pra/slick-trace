@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Badge, Card, EmptyState } from '../ui/primitives';
 import { HowMeasured } from '../ui/viz';
 import { useCountUp } from '../ui/useCountUp';
+import { useInView } from '../ui/useInView';
 import './fragility.css';
 import './whatIf.css';
 import { CAPTIONS as C } from '../ui/glossary';
@@ -14,15 +15,14 @@ import { CAPTIONS as C } from '../ui/glossary';
  * not run. On an abstained case the leader was never named, and says so.
  */
 const AXIS_ORDER = ['current_u_bias', 'current_v_bias', 'diffusivity_scale', 'mask_threshold', 'duration_shift_h'];
+const SHORT = { current_u_bias: 'Along-shore current', current_v_bias: 'Cross-shore current', diffusivity_scale: 'Spreading',
+                mask_threshold: 'Footprint threshold', duration_shift_h: 'Release duration' };
 
 export default function FragilityCard({ fragility, attribution }) {
   const [axis, setAxis] = useState('current_u_bias');
   const [whatIf, setWhatIf] = useState(false);
   const [pointId, setPointId] = useState(null);
 
-  const points = useMemo(() => (fragility?.grid ?? [])
-    .filter((g) => Object.keys(g.changed_axes).length === 1 && axis in g.changed_axes)
-    .sort((a, b) => a.changed_axes[axis] - b.changed_axes[axis]), [fragility, axis]);
 
   if (!fragility) return null;
   if (!fragility.testable) {
@@ -38,7 +38,6 @@ export default function FragilityCard({ fragility, attribution }) {
   const label = (k) => fragility.axes[k]?.label ?? k;
 
   const pct = Math.round(fragility.lead_retained_fraction * 100);
-  const change = flip ? Object.entries(flip.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ') : null;
   return (
     <Card title="Rank Fragility"
           badge={<Badge tone={fragility.flip_found ? 'warning' : 'accent'}>
@@ -55,8 +54,13 @@ export default function FragilityCard({ fragility, attribution }) {
             {flip && <span><i className="is-first" />smallest flip</span>}
           </div>
           {flip ? (
-            <span className="fr-flip">Smallest change that flips it: <b>{change}</b>
-              <em>{flip.top_candidate} leads instead · magnitude {flip.magnitude}</em></span>
+            <div className="fr-flip2">
+              <span className="fr-flip2-head">Smallest change that flips it
+                <em><b className="mono">{flip.top_candidate}</b> leads instead · magnitude {flip.magnitude}</em></span>
+              {Object.entries(flip.changed_axes).map(([k, v]) => (
+                <AxisTrack key={k} axis={k} fragility={fragility} label={label} mark={v} readOnly />
+              ))}
+            </div>
           ) : <span className="fr-flip is-held">No tested change moved the leader.</span>}
         </div>
       </div>
@@ -64,32 +68,20 @@ export default function FragilityCard({ fragility, attribution }) {
       {flip && <WhatIf fragility={fragility} attribution={attribution} flip={flip} on={whatIf} setOn={setWhatIf} label={label} />}
 
       <div className="fr-explore">
-        <div className="ui-row">
-          <label className="fr-explore-label" htmlFor="frag-axis">Explore one setting</label>
-          <select id="frag-axis" className="ui-select" value={axis}
-                  onChange={(e) => { setAxis(e.target.value); setPointId(null); }}>
-            {AXIS_ORDER.filter((x) => fragility.axes[x]).map((x) => (
-              <option key={x} value={x}>{label(x)}</option>
-            ))}
-          </select>
-        </div>
-        <div className="chip-steps" role="group" aria-label={`Tested values for ${label(axis)}`} style={{ marginTop: 'var(--space-2)' }}>
-          {points.map((pt) => (
-            <button key={pt.point_id} type="button"
-                    className={`chip${pointId === pt.point_id ? ' is-active' : ''}${pt.flipped ? ' is-flag' : ''}`}
-                    aria-pressed={pointId === pt.point_id}
-                    onClick={() => setPointId(pointId === pt.point_id ? null : pt.point_id)}>
-              {String(pt.changed_axes[axis])}
-              <span className="visually-hidden">{pt.flipped ? ' changes the leader' : ' leader unchanged'}</span>
-            </button>
+        <span className="fr-explore-label">Explore one setting</span>
+        <div className="fr-tabs" role="tablist" aria-label="Assumption to explore">
+          {AXIS_ORDER.filter((x) => fragility.axes[x]).map((x) => (
+            <button key={x} type="button" role="tab" aria-selected={axis === x} className={`fr-tab${axis === x ? ' is-on' : ''}`}
+                    onClick={() => { setAxis(x); setPointId(null); }}>{SHORT[x] ?? label(x)}</button>
           ))}
         </div>
-        {selected && (
-          <p className="fr-selected">
-            <b className="mono">{selected.top_candidate}</b> leads{selected.flipped ? ' — a different vessel' : ' — the same leader'}
-            {' '}· IoU {selected.top_iou.toFixed(3)}{selected.loss_margin != null ? ` · margin ${selected.loss_margin}` : ''}
-          </p>
-        )}
+        <AxisTrack axis={axis} fragility={fragility} label={label} selected={pointId}
+                   onPick={(pt) => setPointId(pointId === pt.point_id ? null : pt.point_id)} />
+        <p className={`fr-selected${selected ? ' is-on' : ''}`}>
+          {selected ? <><b className="mono">{selected.top_candidate}</b> leads{selected.flipped ? ' — a different vessel' : ' — the same leader'}
+            {' '}· IoU {selected.top_iou.toFixed(3)}{selected.loss_margin != null ? ` · margin ${selected.loss_margin}` : ''}</>
+            : 'Tap a tested value to see who leads under it.'}
+        </p>
       </div>
 
       <HowMeasured>
@@ -133,7 +125,8 @@ function FlipMatrix({ fragility, label }) {
 }
 
 function Count({ value }) {
-  return useCountUp(value, { decimals: 0, duration: 1000 });
+  const [ref, seen] = useInView();
+  return <span ref={ref}>{useCountUp(value, { decimals: 0, duration: 1000, run: seen })}</span>;
 }
 
 /**
@@ -185,3 +178,33 @@ function WhatIf({ fragility, attribution, flip, on, setOn, label }) {
     </div>
   );
 }
+
+/**
+ * One assumption as a track of its tested values: the value as tested is a hollow
+ * stop; each changed value is blue where the leader held and amber where it
+ * flipped. `mark` rings a value (the smallest flip); `onPick` makes stops tappable.
+ */
+function AxisTrack({ axis, fragility, label, mark = null, selected = null, onPick = null, readOnly = false }) {
+  const values = fragility.axes[axis]?.tested_values ?? [];
+  const single = (fragility.grid ?? []).filter((g) => Object.keys(g.changed_axes).length === 1 && axis in g.changed_axes);
+  const at = new Map(single.map((g) => [g.changed_axes[axis], g]));
+  return (
+    <div className={`fr-track${readOnly ? ' is-static' : ''}`}>
+      <span className="fr-track-name">{label(axis)}</span>
+      <div className="fr-track-line" role={readOnly ? undefined : 'group'} aria-label={`Tested values for ${label(axis)}`}>
+        <span className="fr-track-rail" aria-hidden="true" />
+        {values.map((v, i) => {
+          const pt = at.get(v);
+          const kind = !pt ? 'nominal' : pt.flipped ? 'flip' : 'held';
+          const cls = `fr-stop is-${kind}${mark === v ? ' is-mark' : ''}${pt && selected === pt.point_id ? ' is-sel' : ''}`;
+          const inner = <><i /><span>{String(v)}</span></>;
+          return (!pt || readOnly || !onPick)
+            ? <span key={v} className={cls} style={{ '--i': i }} title={!pt ? 'as tested' : `${pt.flipped ? 'flips the lead' : 'lead held'}`}>{inner}</span>
+            : <button key={v} type="button" className={cls} style={{ '--i': i }} aria-pressed={selected === pt.point_id}
+                      aria-label={`${label(axis)} ${v}: ${pt.flipped ? 'the lead flips' : 'the lead holds'}`} onClick={() => onPick(pt)}>{inner}</button>;
+        })}
+      </div>
+    </div>
+  );
+}
+

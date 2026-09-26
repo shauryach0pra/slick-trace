@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FAMILY_LABEL } from './families';
-import { findingHeadline } from './findingText';
+import { FAMILY_LABEL, FAMILY_STORY } from './families';
+import OutcomeIcon from './OutcomeIcon';
 import './overview.css';
 
 /**
@@ -10,6 +10,32 @@ import './overview.css';
  * written here. The family says what kind of test a case is, never which vessel
  * did it; the status dot is the system's own outcome.
  */
+/**
+ * One paragraph per case: what the case tests (its family's design), this case's
+ * own facts - vessels tracked and replayed, the nearest vessel at image time and
+ * how far - and then what forward replay concluded. Every figure is a field of
+ * /api/overview; the distance uses 0.01° ≈ 1.1 km, as the app states elsewhere.
+ */
+function caseStory(r) {
+  const f = r.finding;
+  const design = FAMILY_STORY[r.family] ?? FAMILY_LABEL[r.family] ?? '';
+  if (!f) return `${design} Not yet analysed.`;
+  const km = f.nearest ? (f.nearest.distance_deg * 111).toFixed(1) : null;
+  const facts = ` Here, ${r.n_vessels} vessels were tracked and ${f.n_candidates} were replayed`
+    + (f.nearest ? `; the nearest at image time was ${f.nearest.vessel_key}, about ${km} km away.` : '.');
+  const b = f.best;
+  let outcome;
+  if (f.unknown_source) {
+    outcome = ` No vessel was named: the best fit, ${b ? b.mean_iou.toFixed(2) : '—'}, is below the ${f.abstention_iou_gate} gate.`;
+  } else {
+    const how = `(fit ${b.mean_iou.toFixed(2)}, best under ${b.ensemble_win_count} of ${b.n_ensemble} forcing variants)`;
+    outcome = f.nearest && f.nearest.vessel_key !== b.vessel_key
+      ? ` Forward replay named ${b.vessel_key} ${how}, not the nearest vessel.`
+      : ` Forward replay named ${b.vessel_key} ${how}, which was also the nearest vessel.`;
+  }
+  return design + facts + outcome;
+}
+
 export default function Overview({ api, onOpen, family = 'all', chips = null }) {
   const [rows, setRows] = useState(null);
   const [error, setError] = useState(null);
@@ -36,26 +62,15 @@ export default function Overview({ api, onOpen, family = 'all', chips = null }) 
         {shown.map((r, i) => {
           const f = r.finding;
           const unknown = f?.unknown_source;
-          const differs = f && !unknown && f.nearest && f.best && f.nearest.vessel_key !== f.best.vessel_key;
           return (
             <button type="button" key={r.incident_id} className={`ov-tile${unknown ? ' is-abstain' : ''}`}
                     style={{ '--k': i }} onClick={() => onOpen(r.incident_id)}>
               <span className="ov-top">
-                <span className={`ov-dot${unknown ? ' is-abstain' : f ? ' is-named' : ''}`} aria-hidden="true" />
-                <span className="ov-id">{r.incident_id.replace('_', ' ')}</span>
-                <span className="ov-family">{FAMILY_LABEL[r.family] ?? r.family}</span>
+                {f && <OutcomeIcon abstain={unknown} />}
+                <span className="ov-id">{r.incident_id.replace('case_', 'Case ')}</span>
               </span>
-              {f ? (
-                <>
-                  <span className="ov-finding">{findingHeadline({ unknown, nCandidates: f.n_candidates, differs })}</span>
-                  <span className="ov-facts">
-                    {unknown
-                      ? <>best fit <b>{f.best?.mean_iou.toFixed(2) ?? '—'}</b> · below the gate of {f.abstention_iou_gate}</>
-                      : <>named <b className="mono">{f.best.vessel_key}</b> · mean IoU {f.best.mean_iou.toFixed(2)}
-                          {differs && <> · proximity picked <span className="mono">{f.nearest.vessel_key}</span></>}</>}
-                  </span>
-                </>
-              ) : <span className="ov-finding is-pending">Not yet analysed.</span>}
+              {/* the scenario, this case's facts and what happened, in one paragraph */}
+              <span className="ov-story">{caseStory(r)}</span>
               <span className="ov-open">Open case →</span>
             </button>
           );

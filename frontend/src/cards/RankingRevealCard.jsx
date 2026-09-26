@@ -87,7 +87,7 @@ export default function RankingRevealCard({ attribution, baseline, vessels }) {
     return (
       <div key={r.vessel_key} className={`rv-row${cls}${struck ? ' is-struck' : ''}`} role="row"
            data-rank-key={r.vessel_key} id={`rank-${revealed ? 'replay' : 'naive'}-${r.vessel_key}`}
-           style={{ transform: `translateY(${pos * ROW}px)`, '--w': Math.max(0, Math.min(1, width)) }}>
+           style={{ transform: `translateY(${pos * ROW}px)`, '--w': Math.max(0, Math.min(1, width)), '--d': pos }}>
         <span className="rv-pos" role="cell">{pos + 1}</span>
         <span className="rv-key" role="cell"><span className="rv-key-text">{r.vessel_key}</span></span>
         <span className="rv-track" role="cell" aria-hidden="true">
@@ -95,7 +95,7 @@ export default function RankingRevealCard({ attribution, baseline, vessels }) {
           {revealed && <span className="rv-gate" style={{ left: `${gate * 100}%` }} />}
         </span>
         <span className="rv-value" role="cell">{value}</span>
-        <span className="rv-sub" role="cell">
+        <span className="rv-sub" role="cell" key={`${phase >= 2}-${struck}`}>
           {struck ? 'proximity pick · not supported by forward replay'
             : revealed && agree && r.vessel_key === naiveKey ? 'proximity and forward replay agree'
               : revealed && unknown && r.vessel_key === naiveKey ? `proximity pick · below the fit gate, like every candidate` : sub}
@@ -129,12 +129,6 @@ export default function RankingRevealCard({ attribution, baseline, vessels }) {
           <span>The best replayed fit is a mean IoU of {attribution.ranking[0]?.mean_iou?.toFixed(3) ?? '—'}, below
             the gate of {gate}. Declining to name a vessel is the output, not a failure to produce one.</span>
         </div>
-      )}
-      {revealed && !unknown && phase >= 3 && (
-        <p className="rv-note">
-          {agree ? `Proximity and forward replay pick the same vessel, ${leadKey}.`
-            : `Forward replay names ${leadKey}; the nearest vessel, ${naiveKey}, is not supported.`}
-        </p>
       )}
       <HowMeasured>
         <dl>

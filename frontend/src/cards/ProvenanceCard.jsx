@@ -25,35 +25,47 @@ export default function ProvenanceCard({ meta, report, attribution }) {
     { k: 'replayed', label: 'Replayed', n: replayed },
     ...(named != null ? [{ k: 'named', label: named ? 'Named' : 'Named — system abstains', n: named }] : []),
   ];
+  // one dot per vessel at each stage: candidates first, then excluded, then unassessed
+  const nc = counts.candidate ?? 0, ne = counts.excluded ?? 0, nu = counts.unassessed ?? 0;
+  const dots = (k) => k === 'scene' ? [...Array(nc).fill('candidate'), ...Array(ne).fill('excluded'), ...Array(nu).fill('unassessed')]
+    : k === 'kept' ? Array(nc).fill('candidate') : k === 'replayed' ? Array(replayed).fill('candidate') : ['named'];
+  const chips = [
+    ['AIS', String(meta.ais_source).split(' (')[0]], ['Projection', meta.metric_crs], ['Seed', meta.generator.seed],
+    ['Integrity', nFiles == null ? '—' : `${nFiles} files · SHA-256`],
+  ];
   const facts = [
     ['AIS', meta.ais_source], ['Forcing', meta.forcing_product], ['Projection', meta.metric_crs],
     ['Seed', meta.generator.seed], ['Integrity', nFiles == null ? '—' : `${nFiles} files · SHA-256`], ['Licence', meta.data_licence],
   ];
   return (
     <Card title="Traffic Filtering and Provenance" badge={<Badge>{meta.provenance.status} data</Badge>}
-          caption="From every vessel in the scene to the one named, and what identifies this run.">
-      <div className="pv-funnel" role="list" aria-label={steps.map((st) => `${st.label}: ${st.n}`).join(', ')}>
-        {steps.map((st, i) => (
-          <div key={st.k} role="listitem" className={`pv-step is-${st.k}${st.k === 'named' && !named ? ' is-none' : ''}`} style={{ '--i': i }}>
-            <span className="pv-bar" style={{ '--w': total ? Math.max(st.n / total, 0.04) : 0 }}><b>{st.n}</b></span>
-            <span className="pv-label">{st.label}</span>
+          caption="Every vessel in the scene, down to the one named.">
+      <div className="pv-dots" role="list" aria-label={steps.map((st) => `${st.label}: ${st.n}`).join(', ')}>
+        {steps.map((st, row) => (
+          <div key={st.k} role="listitem" className={`pv-row is-${st.k}`}>
+            <span className="pv-row-label">{st.label}</span>
+            <span className="pv-row-dots">
+              {st.k === 'named' && !named ? <span className="pv-none">no vessel named</span>
+                : dots(st.k).map((kind, i) => <i key={i} className={`pv-dot is-${kind}`} style={{ '--i': row * 4 + i }} />)}
+            </span>
+            <span className="pv-row-n">{st.n}</span>
           </div>
         ))}
       </div>
-      {(counts.excluded || counts.unassessed) ? (
-        <div className="pv-side">
-          {counts.excluded ? <span className="pv-chip">{counts.excluded} excluded — never inside the origin area</span> : null}
-          {counts.unassessed ? <span className="pv-chip is-warn">{counts.unassessed} unassessed — track gaps, so not cleared</span> : null}
-        </div>
-      ) : null}
-      <dl className="pv-facts">
-        {facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd title={String(v)}>{v}</dd></div>)}
-      </dl>
+      <div className="pv-legend">
+        <span><i className="pv-dot is-candidate" />candidate</span>
+        {counts.excluded ? <span><i className="pv-dot is-excluded" />excluded</span> : null}
+        {counts.unassessed ? <span><i className="pv-dot is-unassessed" />unassessed — not cleared</span> : null}
+      </div>
+      <div className="pv-chips">
+        {chips.map(([k, v]) => <span key={k} className="pv-chip" title={String(v)}><em>{k}</em>{v}</span>)}
+      </div>
       <HowMeasured>
         <dl>
           <dt>Kept, excluded, unassessed</dt><dd>{C.candidate} {C.excluded} {C.unassessed}</dd>
           <dt>Seed</dt><dd>{C.seed}</dd>
           <dt>Integrity</dt><dd>{C.checksums}</dd>
+          {facts.flatMap(([k, v]) => [<dt key={`${k}-t`}>{k}</dt>, <dd key={`${k}-d`}>{v}</dd>])}
           {report?.not_a && <><dt>What this is not</dt><dd>{report.not_a}</dd></>}
         </dl>
       </HowMeasured>

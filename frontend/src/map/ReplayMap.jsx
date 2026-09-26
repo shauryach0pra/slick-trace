@@ -458,6 +458,10 @@ function ForcingRose({ forcing }) {
   );
 }
 
+// the first map appears at once; maps created on a case switch wait for the transition
+const MAP_DEFER_MS = 420;
+let firstMap = true;
+
 export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, timeline, tau, label, onPick, onMode, onShowRanking, fan }) {
   const el = useRef(null);
   const mapRef = useRef(null);
@@ -496,6 +500,12 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
   // one map per case, framed on the scene
   useEffect(() => {
     if (!el.current || !bbox) return undefined;
+    // Creating a map compiles its WebGL programs and tearing one down is costly:
+    // done in the same instant as a case switch, it froze the transition. The
+    // first map is created at once; on a switch the new one is created just after
+    // the new case has risen into focus, and the old one is removed after the fade.
+    let teardown = null;
+    const start = () => {
     const map = new MapLibreMap({
       container: el.current,
       style: baseStyle(bbox, coastline, currentTheme()),
@@ -600,10 +610,15 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
       envLoaded.current = { a: null, b: null };
       lastTau.current = null;
       cache.current = {};
-      map.remove();
+      setTimeout(() => map.remove(), MAP_DEFER_MS + 300);
       mapRef.current = null;
       setReady(false);
     };
+    };
+    const delay = firstMap ? 0 : MAP_DEFER_MS;
+    firstMap = false;
+    const id = setTimeout(() => { teardown = start(); }, delay);
+    return () => { clearTimeout(id); teardown?.(); };
   }, [bbox, coastline]);
 
   // layer toggle: map layers by group, markers by a class on the map

@@ -286,3 +286,30 @@ def test_overview_serves_each_case_finding_from_its_artifacts():
         assert f["best"]["mean_iou"] == at["ranking"][0]["mean_iou"]
         assert f["nearest"]["vessel_key"] == nb["ranking"][0]["vessel_key"]
         assert f["discrimination"] == at["discrimination"]
+
+
+def test_overview_thumbnails_come_from_the_case_artifacts():
+    """Each tile's drawing is selected from the case's own files, never made up."""
+    import json, os
+    for r in client.get("/api/overview").json():
+        d = os.path.join("data", "cases", r["incident_id"])
+        det = json.load(open(os.path.join(d, "detection_result.json")))
+        td = json.load(open(os.path.join(d, "track_display.json")))
+        acq = json.load(open(os.path.join(d, "manifest.json")))["acquired_utc"]
+        th = r["finding"]["thumb"]
+        poly = {(round(x, 4), round(y, 4)) for x, y in det["polygon"]}
+        assert th["slick"] and all(tuple(p) in poly for p in th["slick"])
+        lead = next(v for v in td["vessels"] if v["vessel_key"] == r["finding"]["best"]["vessel_key"])["display_path"]
+        fixes = {(round(p[0], 4), round(p[1], 4)) for p in lead if p[2] <= acq}
+        assert all(tuple(p) in fixes for p in th["lead_path"])
+        assert th["lead_at_image"] is not None and th["nearest_at_image"] is not None
+
+
+def test_benchmark_is_the_validation_report_summary():
+    import json
+    a = json.load(open("docs/validation_report.json"))["attribution"]
+    b = client.get("/api/benchmark").json()
+    assert b["source_present"]["method_top1"] == a["source_present"]["method_top1"]
+    assert b["source_present"]["naive_top1"] == a["source_present"]["naive_top1"]
+    assert b["source_present"]["p_value"] == a["source_present"]["mcnemar"]["p_value"]
+    assert b["source_absent"] == {k: a["source_absent"][k] for k in ("n", "correct_abstentions", "false_named_attributions")}

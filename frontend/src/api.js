@@ -20,6 +20,7 @@ export const api = {
   naiveBaseline: (id) => j(`/incidents/${id}/naive-baseline`),
   tracks: (id) => j(`/incidents/${id}/tracks`),
   overview: () => j('/overview'),
+  benchmark: () => j('/benchmark'),
   // computed frames for the replay map's time slider
   envelopeTimeline: (id) => j(`/incidents/${id}/envelope-timeline`),
   replayTimeline: (id) => j(`/incidents/${id}/replay-timeline`),

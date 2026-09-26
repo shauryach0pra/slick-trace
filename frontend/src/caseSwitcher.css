@@ -1,0 +1,87 @@
+/* The case list as a macOS source list. */
+.sl { display: flex; flex-direction: column; }
+.sl-section { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 10px 6px;
+              font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase;
+              letter-spacing: 0.07em; color: var(--label-3); }
+.sl-count { font-variant-numeric: tabular-nums; font-weight: var(--font-weight-medium); color: var(--label-3); letter-spacing: 0; }
+.sl-wrap { position: relative; }
+.sl-group { margin-bottom: 2px; }
+.sl-group-head { display: flex; align-items: center; gap: 7px; width: 100%; padding: 6px 10px 4px 6px; border: 0; background: transparent;
+                 cursor: default; font: inherit; font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold);
+                 color: var(--label-2); border-radius: 7px; text-align: left; position: relative; z-index: 1; }
+.sl-group-head:hover { color: var(--label-1); background: var(--fill-hover); }
+.sl-group-head:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: -1px; }
+.sl-chev { width: 6px; height: 6px; margin: 0 2px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+           transform: rotate(45deg) translate(-1px, -1px); transition: transform 260ms var(--ease-spring); opacity: 0.7; }
+.sl-group.is-closed .sl-chev { transform: rotate(-45deg); }
+.sl-fam { width: 15px; height: 15px; fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.sl-fam circle[r="1.4"] { fill: var(--accent); stroke: none; }
+.sl-group-name { flex: 1; }
+/* groups open and close by animating their height */
+.sl-rows { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 300ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease; }
+.sl-rows > ul { min-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; }
+.sl-group.is-closed .sl-rows { grid-template-rows: 0fr; opacity: 0; }
+
+.sl-row { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 10px 7px 12px; }
+.sl-row .case-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sl-row .case-id { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); }
+.sl-row .case-description { font-family: var(--font-mono); font-size: 11px; opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sl-outcome { flex: none; width: 17px; height: 17px; display: inline-grid; place-items: center; }
+.sl-outcome svg { width: 17px; height: 17px; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.sl-outcome.is-named svg { stroke: var(--status-green); }
+.sl-outcome.is-named svg circle { fill: rgba(48, 209, 88, 0.14); }
+.sl-outcome.is-abstain svg { stroke: var(--status-orange); }
+.sl-outcome.is-abstain svg circle { fill: rgba(255, 159, 10, 0.14); }
+.sl-fit { flex: none; display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 10.5px;
+          font-variant-numeric: tabular-nums; color: var(--label-2); }
+.sl-fit svg { width: 14px; height: 14px; }
+.sl-fit-track { fill: none; stroke: var(--fill-pressed); stroke-width: 2.2; }
+.sl-fit-arc { fill: none; stroke: #64d2ff; stroke-width: 2.2; stroke-linecap: round; }
+.sl-fit.is-below .sl-fit-arc { stroke: var(--status-orange); }
+/* on the selection, everything takes the selection's colour */
+.sl-row.is-active .case-description, .sl-row.is-active .sl-fit { color: inherit; opacity: 0.85; }
+.sl-row.is-active .sl-outcome svg { stroke: currentColor; }
+.sl-row.is-active .sl-outcome svg circle { fill: rgba(255, 255, 255, 0.2); }
+.sl-row.is-active .sl-fit-arc { stroke: #fff; }
+.sl-row.is-active .sl-fit-track { stroke: rgba(255, 255, 255, 0.3); }
+
+.sl-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: auto; padding: 16px 10px 4px; font-size: var(--font-size-xxs); color: var(--label-3); }
+.sl-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.sl-legend .sl-outcome, .sl-legend .sl-outcome svg { width: 12px; height: 12px; }
+@media (prefers-reduced-motion: reduce) { .sl-rows, .sl-chev { transition: none; } }
+/* the sidebar lays out as a column so the legend sits at its foot */
+.finder-sidebar { display: flex; flex-direction: column; }
+.finder-sidebar > .sl { flex: 1; }
+
+/* the selection glides between rows on a gentle spring, with a soft glow */
+.case-highlight { box-shadow: 0 4px 14px rgba(10, 132, 255, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.25); }
+.case-highlight.is-ready { transition: transform 420ms cubic-bezier(0.34, 1.3, 0.64, 1), height 420ms cubic-bezier(0.34, 1.3, 0.64, 1), opacity 200ms ease; }
+.sl-row { transition: color 200ms ease, background-color 120ms ease, transform 160ms var(--ease-spring); }
+.sl-row:active { transform: scale(0.98); }
+.sl-row.is-active .case-id { font-weight: var(--font-weight-semibold); }
+@media (prefers-reduced-motion: reduce) {
+  .case-highlight.is-ready { transition: none; }
+  .finder-content, .finder-content > .finder-features, .finder-content > .finder-details { transition: none; animation: none; }
+  .finder-content.is-leaving { filter: none; transform: none; }
+  .finder-content.is-leaving::before { animation: none; opacity: 0; }
+}
+
+/* One symbol column and one text column down the whole sidebar: the Overview icon,
+   family symbols and outcome symbols share a 17 px column at 12 px; every label
+   starts 10 px after it. */
+.nav-overview { padding: 8px 10px 8px 12px; gap: 10px; }
+.nav-overview svg { width: 17px; height: 17px; }
+.sl-section { padding: 14px 10px 6px 12px; }
+.sl-group-head { gap: 10px; padding: 8px 10px 4px 12px; }
+.sl-fam { flex: none; width: 17px; height: 17px; }
+.sl-group-head .sl-count { margin-left: auto; }
+.sl-chev { flex: none; margin: 0 2px 0 2px; opacity: 0; transition: transform 260ms var(--ease-spring), opacity 160ms ease; }
+.sl-group-head:hover .sl-chev, .sl-group-head:focus-visible .sl-chev, .sl-group.is-closed .sl-chev { opacity: 0.7; }
+.sl-row { gap: 10px; padding: 7px 10px 7px 12px; }
+.sl-legend { padding: 16px 10px 4px 12px; }
+.nav-overview svg { flex: none; min-width: 17px; }
+
+/* every count - Cases and each group - on one right edge */
+.sl-section, .sl-group-head { padding-right: 12px; }
+.sl-count { min-width: 14px; text-align: right; }
+.sl-chev { margin: 0 4px 0 0; }

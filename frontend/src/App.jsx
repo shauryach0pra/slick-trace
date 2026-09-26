@@ -9,6 +9,7 @@ import FamilyChips from './FamilyChips';
 import ConfidenceBadge from './ConfidenceBadge';
 import { attachStickyHeaders } from './stickyHeaders';
 import { attachTilt } from './tilt';
+import { attachInView } from './inView';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
 import CaseFindingCard from './cards/CaseFindingCard';
@@ -52,6 +53,11 @@ export default function App() {
   useEffect(() => {
     api.listIncidents().then(setIncidents).catch(() => setIncidents([]));
   }, []);
+  // each case's outcome and fit for the sidebar, from the same fields as the overview grid
+  const [summaries, setSummaries] = useState({});
+  useEffect(() => {
+    api.overview().then((rows) => setSummaries(Object.fromEntries(rows.map((r) => [r.incident_id, r.finding])))).catch(() => {});
+  }, []);
   // hover tilt and light for every card, one listener for the app
   useEffect(() => attachTilt(), []);
 
@@ -72,6 +78,8 @@ export default function App() {
 
   // scroll-edge effect on the pinned card headers; the column remounts per case
   useEffect(() => attachStickyHeaders(document.querySelector('.finder-features')), [vid, route.view]);
+  // card motion plays as each card scrolls into view
+  useEffect(() => attachInView(document.querySelector('.finder-content')), [vid, route.view]);
 
   return (
     <div className="app-shell">
@@ -113,7 +121,7 @@ export default function App() {
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
             Overview
           </button>
-          <CaseSwitcher incidents={incidents} active={route.view === 'case' ? incidentId : null} onSelect={openCase} />
+          <CaseSwitcher incidents={incidents} active={route.view === 'case' ? incidentId : null} onSelect={openCase} summaries={summaries} />
         </aside>
 
         {route.view === 'overview' ? (

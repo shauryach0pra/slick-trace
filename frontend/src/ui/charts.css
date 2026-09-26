@@ -34,3 +34,6 @@
 @media (prefers-reduced-motion: reduce) {
   .lc-line { animation: none; stroke-dashoffset: 0; } .lc-area, .lc-dot, .bt-val { animation: none; opacity: 1; } .bt-bar { animation: none; }
 }
+.lc-guide { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.7; transition: x1 420ms cubic-bezier(0.22, 1, 0.36, 1), x2 420ms cubic-bezier(0.22, 1, 0.36, 1); }
+.lc-dot { transition: r 260ms var(--ease-spring); }
+.lc-dot.is-on { filter: drop-shadow(0 0 6px rgba(10, 132, 255, 0.9)); }

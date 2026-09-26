@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCountUp } from './useCountUp';
+import { useInView } from './useInView';
 import './viz.css';
 
 /**
@@ -13,10 +14,12 @@ const reduce = () => typeof window !== 'undefined' && window.matchMedia('(prefer
  * A 270° ring for a 0-1 fit: the arc draws in to the value; a tick marks the
  * gate below which no vessel is named, and a dot marks the runner-up.
  */
-export function FitGauge({ value, gate, secondary = null, tone = 'accent', size = 132, label = 'mean IoU' }) {
+export function FitGauge({ value, gate, secondary = null, tone = 'accent', size = 132, label = 'mean IoU', compact = false }) {
+  // draws and counts when it scrolls into view, not unseen on load
+  const [ref, seen] = useInView();
   const [drawn, setDrawn] = useState(reduce());
-  useEffect(() => { const id = requestAnimationFrame(() => setDrawn(true)); return () => cancelAnimationFrame(id); }, []);
-  const n = useCountUp(value, { decimals: 2 });
+  useEffect(() => { if (!seen) return undefined; const id = requestAnimationFrame(() => setDrawn(true)); return () => cancelAnimationFrame(id); }, [seen]);
+  const n = useCountUp(value, { decimals: 2, run: seen });
   const r = 46, c = 2 * Math.PI * r, span = 0.75;                 // 270° of the circle
   const at = (f) => {                                              // angle along the arc for a fraction
     const a = (135 + 270 * Math.max(0, Math.min(1, f))) * Math.PI / 180;
@@ -26,7 +29,7 @@ export function FitGauge({ value, gate, secondary = null, tone = 'accent', size 
   const [gx1, gy1] = [60 + (r - 9) * Math.cos((135 + 270 * gate) * Math.PI / 180), 60 + (r - 9) * Math.sin((135 + 270 * gate) * Math.PI / 180)];
   const sec = secondary != null ? at(secondary) : null;
   return (
-    <div className={`fitg is-${tone}`} style={{ width: size, height: size }}
+    <div ref={ref} className={`fitg is-${tone}${compact ? ' is-compact' : ''}`} style={{ width: size, height: size }}
          role="img" aria-label={`${label} ${value?.toFixed(2)}, fit gate ${gate}${secondary != null ? `, runner-up ${secondary.toFixed(2)}` : ''}`}>
       <svg viewBox="0 0 120 120" aria-hidden="true">
         <defs>

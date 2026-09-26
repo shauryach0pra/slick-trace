@@ -683,10 +683,19 @@
 }
 .tour-btn:hover { background: var(--control-bg-hover); }
 .tour-btn.is-on { background: var(--accent); color: var(--on-accent); }
-.finder-content { transition: opacity 150ms ease; }
-.finder-content.is-leaving { opacity: 0.25; }
-.finder-content > .finder-features, .finder-content > .finder-details { animation: st-case-in 180ms ease; }
-@keyframes st-case-in { from { opacity: 0; } }
+/* Switching case: the old case softens into the background - dimmer, slightly
+   blurred, a hair smaller - while the next loads; the new case then rises into
+   focus. A thin progress sweep appears only if loading takes more than a beat. */
+.finder-content { position: relative; transition: opacity 240ms ease, filter 240ms ease, transform 240ms cubic-bezier(0.22, 1, 0.36, 1); }
+.finder-content.is-leaving { opacity: 0.4; filter: blur(4px) saturate(0.9); transform: scale(0.992); }
+.finder-content.is-leaving::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; z-index: 20; height: 2px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--accent), #64d2ff, transparent); background-size: 40% 100%; background-repeat: no-repeat;
+  animation: case-load 1100ms 180ms ease-in-out infinite backwards;
+}
+@keyframes case-load { from { background-position: -40% 0; opacity: 1; } to { background-position: 140% 0; opacity: 1; } }
+.finder-content > .finder-features, .finder-content > .finder-details { animation: st-case-in 380ms cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes st-case-in { from { opacity: 0; translate: 0 10px; filter: blur(6px); } }
 
 @media (prefers-reduced-motion: reduce) {
   .finder-content > .finder-features, .finder-content > .finder-details { animation: none; }
@@ -789,3 +798,20 @@
 .finder-features > .card-row > .panel.cg-flash::after { inset: -6px; border-radius: 24px; }
 @media (max-width: 1100px) { .finder-features > .card-row { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .finder-features > .card-row > .panel { animation: none; transform: none; } }
+
+/* ======================================================= scroll-triggered motion */
+/* A card's animations wait, in their start state, until it scrolls into view
+   (inView.js adds is-inview): the card fades up, then its charts draw. */
+:is(.finder-features > .panel, .finder-features > .card-row > .panel, .finder-details > .cg, .finder-details > .panel):not(.is-inview),
+:is(.finder-features > .panel, .finder-features > .card-row > .panel, .finder-details > .cg, .finder-details > .panel):not(.is-inview)
+  :is(.lc-line, .lc-area, .lc-dot, .bt-bar, .bt-val, .fr-dot, .os-glyph-shape, .os-glyph-axis, .cf-pips i, .cv-fill, .pv-bar,
+      .gate-dot, .rv-row, .whatif-row) {
+  animation-play-state: paused;
+}
+:is(.finder-features > .panel, .finder-features > .card-row > .panel):not(.is-inview) .cf-naive.is-struck .cf-key > span::after {
+  animation-play-state: paused;
+}
+/* the card itself arrives from a little lower, once, when first seen */
+.finder-features > .panel, .finder-features > .card-row > .panel, .finder-details > .cg, .finder-details > .panel {
+  animation-delay: 0ms;
+}

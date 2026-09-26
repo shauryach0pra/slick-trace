@@ -1,6 +1,5 @@
 import { Badge, Card, EmptyState } from '../ui/primitives';
 import { HowMeasured } from '../ui/viz';
-import { BarTimeline } from '../ui/charts';
 import './nextObservation.css';
 import { CAPTIONS as C } from '../ui/glossary';
 
@@ -32,16 +31,28 @@ export default function NextObservationCard({ nextObs, closing = false }) {
           <span className="no-eyebrow">Recommended window</span>
           <span className="no-big">+{rec.horizon_hours}<small> h</small></span>
           <span className="no-time">{hhmm(rec.valid_utc)}</span>
-          <div className="no-facts">
-            <span><b>{Math.round(rec.disagreement_score * 100)}%</b> disagreement</span>
-            <span><b>{rec.predicted_overlap_iou.toFixed(2)}</b> predicted overlap</span>
+          <div className="no-pair">
+            <span className="no-vs"><b className="mono">{A}</b><em>vs</em><b className="mono">{B}</b></span>
+            <span className="no-facts"><b>{Math.round(rec.disagreement_score * 100)}%</b> disagreement · <b>{rec.predicted_overlap_iou.toFixed(2)}</b> overlap</span>
           </div>
         </div>
         <figure className="no-fig">
-          <figcaption>How differently the two explanations predict the slick, by window</figcaption>
-          <BarTimeline highlight={rec.horizon_hours} format={(v) => `${Math.round(v * 100)}%`}
-                       bars={nextObs.windows.map((w) => ({ key: w.horizon_hours, label: `+${w.horizon_hours} h`, value: w.disagreement_score }))}
-                       ariaLabel={`Disagreement by window: ${nextObs.windows.map((w) => `plus ${w.horizon_hours} hours ${Math.round(w.disagreement_score * 100)} percent`).join(', ')}; recommended plus ${rec.horizon_hours} hours`} />
+          <figcaption>How differently the two explanations predict the slick, hours after the image</figcaption>
+          <div className="no-bars" role="img"
+               aria-label={`Disagreement by window: ${nextObs.windows.map((w) => `plus ${w.horizon_hours} hours ${Math.round(w.disagreement_score * 100)} percent`).join(', ')}; recommended plus ${rec.horizon_hours} hours`}>
+            <span className="no-origin" aria-hidden="true"><i />image</span>
+            {nextObs.windows.map((w, i) => {
+              const on = w.horizon_hours === rec.horizon_hours;
+              return (
+                <div key={w.horizon_hours} className={`no-col${on ? ' is-on' : ''}`} style={{ '--i': i }}>
+                  {on && <span className="no-sat" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 8h4v4H4zM12 8h4v4h-4zM8 9.5h4v1H8z" /><path d="M10 12v4" className="no-beam" /></svg></span>}
+                  <span className="no-val">{Math.round(w.disagreement_score * 100)}%</span>
+                  <span className="no-track"><i style={{ '--h': w.disagreement_score }} /></span>
+                  <span className="no-lab">+{w.horizon_hours} h</span>
+                </div>
+              );
+            })}
+          </div>
         </figure>
       </div>
       <p className="no-foot">Recommends which evidence would be most telling; it does not task a satellite.</p>

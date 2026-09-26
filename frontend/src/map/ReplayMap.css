@@ -332,3 +332,8 @@
 .fr-var { stroke: #5ac8fa; stroke-width: 1.2; opacity: 0.6; stroke-linecap: round; }
 .fr-nom { stroke: var(--label-1); stroke-width: 2; stroke-linecap: round; }
 .fr-headfill { fill: var(--label-1); }
+
+/* a map created after a case switch fades in rather than appearing abruptly */
+.rmap-canvas .maplibregl-canvas { animation: rmap-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes rmap-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .rmap-canvas .maplibregl-canvas { animation: none; } }

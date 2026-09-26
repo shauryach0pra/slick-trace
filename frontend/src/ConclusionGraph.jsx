@@ -183,12 +183,10 @@ export default function ConclusionGraph(props) {
     return () => ro.disconnect();
   }, [layout]);
 
-  const confirmed = stages.filter((s) => s.state === 'done').length;
   return (
     <section className="cg cgx" aria-label="How the finding was reached">
       <div className="cg-head">
         <h2>Conclusion Graph</h2>
-        <span className="tag">{confirmed} of {stages.length} stages confirmed</span>
       </div>
       <div className="cgx-scroll" tabIndex={0} role="group" style={viewH ? { height: viewH } : undefined}
            aria-label="Pipeline stages, left to right; scroll sideways, and down for the comparison">

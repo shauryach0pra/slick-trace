@@ -56,18 +56,10 @@ for all 25 hours of all nine cases, contours to the 5-decimal rounding the
 artifact applies; the NLP suite returns the same 40 answers. CI now diffs the
 new artifact. Two tests added; 217 pass.
 
-**README brought in line with the repository.** It stated eight cases, four
-families, 197 tests and a 4/4 against 0/4 headline. `CASE_PLAN` defines nine
-cases across five families (along_track_ribbon was missing), 217 tests pass,
+**README brought in line with the repository.** (mirror)
 and validation reports 7/7 against 0/7, exact McNemar p = 0.0156.
 
-**Interface: three displays that showed values nothing computed.**
-`CoveragePanel` printed a null rate (denominator zero, e.g. mistaken promotion
-on absent-source cases, 0/0) as 0.0%; it now reads "not measured".
-`ConclusionGraph` read three fields no artifact has (`detection.iou`,
-`historical.candidates`, `fragility.flip_delta`), so it showed "N/A" and
-"0 candidates" on every case and "Source: null" on abstentions, and drew
-attribution before historical mapping; it is removed, as the verdict band
+**Interface: three displays that showed values nothing computed.** (mirror)
 already states the finding. `api.js` no longer defines `detection` twice.
 
 **Display geometry computed in the pipeline.** The attribution stage now also
@@ -423,6 +415,85 @@ into its own disclosure.
 Slick Trace gets a one-line caption, suggestion chips that stay after the first answer, readable
 questions instead of a terminal prompt, and a rounded field with a send button; the refusal still
 declines. Naive vs Forward-Replay gets a short caption for each state, with its definitions folded.
+
+**Design step 6: motion that plays when you arrive.** Every card's animations - lines drawing,
+bars and funnels growing, the dot matrix, the fingerprint outline, pips - wait paused until the
+card scrolls into view, and the card fades up as it arrives; counters and the fit gauge start
+when they are seen. Previously everything played on load, unseen below the fold. Without
+IntersectionObserver, or under reduced motion, everything is simply shown.
+
+**The sidebar as a macOS source list.** Cases are grouped by family in collapsible sections, each
+with a symbol and count. Every row shows the system's own outcome - a vessel named or an
+abstention - the vessel it named and a mini ring of its fit, from the same overview fields as the
+grid, so a wrongly named case still reads as named. The selection follows rows through collapsing
+groups and hides when its group is closed; a small legend explains the symbols.
+
+**Smoother case switching.** The leaving case softens into the background - dimmer, lightly
+blurred, a hair smaller - and a thin progress sweep appears only if the next takes more than a
+beat to load; the new case then rises into focus. The sidebar selection glides between rows on a
+gentle spring with a soft glow. Reduced motion turns all of it off.
+
+**The case switch no longer freezes.** Profiling showed the stall was the map, not the
+transition: each switch tore down one WebGL map and compiled another in the same instant the
+animation ran (React's render was ~2% of it). The new map is now created just after the new case
+has risen into focus, and fades in; the old one is removed after the fade. The first map on load
+is unchanged. Measured in a software-rendered browser, the switch settles in 0.9 s instead of
+6.2 s, and the longest stalled frame fell from 1.6 s to 0.3 s.
+
+**Sidebar alignment.** One symbol column and one text column run the length of the sidebar:
+the Overview icon, family symbols and outcome symbols share a 17 px column, and every label
+starts at the same x. The disclosure chevron moves to each group's trailing edge, shown on hover
+and while collapsed, as in Finder.
+
+**The overview, redesigned.** A header of benchmark figures served from the validation report
+(/api/benchmark): sources named by forward replay against the proximity baseline, correct
+abstentions with the wrongly named case stated, and cases named. Each tile says what its case
+tests (the family's design, never which vessel), draws a radar-style thumbnail of the case's own
+geometry - the detected slick, the best-fitting vessel's track to the image, the proximity pick -
+from a new thumb block in /api/overview, and shows its fit gauge and outcome. Tests tie the
+thumbnails and the benchmark figures to their source files. 359 tests pass.
+
+**The overview tiles, as they were, with what each case is.** The previous tiles are restored,
+each now leading with its scenario - what the case tests - and a line of facts: the image time,
+vessels tracked and candidates replayed. The overview and benchmark endpoints stay available.
+
+**A brief overview and a quieter sidebar.** Each overview tile now shows only the case, what it
+tests and one sentence on what happened, built from its result, with the same outcome symbol as
+the sidebar (one shared component). The sidebar drops its fit rings, and every count sits on one
+right edge.
+
+**Tile text tidied.** The scenario stays on one line (tiles widened so none truncate); the
+outcome sentence may wrap to two lines; and it is always the same colour, including for
+abstentions - an override that had picked it out in amber is removed. A leftover unused style
+rule from an earlier design pass is deleted.
+
+**One paragraph per case, three per row.** Each overview tile now reads as a single paragraph: what
+the case tests, fully explained; that case's own facts - vessels tracked and replayed, the nearest
+vessel at image time and how far away - and what forward replay concluded, with its fit and
+variant wins. So no two cases read alike. The grid is fixed at three per row (nine cases make an
+exact 3 x 3), dropping to two or one only on narrow windows.
+
+**Batch 1 of the card redesign.** Case Finding is rebuilt: the named vessel beside its fit gauge,
+three fact tiles (variants won, lead over the runner-up, time inside the origin area) and the
+proximity pick set aside on its own row - with every text column free to wrap, so nothing leaves
+the card (checked in all nine cases). The reveal drops its closing sentence and glides: rows and
+bars ease on a decelerating curve, staggered, and labels cross-fade. The Conclusion Graph loses
+its stage-count badge. Ask behaves like a chat: a tapped or typed question appears at once, a
+typing indicator follows, and the reply arrives below it; suggestions sit on one scrolling row.
+
+**Batch 2 of the card redesign.** Observed Scene puts the scene's facts on the image as a
+viewfinder HUD, with a radar sweep as it comes into view, and fills the fingerprint panel with the
+shape, area and a grid of measurements. Rank Fragility draws the smallest flipping change on its
+assumption's track of tested values, and explores by assumption tabs and tappable stops. Forward
+Exposure is interactive: a +6/+12/+24 h control drives the counting spread figure, the chart's
+highlighted hour and animated share bars for each sensitive area and the shoreline.
+
+**Batch 3 of the card redesign.** Coverage-Aware Matching shows each rate as two concentric
+activity rings (vessels hidden outside, area goes dark inside) with the better direction marked;
+counts move to hovers and the disclosure. Traffic Filtering shows one dot per vessel, stage by
+stage, down to the one named - or none - with its provenance as four compact chips. Next
+Observation gains a time axis from the image, ghost tracks behind each window's disagreement and a
+satellite over the recommended window, with the two vessels it would separate as chips.
 
 ---
 

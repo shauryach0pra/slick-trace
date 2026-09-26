@@ -34,3 +34,37 @@
 .mono { font-family: var(--font-mono); }
 @media (max-width: 900px) { .fr { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .fr-dot { animation: none; } }
+
+/* ---- redesign: the flipping change on its axis track; explore by axis tabs and stops */
+.fr-flip2 { margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: rgba(255, 159, 10, 0.08); box-shadow: inset 0 0 0 0.5px rgba(255, 159, 10, 0.35); }
+.fr-flip2-head { display: flex; flex-direction: column; gap: 2px; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--label-1); }
+.fr-flip2-head em { font-style: normal; font-weight: var(--font-weight-regular, 400); font-size: var(--font-size-xs); color: var(--label-2); }
+.fr-track { margin-top: 12px; }
+.fr-track-name { display: block; font-size: var(--font-size-xxs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--label-3); margin-bottom: 8px; }
+.fr-track-line { position: relative; display: flex; justify-content: space-between; align-items: flex-start; padding: 0 4px; }
+.fr-track-rail { position: absolute; left: 14px; right: 14px; top: 9px; height: 2px; border-radius: 1px; background: var(--fill-pressed); }
+.fr-stop { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 20px; border: 0; padding: 0;
+           background: none; font: inherit; cursor: default; color: var(--label-2); animation: fr-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+           animation-delay: calc(var(--i) * 60ms); }
+.fr-stop i { width: 20px; height: 20px; border-radius: 50%; transition: transform 200ms var(--ease-spring), box-shadow 200ms ease; }
+.fr-stop span { font-family: var(--font-mono); font-size: var(--font-size-xxs); }
+.fr-stop.is-nominal i { background: var(--card-bg, var(--content-bg)); box-shadow: inset 0 0 0 2px var(--label-2); }
+.fr-stop.is-nominal span { color: var(--label-1); font-weight: var(--font-weight-semibold); }
+.fr-stop.is-held i { background: linear-gradient(135deg, #0a84ff, #64d2ff); box-shadow: 0 0 8px rgba(10, 132, 255, 0.45); }
+.fr-stop.is-flip i { background: linear-gradient(135deg, #ff9f0a, #ffd60a); box-shadow: 0 0 8px rgba(255, 159, 10, 0.55); }
+.fr-stop.is-mark i { box-shadow: 0 0 0 3px var(--card-bg, var(--content-bg)), 0 0 0 5px #ff9f0a, 0 0 14px rgba(255, 159, 10, 0.7); }
+.fr-stop.is-mark span { color: #ff9f0a; font-weight: var(--font-weight-semibold); }
+button.fr-stop:hover i { transform: scale(1.15); }
+button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i { box-shadow: 0 0 0 3px var(--accent-ring); }
+.fr-stop.is-sel i { transform: scale(1.2); box-shadow: 0 0 0 3px var(--card-bg, var(--content-bg)), 0 0 0 5px var(--accent); }
+.fr-explore { margin-top: var(--space-5); padding-top: var(--space-4); border-top: 0.5px solid var(--separator); }
+.fr-explore-label { display: block; margin-bottom: 8px; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--label-1); }
+.fr-tabs { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 2px; border-radius: 9px; background: var(--fill-pressed); }
+.fr-tab { height: 26px; padding: 0 11px; border: 0; border-radius: 7px; cursor: default; font: inherit; font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-medium); color: var(--label-1); background: transparent; transition: background-color 150ms ease, box-shadow 150ms ease; }
+.fr-tab.is-on { background: var(--control-bg); box-shadow: var(--shadow-control); }
+.fr-tab:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 1px; }
+.fr-explore .fr-track { margin-top: 14px; max-width: 520px; }
+.fr-selected { margin: 12px 0 0; min-height: 20px; font-size: var(--font-size-sm); color: var(--label-3); }
+.fr-selected.is-on { color: var(--label-1); animation: rv-sub-in 320ms ease both; }
+@media (prefers-reduced-motion: reduce) { .fr-stop { animation: none; } }

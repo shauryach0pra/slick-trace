@@ -29,3 +29,7 @@
 .howto-body dt { color: var(--label-1); font-weight: var(--font-weight-semibold); }
 .howto-body dd { margin: 0 0 4px; }
 @keyframes howto-in { from { opacity: 0; translate: 0 -4px; } }
+
+.fitg.is-compact .fitg-num { font-size: 17px; }
+.fitg.is-compact .fitg-label { font-size: 8px; }
+.fitg.is-compact .fitg-arc, .fitg.is-compact .fitg-track { stroke-width: 11; }
