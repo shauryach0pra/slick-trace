@@ -28,7 +28,8 @@ function Rings({ outer, inner, title, better, nOuter, nInner }) {
       <g className={cls}>
         <circle r={r} className="cv-ring-track" />
         {v == null ? <circle r={r} className="cv-ring-none" /> :
-          <circle r={r} className="cv-ring-arc" strokeDasharray={`${c * Math.max(0.004, Math.min(1, v))} ${c}`} transform="rotate(-90)" />}
+          <circle r={r} className="cv-ring-arc" style={{ stroke: `url(#cv-${cls === 'is-outer' ? 'b' : 'y'}-${title.length})` }}
+                  strokeDasharray={`${c * Math.max(0.004, Math.min(1, v))} ${c}`} transform="rotate(-90)" />}
       </g>
     );
   };
@@ -36,13 +37,17 @@ function Rings({ outer, inner, title, better, nOuter, nInner }) {
   return (
     <figure className="cv-rate">
       <svg viewBox="-50 -50 100 100" role="img" aria-label={`${title}: vessels hidden ${pct(outer)} (${nOuter}), area goes dark ${pct(inner)} (${nInner}); ${better} is better`}>
+        <defs>
+          <linearGradient id={`cv-b-${title.length}`} x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#0a84ff" /><stop offset="1" stopColor="#64d2ff" /></linearGradient>
+          <linearGradient id={`cv-y-${title.length}`} x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#ff9f0a" /><stop offset="1" stopColor="#ffd60a" /></linearGradient>
+        </defs>
         {ring(40, outer, 'is-outer')}
         {ring(28, inner, 'is-inner')}
       </svg>
       <figcaption>
         <b>{title}</b>
         <span className="cv-vals"><i className="is-outer" title={`vessels hidden: ${nOuter}`}>{pct(outer)}</i><i className="is-inner" title={`area goes dark: ${nInner}`}>{pct(inner)}</i></span>
-        <span className={`cv-better is-${better}`}>{better} is better</span>
+        <span className={`cv-better is-${better}`}>{better === 'higher' ? '↑' : '↓'} {better} is better</span>
       </figcaption>
     </figure>
   );

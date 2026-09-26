@@ -37,28 +37,26 @@ export default function ForecastCard({ forecast }) {
           caption="Where the oil is modelled to drift after the image.">
       <div className="fx-chips">
         <span className={`fx-chip${firstArea ? ' is-warn' : ''}`}>
-          {firstArea ? <>Reaches the {firstArea[0].replace(' (synthetic)', '').toLowerCase()} by <b>+{firstArea[1]} h</b></> : <>No sensitive-area contact within {last} h</>}</span>
+          {firstArea ? <>{firstArea[0].replace(' (synthetic)', '')} reached · <b>+{firstArea[1]} h</b></> : <>No sensitive-area contact within {last} h</>}</span>
         <span className={`fx-chip${firstShore != null ? ' is-warn' : ''}`}>
-          {firstShore != null ? <>Reaches the shoreline by <b>+{firstShore} h</b></> : <>No shoreline contact within {last} h</>}</span>
-        <span className="fx-chip is-mode">{forecast.forcing_mode.split(' — ')[0]} — not an operational forecast</span>
-      </div>
-
-      <div className="fx-live">
-        <div className="fx-seg" role="tablist" aria-label="Hours after the image">
-          {hs.map((x, i) => (
-            <button key={x.horizon_hours} type="button" role="tab" aria-selected={i === hi} className={i === hi ? 'is-on' : ''}
-                    onClick={() => setHi(i)}>+{x.horizon_hours} h</button>
-          ))}
-          <span className="fx-seg-thumb" style={{ '--i': hi }} aria-hidden="true" />
-        </div>
-        <span className="fx-when">{hhmm(h.valid_utc)}</span>
+          {firstShore != null ? <>Shoreline reached · <b>+{firstShore} h</b></> : <>No shoreline contact within {last} h</>}</span>
+        <span className="fx-chip is-mode" title={forecast.forcing_mode}>Retrospective field, not a forecast</span>
       </div>
 
       <div className="fx-board">
         <div className="fx-hero">
-          <span className="fx-hero-label">Modelled spread</span>
+          <div className="fx-hero-head">
+            <span className="fx-hero-label">Modelled spread</span>
+            <div className="fx-seg" role="tablist" aria-label="Hours after the image">
+              {hs.map((x, i) => (
+                <button key={x.horizon_hours} type="button" role="tab" aria-selected={i === hi} className={i === hi ? 'is-on' : ''}
+                        onClick={() => setHi(i)}>+{x.horizon_hours} h</button>
+              ))}
+              <span className="fx-seg-thumb" style={{ '--i': hi }} aria-hidden="true" />
+            </div>
+          </div>
           <span className="fx-hero-big"><Count value={h.envelope_area_km2} /><small> km²</small></span>
-          <LineChart xs={xs} yMax={spreadMax} yFormat={(v) => `${Math.round(v)}`} highlight={hi}
+          <LineChart xs={xs} yMax={spreadMax} yFormat={(v) => `${Math.round(v)}`} highlight={hi} height={124}
                      series={[{ name: 'Modelled spread (km²)', tone: 'accent', area: true, values: hs.map((x) => x.envelope_area_km2) }]}
                      ariaLabel={`Modelled spread: ${hs.map((x) => `${x.envelope_area_km2} square kilometres at plus ${x.horizon_hours} hours`).join(', ')}`} />
         </div>
@@ -71,6 +69,7 @@ export default function ForecastCard({ forecast }) {
               <span className="fx-share-val">{x.v > 0 && x.v < 0.005 ? '<1' : Math.round(x.v * 100)}%</span>
             </div>
           ))}
+          <span className="fx-when">{hhmm(h.valid_utc)}</span>
         </div>
       </div>
       <HowMeasured>

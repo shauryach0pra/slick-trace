@@ -49,14 +49,18 @@ export default function FragilityCard({ fragility, attribution }) {
           <span className="fr-big"><Count value={pct} />%</span>
           <span className="fr-hero-label">of {fragility.n_points_tested} tested changes kept
             {' '}<b className="mono">{fragility.baseline_top}</b>{unnamed ? ' (unnamed best fit)' : ''} in the lead</span>
-          <div className="fr-legend">
-            <span><i className="is-held" />lead held</span><span><i className="is-flip" />lead flipped</span>
-            {flip && <span><i className="is-first" />smallest flip</span>}
+          <div className="fr-counts">
+            <span className="is-held"><i /><b>{fragility.n_points_tested - fragility.n_points_flipped}</b> held the lead</span>
+            <span className="is-flip"><i /><b>{fragility.n_points_flipped}</b> flipped it</span>
           </div>
           {flip ? (
             <div className="fr-flip2">
-              <span className="fr-flip2-head">Smallest change that flips it
-                <em><b className="mono">{flip.top_candidate}</b> leads instead · magnitude {flip.magnitude}</em></span>
+              <div className="fr-flip2-top">
+                <b>Smallest flip</b><span className="fr-flip2-mag">magnitude {flip.magnitude}</span>
+              </div>
+              <span className="fr-flip2-line">
+                {Object.entries(flip.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(' + ')} → <b className="mono">{flip.top_candidate}</b> leads
+              </span>
               {Object.entries(flip.changed_axes).map(([k, v]) => (
                 <AxisTrack key={k} axis={k} fragility={fragility} label={label} mark={v} readOnly />
               ))}
@@ -119,6 +123,10 @@ function FlipMatrix({ fragility, label }) {
         ))}
       </div>
       <span className="fr-axis"><span>smallest change</span><span>largest</span></span>
+      <div className="fr-legend fr-legend-grid">
+        <span><i className="is-held" />lead held</span><span><i className="is-flip" />lead flipped</span>
+        {fragility.smallest_flip && <span><i className="is-first" />smallest flip</span>}
+      </div>
       <p className={`fr-readout${hover ? ' is-on' : ''}`}>{hover ? describe(hover) : 'Hover a dot to see that change.'}</p>
     </div>
   );

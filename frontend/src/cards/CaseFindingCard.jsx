@@ -30,36 +30,9 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
 
   return (
     <Card title="Case Finding" badge={badge} className={`finding cf2${unknown ? ' is-abstain' : ''}`}>
-      {unknown && (
-        // A deliberate outcome, drawn as one - keyed on the system's own output
-        // (unknown_source), never on the case's family.
-        <div className="abstain-block" role="status">
-          <div className="abstain-head">
-            <svg className="abstain-mark" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" /><path d="M5.5 10h9" /></svg>
-            <span>
-              <strong>The system abstains</strong>
-              <em>No candidate's replayed release meets the fit gate, so no vessel is named.</em>
-            </span>
-          </div>
-          <div className="gate-meter" aria-label={`Mean IoU of each replayed candidate against the fit gate of ${gate}`}>
-            <div className="gate-track">
-              <span className="gate-zone" style={{ left: `${gate * 100}%` }}><i>would be named</i></span>
-              <span className="gate-tick" style={{ left: `${gate * 100}%` }} />
-              {attribution.ranking.map((r) => (
-                <span key={r.vessel_key} className={`gate-dot${r === top ? ' is-best' : ''}`}
-                      style={{ left: `${Math.max(0, Math.min(1, r.mean_iou)) * 100}%` }} title={`${r.vessel_key}: mean IoU ${r.mean_iou.toFixed(3)}`} />
-              ))}
-            </div>
-            <div className="gate-scale">
-              <span style={{ left: 0 }}>0</span><span className="is-gate" style={{ left: `${gate * 100}%` }}>gate {gate}</span><span style={{ left: '100%' }}>1</span>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="cf2-hero">
         <div className="cf2-main">
-          <span className="cf2-eyebrow">{unknown ? 'Forward replay' : 'Forward replay names'}</span>
+          <span className="cf2-eyebrow">{unknown ? 'The system abstains' : 'Forward replay names'}</span>
           <span className="cf2-key">{unknown ? 'No vessel named' : top?.vessel_key}</span>
           <span className="cf2-why">{unknown
             ? `The best of ${nCandidates} replayed candidates fits at ${top?.mean_iou.toFixed(2) ?? '—'}, below the gate of ${gate}.`
@@ -69,7 +42,25 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
                   tone={unknown ? 'warning' : 'accent'} size={132} />
       </div>
 
-      {!unknown && (
+      {unknown ? (
+        <div className="cf2-tiles">
+          <div className="cf2-tile">
+            <span className="cf2-tile-label">Best fit</span>
+            <span className="cf2-tile-big">{top?.mean_iou.toFixed(2) ?? '—'}</span>
+            <span className="cf2-tile-sub">mean IoU of the best replay</span>
+          </div>
+          <div className="cf2-tile">
+            <span className="cf2-tile-label">Fit gate</span>
+            <span className="cf2-tile-big">{gate}</span>
+            <span className="cf2-tile-sub">needed to name a vessel</span>
+          </div>
+          <div className="cf2-tile">
+            <span className="cf2-tile-label">Short of the gate by</span>
+            <span className="cf2-tile-big">{top ? (gate - top.mean_iou).toFixed(2) : '—'}</span>
+            <span className="cf2-tile-sub">across {nCandidates} replayed candidates</span>
+          </div>
+        </div>
+      ) : (
         <div className="cf2-tiles">
           <div className="cf2-tile">
             <span className="cf2-tile-label">Forcing variants won</span>
@@ -99,9 +90,6 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
         </div>
       )}
 
-      <p className="cf2-foot">{unknown
-        ? 'Declining is the output when no replayed release fits well enough; the source may be outside the data.'
-        : 'A lead for an analyst, not proof of responsibility.'}</p>
       <HowMeasured>
         <dl>
           <dt>Proximity pick</dt><dd>{C.distance}</dd>

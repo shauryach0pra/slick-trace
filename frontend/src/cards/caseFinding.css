@@ -39,3 +39,9 @@
 .cf2-foot { margin: 14px 0 0; font-size: var(--font-size-sm); color: var(--label-2); }
 @media (max-width: 900px) { .cf2-hero { flex-direction: column; align-items: flex-start; } .cf2-tiles { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .cf2-pips i, .cf2-naive.is-struck .cf2-naive-key > span::after { animation: none; } }
+
+/* the abstention in the same layout as every other case, in amber */
+.cf2.is-abstain .cf2-eyebrow { color: #ffb340; }
+.cf2.is-abstain .cf2-key { background: linear-gradient(90deg, #ff9f0a, #ffd60a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cf2.is-abstain .cf2-tile { background: rgba(255, 159, 10, 0.08); box-shadow: inset 0 0 0 0.5px rgba(255, 159, 10, 0.3); }
+.cf2.is-abstain .cf2-tile-big { color: #ffb340; }

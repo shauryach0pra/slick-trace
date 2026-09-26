@@ -68,3 +68,64 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 .fr-selected { margin: 12px 0 0; min-height: 20px; font-size: var(--font-size-sm); color: var(--label-3); }
 .fr-selected.is-on { color: var(--label-1); animation: rv-sub-in 320ms ease both; }
 @media (prefers-reduced-motion: reduce) { .fr-stop { animation: none; } }
+
+/* both columns share one height, so the flip box's foot lines up with the matrix column's foot */
+.fr { align-items: stretch; }
+.fr-matrix-wrap { display: flex; flex-direction: column; }
+.fr-matrix-wrap .fr-readout { margin-top: auto; margin-bottom: 0; }
+.fr-hero { justify-content: flex-start; }
+.fr-hero .fr-flip2 { margin-top: auto; }
+
+/* explore one setting across the full width: the tabs share it equally, and the track of
+   tested values stretches edge to edge */
+.fr-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); width: 100%; box-sizing: border-box; }
+.fr-tab { width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fr-explore .fr-track { max-width: none; }
+/* every stop the same width, so the tested values are spaced exactly evenly */
+.fr-stop { width: 52px; min-width: 52px; }
+/* the readout's text itself sits on the shared foot line (a longer description grows upwards) */
+.fr-matrix-wrap .fr-readout { min-height: 0; line-height: 1.35; }
+
+/* the right column: the hero, two counts, then the flip box - with an even rhythm */
+.fr-hero { gap: 0; }
+.fr-hero .fr-hero-label { margin-top: 6px; max-width: 40ch; }
+.fr-counts { display: flex; gap: 22px; margin-top: 16px; }
+.fr-counts span { display: inline-flex; align-items: center; gap: 8px; font-size: var(--font-size-sm); color: var(--label-2); }
+.fr-counts i { width: 10px; height: 10px; border-radius: 50%; }
+.fr-counts .is-held i { background: linear-gradient(135deg, #0a84ff, #64d2ff); box-shadow: 0 0 6px rgba(10, 132, 255, 0.5); }
+.fr-counts .is-flip i { background: linear-gradient(135deg, #ff9f0a, #ffd60a); box-shadow: 0 0 6px rgba(255, 159, 10, 0.5); }
+.fr-counts b { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--label-1); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.fr-hero .fr-flip2 { margin-top: auto; }
+.fr-counts { margin-bottom: 22px; }   /* at least this much air above the flip box */
+/* the grid's legend, under the grid */
+.fr-legend-grid { margin-top: 10px; gap: 12px; font-size: var(--font-size-xxs); }
+.fr-legend-grid i { width: 8px; height: 8px; }
+
+/* the grid's column is exactly as wide as the grid: the hover description adds no width of its own
+   (width 0, filling the column), so nothing to its right moves when a dot is hovered */
+.fr { grid-template-columns: max-content minmax(0, 1fr); }
+.fr-matrix-wrap .fr-readout { width: 0; min-width: 100%; max-width: none; }
+
+/* counts at text size, not display size */
+.fr-counts { gap: 18px; margin-top: 14px; margin-bottom: 18px; }
+.fr-counts span { font-size: var(--font-size-sm); }
+.fr-counts b { font-family: inherit; font-size: inherit; font-weight: var(--font-weight-semibold); letter-spacing: 0; }
+.fr-counts i { width: 8px; height: 8px; }
+
+/* a compact smallest-flip box */
+.fr-flip2 { padding: 12px 14px 10px; border-radius: 12px; }
+.fr-flip2-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fr-flip2-top b { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--label-1); }
+.fr-flip2-mag { padding: 1px 8px; border-radius: 999px; font-size: var(--font-size-xxs); color: #ffb340; background: rgba(255, 159, 10, 0.14); white-space: nowrap; }
+.fr-flip2-line { display: block; margin-top: 3px; font-size: var(--font-size-xs); color: var(--label-2); }
+.fr-flip2-line b { color: var(--label-1); }
+.fr-flip2 .fr-track { margin-top: 10px; }
+.fr-flip2 .fr-track-name { display: none; }
+.fr-flip2 .fr-track-rail { top: 7px; }
+.fr-flip2 .fr-stop { gap: 4px; }
+.fr-flip2 .fr-stop i { width: 14px; height: 14px; }
+.fr-flip2 .fr-stop.is-mark i { box-shadow: 0 0 0 2px var(--card-bg, var(--content-bg)), 0 0 0 3.5px #ff9f0a, 0 0 10px rgba(255, 159, 10, 0.6); }
+.fr-flip2 .fr-stop span { font-size: 10px; }
+/* room for the longest description (three lines) is reserved, text sitting at the bottom:
+   hovering never changes the card's height, so nothing below it moves either */
+.fr-matrix-wrap .fr-readout { min-height: calc(3 * 1.35em); display: flex; align-items: flex-end; }

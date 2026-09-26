@@ -437,23 +437,14 @@ function placeShips(map, ships, ctx) {
 
 /** The model's forcing: one uniform current, and the six variants that perturb it. */
 function ForcingRose({ forcing }) {
+  // the model's forcing as a small chip: an arrow along the current, and its speed
   const kn = Math.hypot(forcing.u_ms, forcing.v_ms) * 1.943844;
   const bearing = Math.round(((Math.atan2(forcing.u_ms, forcing.v_ms) * 180) / Math.PI + 360) % 360);
-  const S = 150;                                           // px per m/s, for the drawing only
-  const vec = (u, v) => [40 + u * S, 40 - v * S];
   return (
-    <div className="rmap-forcing" aria-label={`Model forcing: one uniform current, ${kn.toFixed(2)} knots toward ${bearing} degrees, with six variants`}>
-      <svg viewBox="0 0 80 80" width="80" height="80" aria-hidden="true">
-        <circle cx="40" cy="40" r="34" className="fr-ring" />
-        {forcing.variants.filter((x) => x.du_ms || x.dv_ms).map((x) => {
-          const [ex, ey] = vec(forcing.u_ms + x.du_ms, forcing.v_ms + x.dv_ms);
-          return <line key={x.name} x1="40" y1="40" x2={ex} y2={ey} className="fr-var" />;
-        })}
-        {(() => { const [ex, ey] = vec(forcing.u_ms, forcing.v_ms); return <line x1="40" y1="40" x2={ex} y2={ey} className="fr-nom" markerEnd="url(#fr-head)" />; })()}
-        <defs><marker id="fr-head" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto">
-          <path d="M0 0L6 3L0 6Z" className="fr-headfill" /></marker></defs>
-      </svg>
-      <span><strong>Uniform current</strong>{kn.toFixed(2)} kn toward {bearing}° · 6 forcing variants</span>
+    <div className="rmap-forcing" title={`Uniform current: ${kn.toFixed(2)} kn toward ${bearing}°, the same everywhere; 6 forcing variants perturb it`}
+         aria-label={`Model forcing: one uniform current, ${kn.toFixed(2)} knots toward ${bearing} degrees`}>
+      <svg viewBox="0 0 16 16" aria-hidden="true" style={{ transform: `rotate(${bearing}deg)` }}><path d="M8 13V3M4.5 6.5 8 3l3.5 3.5" /></svg>
+      {kn.toFixed(2)} kn
     </div>
   );
 }
@@ -760,14 +751,23 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     <div className={`rmap${Object.entries(hidden).filter(([, v]) => v).map(([k]) => ` hide-${k}`).join('')}`}>
       <div ref={el} className="rmap-canvas" role="img"
            aria-label={`Map of the scene, ${bbox.min_lon}–${bbox.max_lon}° E, ${bbox.min_lat}–${bbox.max_lat}° N. ${label}`} />
-      <div className="rmap-label">
-        <span className="rmap-base">
-          {mode === 'imagery' && 'Real satellite imagery · case data is synthetic'}
-          {mode === 'offline' && 'Offline basemap: real coastline · add an Esri key for imagery'}
-          {mode === 'imagery-failed' && 'Imagery unavailable · showing real coastline'}
-        </span>
-        <span className="rmap-phase">{label}</span>
-      </div>
+      {(() => {
+        // "Observed · the image: …" becomes a coloured tag and its description, on one line
+        const [head, ...rest] = String(label ?? '').split(' · ');
+        const text = rest.join(' · ');
+        const tone = /^observed/i.test(head) ? 'observed' : 'modelled';
+        return (
+          <div className="rmap-label" title={label}>
+            <span className={`rmap-tag is-${tone}`}><i />{head}</span>
+            {text && <span className="rmap-phase">{text.charAt(0).toUpperCase() + text.slice(1)}</span>}
+            <span className="rmap-base">
+              {mode === 'imagery' && 'real imagery · synthetic case'}
+              {mode === 'offline' && 'offline coastline'}
+              {mode === 'imagery-failed' && 'imagery unavailable'}
+            </span>
+          </div>
+        );
+      })()}
       <div className="rmap-sweep" aria-hidden="true"><span /></div>
       {fan?.forcing && !hidden.forcing && <ForcingRose forcing={fan.forcing} />}
       <div className="rmap-layers">

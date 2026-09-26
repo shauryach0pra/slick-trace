@@ -83,3 +83,42 @@
            color: var(--label-1); background: var(--fill-pressed); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pv-chip em { font-style: normal; font-size: var(--font-size-xxs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--label-3); }
 @media (prefers-reduced-motion: reduce) { .cv-ring-arc, .pv-dot { animation: none; } }
+
+/* Coverage in the dashboard's own palette: teal for vessels hidden (the calm member of the blue
+   family), amber for area goes dark (the adverse condition, in the caveat colour) - no violet */
+.is-outer .cv-ring-arc { stroke: #40c8e0; filter: drop-shadow(0 0 5px rgba(64, 200, 224, 0.55)); }
+.is-inner .cv-ring-arc { stroke: #ffb340; filter: drop-shadow(0 0 5px rgba(255, 159, 10, 0.5)); }
+.cv-vals .is-outer { color: #40c8e0; }
+.cv-vals .is-inner { color: #ffb340; }
+.cv-key i.is-outer { background: #40c8e0; }
+.cv-key i.is-inner { background: #ffb340; }
+:root[data-theme="light"] .is-outer .cv-ring-arc, .theme-light .is-outer .cv-ring-arc { stroke: #1fa3bd; }
+:root[data-theme="light"] .is-inner .cv-ring-arc, .theme-light .is-inner .cv-ring-arc { stroke: #f08c00; }
+:root[data-theme="light"] .cv-vals .is-outer { color: #1592ab; }
+:root[data-theme="light"] .cv-vals .is-inner { color: #d97800; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .is-outer .cv-ring-arc { stroke: #1fa3bd; }
+  :root:not([data-theme="dark"]) .is-inner .cv-ring-arc { stroke: #f08c00; }
+  :root:not([data-theme="dark"]) .cv-vals .is-outer { color: #1592ab; }
+  :root:not([data-theme="dark"]) .cv-vals .is-inner { color: #d97800; }
+}
+
+/* Coverage in the project's own blue and yellow - the same gradients as the rest of the dashboard
+   (set inline on each ring); the values and legend match */
+.is-outer .cv-ring-arc { filter: drop-shadow(0 0 5px rgba(10, 132, 255, 0.5)); }
+.is-inner .cv-ring-arc { filter: drop-shadow(0 0 5px rgba(255, 159, 10, 0.5)); }
+.cv-vals .is-outer { color: #409cff; }
+.cv-vals .is-inner { color: #ffb340; }
+.cv-key i.is-outer { background: linear-gradient(135deg, #0a84ff, #64d2ff); }
+.cv-key i.is-inner { background: linear-gradient(135deg, #ff9f0a, #ffd60a); }
+:root[data-theme="light"] .cv-vals .is-outer { color: #0a6fd8; }
+:root[data-theme="light"] .cv-vals .is-inner { color: #d97800; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .cv-vals .is-outer { color: #0a6fd8; }
+  :root:not([data-theme="dark"]) .cv-vals .is-inner { color: #d97800; }
+}
+/* tidy columns: every title takes the same two-line space, so the values line up across all
+   three; the hint sits on one line in normal case (its arrow is in the text) */
+.cv-rate figcaption b { display: flex; align-items: center; justify-content: center; min-height: 2.6em; line-height: 1.3; }
+.cv-rate .cv-better { white-space: nowrap; text-transform: none; letter-spacing: 0; font-size: var(--font-size-xs); }
+.cv-rate .cv-better::before { content: none; }

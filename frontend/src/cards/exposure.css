@@ -45,3 +45,16 @@
                 font-variant-numeric: tabular-nums; color: var(--label-1); }
 @media (max-width: 900px) { .fx-board { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .fx-seg-thumb, .fx-share-track i { transition: none; } }
+
+/* tighter: the chips on one row, the hour control in the chart panel's header,
+   the share panel filled from the top with the time at its foot */
+.fx-chips { flex-wrap: nowrap; overflow: hidden; margin-bottom: 14px; }
+.fx-chip { white-space: nowrap; flex: none; }
+.fx-hero-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fx-hero-head .fx-seg { grid-auto-columns: 60px; }
+.fx-hero-head .fx-seg button { height: 24px; font-size: var(--font-size-xs); }
+.fx-hero-head .fx-seg-thumb { width: 60px; transform: translateX(calc(var(--i) * 60px)); }
+.fx-hero, .fx-shares { padding: 14px 16px; }
+.fx-hero-big { font-size: 36px; margin: 4px 0 2px; }
+.fx-shares { justify-content: flex-start; gap: 16px; }
+.fx-shares .fx-when { margin-top: auto; font-family: var(--font-mono); font-size: var(--font-size-xs); color: var(--label-3); }

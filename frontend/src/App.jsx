@@ -18,7 +18,6 @@ import ObservedSceneCard from './cards/ObservedSceneCard';
 import HistoricalReplayCard from './cards/HistoricalReplayCard';
 import FragilityCard from './cards/FragilityCard';
 import ForecastCard from './cards/ForecastCard';
-import NextObservationCard from './cards/NextObservationCard';
 import CoverageCard from './cards/CoverageCard';
 import ProvenanceCard from './cards/ProvenanceCard';
 import AskSlickTraceCard from './cards/AskSlickTraceCard';
@@ -145,8 +144,6 @@ export default function App() {
                   <CoverageCard coverage={vc.coverage} />
                   <ProvenanceCard meta={meta} report={shown.report} attribution={vc.attribution} />
                 </div>
-                {/* the case closes on what to check next */}
-                <NextObservationCard nextObs={vc.next_observation} closing />
               </>
             )}
           </div>

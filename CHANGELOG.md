@@ -501,6 +501,54 @@ cropping it to fill a taller box had shifted it out from under its outline.
 **Observed Scene's two halves match.** The fingerprint panel takes exactly the scene image's
 height, with the shape glyph as the part that gives; below 1320 px the two stack instead.
 
+**Case Finding: one line fewer.** The closing line "A lead for an analyst, not proof of
+responsibility" is removed from named cases; the top bar's "Lead · not proof" badge still says it.
+
+**Replay Map: a one-line label and a small current.** The label is one glass pill - a coloured
+phase tag (blue Observed, amber Modelled), the description, and a quiet basemap note - trimmed
+with an ellipsis if the map is narrow, the full text on hover. The model's uniform current is a
+small chip with an arrow along its bearing and its speed, the details in its tooltip.
+
+**Rank Fragility aligned.** The two top columns share one height, so the smallest-flip box's foot
+and the matrix column's readout sit on one line. Explore one setting runs the full width: the
+assumption tabs share it equally and the track of tested values stretches edge to edge, its
+stops evenly spaced.
+
+**Forward Exposure tightened.** The three chips sit on one row with shorter wording (the full
+forcing description in the tooltip); the +6/+12/+24 h control moves into the chart panel's
+header; the share panel fills from the top with the hour's time at its foot; the chart is
+shorter. About 90 px less height, with nothing removed.
+
+**The Next Observation card is removed** from every case. Its data and API endpoint remain.
+
+**Ask Slick Trace loses its "rule-based intent matching" tag.** The caption still says the
+answers come from fixed templates, every one cited, with no language model.
+
+**Coverage recoloured.** Teal for vessels hidden and amber for area goes dark - the dashboard's
+own palette, with deeper tones in light mode - replacing blue and violet.
+
+**An abstention's Case Finding matches every other case.** The separate banner, gate meter and
+closing line are gone; it uses the same hero, three fact tiles (best fit, fit gate, short of the
+gate by) and proximity row, in amber.
+
+**Rank Fragility's right half reworked.** The colour legend moves under the grid it explains; the
+right column reads as the 79% hero and its sentence, then two counts (held the lead, flipped it),
+then the smallest-flip box with room above it, its foot still aligned with the grid column's.
+
+**Coverage in the project's blue and yellow, one row per rate.** The rings use the same
+blue-to-cyan and orange-to-yellow gradients as the rest of the dashboard. Each rate is a row - a
+compact ring, then the title, the hint and both values - so no label wraps into the next column;
+a title too long for a narrow window wraps rather than being cut.
+
+**Rank Fragility settles.** The smallest-flip box is compact - a one-line heading with its
+magnitude, one line of what flips, a slimmer track - and the held/flipped counts are text-sized.
+Hovering a dot no longer moves anything: the description adds no width to the grid's column and
+has three lines reserved, so the hero, the flip box and the card's height stay put.
+
+**Coverage back in columns, keeping the blue and yellow.** The three-ring column layout returns,
+with the project's blue-to-cyan and orange-to-yellow gradients; every title takes the same space so
+the values line up, and each hint sits on one line.
+
 ---
 
 ## 13 September 2026
