@@ -393,3 +393,39 @@ button.chip:active {
 .bar-row.is-flash { animation: row-flash 1.8s var(--ease-out); border-radius: 6px; }
 @keyframes row-flash { 0%, 30% { background: rgba(10, 132, 255, 0.28); box-shadow: 0 0 0 1px rgba(10, 132, 255, 0.7); }
                         100% { background: transparent; box-shadow: none; } }
+
+/* ------------------------------------------------ the abstain state (8d) */
+/* A deliberate outcome, not a weak result: an amber-rimmed surface, the
+   statement, and a meter showing every candidate's fit below the gate. */
+.finding.is-abstain {
+  background: linear-gradient(180deg, rgba(255, 159, 10, 0.07), rgba(255, 159, 10, 0.02)), var(--surface-sunken);
+  box-shadow: inset 0 0 0 1px rgba(255, 159, 10, 0.45), 0 0 28px rgba(255, 159, 10, 0.08);
+}
+.abstain-block { margin: 0 0 var(--space-4); }
+.abstain-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: var(--space-4); }
+.abstain-mark { flex: none; width: 30px; height: 30px; fill: none; stroke: var(--status-orange); stroke-width: 1.8; stroke-linecap: round; }
+.abstain-head strong { display: block; font-family: var(--font-display); font-size: var(--font-size-lg);
+                       font-weight: var(--font-weight-semibold); letter-spacing: -0.01em; color: var(--status-orange); }
+.abstain-head em { display: block; font-style: normal; font-size: var(--font-size-sm); color: var(--label-1); margin-top: 2px; }
+.finding.is-abstain .finding-line { color: var(--label-2); font-size: var(--font-size-sm); }
+
+.gate-meter { padding: 12px 14px 10px; border-radius: 10px; background: var(--surface-raised);
+              box-shadow: inset 0 0 0 0.5px var(--separator); }
+.gate-track { position: relative; height: 22px; margin: 4px 0 2px; border-radius: 6px;
+              background: linear-gradient(90deg, var(--fill-pressed), var(--fill-pressed)); }
+.gate-zone { position: absolute; top: 0; bottom: 0; right: 0; border-radius: 0 6px 6px 0;
+             background: repeating-linear-gradient(135deg, rgba(10, 132, 255, 0.14) 0 6px, rgba(10, 132, 255, 0.05) 6px 12px); }
+.gate-zone i { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-style: normal;
+               font-size: var(--font-size-xxs); color: var(--label-3); white-space: nowrap; }
+.gate-tick { position: absolute; top: -5px; bottom: -5px; width: 2px; margin-left: -1px; border-radius: 1px;
+             background: var(--status-orange); box-shadow: 0 0 8px rgba(255, 159, 10, 0.8); }
+.gate-dot { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
+            background: var(--label-3); box-shadow: 0 0 0 1.5px var(--surface-raised); }
+.gate-dot.is-best { width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; background: var(--status-orange);
+                    box-shadow: 0 0 0 2px var(--surface-raised), 0 0 10px rgba(255, 159, 10, 0.7); }
+.gate-scale { position: relative; height: 16px; font-family: var(--font-mono); font-size: var(--font-size-xxs); color: var(--label-3); }
+.gate-scale span { position: absolute; transform: translateX(-50%); }
+.gate-scale span:first-child { transform: none; }
+.gate-scale span:last-child { transform: translateX(-100%); }
+.gate-scale .is-gate { color: var(--status-orange); font-weight: var(--font-weight-semibold); }
+.gate-caption { margin: 6px 0 0; font-size: var(--font-size-xs); color: var(--label-2); }

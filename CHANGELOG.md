@@ -332,6 +332,13 @@ popover's ranking link and the graph's replay stage open the forward-replay view
 The jump-to-evidence ring around Case Finding now follows that card's own box - an even
 margin on every side, corners parallel to the card's - like the ring around every other card.
 
+**A distinct abstain state.** When the system names no vessel - keyed on its own output,
+unknown_source, never on the case's family, so a wrongly named absent-source case still
+shows as the failure it is - Case Finding says so as a decision: "The system abstains" on
+an amber-rimmed surface, with a meter placing every replayed candidate's fit against the
+gate so it is visible that none reaches it. Its note no longer claims declining was "the
+correct output": the interface has no ground truth to know that.
+
 ---
 
 ## 13 September 2026
