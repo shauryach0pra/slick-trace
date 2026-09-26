@@ -549,6 +549,10 @@ has three lines reserved, so the hero, the flip box and the card's height stay p
 with the project's blue-to-cyan and orange-to-yellow gradients; every title takes the same space so
 the values line up, and each hint sits on one line.
 
+**Rank Fragility always describes a dot.** The readout shows the first dot - the smallest tested
+change - until another is hovered, and returns to it when the pointer leaves; the dot described is
+shown enlarged.
+
 ---
 
 ## 13 September 2026

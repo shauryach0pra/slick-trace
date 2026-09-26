@@ -112,13 +112,15 @@ function FlipMatrix({ fragility, label }) {
   const firstId = fragility.smallest_flip?.point_id;
   const describe = (pt) => `${Object.entries(pt.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ')} · `
     + `${pt.flipped ? `${pt.top_candidate} leads` : 'leader held'} · magnitude ${pt.magnitude}`;
+  // the readout always describes a dot: the first (the smallest change) until another is hovered
+  const shown = hover ?? pts[0] ?? null;
   return (
     <div className="fr-matrix-wrap">
       <div className="fr-matrix" role="list" aria-label={`${pts.length} tested changes, smallest first`}
            onMouseLeave={() => setHover(null)}>
         {pts.map((pt, i) => (
           <span key={pt.point_id} role="listitem" tabIndex={0} aria-label={describe(pt)}
-                className={`fr-dot${pt.flipped ? ' is-flip' : ''}${pt.point_id === firstId ? ' is-first' : ''}`}
+                className={`fr-dot${pt.flipped ? ' is-flip' : ''}${pt.point_id === firstId ? ' is-first' : ''}${shown && pt.point_id === shown.point_id ? ' is-shown' : ''}`}
                 style={{ '--i': i }} onMouseEnter={() => setHover(pt)} onFocus={() => setHover(pt)} onBlur={() => setHover(null)} />
         ))}
       </div>
@@ -127,7 +129,7 @@ function FlipMatrix({ fragility, label }) {
         <span><i className="is-held" />lead held</span><span><i className="is-flip" />lead flipped</span>
         {fragility.smallest_flip && <span><i className="is-first" />smallest flip</span>}
       </div>
-      <p className={`fr-readout${hover ? ' is-on' : ''}`}>{hover ? describe(hover) : 'Hover a dot to see that change.'}</p>
+      <p className="fr-readout is-on" aria-live="polite">{shown ? describe(shown) : ''}</p>
     </div>
   );
 }

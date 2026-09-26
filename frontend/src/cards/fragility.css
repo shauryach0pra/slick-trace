@@ -129,3 +129,5 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 /* room for the longest description (three lines) is reserved, text sitting at the bottom:
    hovering never changes the card's height, so nothing below it moves either */
 .fr-matrix-wrap .fr-readout { min-height: calc(3 * 1.35em); display: flex; align-items: flex-end; }
+/* the dot being described is shown enlarged, as on hover */
+.fr-dot.is-shown { transform: scale(1.35); }
