@@ -133,21 +133,20 @@ export default function App() {
           <div className="finder-features" key={vid}>
             {vc && (
               <>
-                {/* ordered as the story is told: the answer, the proof, how it was reached, how robust
-                    it is, what it means, the raw evidence, what to check next, then methodology */}
                 <CaseFindingCard attribution={vc.attribution} baseline={vc.baseline} vessels={vc.vessels} />
                 <RankingRevealCard attribution={vc.attribution} baseline={vc.baseline} vessels={vc.vessels} />
+                <ObservedSceneCard meta={meta} slick={vc.slick} sceneUrl={api.sceneUrl(vid)}
+                                   nVessels={vc.vessels.length} />
                 <HistoricalReplayCard incidentId={vid} api={api} c={vc} tracks={shown.tracks} />
                 <FragilityCard fragility={vc.fragility} attribution={vc.attribution} />
                 <ForecastCard forecast={vc.forecast} />
-                <ObservedSceneCard meta={meta} slick={vc.slick} sceneUrl={api.sceneUrl(vid)}
-                                   nVessels={vc.vessels.length} />
-                <NextObservationCard nextObs={vc.next_observation} closing />
                 {/* two supporting cards, side by side */}
                 <div className="card-row">
                   <CoverageCard coverage={vc.coverage} />
                   <ProvenanceCard meta={meta} report={shown.report} attribution={vc.attribution} />
                 </div>
+                {/* the case closes on what to check next */}
+                <NextObservationCard nextObs={vc.next_observation} closing />
               </>
             )}
           </div>
