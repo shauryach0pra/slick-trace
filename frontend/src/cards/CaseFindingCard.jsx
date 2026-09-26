@@ -1,4 +1,6 @@
-import { Badge, Card, Stat } from '../ui/primitives';
+import { Badge, Card } from '../ui/primitives';
+import { FitGauge, HowMeasured } from '../ui/viz';
+import './caseFinding.css';
 import { findingHeadline } from '../findingText';
 import { CAPTIONS as C } from '../ui/glossary';
 
@@ -26,8 +28,10 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
     ? <Badge tone="warning">System abstains</Badge>
     : <Badge tone="accent">{differs ? 'Nearest vessel not supported' : 'Candidate named'}</Badge>;
 
+  const runnerIou = runnerUp?.mean_iou ?? null;
+  const wins = top?.ensemble_win_count ?? 0, nVar = top?.n_ensemble ?? 0;
   return (
-    <Card title="Case Finding" badge={badge} className={`finding${unknown ? ' is-abstain' : ''}`}>
+    <Card title="Case Finding" badge={badge} className={`finding cf${unknown ? ' is-abstain' : ''}`}>
       {unknown && (
         // A deliberate outcome, drawn as one: the statement, and every candidate's fit
         // against the gate, so it is visible that none reaches it. Keyed on the
@@ -57,50 +61,71 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
               <span className="is-gate" style={{ left: `${gate * 100}%` }}>gate {gate}</span>
               <span style={{ left: '100%' }}>1</span>
             </div>
-            <p className="gate-caption">
-              {attribution.ranking.length} candidate{attribution.ranking.length === 1 ? '' : 's'} replayed; the best reaches a
-              mean IoU of {top?.mean_iou.toFixed(3) ?? '—'}.
-            </p>
           </div>
         </div>
       )}
-      <p className="finding-line">{findingHeadline({ unknown, nCandidates, differs })}</p>
 
-      <div className="finding-compare">
-        <div className={`finding-side${differs || unknown ? ' is-muted' : ''}`}>
-          <div className="finding-side-label">Proximity baseline picks</div>
-          <Stat mono label="Nearest at image time" value={nearest?.vessel_key}
-                caption={`${nearest?.distance_deg.toFixed(3)}° from the slick. ${C.distance}`} />
+      {/* the abstain statement above already says it; the sentence is for a named result */}
+      {!unknown && <p className="cf-headline">{findingHeadline({ unknown, nCandidates, differs })}</p>}
+
+      {/* the comparison, as one picture: what proximity picks, then what the physics supports */}
+      <div className="cf-hero">
+        <div className={`cf-side cf-naive${differs ? ' is-struck' : ''}`}>
+          <span className="cf-eyebrow">Proximity pick</span>
+          <span className="cf-key"><span>{nearest?.vessel_key}</span></span>
+          <span className="cf-sub">nearest when imaged · {nearest?.distance_deg.toFixed(3)}°</span>
+          {differs && <span className="cf-verdict">not supported by forward replay</span>}
+          {!unknown && !differs && <span className="cf-verdict is-agree">also the best physical fit</span>}
         </div>
-        <span className="finding-arrow" aria-hidden="true">→</span>
-        <div className="finding-side">
-          <div className="finding-side-label">Forward replay</div>
-          {unknown ? (
-            <Stat label="No vessel named" value={`best fit ${top?.mean_iou.toFixed(3) ?? '—'}`}
-                  caption={`Below the gate of ${gate}. ${C.fitGate}`} />
-          ) : (
-            <Stat mono label="Best physical fit" value={top?.vessel_key}
-                  caption={`Mean IoU ${top?.mean_iou.toFixed(3)}${runnerUp ? ` against ${runnerUp.mean_iou.toFixed(3)} for the runner-up` : ''}. ${C.meanIou}`} />
-          )}
+        <div className="cf-bridge" aria-hidden="true">
+          <span className="cf-bridge-line" /><span className="cf-bridge-label">physics check</span><span className="cf-bridge-line" />
+        </div>
+        <div className="cf-side cf-replay">
+          <FitGauge value={top?.mean_iou ?? 0} gate={gate} secondary={unknown ? null : runnerIou}
+                    tone={unknown ? 'warning' : 'accent'} />
+          <div className="cf-replay-text">
+            <span className="cf-eyebrow">{unknown ? 'Forward replay · best fit' : 'Forward replay names'}</span>
+            <span className="cf-key is-lead">{unknown ? 'No vessel' : top?.vessel_key}</span>
+            <span className="cf-sub">{unknown
+              ? <>best {top?.mean_iou.toFixed(2)} is below the gate of {gate}</>
+              : <>gate {gate}{runnerIou != null ? <> · runner-up {runnerIou.toFixed(2)}</> : null}</>}</span>
+            {!unknown && nVar > 0 && (
+              <span className="cf-pips" aria-label={`best under ${wins} of ${nVar} forcing variants`}>
+                {Array.from({ length: nVar }, (_, i) => <i key={i} className={i < wins ? 'is-won' : ''} style={{ '--i': i }} />)}
+                <span>best under {wins} of {nVar} forcing variants</span>
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
-      {!unknown && topVessel?.first_entry_hours_before != null && (
-        <p className="card-caption" style={{ marginTop: 'var(--space-3)', marginBottom: 0 }}>
-          Inside the origin area {topVessel.first_entry_hours_before} h before the image. {C.firstEntry}
-        </p>
-      )}
-      {!unknown && disc?.discriminated === false && (
-        <p className="card-caption" style={{ marginTop: 'var(--space-2)', marginBottom: 0 }}>
-          The top two are not separated: loss gap {disc.loss_gap}, under {disc.tolerance}. {C.lossGap}
-        </p>
+      {!unknown && (
+        <div className="cf-chips">
+          {topVessel?.first_entry_hours_before != null && (
+            <span className="cf-chip"><i className="cf-ico is-clock" aria-hidden="true" />Inside the origin area {topVessel.first_entry_hours_before} h before</span>
+          )}
+          {disc?.discriminated === true && (
+            <span className="cf-chip"><i className="cf-ico is-gap" aria-hidden="true" />Clear of the runner-up · gap {disc.loss_gap}</span>
+          )}
+          {disc?.discriminated === false && (
+            <span className="cf-chip is-warn"><i className="cf-ico is-gap" aria-hidden="true" />Tied with the runner-up · gap {disc.loss_gap} under {disc.tolerance}</span>
+          )}
+        </div>
       )}
 
-      <p className="finding-note">
-        {unknown
-          ? 'Declining is what the system does when no candidate’s replayed release fits the slick well enough. The source may be outside the data — for example, a vessel that left the scene before the image.'
-          : 'A ranking reflects physical consistency under tested assumptions: an investigative lead, not proof of responsibility.'}
-      </p>
+      <p className="cf-foot">{unknown
+        ? 'Declining is the output when no replayed release fits well enough; the source may be outside the data.'
+        : 'A lead for an analyst, not proof of responsibility.'}</p>
+      <HowMeasured>
+        <dl>
+          <dt>Proximity pick</dt><dd>{C.distance}</dd>
+          <dt>Mean IoU</dt><dd>{C.meanIou}</dd>
+          <dt>Fit gate</dt><dd>{C.fitGate}</dd>
+          {!unknown && <><dt>Inside the origin area</dt><dd>{C.firstEntry}</dd></>}
+          {!unknown && <><dt>Loss gap</dt><dd>{C.lossGap}</dd></>}
+          <dt>Forcing variants</dt><dd>Every release is replayed under six forcing variants; the pips count those in which this vessel fits best of all candidates.</dd>
+        </dl>
+      </HowMeasured>
     </Card>
   );
 }

@@ -1,0 +1,31 @@
+/* fit gauge */
+.fitg { position: relative; flex: none; }
+.fitg svg { width: 100%; height: 100%; overflow: visible; }
+.fitg-track { fill: none; stroke: var(--fill-pressed); stroke-width: 9; stroke-linecap: round; }
+.fitg-arc { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+            filter: drop-shadow(0 0 6px rgba(10, 132, 255, 0.45)); }
+.fitg.is-warning .fitg-arc { filter: drop-shadow(0 0 6px rgba(255, 159, 10, 0.45)); }
+.fitg-gate { stroke: var(--status-orange); stroke-width: 2.4; stroke-linecap: round; }
+.fitg-sec { fill: var(--label-3); stroke: var(--card-bg, var(--content-bg)); stroke-width: 1.5; }
+.fitg-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.fitg-num { font-family: var(--font-display); font-size: 30px; font-weight: 600; letter-spacing: -0.02em;
+            font-variant-numeric: tabular-nums; color: var(--label-1); }
+.fitg-label { margin-top: -2px; font-size: var(--font-size-xxs); color: var(--label-2); text-transform: uppercase; letter-spacing: 0.06em; }
+@media (prefers-reduced-motion: reduce) { .fitg-arc { transition: none; } }
+
+/* "How this is measured" */
+.howto { margin-top: var(--space-4); border-top: 0.5px solid var(--separator); padding-top: var(--space-3); }
+.howto summary { display: inline-flex; align-items: center; gap: 7px; cursor: default; list-style: none;
+                 font-size: var(--font-size-xs); font-weight: var(--font-weight-medium); color: var(--label-2);
+                 border-radius: 6px; padding: 2px 4px; margin-left: -4px; transition: color var(--dur-fast) ease; }
+.howto summary::-webkit-details-marker { display: none; }
+.howto summary:hover { color: var(--label-1); }
+.howto summary:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 1px; }
+.howto-chev { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+              transform: rotate(-45deg); transition: transform 240ms var(--ease-spring); }
+.howto[open] .howto-chev { transform: rotate(45deg); }
+.howto-body { margin-top: 10px; display: grid; gap: 8px; font-size: var(--font-size-xs); line-height: 1.5; color: var(--label-2);
+              animation: howto-in 280ms var(--ease-out); }
+.howto-body dt { color: var(--label-1); font-weight: var(--font-weight-semibold); }
+.howto-body dd { margin: 0 0 4px; }
+@keyframes howto-in { from { opacity: 0; translate: 0 -4px; } }

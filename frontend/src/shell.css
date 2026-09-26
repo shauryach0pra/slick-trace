@@ -691,3 +691,76 @@
 @media (prefers-reduced-motion: reduce) {
   .finder-content > .finder-features, .finder-content > .finder-details { animation: none; }
 }
+
+/* ================================================================== cards */
+/* Every section is a card on a soft pane: its own surface, a hairline edge and
+   a soft shadow, leaning away from the pointer (tilt.js) with a light that
+   follows it. Sticky headers keep their scroll-edge effect, in the card's colour. */
+:root { --pane-bg: #f2f2f5; --card-bg: #ffffff; --sheen-rgb: 10, 132, 255; --sheen-max: 0.06; }
+:root[data-theme="dark"] { --pane-bg: #19191b; --card-bg: #232326; --sheen-rgb: 255, 255, 255; --sheen-max: 0.07; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --pane-bg: #19191b; --card-bg: #232326; --sheen-rgb: 255, 255, 255; --sheen-max: 0.07; }
+}
+@property --sheen { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+.finder-features {
+  background:
+    radial-gradient(900px 500px at 12% -10%, rgba(10, 132, 255, 0.07), transparent 60%),
+    radial-gradient(800px 600px at 110% 20%, rgba(90, 200, 250, 0.05), transparent 60%),
+    var(--pane-bg);
+}
+.finder-features > .panel,
+.finder-details > .cg,
+.finder-details > .panel {
+  position: relative;
+  margin-top: var(--space-5);
+  padding: var(--space-5) var(--space-6) var(--space-6);
+  border: 0;
+  border-radius: 18px;
+  background:
+    radial-gradient(560px circle at var(--mx, 50%) var(--my, 0%), rgba(var(--sheen-rgb), calc(var(--sheen) * var(--sheen-max))), transparent 45%),
+    var(--card-bg);
+  box-shadow: 0 0 0 0.5px var(--separator-strong), 0 1px 2px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(0, 0, 0, 0.07);
+  transform: perspective(1400px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 700ms cubic-bezier(0.22, 1.2, 0.36, 1), box-shadow 300ms ease, --sheen 400ms ease;
+  animation: card-in 520ms cubic-bezier(0.22, 1.2, 0.36, 1) backwards;
+}
+.finder-features > .panel:first-child { margin-top: var(--space-6); }
+.finder-features > .panel.is-tilting,
+.finder-details > .cg.is-tilting,
+.finder-details > .panel.is-tilting {
+  --sheen: 1;
+  transition: transform 160ms ease-out, box-shadow 300ms ease, --sheen 300ms ease;
+  box-shadow: 0 0 0 0.5px rgba(10, 132, 255, 0.45), 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 44px rgba(0, 0, 0, 0.12);
+}
+/* the entrance: a separate property from the tilt's transform, so they never fight */
+@keyframes card-in { from { opacity: 0; translate: 0 12px; } }
+.finder-features > .panel:nth-child(2) { animation-delay: 40ms; }
+.finder-features > .panel:nth-child(3) { animation-delay: 80ms; }
+.finder-features > .panel:nth-child(4) { animation-delay: 120ms; }
+.finder-features > .panel:nth-child(5) { animation-delay: 160ms; }
+.finder-features > .panel:nth-child(n+6) { animation-delay: 200ms; }
+
+/* sticky headers inside a card: fill the card's width and top corners when stuck */
+.finder-features > .panel > .panel-head {
+  margin: calc(-1 * var(--space-5)) calc(-1 * var(--space-6)) 14px;
+  padding: var(--space-4) var(--space-6) var(--space-3);
+  border-radius: 18px 18px 0 0;
+}
+.finder-features > .panel > .panel-head.is-stuck { background: var(--card-bg); }
+.finder-features > .panel > .panel-head::after { background: linear-gradient(to bottom, var(--card-bg), transparent); }
+.finder-features .panel { padding-top: var(--space-5); }
+
+/* sections that were boxes of their own, or separated by rules, are cards now */
+.finder-features > .panel.finding { margin-top: var(--space-6); }
+.finder-details > .cg { border-bottom: 0; margin-bottom: 0; padding: var(--space-4) var(--space-4) var(--space-4); }
+.finder-details > .panel { padding: var(--space-4); }
+.finder-details > .cg:first-of-type { margin-top: var(--space-4); }
+
+/* the jump-to ring now outlines every card evenly */
+.finder-features > .panel.cg-flash::after,
+.finder-details > .cg.cg-flash::after { inset: -6px; border-radius: 24px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .finder-features > .panel, .finder-details > .cg, .finder-details > .panel { animation: none; transform: none; }
+}

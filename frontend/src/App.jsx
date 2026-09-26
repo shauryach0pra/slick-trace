@@ -8,6 +8,7 @@ import Overview from './Overview';
 import FamilyChips from './FamilyChips';
 import ConfidenceBadge from './ConfidenceBadge';
 import { attachStickyHeaders } from './stickyHeaders';
+import { attachTilt } from './tilt';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
 import CaseFindingCard from './cards/CaseFindingCard';
@@ -51,6 +52,8 @@ export default function App() {
   useEffect(() => {
     api.listIncidents().then(setIncidents).catch(() => setIncidents([]));
   }, []);
+  // hover tilt and light for every card, one listener for the app
+  useEffect(() => attachTilt(), []);
 
 
   const [touring, setTouring] = useState(false);

@@ -33,7 +33,13 @@ export default function AskConsole({ incidentId, api }) {
     } finally {
       setBusy(false);
       requestAnimationFrame(() => {
-        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
+        // show the new answer from its first line - scrolling to the bottom hid the top of long answers
+        requestAnimationFrame(() => {
+          const box = scrollRef.current;
+          const entries = box?.querySelectorAll('.console-entry:not(.console-busy)');
+          const last = entries?.[entries.length - 1];
+          if (box && last) box.scrollTo({ top: box.scrollTop + last.getBoundingClientRect().top - box.getBoundingClientRect().top - 6, behavior: 'smooth' });
+        });
       });
     }
   }

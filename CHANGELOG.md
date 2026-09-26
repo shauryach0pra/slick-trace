@@ -380,6 +380,21 @@ itself - one uniform current, the same everywhere, labelled so - as a subtle arr
 a small rose of the six variants. No wind is in the inputs, and the spatial variation the
 generator applies is not shown. Both have Layers toggles. 357 tests pass.
 
+**Cards that respond.** Every section of a case, and of the inspector, is now a card on a soft
+pane, with its own surface, hairline edge and shadow. Cards and overview tiles lean away on the
+side under the pointer - a little for large cards, more for small tiles - with a light that
+follows it, and enter with a short stagger. The Replay Map card keeps the light but does not
+rotate, so clicks on the map stay on target. Sticky headers keep their scroll-edge effect in
+the card's colour. Motion is off under reduced-motion settings.
+
+**Design step 1: Case Finding as one sentence and one picture.** The card leads with its
+finding, then the comparison as a visual: the proximity pick, struck through where forward
+replay disagrees, against forward replay's pick with a fit gauge that draws in to its mean
+IoU (gate and runner-up marked) and pips for the forcing variants it won. Supporting facts are
+chips; definitions fold into "How this is measured". Shared viz primitives (gauge, count-up,
+disclosure) are added for the next steps. Fixed: the reveal's leader row no longer scales out
+of line, and Ask shows each answer from its first line.
+
 ---
 
 ## 13 September 2026
