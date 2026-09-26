@@ -13,6 +13,9 @@ import { CAPTIONS as C } from '../ui/glossary';
  * what the classical baseline detector retained.
  */
 export default function ObservedSceneCard({ meta, slick, sceneUrl, nVessels }) {
+  // the acquisition plays when the scene image itself is mostly on screen - the card's top edge
+  // entering is too early, and would play it below the bottom of the window
+  const [sceneRef, sceneSeen] = useInView({ threshold: 0.55 });
   if (!meta) return null;
   const synthetic = meta.provenance?.status === 'synthetic';
   const b = meta.bbox;
@@ -28,12 +31,12 @@ export default function ObservedSceneCard({ meta, slick, sceneUrl, nVessels }) {
           badge={<Badge tone={synthetic ? 'warning' : 'accent'}>{synthetic ? 'synthetic' : 'real'}</Badge>}
           caption="The dark, smooth patch the detector outlined. Radar darkness alone is not proof of oil.">
       <div className="os">
-        <div className="scene-wrap os-scene">
+        <div ref={sceneRef} className={`scene-wrap os-scene${sceneSeen ? ' is-playing' : ''}`}>
           <img className="scene-img" src={sceneUrl} alt="Radar scene of the incident area" />
           {pts && (
             <svg className="scene-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" role="img"
                  aria-label={`Detected slick outline covering ${g?.area_km2} square kilometres`}>
-              <polygon points={pts} className="scene-poly" />
+              <polygon points={pts} className="scene-poly" pathLength="100" />
             </svg>
           )}
           {slick && !slick.detected && <div className="scene-nodetect">No slick detected</div>}
@@ -48,7 +51,8 @@ export default function ObservedSceneCard({ meta, slick, sceneUrl, nVessels }) {
               <span className="os-chip is-truth"><i style={{ '--v': slick.truth_agreement_iou }} />{slick.truth_agreement_iou.toFixed(2)} match with the generator's mask</span>
             )}
           </span>
-          <span className="os-scanline" aria-hidden="true" />
+          {/* a radar acquisition: a veil lifts behind a sweeping scan line, then the outline draws in */}
+          <span className="os-scan" aria-hidden="true"><i className="os-scan-veil" /><i className="os-scan-line" /></span>
         </div>
 
         {g && (

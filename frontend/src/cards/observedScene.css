@@ -78,3 +78,37 @@
 .os-print .os-elong { margin-top: 4px; }
 /* too narrow for the image to hold the fingerprint beside it: stack them, each full width */
 @media (max-width: 1320px) { .os { grid-template-columns: 1fr; } .os-print { height: auto; min-height: 0; } }
+
+/* ---- the scene's acquisition, when the card comes into view: a veil over the image lifts behind a
+   thin glowing scan line sweeping top to bottom, developing the image as it passes; once the sweep
+   has crossed the scene, the slick's outline draws itself in and its fill fades up */
+.os-scanline { display: none; }
+.os-scan { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.os-scan-veil { position: absolute; inset: 0; background: rgba(6, 10, 18, 0.78);
+                -webkit-backdrop-filter: saturate(0.2) brightness(0.8); backdrop-filter: saturate(0.2) brightness(0.8);
+                animation: os-veil 1900ms cubic-bezier(0.45, 0, 0.25, 1) 250ms both; }
+@keyframes os-veil { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(100% 0 0 0); } }
+.os-scan-line { position: absolute; left: 0; right: 0; top: 0; height: 110px; margin-top: -110px;
+                background: linear-gradient(180deg, transparent 0%, rgba(100, 210, 255, 0.06) 55%, rgba(100, 210, 255, 0.22) 92%, transparent 100%);
+                animation: os-line 1900ms cubic-bezier(0.45, 0, 0.25, 1) 250ms both; }
+.os-scan-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: #9fe7ff;
+                       box-shadow: 0 0 10px 2px rgba(100, 210, 255, 0.85), 0 0 28px 6px rgba(10, 132, 255, 0.45); }
+@keyframes os-line { 0% { top: 0; opacity: 1; } 88% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+.os-scene .scene-poly { stroke-dasharray: 100; stroke-dashoffset: 100; fill-opacity: 0;
+                        animation: os-poly-draw 900ms cubic-bezier(0.22, 1, 0.36, 1) 1700ms forwards, os-poly-fill 700ms ease 2200ms forwards; }
+@keyframes os-poly-draw { to { stroke-dashoffset: 0; } }
+@keyframes os-poly-fill { to { fill-opacity: 1; } }
+/* the HUD chips arrive once the scene is acquired */
+.os-hud { animation: os-hud-in 500ms ease 1900ms both; }
+@keyframes os-hud-in { from { opacity: 0; } }
+
+/* all of it waits, paused at its start, until the card scrolls into view */
+.panel:not(.is-inview) :is(.os-scan-veil, .os-scan-line, .scene-poly, .os-hud) { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .os-scan { display: none; }
+  .os-scene .scene-poly { animation: none; stroke-dashoffset: 0; fill-opacity: 1; }
+  .os-hud { animation: none; }
+}
+/* the acquisition waits until the scene image itself is on screen */
+.os-scene:not(.is-playing) :is(.os-scan-veil, .os-scan-line, .scene-poly, .os-hud) { animation-play-state: paused; }
