@@ -329,6 +329,9 @@ Where the system abstains the ranking is muted below the gate and says so; nothi
 struck, because replay set no vessel aside. It never says right or wrong. The map
 popover's ranking link and the graph's replay stage open the forward-replay view.
 
+The jump-to-evidence ring around Case Finding now follows that card's own box - an even
+margin on every side, corners parallel to the card's - like the ring around every other card.
+
 ---
 
 ## 13 September 2026

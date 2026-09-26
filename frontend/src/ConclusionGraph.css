@@ -117,3 +117,8 @@
   .cgx-spine-dot, .cgx-spine-dot .cgx-halo { animation: none; opacity: 1; }
   .cgx-edge-base, .cgx-node { animation: none; opacity: 1; transform: none; stroke-dashoffset: 0; }
 }
+
+/* Case Finding is a raised card with its own box: its ring follows that box -
+   an even margin on every side, corners parallel to the card's - instead of the
+   text-hugging offsets used for the plain cards */
+.panel.finding.cg-flash::after { inset: -6px; border-radius: calc(var(--radius-xl) + 6px); }
