@@ -8,7 +8,7 @@ import { attachStickyHeaders } from './stickyHeaders';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
 import CaseFindingCard from './cards/CaseFindingCard';
-import CandidateRankingCard from './cards/CandidateRankingCard';
+import RankingRevealCard from './cards/RankingRevealCard';
 import ObservedSceneCard from './cards/ObservedSceneCard';
 import HistoricalReplayCard from './cards/HistoricalReplayCard';
 import FragilityCard from './cards/FragilityCard';
@@ -92,8 +92,7 @@ export default function App() {
             {vc && (
               <>
                 <CaseFindingCard attribution={vc.attribution} baseline={vc.baseline} vessels={vc.vessels} />
-                <CandidateRankingCard kind="replay" attribution={vc.attribution} baseline={vc.baseline} />
-                <CandidateRankingCard kind="baseline" attribution={vc.attribution} baseline={vc.baseline} />
+                <RankingRevealCard attribution={vc.attribution} baseline={vc.baseline} vessels={vc.vessels} />
                 <ObservedSceneCard meta={meta} slick={vc.slick} sceneUrl={api.sceneUrl(vid)}
                                    nVessels={vc.vessels.length} />
                 <HistoricalReplayCard incidentId={vid} api={api} c={vc} tracks={shown.tracks} />

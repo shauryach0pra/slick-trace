@@ -78,8 +78,8 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
       : `under the tested assumptions — an investigative lead, not proof of responsibility${disc?.discriminated === false ? '; its ordering against the runner-up carries no weight' : ''}`,
   });
   // what each stage summarises in the evidence column
-  const TARGET = { detection: 'Observed Scene', filtering: 'Traffic Filtering and Provenance', replay: 'Forward-Replay Ranking',
-                   baseline: 'Proximity Baseline', fragility: 'Rank Fragility', finding: 'Case Finding' };
+  const TARGET = { detection: 'Observed Scene', filtering: 'Traffic Filtering and Provenance', replay: 'Naive vs Forward-Replay',
+                   baseline: 'Naive vs Forward-Replay', fragility: 'Rank Fragility', finding: 'Case Finding' };
   const decorate = (s) => ({ ...s, caption: CAPTION[s.id], target: TARGET[s.id], branches: s.branches?.map(decorate) });
   return stages.map(decorate);
 }
@@ -89,7 +89,9 @@ const edgeState = (from, to) => (to.state === 'compare' ? 'compare'
   : from.state === 'pending' || to.state === 'pending' ? 'pending'
     : from.state === 'done' && to.state === 'done' ? 'done' : 'abstain');
 
-function jumpTo(title) {
+function jumpTo(title, stage) {
+  // the replay stage opens the ranking on its forward-replay view
+  if (stage === 'replay') window.dispatchEvent(new CustomEvent('slicktrace:reveal'));
   const pane = document.querySelector('.finder-features');
   const h = [...(pane?.querySelectorAll('h2') ?? [])].find((x) => x.textContent.trim() === title);
   const card = h?.closest('.panel') ?? h?.closest('section');
@@ -105,7 +107,7 @@ function NodeCard({ s, index, register }) {
   useLayoutEffect(() => register(s.id, ref.current), [register, s.id]);
   return (
     <button type="button" ref={ref} className={`cgx-node is-${s.state}${s.final ? ' is-final' : ''}${s.state === 'compare' ? ' is-compare' : ''}`}
-            style={{ '--k': index }} onClick={() => s.target && jumpTo(s.target)}
+            style={{ '--k': index }} onClick={() => s.target && jumpTo(s.target, s.id)}
             title={s.target ? `Open ${s.target}` : undefined}
             aria-label={`${s.title}: ${s.value ?? 'not loaded'}. ${s.caption ?? ''}`}>
       <span className="cgx-head">

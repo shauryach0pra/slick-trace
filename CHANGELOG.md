@@ -320,6 +320,15 @@ under it - map imagery especially - into a textured band. A header is now clear 
 rest, and only while its card's content passes beneath it takes the pane's own solid
 background, a hairline and a soft fade below, as macOS and iOS do.
 
+**Naive vs forward replay, as one reveal.** The two ranking cards are one. It opens on the
+naive answer - every vessel by distance to the slick at image time - and "Reveal
+forward-replay result" shows what the pipeline already computed: rows re-sort into
+forward-replay order, bars become fit (mean IoU) with the gate marked, the proximity pick
+is struck through where replay names a different vessel, and the leader is highlighted.
+Where the system abstains the ranking is muted below the gate and says so; nothing is
+struck, because replay set no vessel aside. It never says right or wrong. The map
+popover's ranking link and the graph's replay stage open the forward-replay view.
+
 ---
 
 ## 13 September 2026

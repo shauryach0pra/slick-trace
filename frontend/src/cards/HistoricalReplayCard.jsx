@@ -131,8 +131,8 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
   } : null;
 
   // the popover's "show in ranking": scroll to the vessel's row and flash it
-  const showRanking = useCallback((key, which) => {
-    const row = document.getElementById(`rank-${which}-${key}`);
+  const flash = (key) => {
+    const row = document.querySelector(`[data-rank-key="${key}"]`);
     if (!row) return;
     // scroll only the evidence column: scrollIntoView can also scroll the locked
     // window itself, which shifted the whole app sideways
@@ -143,6 +143,11 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
     }
     row.classList.remove('is-flash'); void row.offsetWidth; row.classList.add('is-flash');
     setTimeout(() => row.classList.remove('is-flash'), 1900);
+  };
+  const showRanking = useCallback((key, which) => {
+    // the ranking opens on proximity; a forward-replay row needs the reveal first
+    if (which === 'replay') window.dispatchEvent(new CustomEvent('slicktrace:reveal'));
+    setTimeout(() => flash(key), which === 'replay' ? 1250 : 0);
   }, []);
 
   const onPick = useCallback(async ({ lon, lat }) => {

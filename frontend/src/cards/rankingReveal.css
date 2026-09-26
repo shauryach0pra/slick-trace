@@ -1,0 +1,82 @@
+/* Naive vs forward replay: rows positioned by transform so a re-sort animates. */
+
+.rv-controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.rv-btn {
+  height: 32px; padding: 0 14px; border: 0; border-radius: 8px; cursor: default; font: inherit;
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  background: var(--control-bg); color: var(--label-1); box-shadow: var(--shadow-control);
+  transition: transform var(--dur-base) var(--ease-spring), background-color var(--dur-fast) ease;
+}
+.rv-btn:hover { background: var(--control-bg-hover); }
+.rv-btn:active { transform: scale(0.97); }
+.rv-btn.is-primary { background: linear-gradient(135deg, #0a84ff, #3d9bff); color: #fff;
+                     box-shadow: 0 0 0 0.5px rgba(10, 132, 255, 0.6), 0 6px 18px rgba(10, 132, 255, 0.35); }
+.rv-btn.is-primary:hover { background: linear-gradient(135deg, #2a95ff, #5aabff); }
+.rv-legend { font-size: var(--font-size-xs); color: var(--label-2); }
+
+.rv-list { position: relative; transition: height 400ms var(--ease-out); }
+.rv-row {
+  position: absolute; left: 0; right: 0; top: 0; height: 40px;
+  display: grid; grid-template-columns: 22px minmax(92px, 118px) minmax(80px, 1fr) 56px minmax(140px, 1.1fr);
+  align-items: center; gap: 12px; padding: 0 10px; border-radius: 9px;
+  transition: transform 720ms cubic-bezier(0.34, 1.26, 0.64, 1), opacity 300ms ease, background-color 300ms ease,
+              box-shadow 400ms ease, scale 400ms var(--ease-spring);
+}
+.rv-pos { font-family: var(--font-mono); font-size: var(--font-size-xs); color: var(--label-3); text-align: right; }
+.rv-key { position: relative; font-family: var(--font-mono); font-size: var(--font-size-sm); color: var(--label-1); }
+.rv-key-text { position: relative; }
+.rv-track { position: relative; height: 8px; border-radius: 4px; background: var(--fill-pressed); overflow: visible; }
+.rv-fill {
+  position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--w) * 100%); border-radius: 4px;
+  background: var(--label-3); transition: width 720ms cubic-bezier(0.34, 1.1, 0.64, 1), background-color 400ms ease;
+}
+.rv-gate { position: absolute; top: -5px; bottom: -5px; width: 2px; margin-left: -1px; border-radius: 1px;
+           background: var(--status-orange); animation: rv-in 400ms 500ms ease both; }
+.rv-value { font-family: var(--font-mono); font-size: var(--font-size-sm); font-variant-numeric: tabular-nums; text-align: right; color: var(--label-1); }
+.rv-sub { font-size: var(--font-size-xs); color: var(--label-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* before the reveal: the proximity pick */
+.rv-row.is-naive { background: rgba(255, 159, 10, 0.1); box-shadow: inset 0 0 0 0.5px rgba(255, 159, 10, 0.45); }
+.rv-row.is-naive .rv-fill { background: var(--status-orange); }
+
+/* the reveal: the proximity pick is struck through where replay does not support it */
+.rv-row.is-struck { opacity: 0.55; }
+.rv-row.is-struck .rv-key-text::after {
+  content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 1.5px; background: var(--status-orange);
+  transform-origin: left; animation: rv-strike 360ms var(--ease-out) forwards;
+}
+.rv-row.is-struck .rv-sub { color: var(--status-orange); }
+@keyframes rv-strike { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* forward replay's fit, and its leader */
+.rv-list .rv-row .rv-fill { background: linear-gradient(90deg, rgba(90, 200, 250, 0.55), rgba(90, 200, 250, 0.85)); }
+.rv-row.is-naive .rv-fill { background: var(--status-orange) !important; }
+.rv-row.is-out { opacity: 0.45; }
+.rv-row.is-lead { background: rgba(10, 132, 255, 0.12); box-shadow: inset 0 0 0 0.5px rgba(10, 132, 255, 0.55); }
+.rv-row.is-lead .rv-fill { background: linear-gradient(90deg, #0a84ff, #5ac8fa); }
+.rv-row.is-lead.is-settled { scale: 1.02; box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.7), 0 0 26px rgba(10, 132, 255, 0.28);
+                              animation: rv-glow 2.6s ease-in-out 1; }
+.rv-row.is-lead .rv-key, .rv-row.is-lead .rv-value { font-weight: var(--font-weight-semibold); }
+.rv-row.is-lead .rv-sub { color: var(--accent); }
+@keyframes rv-glow { 0%, 100% { box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.7), 0 0 14px rgba(10, 132, 255, 0.2); }
+                     40% { box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.9), 0 0 34px rgba(10, 132, 255, 0.45); } }
+@keyframes rv-in { from { opacity: 0; } }
+
+/* when the system abstains: muted ranking, an explicit statement */
+.rv-card.is-abstain .rv-row .rv-fill { background: var(--label-3); }
+.rv-card.is-abstain .rv-row { opacity: 0.6; }
+.rv-card.is-abstain .rv-gate { box-shadow: 0 0 8px rgba(255, 159, 10, 0.8); }
+.rv-abstain { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; padding: 12px 14px; border-radius: 10px;
+              background: rgba(255, 159, 10, 0.1); box-shadow: inset 0 0 0 0.5px rgba(255, 159, 10, 0.5);
+              font-size: var(--font-size-sm); color: var(--label-1); animation: rv-in 400ms 600ms ease both; }
+.rv-abstain strong { color: var(--status-orange); }
+.rv-note { margin: 14px 0 0; font-size: var(--font-size-sm); color: var(--label-2); animation: rv-in 400ms ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-row, .rv-fill, .rv-list { transition: none; }
+  .rv-row.is-struck .rv-key-text::after, .rv-row.is-lead.is-settled, .rv-gate, .rv-abstain, .rv-note { animation: none; }
+}
+@media (max-width: 760px) { .rv-row { grid-template-columns: 18px 92px 1fr 50px; } .rv-sub { display: none; } }
+
+/* a row reached from the map flashes once */
+.rv-row.is-flash { animation: row-flash 1.8s var(--ease-out); }
