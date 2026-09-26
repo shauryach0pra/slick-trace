@@ -1,9 +1,15 @@
 import { useRef, useState } from 'react';
 
+// The same five for every case. Answers are read from that case's computed
+// fields by rule-based templates. The last is deliberately out of scope and
+// looks like any other question: clicking it shows the system declining
+// rather than guessing.
 const SUGGESTIONS = [
   'What is the top candidate and why?',
-  'Which vessels crossed the likely origin zone from 02:00 to 05:00 UTC?',
-  'Find the current-field source used in this report.',
+  'Why was the nearest vessel ruled out?',
+  'How confident is the release time?',
+  'What would change the conclusion?',
+  'Who is legally responsible for this spill?',
 ];
 
 export default function AskConsole({ incidentId, api }) {
@@ -49,11 +55,8 @@ export default function AskConsole({ incidentId, api }) {
           <div className="console-entry" key={i}>
             <div className="console-q">&gt;&gt;&gt; {r.question}</div>
             <div className={`console-tag ${r.supported ? 'ok' : 'refused'}`}>
-              [{r.intent}{r.supported ? '' : ' | refused'}]
+              {r.supported ? `answered · ${r.intent.replaceAll('_', ' ')}` : 'declined · no matching template'}
             </div>
-            {r.filters && Object.keys(r.filters).length > 0 && (
-              <div className="console-filters">filters: {JSON.stringify(r.filters)}</div>
-            )}
             <div className="console-a">{r.answer}</div>
             {r.citations?.length > 0 && (
               <div className="console-cites">cites: {r.citations[0]}{r.citations.length > 1 ? ` (+${r.citations.length - 1} more)` : ''}</div>

@@ -127,7 +127,25 @@ NLP_SUITE: list[dict] = [
     {"category": "refusal_not_implemented", "question": "Find similar incidents in the archive.",
      "expect_intent": "similarity_search", "expect_supported": False},
 
+    # ----------------------------------------------------- nearest vessel
+    {"category": "nearest_vessel", "question": "Why was the nearest vessel ruled out?",
+     "expect_intent": "nearest_vessel", "expect_supported": True},
+    {"category": "nearest_vessel", "question": "Why isn't the closest ship the source?",
+     "expect_intent": "nearest_vessel", "expect_supported": True},
+    {"category": "nearest_vessel", "question": "Was the vessel nearest the slick checked?",
+     "expect_intent": "nearest_vessel", "expect_supported": True},
+
+    # ------------------------------------------------------- release time
+    {"category": "release_time", "question": "How confident is the release time?",
+     "expect_intent": "release_time", "expect_supported": True},
+    {"category": "release_time", "question": "When did the release start?",
+     "expect_intent": "release_time", "expect_supported": True},
+    {"category": "release_time", "question": "How long ago was the oil released?",
+     "expect_intent": "release_time", "expect_supported": True},
+
     # -------------------------------------------- refusals: out of domain
+    {"category": "refusal_out_of_domain", "question": "Who is legally responsible for this spill?",
+     "expect_intent": "unsupported", "expect_supported": False},
     {"category": "refusal_out_of_domain", "question": "What's the weather like in Mumbai today?",
      "expect_intent": "unsupported", "expect_supported": False},
     {"category": "refusal_out_of_domain", "question": "Who owns this vessel and what is their address?",

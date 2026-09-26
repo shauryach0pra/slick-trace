@@ -105,6 +105,12 @@ def parse_intent(question: str) -> str:
         return "time_window_vessels"
     if re.search(r"why (is|does|did|was)\b.*(above|ahead|beat|rank(ed)? (higher|above|before)|preferred over|over)", q):
         return "candidate_comparison"
+    if re.search(r"\b(nearest|closest)\b.*\b(vessel|ship|boat|one)\b|\b(vessel|ship|boat)s? (nearest|closest)\b|"
+                 r"\bproximity (baseline|pick|choice)\b", q):
+        return "nearest_vessel"
+    if re.search(r"\brelease (time|timing|window|start|age)\b|when did the (release|discharge|spill)|"
+                 r"how long ago|when (was|did) (the )?(oil|slick|spill).*(release|spill|discharg)", q):
+        return "release_time"
     if re.search(r"(top|leading|best|most likely) candidate|which vessel (is|was) the source|who (is|was) the source", q):
         return "top_candidate"
     if re.search(r"(list|show|which).*(candidates|candidate vessels)|candidates for this incident", q):
@@ -249,22 +255,104 @@ def _resolve_top_candidate(kb: CaseKB, question: str) -> QueryResult:
     if kb.attribution is None:
         return QueryResult(question, "top_candidate", supported=False,
                             answer="No attribution ranking has been computed for this incident yet.")
-    if kb.attribution["unknown_source"]:
-        answer = ("No candidate cleared the absolute fit gate "
-                  f"(IoU >= {kb.attribution['abstention_iou_gate']}) — reporting UNKNOWN SOURCE "
-                  "rather than naming a vessel.")
+    at = kb.attribution
+    if at["unknown_source"]:
+        best = at["ranking"][0]["mean_iou"] if at["ranking"] else None
+        answer = ("No vessel is named. "
+                  + (f"The best fit reaches a mean IoU of only {best:.2f}, " if best is not None else "")
+                  + f"below the {at['abstention_iou_gate']} gate, so Slick Trace reports an unknown "
+                  "source rather than guess.")
         citations = ["attribution_result.json field=unknown_source"]
     else:
-        top = kb.attribution["ranking"][0]
-        runner_up = kb.attribution["ranking"][1] if len(kb.attribution["ranking"]) > 1 else None
-        answer = (f"Top candidate: {top['vessel_key']} (mean IoU {top['mean_iou']:.2f}, "
-                  f"won {top['ensemble_win_count']}/{top['n_ensemble']} ensemble variants, "
-                  f"release hypothesis: {top['duration_hours']}h "
-                  f"{'continuous' if top['is_continuous'] else 'pulse'}).")
-        if runner_up:
-            answer += f" Runner-up: {runner_up['vessel_key']} (IoU {runner_up['mean_iou']:.2f})."
+        top = at["ranking"][0]
+        runner_up = at["ranking"][1] if len(at["ranking"]) > 1 else None
+        answer = (f"{top['vessel_key']} best recreates the observed slick: its replayed release overlaps "
+                  f"it at a mean IoU of {top['mean_iou']:.2f} and fits best under "
+                  f"{top['ensemble_win_count']} of {top['n_ensemble']} forcing variants.")
+        disc = at.get("discrimination") or {}
+        if runner_up and disc.get("discriminated") is True:
+            answer += (f" It is separated from the runner-up, {runner_up['vessel_key']} at "
+                       f"{runner_up['mean_iou']:.2f}, by a loss gap of {disc['loss_gap']}.")
+        elif runner_up and disc.get("discriminated") is False:
+            answer += (f" It is not clearly separated from the runner-up, {runner_up['vessel_key']} "
+                       f"({runner_up['mean_iou']:.2f}): the loss gap of {disc['loss_gap']} is under "
+                       f"{disc['tolerance']}, so their order carries no weight.")
+        answer += " An investigative lead, not proof of responsibility."
         citations = [f"attribution_result.json candidate={top['vessel_key']} run={top['candidate_id']}"]
     return QueryResult(question, "top_candidate", {}, answer, citations)
+
+
+_ORDINAL = {1: "1st", 2: "2nd", 3: "3rd"}
+
+
+def _ordinal(n: int) -> str:
+    return _ORDINAL.get(n, f"{n}th")
+
+
+def _resolve_nearest_vessel(kb: CaseKB, question: str) -> QueryResult:
+    """Why the vessel nearest the slick at image time is or is not the one named."""
+    nb, at = kb.naive_baseline, kb.attribution
+    if not nb or not nb.get("ranking") or at is None:
+        return QueryResult(question, "nearest_vessel", supported=False,
+                           answer="The proximity baseline or the attribution ranking has not been "
+                                  "computed for this incident yet.")
+    near = nb["ranking"][0]
+    key, dist = near["vessel_key"], near["distance_deg"]
+    cites = [f"naive_baseline_result.json candidate={key}"]
+    ranked = [r["vessel_key"] for r in at["ranking"]]
+    lead = f"The vessel nearest the slick at image time, {key} ({dist:.3f}° away),"
+    if key in ranked:
+        i = ranked.index(key)
+        r = at["ranking"][i]
+        cites.append(f"attribution_result.json candidate={key} run={r['candidate_id']}")
+        if at["unknown_source"]:
+            answer = (f"{lead} ranks {_ordinal(i + 1)} of {len(ranked)} in forward replay at a mean IoU "
+                      f"of {r['mean_iou']:.2f}, below the {at['abstention_iou_gate']} gate like every "
+                      "candidate, so no vessel is named.")
+        elif key == at["top_candidate_id"]:
+            answer = (f"{lead} is also the top candidate: here forward replay (mean IoU "
+                      f"{r['mean_iou']:.2f}) and proximity agree.")
+        else:
+            top = at["ranking"][0]
+            answer = (f"{lead} ranks {_ordinal(i + 1)} of {len(ranked)} in forward replay at a mean IoU "
+                      f"of {r['mean_iou']:.2f}: oil released along its track recreates the slick less "
+                      f"well than {top['vessel_key']}'s ({top['mean_iou']:.2f}). Being nearby when the "
+                      "image was taken is not evidence of a release.")
+    else:
+        a = next((x for x in (kb.historical_mapping or {}).get("assessments", [])
+                  if x["vessel_key"] == key), None)
+        cites.append(f"historical_mapping.json vessel={key}")
+        answer = (f"{lead} was not replayed: historical filtering marked it "
+                  f"{a['status'] if a else 'not assessed'}"
+                  + (f" ({a['reason']})" if a and a.get("reason") else "") + ".")
+    return QueryResult(question, "nearest_vessel", {"nearest": key}, answer, cites)
+
+
+def _resolve_release_time(kb: CaseKB, question: str) -> QueryResult:
+    """When the leading candidate's best-fitting release began, and how sure that is."""
+    at = kb.attribution
+    if at is None:
+        return QueryResult(question, "release_time", supported=False,
+                           answer="No attribution ranking has been computed for this incident yet.")
+    ra = at.get("release_age") or {}
+    if at["unknown_source"]:
+        return QueryResult(question, "release_time", {}, "No release time is estimated, because no "
+                           "vessel was named.", ["attribution_result.json field=unknown_source"])
+    if not ra.get("estimable"):
+        return QueryResult(question, "release_time", {}, f"No release time is estimated: "
+                           f"{ra.get('caveat', 'the replay fit does not constrain it')}",
+                           ["attribution_result.json field=release_age"])
+    top = at["ranking"][0]
+    start = top["release_start"][11:16]
+    how = ("a half-hour pulse" if not top["is_continuous"] and top["duration_hours"] == 0.5
+           else f"a {top['duration_hours']:g} h {'continuous release' if top['is_continuous'] else 'pulse'}")
+    answer = (f"The best-fitting release began about {ra['hours']:g} h before the image ({start} UTC, "
+              f"{how}). {top['vessel_key']} was inside the origin envelope from {ra['hours_low']:g} to "
+              f"{ra['hours_high']:g} h before, so confidence in the timing is {ra['confidence']}. This "
+              "comes from the replay fit, not from how the slick looks.")
+    return QueryResult(question, "release_time", {"hours": ra["hours"]}, answer,
+                       ["attribution_result.json field=release_age",
+                        f"attribution_result.json candidate={top['vessel_key']} run={top['candidate_id']}"])
 
 
 def _resolve_candidate_list(kb: CaseKB, question: str) -> QueryResult:
@@ -320,19 +408,19 @@ def _resolve_rank_stability(kb: CaseKB, question: str) -> QueryResult:
     if not f.get("testable"):
         return QueryResult(question, "rank_stability", supported=False,
                             answer=f"Rank stability is not testable here: {f.get('reason')}")
-    parts = [f"The leading candidate held its position in "
-             f"{f['lead_retained_fraction'] * 100:.0f}% of {f['n_points_tested']} tested "
-             f"perturbations."]
+    who = ("The best fit, though unnamed because it is below the fit gate,"
+           if kb.attribution and kb.attribution.get("unknown_source") else "The leader")
+    parts = [f"{who} held in {f['lead_retained_fraction'] * 100:.0f}% of "
+             f"{f['n_points_tested']} tested assumption changes."]
     if f.get("flip_found"):
         sf = f["smallest_flip"]
-        changes = ", ".join(f"{k} = {v}" for k, v in sf["changed_axes"].items())
-        parts.append(f"The smallest tested change that flips the leader is {changes} "
-                     f"(standardised magnitude {sf['magnitude']}), after which "
-                     f"{sf['top_candidate']} leads instead.")
+        changes = ", ".join(f"{k.replace('_', ' ')} = {v}" for k, v in sf["changed_axes"].items())
+        parts.append(f"The smallest change that flips it is {changes} (magnitude {sf['magnitude']}), "
+                     f"after which {sf['top_candidate']} leads instead.")
     else:
-        parts.append("No tested perturbation changed the leader.")
-    parts.append("This is a sensitivity counterfactual, not proof of causal responsibility, "
-                 "and only single- and two-axis perturbations were tested.")
+        parts.append("No tested change moved the leader.")
+    parts.append("A sensitivity check, not a proof of stability: only single- and two-setting "
+                 "changes were tested.")
     filters = {"n_points_tested": f["n_points_tested"],
                "axes_tested": list(f.get("axes", {}).keys())}
     citations = [f"fragility_result.json incident={f['incident_id']}"]
@@ -416,6 +504,8 @@ def _resolve_similarity_search(kb: CaseKB, question: str) -> QueryResult:
 
 
 _RESOLVERS = {
+    "nearest_vessel": _resolve_nearest_vessel,
+    "release_time": _resolve_release_time,
     "time_window_vessels": _resolve_time_window_vessels,
     "candidate_comparison": _resolve_candidate_comparison,
     "top_candidate": _resolve_top_candidate,
@@ -433,12 +523,16 @@ _RESOLVERS = {
 def ask(kb: CaseKB, question: str) -> QueryResult:
     intent = parse_intent(question)
     if intent == "unsupported":
-        return QueryResult(question, "unsupported", supported=False,
-                            answer="I don't have a supported query template for this question. "
-                                   "Supported topics: candidate vessels, the top candidate and why, "
-                                   "a specific vessel's route, rank stability, forward exposure, "
-                                   "unmatched contacts, the recommended next observation, and the "
-                                   "forcing-field source.")
+        answer = ("Declined. No question template matches this, and Slick Trace never generates or "
+                  "guesses an answer.")
+        if re.search(r"(responsib|liab|guilt|blame|legal|fault|prosecut|culpab)", question.lower()):
+            answer += (" It can say which vessel's release best fits the evidence, but responsibility is "
+                       "a legal finding it does not make.")
+        answer += (" It can answer: the top candidate and why, why the nearest vessel was or wasn't "
+                   "named, how confident the release time is, what would change the conclusion, the "
+                   "candidate list, a vessel's route, forward exposure, unmatched contacts, the next "
+                   "observation, and the forcing-field source.")
+        return QueryResult(question, "unsupported", supported=False, answer=answer)
     return _RESOLVERS[intent](kb, question)
 
 

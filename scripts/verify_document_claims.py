@@ -19,9 +19,9 @@ check("McNemar p",               sp["mcnemar"]["p_value"], 0.0156, 1e-6)
 check("source-absent n",         sa["n"], 2)
 check("correct abstentions",     sa["correct_abstentions"], 1)
 check("false named",             sa["false_named_attributions"], 1)
-check("NLP total",               V["nlp"]["n"], 40)
-check("NLP passed",              V["nlp"]["n_pass"], 40)
-check("NLP refusals",            V["nlp"]["n_refusal"], 11)
+check("NLP total",               V["nlp"]["n"], 47)
+check("NLP passed",              V["nlp"]["n_pass"], 47)
+check("NLP refusals",            V["nlp"]["n_refusal"], 12)
 check("leak audit rules flagged", sum(r["flagged"] for r in V["leak_audit"]["rules"]), 3)
 check("no rule near 7/7",        max(r["hits"] for r in V["leak_audit"]["rules"]) < 6, True)
 
@@ -58,7 +58,7 @@ check("assumptions",
 
 t = subprocess.run("python3 -m pytest tests/ -q 2>&1 | tail -2",
                    shell=True, capture_output=True, text=True).stdout
-check("330 tests pass", "330 passed" in t, True)
+check("337 tests pass", "337 passed" in t, True)
 
 for f in ("data/geo/coastline_mumbai.json", "data/detection/unet.pt",
           "slicktrace_core/adapters/marinecadastre.py",

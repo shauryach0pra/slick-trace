@@ -289,6 +289,19 @@ The graph window is cropped to the main row of cards and scrolls both ways - the
 proximity baseline is scrolled down to rather than leaving empty space. The hover
 caption is gone; each stage's description stays as its accessible label.
 
+**Ask Slick Trace: curated questions, readable answers, a visible refusal.** Two
+narrative questions were refused because no template covered them; two intents were
+added - why the nearest vessel was or wasn't named (proximity baseline against forward
+replay) and how confident the release time is (release_age) - and the top-candidate and
+stability answers now read as short plain-language findings. Every answer is still
+built from computed fields by a rule-based template and keeps its cites: line. The
+card preloads the same five questions for every case, the last deliberately out of
+scope ('Who is legally responsible for this spill?') to show a refusal, which now
+says responsibility is a legal finding the system does not make. The NLP suite gains
+seven questions (47/47, 12 refusals); the 40 existing ones kept their intents.
+
+The out-of-scope question now looks like the other four; clicking it shows the refusal.
+
 ---
 
 ## 13 September 2026

@@ -175,13 +175,13 @@
     }
   },
   "nlp": {
-    "n": 40,
-    "n_pass": 40,
-    "n_supported": 29,
-    "n_supported_pass": 29,
-    "n_refusal": 11,
-    "n_refusal_pass": 11,
-    "traceable": 29,
+    "n": 47,
+    "n_pass": 47,
+    "n_supported": 35,
+    "n_supported_pass": 35,
+    "n_refusal": 12,
+    "n_refusal_pass": 12,
+    "traceable": 35,
     "by_category": {
       "candidate_list": {
         "n": 2,
@@ -196,6 +196,10 @@
         "pass": 3
       },
       "forecast": {
+        "n": 3,
+        "pass": 3
+      },
+      "nearest_vessel": {
         "n": 3,
         "pass": 3
       },
@@ -216,12 +220,16 @@
         "pass": 2
       },
       "refusal_out_of_domain": {
-        "n": 5,
-        "pass": 5
+        "n": 6,
+        "pass": 6
       },
       "refusal_underspecified": {
         "n": 4,
         "pass": 4
+      },
+      "release_time": {
+        "n": 3,
+        "pass": 3
       },
       "time_window": {
         "n": 3,

@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-26T13:02:05.903801+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-26T14:54:23.582537+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -141,11 +141,11 @@ Separate from the split above, and measuring something different. Those rows sco
 
 | Measure | Result |
 | --- | --- |
-| Total questions | 40 |
-| Overall pass | 40/40 = 100% [95% CI 91–100%] |
-| Supported questions interpreted correctly | 29/29 = 100% [95% CI 88–100%] |
-| Unsupported / ambiguous refused correctly | 11/11 = 100% [95% CI 74–100%] |
-| Supported answers carrying citations | 29/29 = 100% [95% CI 88–100%] |
+| Total questions | 47 |
+| Overall pass | 47/47 = 100% [95% CI 92–100%] |
+| Supported questions interpreted correctly | 35/35 = 100% [95% CI 90–100%] |
+| Unsupported / ambiguous refused correctly | 12/12 = 100% [95% CI 76–100%] |
+| Supported answers carrying citations | 35/35 = 100% [95% CI 90–100%] |
 
 | Category | Passed |
 | --- | --- |
@@ -153,12 +153,14 @@ Separate from the split above, and measuring something different. Those rows sco
 | comparison | 3/3 |
 | coverage | 3/3 |
 | forecast | 3/3 |
+| nearest_vessel | 3/3 |
 | next_observation | 2/2 |
 | provenance | 2/2 |
 | rank_stability | 4/4 |
 | refusal_not_implemented | 2/2 |
-| refusal_out_of_domain | 5/5 |
+| refusal_out_of_domain | 6/6 |
 | refusal_underspecified | 4/4 |
+| release_time | 3/3 |
 | time_window | 3/3 |
 | time_window_midnight | 1/1 |
 | top_candidate | 3/3 |
@@ -214,7 +216,7 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 | Slowest single case, all stages | 23.0 s (case_0004) | ≤ 5 min |
 | Mean per case | 15.3 s | — |
 | Full run, 9 cases | 137.5 s | — |
-| Template query, cold — fresh KB + lookup intent | 1.2 ms | < 2 s |
+| Template query, cold — fresh KB + lookup intent | 0.7 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
 | Time-window query, cold — fresh KB, reads per-time state | 0.7 ms | < 2 s |
 | Time-window query, warm (median of 20) | 0.0 ms | < 2 s |

@@ -53,7 +53,7 @@ slicktrace/
 │   ├── eval_unet.py      # U-Net evaluation on test splits
 │   ├── fit_calibration.py # Ensemble calibration against held-out set
 │   └── verify_document_claims.py # Document claim verification
-├── tests/                # Comprehensive test suite (330 tests)
+├── tests/                # Comprehensive test suite (337 tests)
 ├── docs/                 # Validation reports, assumptions, sustainability
 └── docker-compose.yml    # Multi-stage Docker deployment
 ```
@@ -67,7 +67,7 @@ slicktrace/
 - NumPy and SciPy for numerical computations and particle tracking
 - Matplotlib for visualization and envelope generation
 - Pydantic for data validation and schema enforcement
-- Pytest for comprehensive testing (330 tests covering invariants, API, NLP and benchmark fairness)
+- Pytest for comprehensive testing (337 tests covering invariants, API, NLP and benchmark fairness)
 
 **Frontend:**
 - React 19 with Vite for modern build tooling
@@ -219,7 +219,7 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 | Determinism | regenerate, diff analysis artifacts | byte-identical, 9 cases, verified in CI on Ubuntu x86-64 |
 | Test suite | `python3 -m pytest tests/ -q` | 217 passed, 5 skipped |
 | Dependency pins | every `==` vs installed | all match |
-| Validation | `python3 scripts/run_validation.py` | 7/7 attribution (naive 0/7, exact McNemar p = 0.0156), 1/2 abstentions, 3 of 33 leak-audit rules flagged, 40/40 NLP |
+| Validation | `python3 scripts/run_validation.py` | 7/7 attribution (naive 0/7, exact McNemar p = 0.0156), 1/2 abstentions, 3 of 35 leak-audit rules flagged, 47/47 NLP |
 | Acceptance | `python3 scripts/smoke_test.py` | 6/6 |
 | API | 16 endpoints + 404 paths | pass, no 500s |
 | Frontend | `npm run lint && npm run build` | 0 errors, 2 warnings |
