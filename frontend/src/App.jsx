@@ -5,6 +5,7 @@ import { api } from './api';
 import { useCase } from './useCase';
 import CaseSwitcher from './CaseSwitcher';
 import Overview from './Overview';
+import FamilyChips from './FamilyChips';
 import { attachStickyHeaders } from './stickyHeaders';
 import ThemeToggle from './ThemeToggle';
 import ConclusionGraph from './ConclusionGraph';
@@ -42,6 +43,8 @@ export default function App() {
   const incidentId = route.id ?? lastCase;
   const openCase = useCallback((id) => { window.location.hash = `#/case/${id}`; }, []);
   const openOverview = useCallback(() => { window.location.hash = '#/overview'; }, []);
+  // family filter for the overview grid; the sidebar always lists every case
+  const [family, setFamily] = useState('all');
   const { case: c, report, tracks, error } = useCase(incidentId);
 
   useEffect(() => {
@@ -108,7 +111,10 @@ export default function App() {
           <CaseSwitcher incidents={incidents} active={route.view === 'case' ? incidentId : null} onSelect={openCase} />
         </aside>
 
-        {route.view === 'overview' ? <Overview api={api} onOpen={openCase} /> : (
+        {route.view === 'overview' ? (
+          <Overview api={api} onOpen={openCase} family={family}
+                    chips={<FamilyChips incidents={incidents} value={family} onChange={setFamily} className="in-overview" />} />
+        ) : (
         <div className={`finder-content${leaving ? ' is-leaving' : ''}`} data-case={vid}>
           {/* Evidence column, in the order a reviewer needs it: finding first. */}
           <div className="finder-features" key={vid}>

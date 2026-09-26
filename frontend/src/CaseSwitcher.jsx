@@ -24,7 +24,8 @@ export default function CaseSwitcher({ incidents, active, onSelect }) {
   useLayoutEffect(() => {
     const measure = () => {
       const row = rowRefs.current[active];
-      if (!row || !wrapRef.current) return;
+      // no active row - on the overview, or filtered out of the list: no selection
+      if (!row || !wrapRef.current) { setBox(null); return; }
       setBox({ y: row.offsetTop, h: row.offsetHeight });
     };
     measure();

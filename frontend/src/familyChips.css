@@ -1,0 +1,14 @@
+.fchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fchip {
+  display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px;
+  border: 0; border-radius: 999px; cursor: default; font: inherit; font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium); color: var(--label-1); background: var(--fill-pressed);
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, transform var(--dur-base) var(--ease-spring);
+}
+.fchip:hover { background: var(--fill-hover); }
+.fchip:active { transform: scale(0.96); }
+.fchip:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 1px; }
+.fchip.is-on { background: var(--accent); color: var(--on-accent); }
+.fchip-n { font-family: var(--font-mono); font-size: var(--font-size-xxs); opacity: 0.7; font-variant-numeric: tabular-nums; }
+.fchip.is-on .fchip-n { opacity: 0.9; }
+.fchips.in-overview { margin: -8px 0 var(--space-5); }

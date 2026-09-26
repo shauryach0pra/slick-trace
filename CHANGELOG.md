@@ -346,6 +346,14 @@ case's artifacts, so the two can never say different things. A tile opens its ca
 (#/case/<id>); Back and Forward move between them, and an Overview control in the sidebar
 returns. A test checks the overview's fields against every case's artifacts.
 
+**Family filter chips.** "All" plus one chip per family present in the case list, with its
+count, above the sidebar list and the overview grid - one filter state for both, so they
+always agree. Filtering only hides items; the case list and every case's data are
+untouched. Fixed: the sidebar kept highlighting the last case on the overview, or when
+the open case was filtered out of the list; it now shows no selection then.
+
+The filter chips now appear only above the overview grid; the sidebar lists every case.
+
 ---
 
 ## 13 September 2026

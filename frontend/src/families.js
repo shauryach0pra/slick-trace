@@ -7,3 +7,12 @@ export const FAMILY_LABEL = {
   crowded: 'crowded traffic',
   along_track_ribbon: 'ribbon laid along track',
 };
+
+// Short names for the filter chips, where the descriptions above are too long.
+export const FAMILY_SHORT = {
+  decoy: 'Decoy',
+  moving_discharge: 'Under way',
+  absent_source: 'Source absent',
+  crowded: 'Crowded',
+  along_track_ribbon: 'Ribbon',
+};

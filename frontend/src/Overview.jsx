@@ -10,7 +10,7 @@ import './overview.css';
  * written here. The family says what kind of test a case is, never which vessel
  * did it; the status dot is the system's own outcome.
  */
-export default function Overview({ api, onOpen }) {
+export default function Overview({ api, onOpen, family = 'all', chips = null }) {
   const [rows, setRows] = useState(null);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -22,16 +22,18 @@ export default function Overview({ api, onOpen }) {
   if (error) return <div className="ov"><div className="error-banner">Failed to load the case overview: {error}</div></div>;
   if (!rows) return <div className="ov"><div className="ov-loading">Loading cases…</div></div>;
 
-  const named = rows.filter((r) => r.finding && !r.finding.unknown_source).length;
-  const abstained = rows.filter((r) => r.finding?.unknown_source).length;
+  const shown = family === 'all' ? rows : rows.filter((r) => r.family === family);
+  const named = shown.filter((r) => r.finding && !r.finding.unknown_source).length;
+  const abstained = shown.filter((r) => r.finding?.unknown_source).length;
   return (
     <div className="ov">
       <header className="ov-head">
         <h1>All cases</h1>
-        <p>{rows.length} cases · {named} name a vessel · {abstained} {abstained === 1 ? 'abstains' : 'abstain'}</p>
+        <p>{shown.length === rows.length ? `${rows.length} cases` : `${shown.length} of ${rows.length} cases`} · {named} {named === 1 ? 'names' : 'name'} a vessel · {abstained} {abstained === 1 ? 'abstains' : 'abstain'}</p>
       </header>
+      {chips}
       <div className="ov-grid">
-        {rows.map((r, i) => {
+        {shown.map((r, i) => {
           const f = r.finding;
           const unknown = f?.unknown_source;
           const differs = f && !unknown && f.nearest && f.best && f.nearest.vessel_key !== f.best.vessel_key;
