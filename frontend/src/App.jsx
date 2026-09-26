@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import './dashboard.css';
 import './shell.css';
 import { api } from './api';
@@ -17,6 +17,9 @@ import CoverageCard from './cards/CoverageCard';
 import ProvenanceCard from './cards/ProvenanceCard';
 import AskSlickTraceCard from './cards/AskSlickTraceCard';
 
+// loaded only when a tour starts, so driver.js is not in every page view
+const Tour = lazy(() => import('./tour/Tour'));
+
 export default function App() {
   const [incidents, setIncidents] = useState([]);
   const [incidentId, setIncidentId] = useState('case_0001');
@@ -26,7 +29,19 @@ export default function App() {
     api.listIncidents().then(setIncidents).catch(() => setIncidents([]));
   }, []);
 
-  const meta = c?.meta;
+  const [touring, setTouring] = useState(false);
+
+  // Cross-fade between cases: the last fully loaded case stays on screen (dimmed)
+  // until the next has loaded, then fades in - rather than blanking and
+  // reloading. Updated during render, the standard pattern for derived state.
+  const [shown, setShown] = useState(null);
+  if (c && (shown?.c !== c || shown?.report !== report || shown?.tracks !== tracks)) {
+    setShown({ id: incidentId, c, report, tracks });
+  }
+  const vid = shown?.id;
+  const vc = shown?.c;
+  const leaving = !!shown && shown.id !== incidentId;
+  const meta = vc?.meta;
 
   return (
     <div className="app-shell">
@@ -47,51 +62,61 @@ export default function App() {
               {meta.provenance.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
             </div>
           )}
+          <button type="button" className={`tour-btn${touring ? ' is-on' : ''}`} onClick={() => setTouring((t) => !t)}>
+            {touring ? 'Exit Tour' : 'Start Tour'}
+          </button>
           <ThemeToggle />
         </div>
       </header>
 
       {error && <div className="error-banner">Failed to load incident data: {error}</div>}
+      {touring && incidents.length > 0 && (
+        <Suspense fallback={null}>
+          <Tour incidents={incidents} api={api} selectCase={setIncidentId} onExit={() => setTouring(false)} />
+        </Suspense>
+      )}
 
       <div className="finder-layout">
         <aside className="finder-sidebar">
           <CaseSwitcher incidents={incidents} active={incidentId} onSelect={setIncidentId} />
         </aside>
 
-        <div className="finder-content">
+        <div className={`finder-content${leaving ? ' is-leaving' : ''}`} data-case={vid}>
           {/* Evidence column, in the order a reviewer needs it: finding first. */}
-          <div className="finder-features" key={incidentId}>
-            {c && (
+          <div className="finder-features" key={vid}>
+            {vc && (
               <>
-                <CaseFindingCard attribution={c.attribution} baseline={c.baseline} vessels={c.vessels} />
-                <CandidateRankingCard kind="replay" attribution={c.attribution} baseline={c.baseline} />
-                <CandidateRankingCard kind="baseline" attribution={c.attribution} baseline={c.baseline} />
-                <ObservedSceneCard meta={meta} slick={c.slick} sceneUrl={api.sceneUrl(incidentId)}
-                                   nVessels={c.vessels.length} />
-                <HistoricalReplayCard incidentId={incidentId} api={api} c={c} tracks={tracks} />
-                <FragilityCard fragility={c.fragility} />
-                <ForecastCard forecast={c.forecast} />
-                <NextObservationCard nextObs={c.next_observation} />
-                <CoverageCard coverage={c.coverage} />
-                <ProvenanceCard meta={meta} report={report} />
+                <CaseFindingCard attribution={vc.attribution} baseline={vc.baseline} vessels={vc.vessels} />
+                <CandidateRankingCard kind="replay" attribution={vc.attribution} baseline={vc.baseline} />
+                <CandidateRankingCard kind="baseline" attribution={vc.attribution} baseline={vc.baseline} />
+                <ObservedSceneCard meta={meta} slick={vc.slick} sceneUrl={api.sceneUrl(vid)}
+                                   nVessels={vc.vessels.length} />
+                <HistoricalReplayCard incidentId={vid} api={api} c={vc} tracks={shown.tracks} />
+                <FragilityCard fragility={vc.fragility} />
+                <ForecastCard forecast={vc.forecast} />
+                <NextObservationCard nextObs={vc.next_observation} />
+                <CoverageCard coverage={vc.coverage} />
+                <ProvenanceCard meta={meta} report={shown.report} />
               </>
             )}
           </div>
 
-          <div className="finder-details">
+          <div className="finder-details" key={`d-${vid}`}>
             {meta && (
               <div className="report-buttons">
-                <a className="report-button" href={api.reportUrl(incidentId)} target="_blank" rel="noreferrer">
+                <a className="report-button" href={api.reportUrl(vid)} target="_blank" rel="noreferrer">
                   Investigation Report
                 </a>
-                <a className="report-button" href={api.dossierUrl(incidentId)} target="_blank" rel="noreferrer">
+                <a className="report-button" href={api.dossierUrl(vid)} target="_blank" rel="noreferrer">
                   Dossier (PDF)
                 </a>
               </div>
             )}
-            <ConclusionGraph key={incidentId} attribution={c?.attribution} naive={c?.baseline}
-                             report={report} detection={c?.slick} fragility={c?.fragility} />
-            <AskSlickTraceCard key={`ask-${incidentId}`} incidentId={incidentId} api={api} />
+            {vc && (
+              <ConclusionGraph key={vid} attribution={vc.attribution} naive={vc.baseline}
+                               report={shown.report} detection={vc.slick} fragility={vc.fragility} />
+            )}
+            {vid && <AskSlickTraceCard key={`ask-${vid}`} incidentId={vid} api={api} />}
           </div>
         </div>
       </div>

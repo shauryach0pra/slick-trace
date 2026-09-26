@@ -1,0 +1,73 @@
+/* Guided tour: a blurred, dimmed scrim with a cut-out around the spotlighted
+   card, an animated gradient ring on it, and a frosted callout. */
+
+.st-scrim {
+  position: fixed; inset: 0; z-index: 9990; pointer-events: none;
+  background: rgba(6, 9, 14, 0.46);
+  -webkit-backdrop-filter: blur(7px) saturate(120%); backdrop-filter: blur(7px) saturate(120%);
+  transition: clip-path 420ms var(--ease-spring);
+  animation: st-fade 260ms ease;
+}
+@property --st-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.st-glow {
+  position: fixed; z-index: 9991; pointer-events: none; border-radius: 16px; padding: 2px;
+  background: conic-gradient(from var(--st-angle), #0a84ff, #5ac8fa, #bf5af2, #0a84ff);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  filter: drop-shadow(0 0 10px rgba(90, 200, 250, 0.55));
+  transition: left 420ms var(--ease-spring), top 420ms var(--ease-spring), width 420ms var(--ease-spring),
+              height 420ms var(--ease-spring), opacity 200ms ease;
+  animation: st-spin 4s linear infinite;
+}
+@keyframes st-spin { to { --st-angle: 360deg; } }
+@keyframes st-fade { from { opacity: 0; } }
+
+/* the callout: frosted glass, like the map popovers */
+.driver-popover.st-pop {
+  min-width: 300px; max-width: 360px; padding: 16px 16px 12px; border-radius: 14px;
+  background: rgba(22, 26, 34, 0.9); color: #eef2f7;
+  -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.22), 0 24px 60px rgba(0, 0, 0, 0.55);
+  font-family: var(--font-body);
+}
+.driver-popover.st-pop .driver-popover-arrow { border-color: rgba(22, 26, 34, 0.9); }
+.driver-popover.st-pop .driver-popover-arrow-side-left.driver-popover-arrow { border-top-color: transparent; border-bottom-color: transparent; border-right-color: transparent; }
+.driver-popover.st-pop .driver-popover-arrow-side-right.driver-popover-arrow { border-top-color: transparent; border-bottom-color: transparent; border-left-color: transparent; }
+.driver-popover.st-pop .driver-popover-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
+.driver-popover.st-pop .driver-popover-description { font-size: 13px; line-height: 1.5; color: rgba(238, 242, 247, 0.88); }
+.driver-popover.st-pop .driver-popover-description p { margin: 0 0 8px; }
+.driver-popover.st-pop .driver-popover-description b { color: #fff; font-family: var(--font-mono); font-weight: 600; }
+.driver-popover.st-pop .st-case { font-family: var(--font-mono); font-size: 11px; color: #9fd0ff; text-transform: uppercase; letter-spacing: 0.06em; }
+.driver-popover.st-pop .st-when { padding: 6px 9px; border-radius: 8px; background: rgba(10, 132, 255, 0.16); color: #cfe8ff; }
+.driver-popover.st-pop .st-caveat { color: #ffd08a; font-size: 12px; }
+.driver-popover.st-pop .st-keys { color: rgba(238, 242, 247, 0.55); font-size: 11.5px; }
+.driver-popover.st-pop .driver-popover-footer { margin-top: 6px; }
+.driver-popover.st-pop .driver-popover-progress-text { color: rgba(238, 242, 247, 0.55); font-size: 11.5px; }
+.driver-popover.st-pop .driver-popover-footer button {
+  padding: 5px 12px; border: 0; border-radius: 7px; text-shadow: none; font: inherit; font-size: 12.5px; font-weight: 600;
+  background: rgba(255, 255, 255, 0.12); color: #fff; transition: background-color 150ms ease;
+}
+.driver-popover.st-pop .driver-popover-footer button:hover { background: rgba(255, 255, 255, 0.2); }
+.driver-popover.st-pop .driver-popover-next-btn { background: #0a84ff; }
+.driver-popover.st-pop .driver-popover-next-btn:hover { background: #2a95ff; }
+.driver-popover.st-pop .driver-popover-close-btn { color: rgba(255, 255, 255, 0.6); }
+.driver-popover.st-pop.is-busy .driver-popover-footer { opacity: 0.5; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .st-glow { animation: none; }
+  .st-scrim, .st-glow { transition: none; }
+}
+
+/* Exit Tour, above driver.js's page-wide overlay */
+.st-exit {
+  position: fixed; top: 12px; right: 16px; z-index: 1000000002; height: 30px; padding: 0 14px;
+  border: 0; border-radius: 999px; cursor: default; font: inherit; font-size: 13px; font-weight: 600;
+  color: #fff; background: rgba(22, 26, 34, 0.82);
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.28), 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: st-fade 260ms ease;
+  /* driver.js disables pointer events on the whole page during a tour; exempt this */
+  pointer-events: auto !important;
+}
+.st-exit:hover { background: rgba(40, 46, 58, 0.9); }
+.st-exit:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 2px; }

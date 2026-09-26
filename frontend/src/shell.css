@@ -666,3 +666,20 @@
   .topbar-trailing { width: 100%; justify-content: space-between; margin-left: 0; }
   .wordmark-sub { display: none; }
 }
+
+/* the always-visible tour control, and the case cross-fade */
+.tour-btn {
+  height: 28px; padding: 0 12px; border: 0; border-radius: 7px; cursor: default;
+  background: var(--control-bg); color: var(--label-1); box-shadow: var(--shadow-control);
+  font: inherit; font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);
+}
+.tour-btn:hover { background: var(--control-bg-hover); }
+.tour-btn.is-on { background: var(--accent); color: var(--on-accent); }
+.finder-content { transition: opacity 150ms ease; }
+.finder-content.is-leaving { opacity: 0.25; }
+.finder-content > .finder-features, .finder-content > .finder-details { animation: st-case-in 180ms ease; }
+@keyframes st-case-in { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .finder-content > .finder-features, .finder-content > .finder-details { animation: none; }
+}

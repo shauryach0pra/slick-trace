@@ -302,6 +302,18 @@ seven questions (47/47, 12 refusals); the 40 existing ones kept their intents.
 
 The out-of-scope question now looks like the other four; clicking it shows the refusal.
 
+**Guided tour and a cross-fading case switcher.** A tour visits one exemplar of each of
+the five case families, chosen from the case list's family field. At each stop it drives
+the Replay Map through its own controls - no card logic changed - playing from -24 h and
+freezing on the frame where the top-ranked candidate is inside the origin envelope nearest
+the start of its best-fitting release, computed from the ranking and envelope data; where
+no vessel is named it freezes on the image instead, and notes the family's wrongly named
+case. Built on driver.js (MIT, loaded only when a tour starts) with a blurred, dimmed
+scrim cut out around the spotlighted card, an animated gradient ring and a frosted
+callout. Advance is manual: Space, the arrows, Next, or a click. Start Tour / Exit Tour is
+always available. Switching case keeps the previous case on screen, dimmed, until the next
+has loaded, then fades it in, instead of blanking and reloading.
+
 ---
 
 ## 13 September 2026
