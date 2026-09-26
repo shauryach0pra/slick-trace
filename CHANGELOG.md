@@ -495,6 +495,12 @@ stage, down to the one named - or none - with its provenance as four compact chi
 Observation gains a time axis from the image, ghost tracks behind each window's disagreement and a
 satellite over the recommended window, with the two vessels it would separate as chips.
 
+**Observed Scene's outline sits on the slick again.** The scene image keeps its true proportions;
+cropping it to fill a taller box had shifted it out from under its outline.
+
+**Observed Scene's two halves match.** The fingerprint panel takes exactly the scene image's
+height, with the shape glyph as the part that gives; below 1320 px the two stack instead.
+
 ---
 
 ## 13 September 2026

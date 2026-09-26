@@ -14,3 +14,9 @@ data/calibration/
 # Training-only environment: torch is not in requirements.lock and the
 # runtime image does not need it
 .venv-train/
+
+# one-off patch scripts: applied, kept outside the repository
+patch_*.py
+undo_*.py
+restore_*.py
+.restore_backup/

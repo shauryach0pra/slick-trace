@@ -63,3 +63,18 @@
 .os-grid span { font-size: var(--font-size-xxs); color: var(--label-3); text-transform: uppercase; letter-spacing: 0.05em; }
 .os-print .os-elong { width: 100%; margin-top: 12px; }
 @media (prefers-reduced-motion: reduce) { .os-scanline { animation: none; } }
+
+/* the scene keeps its true proportions, so the outline lies exactly on the slick:
+   cropping the image to fill a taller box had shifted it out from under its outline */
+.os-scene { min-height: 0; align-self: start; }
+.os-scene .scene-img { height: auto; object-fit: fill; }
+
+/* the fingerprint panel takes exactly the image's height: it adds no height of its own to the
+   row (height 0) and stretches to it (min-height 100%); the shape glyph is the part that gives */
+.os { align-items: stretch; }
+.os-print { height: 0; min-height: 100%; box-sizing: border-box; justify-content: space-between; gap: 8px; overflow: hidden; }
+.os-print .os-glyph { flex: 1 1 0; width: auto; height: auto; min-height: 64px; max-height: 150px; aspect-ratio: 1; margin: 2px 0; }
+.os-print .os-grid { margin-top: 4px; }
+.os-print .os-elong { margin-top: 4px; }
+/* too narrow for the image to hold the fingerprint beside it: stack them, each full width */
+@media (max-width: 1320px) { .os { grid-template-columns: 1fr; } .os-print { height: auto; min-height: 0; } }
