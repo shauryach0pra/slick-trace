@@ -10,7 +10,6 @@ import CaseFindingCard from './cards/CaseFindingCard';
 import CandidateRankingCard from './cards/CandidateRankingCard';
 import ObservedSceneCard from './cards/ObservedSceneCard';
 import HistoricalReplayCard from './cards/HistoricalReplayCard';
-import BasemapCard from './cards/BasemapCard';
 import FragilityCard from './cards/FragilityCard';
 import ForecastCard from './cards/ForecastCard';
 import NextObservationCard from './cards/NextObservationCard';
@@ -69,9 +68,7 @@ export default function App() {
                 <CandidateRankingCard kind="baseline" attribution={c.attribution} baseline={c.baseline} />
                 <ObservedSceneCard meta={meta} slick={c.slick} sceneUrl={api.sceneUrl(incidentId)}
                                    nVessels={c.vessels.length} />
-                <BasemapCard meta={meta} api={api} />
-                <HistoricalReplayCard incidentId={incidentId} api={api} tracks={tracks}
-                                      topCandidateId={c.attribution?.top_candidate_id} />
+                <HistoricalReplayCard incidentId={incidentId} api={api} c={c} tracks={tracks} />
                 <FragilityCard fragility={c.fragility} />
                 <ForecastCard forecast={c.forecast} />
                 <NextObservationCard nextObs={c.next_observation} />

@@ -117,6 +117,42 @@ def write_replay_footprints(case_dir: str, manifest: dict, ranking: list, tracks
     return out
 
 
+# Every sixth particle is drawn: 600 of 3,600 per hour keeps a day of frames
+# small, while the contours and stranded share use all of them.
+TIMELINE_PARTICLE_STRIDE = 6
+
+
+def write_forecast_timeline(case_dir: str, forecast: dict, hourly: list, acquired) -> dict:
+    from datetime import timedelta
+    frames = []
+    for h, lon, lat, stranded in hourly:
+        idx = np.arange(0, len(lon), TIMELINE_PARTICLE_STRIDE)
+        frames.append({
+            "hours_after_acquisition": h,
+            "valid_utc": (acquired + timedelta(hours=h)).isoformat(),
+            "stranded_fraction": round(float(stranded.mean()), 4),
+            "particles": [[_r(lon[i]), _r(lat[i]), bool(stranded[i])] for i in idx],
+            "density_contours": [{"fraction": c["fraction"],
+                                  "polygons": [[[_r(x), _r(y)] for x, y in ring]
+                                               for ring in c["polygons"]]}
+                                 for c in density_contours(lon, lat)],
+        })
+    out = {
+        "incident_id": forecast["incident_id"],
+        "issued_from_utc": forecast["issued_from_utc"],
+        "n_particles_per_hour": int(len(hourly[0][1])) if hourly else 0,
+        "particle_stride": TIMELINE_PARTICLE_STRIDE,
+        "coordinate_decimals": DECIMALS,
+        "frames": frames,
+        "note": ("Modelled surface-particle drift after the image, hour by hour, under the "
+                 "tested forcing ensemble. Particles that reach the coast are held there "
+                 "(stranded, third field true). At 6, 12 and 24 h these are the particles "
+                 "behind forecast_result.json. Modelled exposure, not predicted damage."),
+    }
+    _write(case_dir, "forecast_timeline.json", out)
+    return out
+
+
 def write_forecast_contours(case_dir: str, forecast: dict, particles_by_horizon: list) -> dict:
     horizons = []
     for h, (lon, lat) in zip(forecast["horizons"], particles_by_horizon):

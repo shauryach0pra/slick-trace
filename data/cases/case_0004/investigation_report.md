@@ -2,11 +2,11 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-25T20:56:23.535267+00:00 · git `3de746c` · Darwin 25.2.0 (arm64)
+Generated 2026-09-26T12:21:29.528911+00:00 · git `7e10f46` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
-**Leading candidate: `419602854`** — mean IoU 0.479, leading in 5/6 shared forcing variants.
+**Leading candidate: `419210002`** — mean IoU 0.727, leading in 6/6 shared forcing variants.
 
 This is an investigative lead for a human analyst. It is not a legal finding, and it is not an accusation.
 
@@ -28,21 +28,21 @@ This is an investigative lead for a human analyst. It is not a legal finding, an
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 8 candidate, 3 unassessed.
+Backward window: 24 h. Outcomes: 10 candidate, 1 excluded.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
-| `419407863` | candidate | inside envelope at 4 of 25 queried times |
-| `419918411` | candidate | inside envelope at 7 of 25 queried times |
-| `419603105` | candidate | inside envelope at 5 of 25 queried times |
-| `419643687` | candidate | inside envelope at 9 of 25 queried times |
-| `419745959` | unassessed | no track data at 14 of 25 queried times; track data 12 h to 2 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
-| `419224568` | candidate | inside envelope at 3 of 25 queried times |
-| `419602854` | candidate | inside envelope at 5 of 25 queried times |
-| `419933538` | candidate | inside envelope at 5 of 25 queried times |
-| `419334550` | unassessed | no track data at 14 of 25 queried times; track data 13 h to 3 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
-| `419298967` | unassessed | no track data at 17 of 25 queried times; track data 14 h to 7 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
-| `419202023` | candidate | inside envelope at 1 of 25 queried times |
+| `419364347` | candidate | inside envelope at 7 of 25 queried times |
+| `419105044` | candidate | inside envelope at 5 of 25 queried times |
+| `419925490` | candidate | inside envelope at 1 of 25 queried times |
+| `419245446` | candidate | inside envelope at 2 of 25 queried times |
+| `419551783` | candidate | inside envelope at 8 of 25 queried times |
+| `419761151` | candidate | inside envelope at 10 of 25 queried times |
+| `419737493` | candidate | inside envelope at 16 of 25 queried times |
+| `419634099` | candidate | inside envelope at 3 of 25 queried times |
+| `419210002` | candidate | inside envelope at 5 of 25 queried times |
+| `419580368` | excluded | track data at all 25 queried times; never inside the backward envelope |
+| `419433516` | candidate | inside envelope at 4 of 25 queried times |
 
 > `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
@@ -50,22 +50,24 @@ Backward window: 24 h. Outcomes: 8 candidate, 3 unassessed.
 
 | Vessel | Mean IoU | Mean loss | Ensemble wins | Release hypothesis |
 | --- | --- | --- | --- | --- |
-| `419602854` | 0.479 | 0.4031 | 5/6 | 4.0 h continuous |
-| `419643687` | 0.346 | 0.4657 | 1/6 | 4.0 h continuous |
-| `419603105` | 0.118 | 0.4978 | 0/6 | 0.5 h pulse |
-| `419933538` | 0.119 | 0.5001 | 0/6 | 0.5 h pulse |
-| `419407863` | 0.117 | 0.5105 | 0/6 | 0.5 h pulse |
-| `419224568` | 0.066 | 0.5200 | 0/6 | 0.5 h pulse |
-| `419918411` | 0.040 | 0.5229 | 0/6 | 0.5 h pulse |
-| `419202023` | 0.015 | 0.5656 | 0/6 | 0.5 h pulse |
+| `419210002` | 0.727 | 0.2034 | 6/6 | 2.0 h continuous |
+| `419105044` | 0.487 | 0.3008 | 0/6 | 0.5 h pulse |
+| `419737493` | 0.365 | 0.4074 | 0/6 | 0.5 h pulse |
+| `419364347` | 0.320 | 0.4202 | 0/6 | 0.5 h pulse |
+| `419433516` | 0.307 | 0.4645 | 0/6 | 0.5 h pulse |
+| `419245446` | 0.189 | 0.4974 | 0/6 | 2.0 h continuous |
+| `419925490` | 0.004 | 0.5673 | 0/6 | 0.5 h pulse |
+| `419761151` | 0.000 | 0.5766 | 0/6 | 0.5 h pulse |
+| `419634099` | 0.000 | 0.5911 | 0/6 | 0.5 h pulse |
+| `419551783` | 0.000 | 0.5973 | 0/6 | 0.5 h pulse |
 
-Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419643687`.
+Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419245446`.
 
 ## Rank fragility
 
-80 perturbations tested; the leader changed in 10 of them (88% lead retention).
+80 perturbations tested; the leader changed in 13 of them (84% lead retention).
 
-Smallest tested rank-changing perturbation (standardised magnitude 1.0): `diffusivity_scale` = 1.8 → leader becomes `419643687`.
+Smallest tested rank-changing perturbation (standardised magnitude 1.0): `current_u_bias` = -0.03, `diffusivity_scale` = 0.6 → leader becomes `419433516`.
 
 > Single-axis and two-axis perturbations only. Three-or-more-axis combinations were not tested, so absence of a flip is evidence of stability across the tested set, not a proof of stability.
 
@@ -77,9 +79,9 @@ _reanalysis-style retrospective field — NOT an operational forecast issued fro
 
 | Horizon | Envelope area (km²) | Shoreline fraction | Sensitive-area contact |
 | --- | --- | --- | --- |
-| +6 h | 515.7 | 0.0 | Fishing ground (synthetic) |
-| +12 h | 551.8 | 0.0003 | Fishing ground (synthetic) |
-| +24 h | 595.6 | 0.0122 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
+| +6 h | 490.9 | 0.0 | Fishing ground (synthetic) |
+| +12 h | 541.3 | 0.0 | Fishing ground (synthetic) |
+| +24 h | 585.3 | 0.0067 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
 
 > Modelled surface-particle exposure and arrival intervals under the tested forcing ensemble. Not a prediction of beaching, concentration, or environmental damage. A particle that reaches the coastline is held where it arrives (simple stranding, checked hourly); refloating, weathering and emulsification are not modelled.
 
@@ -89,12 +91,12 @@ Operating point: match gate 0.02°, contact position noise 0.012°.
 
 | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- |
-| selective | 0.9016 (55/61) | 0.315 (40/127) | 0.275 (11/40) |
-| coverage_failure | 0.9062 (29/32) | 0.2667 (16/60) | 0.0588 (1/17) |
+| selective | 0.8571 (54/63) | 0.338 (48/142) | 0.225 (9/40) |
+| coverage_failure | 0.8378 (31/37) | 0.35 (28/80) | 0.3333 (7/21) |
 
 ## Recommended next observation
 
-Most informative tested window: **+3 h** (disagreement score 0.6393). hypothetical — no acquisition schedule supplied.
+Most informative tested window: **+24 h** (disagreement score 0.5841). hypothetical — no acquisition schedule supplied.
 
 > The system recommends which evidence would be informative. It does not task satellites and does not assert that an acquisition is available in the recommended window.
 
@@ -111,14 +113,14 @@ Most informative tested window: **+3 h** (disagreement score 0.6393). hypothetic
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `7085bf619bda128b…` |
-| `historical_mapping.json` | `4d0f5ac80290d07e…` |
-| `naive_baseline_result.json` | `4f2b6e4aef248f0c…` |
-| `attribution_result.json` | `054142f32c3ebe7d…` |
-| `fragility_result.json` | `4ad356713978641c…` |
-| `coverage_result.json` | `95e0564f06cf49da…` |
-| `forecast_result.json` | `89eec35e2e58e74b…` |
-| `next_observation_result.json` | `bf4ffe7846242d8b…` |
-| `scene.png` | `7215840d51797b3d…` |
-| `mask_groundtruth.png` | `0b90880eb9fbab99…` |
+| `manifest.json` | `afd9c576ef5dfb28…` |
+| `historical_mapping.json` | `0e59d782ef6b8cbb…` |
+| `naive_baseline_result.json` | `98441527f8e3dc37…` |
+| `attribution_result.json` | `28f6266e0be58157…` |
+| `fragility_result.json` | `c982850c8bf6dcf2…` |
+| `coverage_result.json` | `1e82a0203e8eba1e…` |
+| `forecast_result.json` | `360170a11e8fab91…` |
+| `next_observation_result.json` | `29f9f10a8c7b7dd6…` |
+| `scene.png` | `b01fa9684715b913…` |
+| `mask_groundtruth.png` | `744117fc89bfd972…` |
 | `forcing.npz` | `4b4a3d7409108fc9…` |

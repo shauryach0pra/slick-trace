@@ -2,11 +2,11 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-25T20:56:17.127062+00:00 · git `3de746c` · Darwin 25.2.0 (arm64)
+Generated 2026-09-26T12:21:08.846513+00:00 · git `7e10f46` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
-**Leading candidate: `419829242`** — mean IoU 0.494, leading in 3/6 shared forcing variants.
+**Leading candidate: `419771272`** — mean IoU 0.325, leading in 5/6 shared forcing variants.
 
 This is an investigative lead for a human analyst. It is not a legal finding, and it is not an accusation.
 
@@ -28,15 +28,15 @@ This is an investigative lead for a human analyst. It is not a legal finding, an
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 2 unassessed, 3 candidate.
+Backward window: 24 h. Outcomes: 5 candidate.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
-| `419870273` | unassessed | no track data at 10 of 25 queried times; track data 14 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
-| `419949542` | candidate | inside envelope at 2 of 25 queried times |
-| `419155085` | unassessed | no track data at 13 of 25 queried times; track data 12 h to 1 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
-| `419101352` | candidate | inside envelope at 11 of 25 queried times |
-| `419829242` | candidate | inside envelope at 4 of 25 queried times |
+| `419530006` | candidate | inside envelope at 14 of 25 queried times |
+| `419315497` | candidate | inside envelope at 3 of 25 queried times |
+| `419400107` | candidate | inside envelope at 2 of 25 queried times |
+| `419771272` | candidate | inside envelope at 25 of 25 queried times |
+| `419551858` | candidate | inside envelope at 17 of 25 queried times |
 
 > `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
@@ -44,17 +44,19 @@ Backward window: 24 h. Outcomes: 2 unassessed, 3 candidate.
 
 | Vessel | Mean IoU | Mean loss | Ensemble wins | Release hypothesis |
 | --- | --- | --- | --- | --- |
-| `419829242` | 0.494 | 0.3013 | 3/6 | 0.5 h pulse |
-| `419101352` | 0.406 | 0.3477 | 3/6 | 0.5 h pulse |
-| `419949542` | 0.191 | 0.4722 | 0/6 | 0.5 h pulse |
+| `419771272` | 0.325 | 0.3898 | 5/6 | 0.5 h pulse |
+| `419400107` | 0.190 | 0.4800 | 1/6 | 0.5 h pulse |
+| `419551858` | 0.035 | 0.5243 | 0/6 | 0.5 h pulse |
+| `419530006` | 0.000 | 0.5715 | 0/6 | 0.5 h pulse |
+| `419315497` | 0.000 | 0.5957 | 0/6 | 0.5 h pulse |
 
-Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419949542`.
+Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419400107`.
 
 ## Rank fragility
 
-80 perturbations tested; the leader changed in 42 of them (48% lead retention).
+80 perturbations tested; the leader changed in 6 of them (92% lead retention).
 
-Smallest tested rank-changing perturbation (standardised magnitude 0.25): `diffusivity_scale` = 0.8 → leader becomes `419101352`.
+Smallest tested rank-changing perturbation (standardised magnitude 1.0): `diffusivity_scale` = 1.8 → leader becomes `419400107`.
 
 > Single-axis and two-axis perturbations only. Three-or-more-axis combinations were not tested, so absence of a flip is evidence of stability across the tested set, not a proof of stability.
 
@@ -66,9 +68,9 @@ _reanalysis-style retrospective field — NOT an operational forecast issued fro
 
 | Horizon | Envelope area (km²) | Shoreline fraction | Sensitive-area contact |
 | --- | --- | --- | --- |
-| +6 h | 471.7 | 0.0 | Fishing ground (synthetic) |
-| +12 h | 534.9 | 0.0 | Fishing ground (synthetic) |
-| +24 h | 580.9 | 0.0028 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
+| +6 h | 482.6 | 0.0 | Fishing ground (synthetic) |
+| +12 h | 536.9 | 0.0 | Fishing ground (synthetic) |
+| +24 h | 578.3 | 0.0028 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
 
 > Modelled surface-particle exposure and arrival intervals under the tested forcing ensemble. Not a prediction of beaching, concentration, or environmental damage. A particle that reaches the coastline is held where it arrives (simple stranding, checked hourly); refloating, weathering and emulsification are not modelled.
 
@@ -78,12 +80,12 @@ Operating point: match gate 0.02°, contact position noise 0.012°.
 
 | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- |
-| selective | 0.7846 (51/65) | 0.2526 (24/95) | 0.35 (14/40) |
-| coverage_failure | 0.8304 (93/112) | 0.0268 (3/112) | 1.0 (32/32) |
+| selective | 0.8 (64/80) | 0.25 (32/128) | 0.375 (15/40) |
+| coverage_failure | 0.7955 (70/88) | 0.2154 (28/130) | 0.575 (23/40) |
 
 ## Recommended next observation
 
-Most informative tested window: **+3 h** (disagreement score 0.7187). hypothetical — no acquisition schedule supplied.
+Most informative tested window: **+3 h** (disagreement score 0.9178). hypothetical — no acquisition schedule supplied.
 
 > The system recommends which evidence would be informative. It does not task satellites and does not assert that an acquisition is available in the recommended window.
 
@@ -100,14 +102,14 @@ Most informative tested window: **+3 h** (disagreement score 0.7187). hypothetic
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `4054992831450b80…` |
-| `historical_mapping.json` | `6f1f20a671a4f8fc…` |
-| `naive_baseline_result.json` | `cb2b3f36909550a3…` |
-| `attribution_result.json` | `ce692c5b2f167922…` |
-| `fragility_result.json` | `f50f6dcdc72837cc…` |
-| `coverage_result.json` | `c97cba7c57612ccb…` |
-| `forecast_result.json` | `0b080939e537c79c…` |
-| `next_observation_result.json` | `3d48061a513ca7eb…` |
-| `scene.png` | `4b8735e990e24713…` |
-| `mask_groundtruth.png` | `625ed548de69796c…` |
+| `manifest.json` | `d984b38484da1031…` |
+| `historical_mapping.json` | `748c15129fabdb2c…` |
+| `naive_baseline_result.json` | `ec0c618119c3a020…` |
+| `attribution_result.json` | `13dd40672ab6431e…` |
+| `fragility_result.json` | `42a592bcdf7fe525…` |
+| `coverage_result.json` | `6ceb13a8c2e6da7d…` |
+| `forecast_result.json` | `efb953534425a760…` |
+| `next_observation_result.json` | `ae115bc6f214ab9b…` |
+| `scene.png` | `2e9edc714c5336e2…` |
+| `mask_groundtruth.png` | `f68e46a604d4c3c2…` |
 | `forcing.npz` | `767ec8f532e8cc46…` |

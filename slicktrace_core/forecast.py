@@ -110,7 +110,24 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
                 lo, la = at(t)
                 hit = np.isinf(strand_h) & on_land(lo, la, coastline)
                 strand_h[hit] = t
-        return at, strand_h
+        # Where it strands: the hourly check finds the first hour a particle is
+        # on land, up to an hour's drift past the coast. Bisecting between its
+        # last sea hour and that one finds the moment it crosses the shoreline,
+        # and it is held there. Counts still use the hourly strand_h, so every
+        # stranded fraction and first-contact hour is unchanged.
+        strand_t = strand_h.copy()
+        idx = np.flatnonzero(np.isfinite(strand_h))
+        if idx.size:
+            lo_t, hi_t = strand_h[idx] - 1.0, strand_h[idx].copy()
+            for _ in range(12):
+                mid = (lo_t + hi_t) / 2
+                t_all = np.zeros(len(lon0)); t_all[idx] = mid
+                lo_x, la_x = at(t_all)
+                land = on_land(lo_x[idx], la_x[idx], coastline)
+                hi_t = np.where(land, mid, hi_t)
+                lo_t = np.where(land, lo_t, mid)
+            strand_t[idx] = hi_t
+        return at, strand_h, strand_t
 
     paths = [_paths(vi, var) for vi, var in enumerate(variants)]
 
@@ -121,8 +138,8 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
 
     for h in horizons_h:
         all_lon, all_lat, stranded = [], [], []
-        for at, strand_h in paths:
-            t_eff = np.minimum(float(h), strand_h)
+        for at, strand_h, strand_t in paths:
+            t_eff = np.where(strand_h <= h, strand_t, float(h))
             lon, lat = at(t_eff)
             all_lon.append(lon)
             all_lat.append(lat)
@@ -184,8 +201,19 @@ def run_forecast(case_dir: str, horizons_h=HORIZONS_H, n_particles: int = 600,
     with open(os.path.join(case_dir, "forecast_result.json"), "w") as f:
         json.dump(out, f, indent=2, default=str)
 
-    from slicktrace_core.display_geometry import write_forecast_contours
+    from slicktrace_core.display_geometry import write_forecast_contours, write_forecast_timeline
     write_forecast_contours(case_dir, out, particles_by_horizon)
+
+    # The same particle paths at every whole hour, for the map's time slider.
+    # At 6, 12 and 24 h these are exactly the particles behind the figures above.
+    hourly = []
+    for h in range(1, h_max + 1):
+        lons, lats, strands = [], [], []
+        for at, strand_h, strand_t in paths:
+            lo, la = at(np.where(strand_h <= h, strand_t, float(h)))
+            lons.append(lo); lats.append(la); strands.append(strand_h <= h)
+        hourly.append((h, np.concatenate(lons), np.concatenate(lats), np.concatenate(strands)))
+    write_forecast_timeline(case_dir, out, hourly, acquired)
     return out
 
 

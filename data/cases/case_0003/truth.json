@@ -3,7 +3,7 @@
   "family": "absent_source",
   "seed": 2026,
   "true_vessel_key": null,
-  "absent_true_vessel_key": "419402921",
+  "absent_true_vessel_key": "419870273",
   "source_is_in_manifest": false,
   "expected_outcome": "unknown_source",
   "release_start_utc": "2026-09-09T22:30:00+00:00",
@@ -11,16 +11,16 @@
   "is_continuous": true,
   "swirl": 0.011789348136754363,
   "roles": {
-    "419870273": "background",
-    "419949542": "near_decoy",
-    "419402921": "absent_true_source",
-    "419155085": "near_miss_decoy",
-    "419101352": "background",
-    "419829242": "background"
+    "419530006": "background",
+    "419870273": "absent_true_source",
+    "419315497": "background",
+    "419400107": "near_decoy",
+    "419771272": "background",
+    "419551858": "near_miss_decoy"
   },
   "slick_centroid": [
-    72.28279045403993,
-    19.189139364952315
+    72.31337954416414,
+    19.166342466202245
   ],
   "WARNING": "Dev/validation only. Not served by the API, not read by the UI, and not required to reproduce any result shown to a reviewer."
 }

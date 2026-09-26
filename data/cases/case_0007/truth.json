@@ -2,7 +2,7 @@
   "incident_id": "case_0007",
   "family": "decoy",
   "seed": 3312,
-  "true_vessel_key": "419323519",
+  "true_vessel_key": "419363968",
   "absent_true_vessel_key": null,
   "source_is_in_manifest": true,
   "expected_outcome": "named_candidate",
@@ -11,16 +11,16 @@
   "is_continuous": true,
   "swirl": 0.010485644795903373,
   "roles": {
+    "419276389": "background",
+    "419625403": "background",
+    "419931151": "near_decoy",
+    "419363968": "true_source",
     "419473598": "background",
-    "419276389": "near_miss_decoy",
-    "419735411": "background",
-    "419615389": "background",
-    "419625403": "near_decoy",
-    "419323519": "true_source"
+    "419323519": "near_miss_decoy"
   },
   "slick_centroid": [
-    72.364110493811,
-    19.125867185727024
+    72.29494119060801,
+    19.17755675837264
   ],
   "WARNING": "Dev/validation only. Not served by the API, not read by the UI, and not required to reproduce any result shown to a reviewer."
 }

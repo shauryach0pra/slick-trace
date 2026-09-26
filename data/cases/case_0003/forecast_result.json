@@ -7,17 +7,17 @@
     {
       "horizon_hours": 6,
       "valid_utc": "2026-09-10T10:30:00+00:00",
-      "envelope_area_km2": 471.7,
+      "envelope_area_km2": 482.6,
       "centroid": [
-        72.31079,
-        19.17986
+        72.33674,
+        19.15898
       ],
       "modelled_shoreline_fraction": 0.0,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.4356,
+          "modelled_particle_fraction": 0.4183,
           "any_contact": true
         },
         {
@@ -32,17 +32,17 @@
     {
       "horizon_hours": 12,
       "valid_utc": "2026-09-10T16:30:00+00:00",
-      "envelope_area_km2": 534.9,
+      "envelope_area_km2": 536.9,
       "centroid": [
-        72.34039,
-        19.17004
+        72.36634,
+        19.14916
       ],
       "modelled_shoreline_fraction": 0.0,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.4128,
+          "modelled_particle_fraction": 0.3983,
           "any_contact": true
         },
         {
@@ -57,23 +57,23 @@
     {
       "horizon_hours": 24,
       "valid_utc": "2026-09-11T04:30:00+00:00",
-      "envelope_area_km2": 580.9,
+      "envelope_area_km2": 578.3,
       "centroid": [
-        72.39927,
-        19.15047
+        72.42515,
+        19.12959
       ],
       "modelled_shoreline_fraction": 0.0028,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.2972,
+          "modelled_particle_fraction": 0.2978,
           "any_contact": true
         },
         {
           "name": "Mangrove reserve (synthetic)",
           "kind": "mangrove",
-          "modelled_particle_fraction": 0.0006,
+          "modelled_particle_fraction": 0.0014,
           "any_contact": true
         }
       ],

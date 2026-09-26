@@ -247,3 +247,22 @@ def test_case_endpoint_missing_stage_returns_actionable_404():
     finally:
         import shutil
         shutil.rmtree(empty, ignore_errors=True)
+
+
+def test_probe_reports_the_current_the_model_advects_with():
+    """The forcing is in m/s. The probe once read it as degrees per hour and
+    showed 9.03 kn for a 0.31 kn current."""
+    import math
+    import numpy as np
+    cid = client.get("/api/incidents").json()[0]["incident_id"]
+    m = client.get(f"/api/incidents/{cid}/manifest").json()
+    f = np.load(m["forcing_path"])
+    b = m["bbox"]
+    r = client.get(f"/api/incidents/{cid}/probe",
+                   params={"lon": (b["min_lon"] + b["max_lon"]) / 2,
+                           "lat": (b["min_lat"] + b["max_lat"]) / 2}).json()
+    speed_ms = math.hypot(float(f["u"]), float(f["v"]))
+    assert abs(r["current"]["speed_knots"] - speed_ms * 1.943844) < 0.001
+    assert abs(r["current"]["speed_km_per_h"] - speed_ms * 3.6) < 0.001
+    bearing = (math.degrees(math.atan2(float(f["u"]), float(f["v"]))) + 360) % 360
+    assert abs(r["current"]["bearing_deg_from_north"] - bearing) < 0.1

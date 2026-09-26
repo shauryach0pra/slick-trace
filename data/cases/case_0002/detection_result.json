@@ -11,16 +11,16 @@
   "detected": true,
   "case_state": "potential_slick",
   "geometry": {
-    "area_km2": 376.44,
+    "area_km2": 374.66,
     "perimeter_km": 75.48,
     "interior_holes_filled_px": 0,
-    "major_axis_km": 24.5,
-    "minor_axis_km": 19.89,
-    "elongation": 1.23,
-    "orientation_deg_from_north": 137.0,
+    "major_axis_km": 24.37,
+    "minor_axis_km": 19.91,
+    "elongation": 1.22,
+    "orientation_deg_from_north": 136.1,
     "centroid": [
-      72.35093,
-      19.15765
+      72.35114,
+      19.15719
     ]
   },
   "polygon": [
@@ -249,32 +249,28 @@
       19.25294
     ],
     [
-      72.28824,
+      72.29216,
+      19.25294
+    ],
+    [
+      72.30784,
+      19.25294
+    ],
+    [
+      72.31569,
+      19.25294
+    ],
+    [
+      72.32745,
       19.25686
     ],
     [
-      72.30196,
-      19.2549
-    ],
-    [
-      72.3098,
-      19.25882
-    ],
-    [
-      72.31961,
-      19.25686
-    ],
-    [
-      72.33137,
+      72.33922,
       19.26078
     ],
     [
-      72.34706,
+      72.3549,
       19.26078
-    ],
-    [
-      72.35882,
-      19.26471
     ]
   ],
   "radiometry": {
@@ -297,24 +293,24 @@
   "n_regions": 1,
   "regions": [
     {
-      "area_km2": 376.44,
+      "area_km2": 374.66,
       "perimeter_km": 75.48,
-      "major_axis_km": 24.5,
-      "minor_axis_km": 19.89,
-      "elongation": 1.23,
-      "orientation_deg_from_north": 137.0,
+      "major_axis_km": 24.37,
+      "minor_axis_km": 19.91,
+      "elongation": 1.22,
+      "orientation_deg_from_north": 136.1,
       "interior_holes_filled_px": 0,
       "centroid": [
-        72.35093,
-        19.15765
+        72.35114,
+        19.15719
       ],
-      "region_px": 2109
+      "region_px": 2099
     }
   ],
-  "total_area_km2": 376.44,
+  "total_area_km2": 374.66,
   "multi_region_note": "Single region in this scene; top-level geometry and regions[0] agree.",
   "agreement_with_truth_mask": {
-    "iou": 0.9691,
+    "iou": 0.9708,
     "note": "Available because this is a synthetic case with a generator truth mask. On real imagery no such label exists."
   },
   "measurement_note": "Geometry measured in local azimuthal-equidistant metres centred on the scene at 18.90 N: 410.9 m east-west against 434.4 m north-south, rather than the manifest's single 433.59 m figure, which treats a pixel as square and overstates area by about 5% at this latitude. Distances and directions from the scene centre are true, which is what area, axis lengths and bearing require. This is not a full reprojection into EPSG:32643 - over a scene one degree across the difference is far below the detector's own boundary uncertainty. Axis lengths are 2-sigma extents along the principal axes.",

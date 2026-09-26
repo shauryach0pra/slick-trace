@@ -1,5 +1,5 @@
 {
-  "wall_clock_s": 37.83,
+  "wall_clock_s": 131.51,
   "n_cases": 9,
   "regenerated_from_seeds": true,
   "skipped_stages": [],
@@ -12,146 +12,146 @@
   },
   "per_case": {
     "case_0001": {
-      "total_s": 4.4,
+      "total_s": 16.42,
       "stages_s": {
-        "detection": 0.22,
-        "historical_mapping": 1.1,
-        "track_display": 0.0,
+        "detection": 0.21,
+        "historical_mapping": 0.81,
+        "track_display": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 1.18,
-        "fragility": 1.44,
+        "attribution": 10.24,
+        "fragility": 2.1,
         "coverage": 0.01,
-        "forecast": 0.33,
-        "next_observation": 0.03,
+        "forecast": 2.9,
+        "next_observation": 0.04,
         "report": 0.03,
         "dossier": 0.06
       }
     },
     "case_0002": {
-      "total_s": 4.26,
+      "total_s": 14.63,
       "stages_s": {
         "detection": 0.03,
-        "historical_mapping": 0.4,
+        "historical_mapping": 0.47,
         "track_display": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 1.54,
-        "fragility": 1.91,
+        "attribution": 8.77,
+        "fragility": 2.42,
         "coverage": 0.01,
-        "forecast": 0.32,
+        "forecast": 2.87,
         "next_observation": 0.03,
-        "report": 0.01,
+        "report": 0.03,
         "dossier": 0.01
       }
     },
     "case_0003": {
-      "total_s": 2.66,
+      "total_s": 16.68,
       "stages_s": {
         "detection": 0.03,
-        "historical_mapping": 0.38,
+        "historical_mapping": 0.41,
         "track_display": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 0.85,
-        "fragility": 1.03,
+        "attribution": 11.16,
+        "fragility": 2.19,
         "coverage": 0.01,
-        "forecast": 0.32,
+        "forecast": 2.81,
         "next_observation": 0.03,
-        "report": 0.01,
+        "report": 0.03,
         "dossier": 0.01
       }
     },
     "case_0004": {
-      "total_s": 6.41,
+      "total_s": 20.68,
       "stages_s": {
         "detection": 0.03,
-        "historical_mapping": 0.38,
+        "historical_mapping": 0.42,
         "track_display": 0.01,
         "naive_baseline": 0.0,
-        "attribution": 2.51,
-        "fragility": 3.11,
+        "attribution": 13.45,
+        "fragility": 3.94,
         "coverage": 0.01,
-        "forecast": 0.32,
-        "next_observation": 0.03,
-        "report": 0.01,
-        "dossier": 0.01
-      }
-    },
-    "case_0005": {
-      "total_s": 3.5,
-      "stages_s": {
-        "detection": 0.03,
-        "historical_mapping": 0.38,
-        "track_display": 0.0,
-        "naive_baseline": 0.0,
-        "attribution": 1.22,
-        "fragility": 1.49,
-        "coverage": 0.01,
-        "forecast": 0.33,
-        "next_observation": 0.03,
-        "report": 0.01,
-        "dossier": 0.01
-      }
-    },
-    "case_0006": {
-      "total_s": 3.51,
-      "stages_s": {
-        "detection": 0.03,
-        "historical_mapping": 0.39,
-        "track_display": 0.0,
-        "naive_baseline": 0.0,
-        "attribution": 1.22,
-        "fragility": 1.5,
-        "coverage": 0.01,
-        "forecast": 0.32,
-        "next_observation": 0.03,
-        "report": 0.01,
-        "dossier": 0.01
-      }
-    },
-    "case_0007": {
-      "total_s": 4.92,
-      "stages_s": {
-        "detection": 0.03,
-        "historical_mapping": 0.38,
-        "track_display": 0.0,
-        "naive_baseline": 0.0,
-        "attribution": 1.82,
-        "fragility": 2.27,
-        "coverage": 0.01,
-        "forecast": 0.35,
-        "next_observation": 0.05,
-        "report": 0.01,
-        "dossier": 0.01
-      }
-    },
-    "case_0008": {
-      "total_s": 4.49,
-      "stages_s": {
-        "detection": 0.03,
-        "historical_mapping": 0.4,
-        "track_display": 0.0,
-        "naive_baseline": 0.0,
-        "attribution": 1.62,
-        "fragility": 2.03,
-        "coverage": 0.01,
-        "forecast": 0.34,
+        "forecast": 2.76,
         "next_observation": 0.03,
         "report": 0.02,
         "dossier": 0.01
       }
     },
-    "case_0009": {
-      "total_s": 3.67,
+    "case_0005": {
+      "total_s": 11.59,
+      "stages_s": {
+        "detection": 0.03,
+        "historical_mapping": 0.41,
+        "track_display": 0.0,
+        "naive_baseline": 0.0,
+        "attribution": 6.65,
+        "fragility": 1.6,
+        "coverage": 0.01,
+        "forecast": 2.82,
+        "next_observation": 0.04,
+        "report": 0.03,
+        "dossier": 0.01
+      }
+    },
+    "case_0006": {
+      "total_s": 11.44,
       "stages_s": {
         "detection": 0.03,
         "historical_mapping": 0.39,
         "track_display": 0.0,
         "naive_baseline": 0.0,
-        "attribution": 1.26,
-        "fragility": 1.58,
+        "attribution": 6.51,
+        "fragility": 1.64,
         "coverage": 0.01,
-        "forecast": 0.35,
+        "forecast": 2.8,
         "next_observation": 0.03,
-        "report": 0.01,
+        "report": 0.02,
+        "dossier": 0.01
+      }
+    },
+    "case_0007": {
+      "total_s": 12.62,
+      "stages_s": {
+        "detection": 0.03,
+        "historical_mapping": 0.42,
+        "track_display": 0.0,
+        "naive_baseline": 0.0,
+        "attribution": 7.34,
+        "fragility": 1.97,
+        "coverage": 0.01,
+        "forecast": 2.77,
+        "next_observation": 0.04,
+        "report": 0.03,
+        "dossier": 0.01
+      }
+    },
+    "case_0008": {
+      "total_s": 10.41,
+      "stages_s": {
+        "detection": 0.03,
+        "historical_mapping": 0.41,
+        "track_display": 0.0,
+        "naive_baseline": 0.0,
+        "attribution": 5.61,
+        "fragility": 1.54,
+        "coverage": 0.01,
+        "forecast": 2.75,
+        "next_observation": 0.03,
+        "report": 0.03,
+        "dossier": 0.01
+      }
+    },
+    "case_0009": {
+      "total_s": 17.04,
+      "stages_s": {
+        "detection": 0.03,
+        "historical_mapping": 0.39,
+        "track_display": 0.0,
+        "naive_baseline": 0.0,
+        "attribution": 11.18,
+        "fragility": 2.56,
+        "coverage": 0.01,
+        "forecast": 2.79,
+        "next_observation": 0.03,
+        "report": 0.03,
         "dossier": 0.01
       }
     }

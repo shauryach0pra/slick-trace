@@ -1,6 +1,6 @@
 # Validation report
 
-Generated 2026-09-25T20:56:44.372156+00:00 · 9 independently generated cases (achieved count, not planned)
+Generated 2026-09-26T12:22:33.625989+00:00 · 9 independently generated cases (achieved count, not planned)
 
 All results below are on synthetic data. Synthetic ranking accuracy is not a measurement of real-world attribution accuracy, and no real matched incident has been scored here.
 
@@ -8,21 +8,18 @@ All results below are on synthetic data. Synthetic ranking accuracy is not a mea
 
 Each rule looks only at track bookkeeping - fix count, first and last fix, span, actual speed, straightness, reported-vs-actual speed, closest approach to the slick - and names one vessel per case, lowest, second-lowest, highest or second-highest on that attribute. Ties count as misses. Rules and the flag threshold were fixed before the generator was changed. A rule that names the true source in 3 or more of the 7 source-present cases is flagged. A rule picking at random reaches that with probability 0.0806, so about 2.66 of 33 rules are expected to flag by luck alone.
 
-**2 of 33 rules flagged.**
+**3 of 33 rules flagged.**
 
 | Rule | Source named | Flagged |
 | --- | --- | --- |
 | second-lowest closest approach to the slick | 4/7 | yes |
-| second-highest actual speed | 3/7 | yes |
-| highest first fix time | 2/7 |  |
-| second-lowest actual speed | 2/7 |  |
+| second-highest first fix time | 3/7 | yes |
+| second-lowest actual speed | 3/7 | yes |
+| second-lowest first fix time | 2/7 |  |
 | second-lowest fix count | 1/7 |  |
-| second-highest fix count | 1/7 |  |
-| second-lowest first fix time | 1/7 |  |
-| second-highest first fix time | 1/7 |  |
 | second-lowest track span | 1/7 |  |
-| second-highest track span | 1/7 |  |
-| highest actual speed | 1/7 |  |
+| lowest actual speed | 1/7 |  |
+| second-highest actual speed | 1/7 |  |
 
 Rules naming the source in no case are omitted from the table. "Closest approach to the slick" has a physical cause rather than a bookkeeping one: the source was at the release point hours before the image and the slick drifts only a few kilometres, while the near decoy is placed on the slick at image time. It is reported, not engineered away.
 
@@ -30,15 +27,15 @@ Rules naming the source in no case are omitted from the table. "Closest approach
 
 | Case | Family | Vessels | Candidates | Expected | Method | Correct | Naive baseline | Naive correct | Top IoU | Lead retained | Smallest flip |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| case_0001 | decoy | 6 | 4 | named_candidate | `419146624` | yes | `419146624` | yes | 0.686 | 81% | 0.5 |
-| case_0002 | moving_discharge | 6 | 5 | named_candidate | `419120580` | yes | `419648686` | no | 0.694 | 100% | none |
-| case_0003 | absent_source | 5 | 3 | unknown_source | `419829242` | NO | `419949542` | no | 0.494 | 48% | 0.25 |
-| case_0004 | crowded | 11 | 8 | named_candidate | `419602854` | yes | `419643687` | no | 0.479 | 88% | 1.0 |
-| case_0005 | decoy | 6 | 4 | named_candidate | `419923894` | yes | `419621596` | no | 0.617 | 84% | 0.25 |
-| case_0006 | absent_source | 5 | 4 | unknown_source | `unknown_source` | yes | `419748958` | no | 0.229 | 52% | 0.25 |
-| case_0007 | decoy | 6 | 6 | named_candidate | `419323519` | yes | `419625403` | no | 0.345 | 99% | 1.5 |
-| case_0008 | moving_discharge | 6 | 5 | named_candidate | `419485509` | yes | `419998212` | no | 0.681 | 85% | 0.5 |
-| case_0009 | along_track_ribbon | 6 | 4 | named_candidate | `419336308` | yes | `419358060` | no | 0.417 | 78% | 1.0 |
+| case_0001 | decoy | 6 | 5 | named_candidate | `419151561` | yes | `419765325` | no | 0.692 | 79% | 0.25 |
+| case_0002 | moving_discharge | 6 | 6 | named_candidate | `419633358` | yes | `419427337` | no | 0.643 | 78% | 0.5 |
+| case_0003 | absent_source | 5 | 5 | unknown_source | `419771272` | NO | `419400107` | no | 0.325 | 92% | 1.0 |
+| case_0004 | crowded | 11 | 10 | named_candidate | `419210002` | yes | `419245446` | no | 0.727 | 84% | 1.0 |
+| case_0005 | decoy | 6 | 4 | named_candidate | `419420729` | yes | `419623584` | no | 0.686 | 82% | 0.5 |
+| case_0006 | absent_source | 5 | 4 | unknown_source | `unknown_source` | yes | `419486428` | no | 0.202 | 100% | none |
+| case_0007 | decoy | 6 | 5 | named_candidate | `419363968` | yes | `419931151` | no | 0.673 | 89% | 0.5 |
+| case_0008 | moving_discharge | 6 | 4 | named_candidate | `419622686` | yes | `419838277` | no | 0.625 | 96% | 1.0 |
+| case_0009 | along_track_ribbon | 6 | 6 | named_candidate | `419792319` | yes | `419151108` | no | 0.51 | 100% | none |
 
 ## Attribution — aggregates
 
@@ -47,15 +44,15 @@ Rules naming the source in no case are omitted from the table. "Closest approach
 | Source-present cases | 7 |
 | Forward-replay Top-1 | 7/7 = 100% [95% CI 65–100%] |
 | Forward-replay Top-3 | 7/7 = 100% [95% CI 65–100%] |
-| Naive proximity Top-1 | 1/7 = 14% [95% CI 3–51%] |
-| Top-1 gain over naive proximity | +86 percentage points |
-| Paired comparison (exact McNemar) | p = 0.0312 — significant at 0.05 |
+| Naive proximity Top-1 | 0/7 = 0% [95% CI 0–35%] |
+| Top-1 gain over naive proximity | +100 percentage points |
+| Paired comparison (exact McNemar) | p = 0.0156 — significant at 0.05 |
 | Source-absent cases | 2 |
 | Correct abstentions | 1/2 = 50% [95% CI 9–91%] |
 | False named attribution | 1/2 = 50% [95% CI 9–91%] |
 
 
-> **On the significance test.** Both methods score the same cases, so this is a paired design and the correct test is McNemar on the discordant pairs: 6 cases where forward replay was right and the baseline wrong, 0 the other way. Exact two-sided p = 0.0312. A test treating the two columns as independent groups would report a smaller p by ignoring the pairing, and is not used here for that reason.
+> **On the significance test.** Both methods score the same cases, so this is a paired design and the correct test is McNemar on the discordant pairs: 7 cases where forward replay was right and the baseline wrong, 0 the other way. Exact two-sided p = 0.0156. A test treating the two columns as independent groups would report a smaller p by ignoring the pairing, and is not used here for that reason.
 
 > The intervals matter more than the point estimates at this sample size. A perfect score over a handful of cases still admits a wide true rate, and the interval is the honest statement of that. The planned benchmark (120 development / 40 validation / 40 source-present / 60 source-absent locked test cases) is not what was achieved; the achieved count is in the header.
 
@@ -101,14 +98,14 @@ Rules naming the source in no case are omitted from the table. "Closest approach
 | Case | Correct vessel | Release start error | Origin error km | True release | Estimated release |
 | --- | --- | --- | --- | --- | --- |
 | case_0001 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
-| case_0002 | yes | +60 min | 3.732 | 4.0h continuous | 2.0h continuous |
-| case_0004 | yes | -90 min | 17.791 | 2.0h continuous | 4.0h continuous |
-| case_0005 | yes | +75 min | 6.009 | 2.0h continuous | 0.5h pulse |
-| case_0007 | yes | +120 min | 19.893 | 2.0h continuous | 0.5h pulse |
-| case_0008 | yes | +60 min | 3.732 | 4.0h continuous | 2.0h continuous |
-| case_0009 | yes | +180 min | 32.312 | 7.0h continuous | 4.0h continuous |
-| **mean** | | | **11.92** | | |
-| **RMSE** | | | **16.13** | | |
+| case_0002 | yes | +120 min | 7.465 | 4.0h continuous | 0.5h pulse |
+| case_0004 | yes | +0 min | 0.0 | 2.0h continuous | 2.0h continuous |
+| case_0005 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
+| case_0007 | yes | +0 min | 0.0 | 2.0h continuous | 0.5h pulse |
+| case_0008 | yes | +120 min | 7.465 | 4.0h continuous | 0.5h pulse |
+| case_0009 | yes | +60 min | 10.77 | 7.0h continuous | 4.0h continuous |
+| **mean** | | | **3.67** | | |
+| **RMSE** | | | **5.70** | | |
 
 > **Why this sits alongside IoU.** IoU measures footprint agreement. An investigator asks how many kilometres the origin estimate is out by.
 
@@ -126,15 +123,15 @@ Separate from the split above, and measuring something different. Those rows sco
 
 | Case | Area km² | Perimeter km | Major × minor km | Elongation | Complexity | Bearing | IoU vs truth |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| case_0001 | 319.32 | 68.36 | 21.63 × 19.03 | 1.14 | 1.16 | 61.5° | 0.9745 |
-| case_0002 | 376.44 | 75.48 | 24.5 × 19.89 | 1.23 | 1.20 | 137.0° | 0.9691 |
-| case_0003 | 319.86 | 70.73 | 20.63 × 20.24 | 1.02 | 1.24 | 170.4° | 0.9818 |
-| case_0004 | 505.85 | 97.79 | 32.19 × 20.63 | 1.56 | 1.50 | 135.4° | 0.9733 |
-| case_0005 | 388.76 | 87.82 | 24.25 × 21.0 | 1.15 | 1.58 | 135.9° | 0.9705 |
-| case_0006 | 345.56 | 71.21 | 21.74 × 20.59 | 1.06 | 1.17 | 69.1° | 0.9744 |
-| case_0007 | 508.17 | 94.47 | 30.86 × 21.29 | 1.45 | 1.40 | 139.1° | 0.9763 |
-| case_0008 | 384.3 | 82.12 | 25.25 × 19.87 | 1.27 | 1.40 | 129.5° | 0.967 |
-| case_0009 | 1068.28 | 224.06 | 83.43 × 17.53 | 4.76 | 3.74 | 171.5° | 0.9692 |
+| case_0001 | 324.14 | 65.98 | 21.5 × 19.32 | 1.11 | 1.07 | 53.7° | 0.9792 |
+| case_0002 | 374.66 | 75.48 | 24.37 × 19.91 | 1.22 | 1.21 | 136.1° | 0.9708 |
+| case_0003 | 351.63 | 74.53 | 23.21 × 19.62 | 1.18 | 1.26 | 111.1° | 0.9784 |
+| case_0004 | 379.65 | 78.8 | 24.65 × 20.05 | 1.23 | 1.30 | 147.5° | 0.9776 |
+| case_0005 | 319.86 | 72.15 | 21.87 × 19.01 | 1.15 | 1.30 | 4.2° | 0.9762 |
+| case_0006 | 390.01 | 79.75 | 24.54 × 20.97 | 1.17 | 1.30 | 117.3° | 0.9764 |
+| case_0007 | 325.39 | 69.78 | 22.22 × 18.95 | 1.17 | 1.19 | 9.0° | 0.9804 |
+| case_0008 | 380.37 | 80.7 | 25.14 × 19.7 | 1.28 | 1.36 | 128.0° | 0.9722 |
+| case_0009 | 1060.07 | 222.16 | 83.39 × 17.41 | 4.79 | 3.70 | 171.5° | 0.9704 |
 
 > **These IoU figures are not comparable to the split above and neither supersedes the other.** The split is the detector on a task designed to trap it; these are the same detector on the incident scenes. Quoting only the higher number would misrepresent the detector.
 
@@ -173,24 +170,24 @@ Separate from the split above, and measuring something different. Those rows sco
 
 | Case | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- | --- |
-| case_0001 | selective | 0.7875 (63/80) | 0.2945 (43/146) | 0.25 (10/40) |
-| case_0001 | coverage_failure | 0.8182 (72/88) | 0.268 (41/153) | 0.4 (16/40) |
-| case_0002 | selective | 0.8065 (50/62) | 0.2708 (26/96) | 0.35 (14/40) |
-| case_0002 | coverage_failure | 0.8519 (46/54) | 0.2179 (17/78) | 0.4286 (12/28) |
-| case_0003 | selective | 0.7846 (51/65) | 0.2526 (24/95) | 0.35 (14/40) |
-| case_0003 | coverage_failure | 0.8304 (93/112) | 0.0268 (3/112) | 1.0 (32/32) |
-| case_0004 | selective | 0.9016 (55/61) | 0.315 (40/127) | 0.275 (11/40) |
-| case_0004 | coverage_failure | 0.9062 (29/32) | 0.2667 (16/60) | 0.0588 (1/17) |
-| case_0005 | selective | 0.825 (66/80) | 0.2886 (43/149) | 0.425 (17/40) |
-| case_0005 | coverage_failure | 0.8333 (50/60) | 0.3382 (46/136) | 0.15 (6/40) |
-| case_0006 | selective | 0.8444 (38/45) | 0.3091 (17/55) | None (0/0) |
-| case_0006 | coverage_failure | 0.8929 (25/28) | 0.3902 (16/41) | None (0/0) |
-| case_0007 | selective | 0.7778 (56/72) | 0.2542 (30/118) | 0.2 (8/40) |
-| case_0007 | coverage_failure | 0.8659 (71/82) | 0.1917 (23/120) | 0.1176 (4/34) |
-| case_0008 | selective | 0.7286 (51/70) | 0.3025 (36/119) | 0.325 (13/40) |
-| case_0008 | coverage_failure | 0.8804 (81/92) | 0.121 (15/124) | 0.5294 (18/34) |
-| case_0009 | selective | 0.8305 (49/59) | 0.2581 (24/93) | 0.375 (15/40) |
-| case_0009 | coverage_failure | 0.8269 (43/52) | 0.2083 (15/72) | 0.1786 (5/28) |
+| case_0001 | selective | 0.7069 (41/58) | 0.2907 (25/86) | 0.3 (12/40) |
+| case_0001 | coverage_failure | 0.8143 (57/70) | 0.1395 (12/86) | 0.6333 (19/30) |
+| case_0002 | selective | 0.85 (34/40) | 0.3333 (17/51) | 0.2 (8/40) |
+| case_0002 | coverage_failure | 0.8409 (37/44) | 0.0263 (1/38) | 0.6667 (12/18) |
+| case_0003 | selective | 0.8 (64/80) | 0.25 (32/128) | 0.375 (15/40) |
+| case_0003 | coverage_failure | 0.7955 (70/88) | 0.2154 (28/130) | 0.575 (23/40) |
+| case_0004 | selective | 0.8571 (54/63) | 0.338 (48/142) | 0.225 (9/40) |
+| case_0004 | coverage_failure | 0.8378 (31/37) | 0.35 (28/80) | 0.3333 (7/21) |
+| case_0005 | selective | 0.7937 (50/63) | 0.2743 (31/113) | 0.175 (7/40) |
+| case_0005 | coverage_failure | 0.8333 (75/90) | 0.1681 (20/119) | 0.8 (24/30) |
+| case_0006 | selective | 0.7937 (50/63) | 0.2784 (27/97) | None (0/0) |
+| case_0006 | coverage_failure | 0.8167 (49/60) | 0.2025 (16/79) | None (0/0) |
+| case_0007 | selective | 0.6939 (34/49) | 0.3494 (29/83) | 0.3 (12/40) |
+| case_0007 | coverage_failure | 0.8556 (77/90) | 0.0722 (7/97) | 1.0 (26/26) |
+| case_0008 | selective | 0.8333 (60/72) | 0.2581 (32/124) | 0.3 (12/40) |
+| case_0008 | coverage_failure | 0.8426 (91/108) | 0.1397 (19/136) | 0.5882 (20/34) |
+| case_0009 | selective | 0.8182 (54/66) | 0.2712 (32/118) | 0.15 (6/40) |
+| case_0009 | coverage_failure | 0.881 (74/84) | 0.189 (24/127) | 0.1389 (5/36) |
 
 > Operating point: match gate 0.02°, contact position noise 0.012°, detector miss rate 0.15, false detection rate 0.15. A rate without its operating point is not a comparable measurement.
 
@@ -198,13 +195,13 @@ Separate from the split above, and measuring something different. Those rows sco
 
 | Case | Recommended | Least informative | Separation at recommended | Separation at least informative | Helped |
 | --- | --- | --- | --- | --- | --- |
-| case_0001 | +24h | +3h | 0.0126 | 0.0754 | no |
-| case_0002 | +3h | +18h | 0.3409 | 0.1316 | yes |
-| case_0004 | +3h | +9h | -0.0098 | -0.0412 | yes |
-| case_0005 | +24h | +9h | 0.0407 | 0.0592 | no |
-| case_0007 | +3h | +18h | -0.0978 | -0.0734 | no |
-| case_0008 | +24h | +9h | 0.0983 | 0.1189 | no |
-| case_0009 | +24h | +3h | -0.0173 | 0.0735 | no |
+| case_0001 | +12h | +9h | -0.0084 | -0.0004 | no |
+| case_0002 | +24h | +12h | 0.0583 | 0.1133 | no |
+| case_0004 | +24h | +3h | 0.0555 | 0.0865 | no |
+| case_0005 | +24h | +3h | -0.0262 | -0.0705 | yes |
+| case_0007 | +3h | +18h | 0.2761 | 0.106 | yes |
+| case_0008 | +3h | +9h | 0.2743 | 0.1581 | yes |
+| case_0009 | +3h | +24h | 0.2854 | 0.1089 | yes |
 
 > One synthetic held-out observation per case is a weak test, so results are reported per case rather than averaged into a headline figure.
 
@@ -214,15 +211,15 @@ Measured on Darwin 25.2.0 / arm64, 8 logical CPUs, Python 3.12.14, CPU (no GPU, 
 
 | Measure | Result | Target (p.15) |
 | --- | --- | --- |
-| Slowest single case, all stages | 6.4 s (case_0004) | ≤ 5 min |
-| Mean per case | 4.2 s | — |
-| Full run, 9 cases | 37.8 s | — |
-| Template query, cold — fresh KB + lookup intent | 1.2 ms | < 2 s |
+| Slowest single case, all stages | 20.7 s (case_0004) | ≤ 5 min |
+| Mean per case | 14.6 s | — |
+| Full run, 9 cases | 131.5 s | — |
+| Template query, cold — fresh KB + lookup intent | 0.7 ms | < 2 s |
 | Template query, warm — lookup intent (median of 20) | 0.00 ms | < 2 s |
 | Time-window query, cold — fresh KB, reads per-time state | 0.7 ms | < 2 s |
 | Time-window query, warm (median of 20) | 0.0 ms | < 2 s |
 
-Dominant stages across the run: fragility 16.4 s, attribution 13.2 s, historical_mapping 4.2 s. Cold and warm query times are reported separately because a fresh knowledge base loads the case's artifacts on first use, and quoting only the warm number would overstate what a reviewer sees on first load. Time-window queries read per-time envelope membership from historical_mapping.json; nothing is simulated at query time.
+Dominant stages across the run: attribution 80.9 s, forecast 25.3 s, fragility 20.0 s. Cold and warm query times are reported separately because a fresh knowledge base loads the case's artifacts on first use, and quoting only the warm number would overstate what a reviewer sees on first load. Time-window queries read per-time envelope membership from historical_mapping.json; nothing is simulated at query time.
 
 > This run regenerated every case from its seed before timing, so the figures include generation rather than assuming warm artifacts on disk.
 
@@ -230,15 +227,15 @@ Dominant stages across the run: fragility 16.4 s, attribution 13.2 s, historical
 
 | Case | Family | Loss gap | Discriminated | Outcome |
 | --- | --- | --- | --- | --- |
-| case_0001 | decoy | 0.1127 | yes | correct |
-| case_0002 | moving_discharge | 0.2536 | yes | correct |
-| case_0003 | absent_source | 0.0464 | no | WRONG |
-| case_0004 | crowded | 0.0626 | yes | correct |
-| case_0005 | decoy | 0.0818 | yes | correct |
-| case_0006 | absent_source | 0.0483 | no | abstained |
-| case_0007 | decoy | 0.0569 | yes | correct |
-| case_0008 | moving_discharge | 0.1255 | yes | correct |
-| case_0009 | along_track_ribbon | 0.0146 | no | correct |
+| case_0001 | decoy | 0.1058 | yes | correct |
+| case_0002 | moving_discharge | 0.1096 | yes | correct |
+| case_0003 | absent_source | 0.0902 | yes | WRONG |
+| case_0004 | crowded | 0.0975 | yes | correct |
+| case_0005 | decoy | 0.1071 | yes | correct |
+| case_0006 | absent_source | 0.0541 | yes | abstained |
+| case_0007 | decoy | 0.1961 | yes | correct |
+| case_0008 | moving_discharge | 0.1674 | yes | correct |
+| case_0009 | along_track_ribbon | 0.1125 | yes | correct |
 
 > **A separate question from the fit gate.** The abstention gate asks whether the best candidate explains the observation at all. This asks whether the second-best explains it about as well: a ranking can clear the gate and still be a coin toss. The tolerance is 0.05 on the loss the ranking is computed from.
 
@@ -252,8 +249,8 @@ Dominant stages across the run: fragility 16.4 s, attribution 13.2 s, historical
 
 | Stage | Measured on source-present cases |
 | --- | --- |
-| 1. Nearest vessel at image time | Top-1 **1/7** |
-| 2. Hindcast intersection (filter only) | true source retained **7/7**; candidate pool 47 -> 36 (23% removed) |
+| 1. Nearest vessel at image time | Top-1 **0/7** |
+| 2. Hindcast intersection (filter only) | true source retained **7/7**; candidate pool 47 -> 40 (15% removed) |
 | 3. Forward reconstruction | Top-1 **7/7** |
 | 4. Uncertainty / abstention | correct on source-absent cases **1/2** |
 

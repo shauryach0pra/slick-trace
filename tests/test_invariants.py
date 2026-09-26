@@ -132,9 +132,9 @@ def test_unassessed_is_reported_for_a_track_with_no_covering_data():
 # directions: a new false naming fails, and so does a listed case starting to
 # abstain, because the validation report and README state this count.
 KNOWN_FALSE_NAMINGS = {
-    "case_0003": "a passer-by crossed the slick area 2.5 h before the image; its best "
-                 "hypothetical release fits at IoU 0.49, above the 0.3 gate, and is not "
-                 "separated from the runner-up (0.41). A known limitation of the gate.",
+    "case_0003": "a background vessel's best hypothetical release - a half-hour pulse 8 h "
+                 "before the image - fits at IoU 0.325, just above the 0.3 gate and well "
+                 "ahead of the runner-up (0.19), so it is named. A known limitation of the gate.",
 }
 
 

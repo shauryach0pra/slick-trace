@@ -1,134 +1,115 @@
 {
   "incident_id": "case_0007",
   "candidates_considered": [
-    "419473598",
     "419276389",
-    "419735411",
-    "419615389",
     "419625403",
-    "419323519"
+    "419931151",
+    "419363968",
+    "419473598"
   ],
   "ranking": [
     {
-      "candidate_id": "419323519_0030_0.5h",
-      "vessel_key": "419323519",
-      "release_start": "2026-09-10T00:30:00+00:00",
+      "candidate_id": "419363968_2230_0.5h",
+      "vessel_key": "419363968",
+      "release_start": "2026-09-09T22:30:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.34516115191975677,
-      "mean_loss": 0.3824092353833258,
+      "mean_iou": 0.6733222699623713,
+      "mean_loss": 0.2057940910194357,
       "ensemble_win_count": 5,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419615389_0200_2.0h",
-      "vessel_key": "419615389",
-      "release_start": "2026-09-10T02:00:00+00:00",
-      "duration_hours": 2.0,
-      "is_continuous": true,
-      "mean_iou": 0.31620750855338997,
-      "mean_loss": 0.43928412268889044,
+      "candidate_id": "419473598_2230_0.5h",
+      "vessel_key": "419473598",
+      "release_start": "2026-09-09T22:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.2883849011854282,
+      "mean_loss": 0.40193669403217624,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419625403_1130_0.5h",
+      "vessel_key": "419625403",
+      "release_start": "2026-09-09T11:30:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.3610452040995798,
+      "mean_loss": 0.42408851898083405,
+      "ensemble_win_count": 0,
+      "n_ensemble": 6
+    },
+    {
+      "candidate_id": "419931151_0400_0.5h",
+      "vessel_key": "419931151",
+      "release_start": "2026-09-10T04:00:00+00:00",
+      "duration_hours": 0.5,
+      "is_continuous": false,
+      "mean_iou": 0.2096806944868311,
+      "mean_loss": 0.46841369703590874,
       "ensemble_win_count": 1,
       "n_ensemble": 6
     },
     {
-      "candidate_id": "419625403_0045_2.0h",
-      "vessel_key": "419625403",
-      "release_start": "2026-09-10T00:45:00+00:00",
-      "duration_hours": 2.0,
-      "is_continuous": true,
-      "mean_iou": 0.2877371853519515,
-      "mean_loss": 0.44898201737080495,
-      "ensemble_win_count": 0,
-      "n_ensemble": 6
-    },
-    {
-      "candidate_id": "419735411_2000_0.5h",
-      "vessel_key": "419735411",
-      "release_start": "2026-09-09T20:00:00+00:00",
-      "duration_hours": 0.5,
-      "is_continuous": false,
-      "mean_iou": 0.1777080757070991,
-      "mean_loss": 0.461965494573344,
-      "ensemble_win_count": 0,
-      "n_ensemble": 6
-    },
-    {
-      "candidate_id": "419276389_1500_0.5h",
+      "candidate_id": "419276389_1030_0.5h",
       "vessel_key": "419276389",
-      "release_start": "2026-09-09T15:00:00+00:00",
+      "release_start": "2026-09-09T10:30:00+00:00",
       "duration_hours": 0.5,
       "is_continuous": false,
-      "mean_iou": 0.03570916831532835,
-      "mean_loss": 0.526003651999652,
-      "ensemble_win_count": 0,
-      "n_ensemble": 6
-    },
-    {
-      "candidate_id": "419473598_2215_4.0h",
-      "vessel_key": "419473598",
-      "release_start": "2026-09-09T22:15:00+00:00",
-      "duration_hours": 4.0,
-      "is_continuous": true,
-      "mean_iou": 0.1357928327434161,
-      "mean_loss": 0.5587399475450057,
+      "mean_iou": 0.0017414464249129276,
+      "mean_loss": 0.5576278420332345,
       "ensemble_win_count": 0,
       "n_ensemble": 6
     }
   ],
-  "top_candidate_id": "419323519",
+  "top_candidate_id": "419363968",
   "unknown_source": false,
   "abstention_iou_gate": 0.3,
   "discrimination": {
     "discriminated": true,
-    "loss_gap": 0.0569,
-    "iou_gap": 0.029,
+    "loss_gap": 0.1961,
+    "iou_gap": 0.3849,
     "tolerance": 0.05,
     "note": "top two candidates separated on the ranking criterion"
   },
   "named_factors": {
     "factors": [
       {
-        "vessel_key": "419323519",
-        "proximity_deg_at_acquisition": 0.437441,
-        "trajectory_envelope_dwell": 5,
-        "physical_fit_mean_iou": 0.3452,
-        "physical_fit_mean_loss": 0.3824
-      },
-      {
-        "vessel_key": "419615389",
-        "proximity_deg_at_acquisition": 0.028557,
-        "trajectory_envelope_dwell": 5,
-        "physical_fit_mean_iou": 0.3162,
-        "physical_fit_mean_loss": 0.4393
-      },
-      {
-        "vessel_key": "419625403",
-        "proximity_deg_at_acquisition": 0.003891,
-        "trajectory_envelope_dwell": 8,
-        "physical_fit_mean_iou": 0.2877,
-        "physical_fit_mean_loss": 0.449
-      },
-      {
-        "vessel_key": "419735411",
-        "proximity_deg_at_acquisition": 0.258491,
-        "trajectory_envelope_dwell": 4,
-        "physical_fit_mean_iou": 0.1777,
-        "physical_fit_mean_loss": 0.462
-      },
-      {
-        "vessel_key": "419276389",
-        "proximity_deg_at_acquisition": 0.222004,
-        "trajectory_envelope_dwell": 5,
-        "physical_fit_mean_iou": 0.0357,
-        "physical_fit_mean_loss": 0.526
+        "vessel_key": "419363968",
+        "proximity_deg_at_acquisition": 0.011386,
+        "trajectory_envelope_dwell": 25,
+        "physical_fit_mean_iou": 0.6733,
+        "physical_fit_mean_loss": 0.2058
       },
       {
         "vessel_key": "419473598",
-        "proximity_deg_at_acquisition": 0.272902,
-        "trajectory_envelope_dwell": 4,
-        "physical_fit_mean_iou": 0.1358,
-        "physical_fit_mean_loss": 0.5587
+        "proximity_deg_at_acquisition": 0.087223,
+        "trajectory_envelope_dwell": 25,
+        "physical_fit_mean_iou": 0.2884,
+        "physical_fit_mean_loss": 0.4019
+      },
+      {
+        "vessel_key": "419625403",
+        "proximity_deg_at_acquisition": 0.244493,
+        "trajectory_envelope_dwell": 5,
+        "physical_fit_mean_iou": 0.361,
+        "physical_fit_mean_loss": 0.4241
+      },
+      {
+        "vessel_key": "419931151",
+        "proximity_deg_at_acquisition": 0.0006,
+        "trajectory_envelope_dwell": 2,
+        "physical_fit_mean_iou": 0.2097,
+        "physical_fit_mean_loss": 0.4684
+      },
+      {
+        "vessel_key": "419276389",
+        "proximity_deg_at_acquisition": 0.245337,
+        "trajectory_envelope_dwell": 6,
+        "physical_fit_mean_iou": 0.0017,
+        "physical_fit_mean_loss": 0.5576
       }
     ],
     "ranked_on": "physical_fit_mean_loss",
@@ -137,9 +118,9 @@
   },
   "release_age": {
     "estimable": true,
-    "hours": 4.0,
-    "hours_low": 3.0,
-    "hours_high": 7.0,
+    "hours": 6.0,
+    "hours_low": 0.0,
+    "hours_high": 24.0,
     "confidence": "low",
     "method": "release time from the best-fitting forward-replay hypothesis; interval from the hours at which this vessel was inside the backward origin envelope",
     "caveat": "Not derived from slick appearance. Area-based age needs volume, oil properties and forcing that a single scene does not supply, so no Fay spreading estimate is made. The interval is as uncertain as the envelope it comes from, and the hypothesis grid it is drawn from has finite time resolution. Confidence cannot be higher than low here and the field cannot express it."

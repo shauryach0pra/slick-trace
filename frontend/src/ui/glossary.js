@@ -39,8 +39,11 @@ export const CAPTIONS = {
   pixelSpacing: 'Ground distance covered by one image pixel.',
 
   // replay map
-  replay: 'Drag the slider to step back hour by hour. The shaded area is where the slick could have '
-    + 'drifted from by then, widening because release time and spreading are unknown.',
+  replayMap: 'Press play or drag the time bar. Before the image, the cyan area is where the slick could '
+    + 'have drifted from, widening as release time and spreading grow more uncertain; for a named vessel, '
+    + 'the glow is its best-fitting release replayed. At the image, the white outline is the detected '
+    + 'slick. After it, the glow is the modelled drift, and red dots are oil stranded on the coast.',
+  probeRange: 'The forcing probe covers the 24 hours before the image. Pick an hour at or before it.',
 
   // fragility
   leadHeld: 'Share of the tested assumption changes that kept the same leader.',
@@ -73,12 +76,6 @@ export const CAPTIONS = {
   // provenance
   seed: 'The number that regenerates this synthetic case exactly.',
   checksums: 'File fingerprints showing the artifacts were not altered, not that the observation is true.',
-
-  // basemap
-  basemap: 'The real map under this case: satellite imagery when an Esri key is set, otherwise the '
-    + 'real coastline on a plain sea. Nothing from the case is drawn on it yet.',
-  basemapGeography: 'The case uses this real coastline. Its vessels, slick and sensitive areas are '
-    + 'synthetic, placed on real geography: at sea, or along the shore where that is where they belong.',
 
   // ask
   ask: 'Answers come from fixed question templates over this case’s files, each with its source cited. '

@@ -142,7 +142,14 @@ def _advect_forward(lon, lat, u0, v0, swirl, hours, rng, diffusivity=BASE_DIFFUS
 # named the true source in up to 7 of 7 cases; it now runs on every regeneration.
 
 TRACK_STEP_MIN = 30
-TRACK_START_H = (10.0, 16.0)          # first fix, hours before acquisition, every vessel
+# Every vessel is tracked over the whole AIS window, as a real archive query
+# for the area returns it: the published fixes are those inside the scene, so a
+# ship enters and leaves through the frame edges. An earlier version started
+# every track 10-16 h before the image, so ships appeared in open water.
+AIS_WINDOW_H = 24.0
+# A genuine AIS gap - transponder switched off, then on - for any vessel, any role.
+DARK_P = 0.15
+DARK_HOURS = (1.0, 3.0)
 LOITER_P = 0.4                        # share of vessels loitering (fishing, waiting, drifting)
 LOITER_SPEED_DEG_H = (0.002, 0.008)   # ~0.1-0.5 kn
 TRANSIT_SPEED_DEG_H = (0.020, 0.120)  # ~1.2-7 kn
@@ -163,8 +170,23 @@ IDENTIFIABLE_KM = 8.0
 
 
 def _track_start(rng: np.random.Generator, acquired: datetime) -> datetime:
-    h = round(float(rng.uniform(*TRACK_START_H)) * 2) / 2
-    return acquired - timedelta(hours=h)
+    return acquired - timedelta(hours=AIS_WINDOW_H)
+
+
+def _published(fixes, bbox, rng):
+    """What an AIS query for the scene returns: fixes inside it, minus any
+    stretch where the transponder was switched off. Drawn for every vessel the
+    same way, whatever its role."""
+    out = _in_scene(fixes, bbox)
+    if len(out) > 4 and rng.random() < DARK_P:
+        dur = round(float(rng.uniform(*DARK_HOURS)) * 2) / 2
+        t0 = datetime.fromisoformat(out[0]["t_utc"]) + timedelta(hours=1)
+        t1 = datetime.fromisoformat(out[-1]["t_utc"]) - timedelta(hours=1 + dur)
+        if t1 > t0:
+            start = t0 + (t1 - t0) * float(rng.random())
+            end = start + timedelta(hours=dur)
+            out = [f for f in out if not (start < datetime.fromisoformat(f["t_utc"]) < end)]
+    return out
 
 
 def _speed(rng: np.random.Generator) -> float:
@@ -467,8 +489,10 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
     absent_vessel_key = next((s["vessel_key"] for s in specs if s["role"] == "absent_true_source"), None)
 
     # the absent source is removed from the manifest — this is the whole point
+    for s in specs:
+        s["published"] = _published(s["fixes"], bbox, rng)
     published = [s for s in specs if s["role"] != "absent_true_source"
-                 and len(_in_scene(s["fixes"], bbox)) >= 2]
+                 and len(s["published"]) >= 2]
 
     identity_from = (acquired - timedelta(days=365)).isoformat()
     tracks = [{
@@ -478,7 +502,7 @@ def generate_case(incident_id: str = "case_0001", family: str = "decoy",
         "name": None,
         "identity_valid_from": identity_from,
         "identity_valid_to": None,
-        "fixes": _in_scene(s["fixes"], bbox),
+        "fixes": s["published"],
         "missing_intervals": [],
         "provenance": {"status": DataStatus.SYNTHETIC.value,
                        "source": "slicktrace_core.synth_generator v0.2 (fictional AIS)"},

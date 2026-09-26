@@ -90,10 +90,18 @@ def raster_particles_to_mask(lon, lat, bbox, img_size=IMG_SIZE, sigma=3, thresh_
     return (blurred > blurred.max() * thresh_frac).astype(np.uint8)
 
 
+# Release start times are tried every hour across the vessel's own observed
+# window. A fixed COUNT of starts (three: the window's start, middle and end)
+# made the time resolution depend on how long a track happened to be; with
+# full-day tracks that meant starts 12 h apart, so a release 6 h before the
+# image was never tried. A fixed step gives every vessel the same resolution.
+RELEASE_START_STEP_H = 1.0
+
+
 def sample_release_hypotheses(vessel_key: str, fixes: list[dict], acquired: datetime,
-                                n_start_samples: int = 3) -> list[ReleaseHypothesisSpec]:
-    """Sample release_start options spread across the vessel's own observed
-    track window (bounded by its actual fixes — no extrapolation), crossed
+                                step_hours: float = RELEASE_START_STEP_H) -> list[ReleaseHypothesisSpec]:
+    """Release start times every `step_hours` across the vessel's own observed
+    track window (bounded by its actual fixes - no extrapolation), crossed
     with duration options covering both a short pulse and continuous
     moving discharges."""
     times = [_parse(f["t_utc"]) for f in fixes]
@@ -105,10 +113,13 @@ def sample_release_hypotheses(vessel_key: str, fixes: list[dict], acquired: date
     t_max_valid = min(t_max, acquired)
     if t_min >= t_max_valid:
         return []
-    starts = np.linspace(0, 1, n_start_samples)
+    step = timedelta(hours=step_hours)
+    n = int((t_max_valid - t_min) / step)
+    starts = [t_min + k * step for k in range(n + 1)]
+    if starts[-1] < t_max_valid:
+        starts.append(t_max_valid)
     hyps = []
-    for frac in starts:
-        start_t = t_min + (t_max_valid - t_min) * frac
+    for start_t in starts:
         for duration, continuous in [(0.5, False), (2.0, True), (4.0, True)]:
             hyps.append(ReleaseHypothesisSpec(
                 candidate_id=f"{vessel_key}_{start_t.strftime('%H%M')}_{duration}h",
@@ -444,6 +455,9 @@ def run_attribution(case_dir: str, candidate_vessel_keys: list[str] | None = Non
     from slicktrace_core.display_geometry import write_replay_footprints
     write_replay_footprints(case_dir, manifest, out["ranking"], tracks_by_key, u, v,
                             acquired, bbox, observed_mask)
+    # The same run, hour by hour, for the leading candidate of a named case.
+    from slicktrace_core.replay_timeline import write_replay_timeline
+    write_replay_timeline(case_dir, manifest, out, tracks_by_key, u, v)
     return out
 
 

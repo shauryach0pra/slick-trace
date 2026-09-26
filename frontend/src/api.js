@@ -19,6 +19,11 @@ export const api = {
   attribution: (id) => j(`/incidents/${id}/attribution`),
   naiveBaseline: (id) => j(`/incidents/${id}/naive-baseline`),
   tracks: (id) => j(`/incidents/${id}/tracks`),
+  // computed frames for the replay map's time slider
+  envelopeTimeline: (id) => j(`/incidents/${id}/envelope-timeline`),
+  replayTimeline: (id) => j(`/incidents/${id}/replay-timeline`),
+  forecastTimeline: (id) => j(`/incidents/${id}/forecast-timeline`),
+  trackDisplay: (id) => j(`/incidents/${id}/track-display`),
   detection: (id) => j(`/incidents/${id}/detection`),
   fragility: (id) => j(`/incidents/${id}/fragility`),
   forecast: (id) => j(`/incidents/${id}/forecast`),

@@ -81,6 +81,8 @@ jobs:
             'data/cases/*/replay_footprints.json' \
             'data/cases/*/forecast_contours.json' \
             'data/cases/*/track_display.json' \
+            'data/cases/*/replay_timeline.json' \
+            'data/cases/*/forecast_timeline.json' \
             'data/cases/*/coverage_result.json' \
             'data/cases/*/forecast_result.json' \
             'data/cases/*/next_observation_result.json' \

@@ -2,53 +2,53 @@
   "incident_id": "case_0008",
   "applicable": true,
   "hypothesis_a": {
-    "vessel_key": "419485509",
-    "candidate_id": "419485509_2230_2.0h"
+    "vessel_key": "419622686",
+    "candidate_id": "419622686_2330_0.5h"
   },
   "hypothesis_b": {
-    "vessel_key": "419428868",
-    "candidate_id": "419428868_1830_0.5h"
+    "vessel_key": "419838277",
+    "candidate_id": "419838277_0300_0.5h"
   },
   "current_ambiguity": {
-    "mean_iou_gap": 0.2776,
-    "mean_loss_gap": 0.1255
+    "mean_iou_gap": 0.3012,
+    "mean_loss_gap": 0.1674
   },
   "windows": [
     {
       "horizon_hours": 3,
       "valid_utc": "2026-09-10T07:30:00+00:00",
-      "disagreement_score": 0.5507,
-      "predicted_overlap_iou": 0.4493,
+      "disagreement_score": 0.5696,
+      "predicted_overlap_iou": 0.4304,
       "disagreement_bbox": {
-        "min_lon": 72.19766,
-        "min_lat": 19.00156,
-        "max_lon": 72.58047,
-        "max_lat": 19.4
+        "min_lon": 72.24453,
+        "min_lat": 19.04453,
+        "max_lon": 72.48281,
+        "max_lat": 19.28672
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
     },
     {
       "horizon_hours": 6,
       "valid_utc": "2026-09-10T10:30:00+00:00",
-      "disagreement_score": 0.5374,
-      "predicted_overlap_iou": 0.4626,
+      "disagreement_score": 0.5442,
+      "predicted_overlap_iou": 0.4558,
       "disagreement_bbox": {
-        "min_lon": 72.19375,
-        "min_lat": 18.97031,
-        "max_lon": 72.61172,
-        "max_lat": 19.4
+        "min_lon": 72.23672,
+        "min_lat": 19.01719,
+        "max_lon": 72.52187,
+        "max_lat": 19.30234
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
     },
     {
       "horizon_hours": 9,
       "valid_utc": "2026-09-10T13:30:00+00:00",
-      "disagreement_score": 0.5269,
-      "predicted_overlap_iou": 0.4731,
+      "disagreement_score": 0.5252,
+      "predicted_overlap_iou": 0.4748,
       "disagreement_bbox": {
-        "min_lon": 72.18984,
-        "min_lat": 18.95469,
-        "max_lon": 72.64297,
+        "min_lon": 72.22891,
+        "min_lat": 18.99766,
+        "max_lon": 72.55312,
         "max_lat": 19.4
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
@@ -56,12 +56,12 @@
     {
       "horizon_hours": 12,
       "valid_utc": "2026-09-10T16:30:00+00:00",
-      "disagreement_score": 0.528,
-      "predicted_overlap_iou": 0.472,
+      "disagreement_score": 0.5261,
+      "predicted_overlap_iou": 0.4739,
       "disagreement_bbox": {
-        "min_lon": 72.16641,
-        "min_lat": 18.92344,
-        "max_lon": 72.70937,
+        "min_lon": 72.22891,
+        "min_lat": 18.9625,
+        "max_lon": 72.58437,
         "max_lat": 19.4
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
@@ -69,12 +69,12 @@
     {
       "horizon_hours": 18,
       "valid_utc": "2026-09-10T22:30:00+00:00",
-      "disagreement_score": 0.5436,
-      "predicted_overlap_iou": 0.4564,
+      "disagreement_score": 0.5499,
+      "predicted_overlap_iou": 0.4501,
       "disagreement_bbox": {
-        "min_lon": 72.15078,
-        "min_lat": 18.82187,
-        "max_lon": 72.79531,
+        "min_lon": 72.225,
+        "min_lat": 18.91953,
+        "max_lon": 72.64687,
         "max_lat": 19.4
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
@@ -82,27 +82,27 @@
     {
       "horizon_hours": 24,
       "valid_utc": "2026-09-11T04:30:00+00:00",
-      "disagreement_score": 0.5701,
-      "predicted_overlap_iou": 0.4299,
+      "disagreement_score": 0.5676,
+      "predicted_overlap_iou": 0.4324,
       "disagreement_bbox": {
-        "min_lon": 72.14687,
-        "min_lat": 18.78281,
-        "max_lon": 72.86953,
+        "min_lon": 72.20937,
+        "min_lat": 18.82187,
+        "max_lon": 72.73672,
         "max_lat": 19.4
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
     }
   ],
   "recommended_window": {
-    "horizon_hours": 24,
-    "valid_utc": "2026-09-11T04:30:00+00:00",
-    "disagreement_score": 0.5701,
-    "predicted_overlap_iou": 0.4299,
+    "horizon_hours": 3,
+    "valid_utc": "2026-09-10T07:30:00+00:00",
+    "disagreement_score": 0.5696,
+    "predicted_overlap_iou": 0.4304,
     "disagreement_bbox": {
-      "min_lon": 72.14687,
-      "min_lat": 18.78281,
-      "max_lon": 72.86953,
-      "max_lat": 19.4
+      "min_lon": 72.24453,
+      "min_lat": 19.04453,
+      "max_lon": 72.48281,
+      "max_lat": 19.28672
     },
     "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
   },

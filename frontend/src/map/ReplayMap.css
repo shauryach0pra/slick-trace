@@ -1,0 +1,252 @@
+/* Replay map: a fixed-height canvas, a label that always says what is shown,
+   and ship markers drawn in the design system rather than as map sprites. */
+
+.rmap {
+  position: relative;
+  height: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 0 0 0.5px var(--separator-strong);
+  background: var(--surface-sunken);
+}
+
+.rmap-canvas { position: absolute; inset: 0; }
+
+.rmap-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  max-width: calc(100% - 70px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--material-header);
+  -webkit-backdrop-filter: var(--blur-material);
+  backdrop-filter: var(--blur-material);
+  box-shadow: var(--shadow-control);
+  pointer-events: none;
+}
+
+.rmap-base { font-size: var(--font-size-xxs); color: var(--label-2); }
+.rmap-phase { font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--label-1); }
+
+.rmap .maplibregl-ctrl-group {
+  border-radius: 7px;
+  background: var(--control-bg);
+  box-shadow: var(--shadow-control);
+}
+.rmap .maplibregl-ctrl-group button + button { border-top: 1px solid var(--separator); }
+.rmap .maplibregl-ctrl-attrib { font-size: 10px; }
+/* MapLibre's control icons are dark; on the dark control background, invert them */
+:root[data-theme="dark"] .rmap .maplibregl-ctrl-icon { filter: invert(1); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .rmap .maplibregl-ctrl-icon { filter: invert(1); }
+}
+
+/* ships: top-down hull symbols, sized by zoom (--ship-len), not to scale */
+/* No position here: MapLibre positions the marker root itself (absolute, moved
+   by a transform). Setting position: relative put every marker in normal flow
+   as well, shifting each one by the height of the markers before it. */
+.ship {
+  --len: var(--ship-len, 11px);
+  width: calc(var(--len) * 0.36);
+  height: var(--len);
+  cursor: default;
+}
+.ship-rot {
+  position: absolute; inset: 0;
+  transform: rotate(var(--cog, 0deg));
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.ship-hull {
+  position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible;
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 0.7));
+}
+.ship-body { fill: #e5e7eb; stroke: rgba(0, 0, 0, 0.65); stroke-width: 0.9; }
+.ship-deck { stroke: rgba(0, 0, 0, 0.28); stroke-width: 0.7; }
+.ship-bridge { fill: rgba(40, 46, 56, 0.85); }
+.ship[data-state="inside"] .ship-body { fill: #7fdcff; }
+.ship[data-state="ended"] { opacity: 0.45; }
+.ship.is-lead .ship-body { fill: #0a84ff; stroke: #ffffff; stroke-width: 1.1; }
+.ship.is-lead .ship-bridge { fill: rgba(255, 255, 255, 0.9); }
+
+/* wake: a V behind the stern, its length and strength from reported speed */
+.ship-wake {
+  position: absolute; left: 50%; top: 88%;
+  width: calc(var(--len) * (0.5 + var(--wake, 0) * 1.1));
+  height: calc(var(--len) * (0.3 + var(--wake, 0) * 2.4));
+  transform: translateX(-50%);
+  opacity: calc(var(--wake, 0) * 0.85);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+  clip-path: polygon(50% 0, 100% 100%, 88% 100%, 50% 16%, 12% 100%, 0 100%);
+  pointer-events: none;
+}
+
+/* the leading candidate: a slow sonar ring */
+.ship.is-lead::before {
+  content: "";
+  position: absolute; left: 50%; top: 50%;
+  width: calc(var(--len) * 1.9); height: calc(var(--len) * 1.9);
+  margin: calc(var(--len) * -0.95) 0 0 calc(var(--len) * -0.95);
+  border-radius: 50%;
+  border: 1.5px solid #0a84ff;
+  box-shadow: 0 0 10px rgba(10, 132, 255, 0.55), inset 0 0 6px rgba(10, 132, 255, 0.35);
+  animation: lead-pulse 2.6s var(--ease-out) infinite;
+}
+@keyframes lead-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.22); opacity: 0.5; }
+}
+
+/* AIS signal starts: one expanding ping where the first fix is */
+.ship.is-new::after {
+  content: "";
+  position: absolute; left: 50%; top: 50%;
+  width: 10px; height: 10px; margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(143, 227, 255, 0.95);
+  animation: ais-ping 1.4s var(--ease-out) forwards;
+  pointer-events: none;
+}
+@keyframes ais-ping {
+  from { transform: scale(0.4); opacity: 1; }
+  to { transform: scale(6); opacity: 0; }
+}
+
+.ship-label {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(8, 12, 18, 0.74);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 0 0.5px rgba(10, 132, 255, 0.6);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: var(--font-weight-semibold);
+  color: #ffffff;
+  pointer-events: none;
+}
+.ship-label:empty { display: none; }
+
+/* labels on the origin envelope's rings */
+.env-label {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: rgba(8, 20, 30, 0.7);
+  box-shadow: 0 0 0 0.5px rgba(143, 227, 255, 0.7);
+  color: #bfefff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  pointer-events: none;
+  transition: opacity var(--dur-base) ease;
+}
+.env-label.is-90 { color: rgba(191, 239, 255, 0.75); }
+.env-label.is-hidden { visibility: hidden; }
+
+/* the image moment: a scan line crossing the image footprint, drawn by CSS */
+.rmap-sweep { position: absolute; overflow: hidden; pointer-events: none; opacity: 0; }
+.rmap-sweep span {
+  position: absolute; left: 0; right: 0; top: 0; height: 22%;
+  transform: translateY(-100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 55%,
+                              rgba(255,255,255,0.16) 92%, rgba(255,255,255,0.75) 99%, rgba(255,255,255,0) 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9), 0 0 16px rgba(255,255,255,0.35);
+}
+.rmap-sweep.is-on { opacity: 1; }
+.rmap-sweep.is-on span { animation: sar-scan 1.3s cubic-bezier(0.45, 0, 0.25, 1) forwards; }
+@keyframes sar-scan { from { transform: translateY(-100%); } to { transform: translateY(460%); opacity: 0.6; } }
+
+/* the image moment */
+.rmap-acq {
+  position: absolute;
+  left: 50%;
+  bottom: 44px;
+  transform: translateX(-50%);
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(8, 12, 18, 0.72);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.5), 0 0 18px rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+  animation: acq-in 600ms var(--ease-out);
+}
+@keyframes acq-in { from { opacity: 0; transform: translate(-50%, 6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+@media (max-width: 620px) { .rmap { height: 380px; } }
+@media (prefers-reduced-motion: reduce) {
+  .ship.is-lead::before, .ship.is-new::after, .rmap-acq { animation: none; }
+}
+
+/* projected after the image: an outlined hull, no fill - a projection, not an observation */
+.ship[data-state="projected"] .ship-body { fill: rgba(255, 255, 255, 0.08); stroke: rgba(255, 255, 255, 0.85); stroke-dasharray: 2 1.5; }
+.ship[data-state="projected"].is-lead .ship-body { fill: rgba(10, 132, 255, 0.25); stroke: #8fc7ff; }
+.ship[data-state="projected"] .ship-bridge { fill: rgba(255, 255, 255, 0.35); }
+.ship[data-state="projected"] .ship-wake { opacity: 0; }
+
+/* the release: two rings and a word, once, at the ship */
+.release-burst { width: 0; height: 0; pointer-events: none; }
+.release-burst span {
+  position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid rgba(255, 190, 60, 0.95);
+  box-shadow: 0 0 14px rgba(255, 150, 20, 0.8), inset 0 0 8px rgba(255, 200, 80, 0.6);
+  animation: burst-ring 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.release-burst span + span { animation-delay: 0.25s; border-color: rgba(255, 230, 150, 0.8); }
+.release-burst em {
+  position: absolute; left: 16px; top: -26px; font-style: normal; white-space: nowrap;
+  padding: 2px 7px; border-radius: 6px; background: rgba(40, 20, 0, 0.75);
+  box-shadow: 0 0 0 0.5px rgba(255, 180, 60, 0.9); color: #ffd48a;
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: var(--font-weight-semibold);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  animation: burst-word 1.8s ease forwards;
+}
+@keyframes burst-ring { from { transform: scale(0.3); opacity: 1; } to { transform: scale(5.5); opacity: 0; } }
+@keyframes burst-word { 0% { opacity: 0; transform: translateY(4px); } 15%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .release-burst span, .release-burst em { animation: none; } }
+
+/* sensitive-area labels and the lit state */
+.area-label {
+  padding: 2px 7px; border-radius: 6px; white-space: nowrap; pointer-events: none;
+  background: rgba(8, 14, 20, 0.72); color: #cdeed8;
+  box-shadow: 0 0 0 0.5px rgba(48, 209, 88, 0.7);
+  font-size: 10.5px; font-weight: var(--font-weight-semibold);
+  transition: opacity var(--dur-base) ease, box-shadow var(--dur-base) ease, color var(--dur-base) ease;
+}
+.area-label.is-fishery { color: #cdf1ff; box-shadow: 0 0 0 0.5px rgba(100, 210, 255, 0.7); }
+.area-label.is-hit { color: #ffd48a; box-shadow: 0 0 0 0.75px rgba(255, 179, 64, 0.95), 0 0 12px rgba(255, 150, 20, 0.45); }
+.area-label.is-hidden { visibility: hidden; }
+
+/* layer toggle */
+.rmap-layers { position: absolute; top: 84px; right: 10px; z-index: 2; }
+.rmap-layers-btn {
+  display: grid; place-items: center; width: 29px; height: 29px; border: 0; border-radius: 7px;
+  background: var(--control-bg); color: var(--label-1); box-shadow: var(--shadow-control); cursor: default;
+}
+.rmap-layers-btn[aria-expanded="true"] { background: var(--accent); color: var(--on-accent); }
+.rmap-layers-pop {
+  position: absolute; top: 36px; right: 0; min-width: 190px; padding: 6px;
+  border-radius: 10px; background: var(--material-header);
+  -webkit-backdrop-filter: var(--blur-material); backdrop-filter: var(--blur-material);
+  box-shadow: var(--shadow-float); animation: popover-in var(--dur-base) var(--ease-spring);
+}
+.rmap-layers-pop label {
+  display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 6px;
+  font-size: var(--font-size-sm); color: var(--label-1);
+}
+.rmap-layers-pop label:hover { background: var(--fill-hover); }
+.rmap-layers-pop input { accent-color: var(--accent); }
+.rmap.hide-vessels .ship, .rmap.hide-envelope .env-label, .rmap.hide-areas .area-label { display: none !important; }

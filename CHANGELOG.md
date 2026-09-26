@@ -166,6 +166,59 @@ from tests and documents because they are no longer true: that the naive baselin
 falls for the decoy, and that the runner-up fits at 0.30 or below. 294 tests pass
 (67 added, 3 retired); all 135 case artifacts regenerate byte-identically.
 
+**Replay map: the case on a real map, 24 h either side of the image.** A MapLibre
+map with a time bar from -24 h to +24 h (play, pause, step, 1x/2x) replaces the
+SVG map and the basemap preview. Before the image it draws the backward origin
+envelope and, for a named vessel only, its scored release replayed hour by hour -
+oil leaving the ship; at the image, the detected slick with the replayed footprint;
+after it, the forecast drift, stranding on the real coast. Ships move along their
+tracks, trails stop at the selected hour and AIS gaps are dashed. Every frame is
+labelled observed or modelled. Two artifacts feed it: replay_timeline.json (the
+nominal member attribution scored, evaluated each hour; the last frame rasterises
+to the scored footprint pixel for pixel) and forecast_timeline.json (the forecast's
+own particle paths each hour; identical to forecast_contours.json at 6, 12 and 24 h).
+Existing artifacts are unchanged. 329 tests pass (35 added).
+
+**Replay map, finished: motion, ships and the image moment.** Playback glides
+between computed hours: every oil particle moves from its position at one hour to
+the next (replay frames now list all 250 particles in a fixed order, with a
+released flag), ships glide, and the origin envelope cross-fades; a paused frame is
+always the computed one. Ships are top-down hull symbols with a wake scaled by
+reported speed, sized by zoom and marked not to scale (no vessel dimensions are
+known, and at scene zoom a pixel is ~200 m); a ping marks where each vessel's AIS
+signal begins. The envelope glows with 50% and 90% labels; arriving at the image
+plays a scan across its footprint. Fixed on the way: the forcing probe read the
+current in m/s as degrees per hour and showed 9.03 kn for a 0.31 kn current; a case
+switch after zooming could crash the page; the scan first redrew the whole map
+each frame and slowed every case load. 330 tests pass (1 added).
+
+**Replay map on a continuous clock.** The map now renders at any fractional hour:
+ships move along their smooth display paths with heading from the path's curve,
+trails grow with them, oil particles and the envelope move between computed hours,
+and a paused frame is exactly a computed hour. After the image, where there is no
+AIS, ships are projected from their last reported course and speed, drawn as
+outlined hulls on dashed tracks, labelled projected and held at the coast. The
+release plays a burst at the ship and the oil emerges from its position; at the
+image the replayed oil fades into the forecast instead of jumping. Ships are
+readable at the default view (20 px). Fixed: every ship marker was displaced by the
+height of the markers before it (a CSS position rule overrode MapLibre's own), which
+is why the leading ship appeared away from its oil and trails did not reach ships;
+each frame re-sent every map layer, starving the renderer during playback.
+
+**Realistic AIS, exact stranding, and a finer release search.** Every vessel is now
+tracked over the whole 24 h AIS window and published as an AIS query for the scene
+returns it, so ships enter and leave through the frame edges instead of appearing in
+open water; 15% of vessels, of any role, switch their transponder off for 1-3 h.
+That exposed a limit in forward replay: it tried three release start times per
+vessel, which full-day tracks spaced 12 h apart, so a release 6 h before the image
+was never tried. Starts are now tried every hour (A23), and case_0001's best
+hypothesis starts at the true release time. Forecast oil that reaches the coast is
+held where it crosses the shoreline (bisected), not up to an hour's drift inland.
+On the map, sensitive areas appear after the image, labelled, and light up from the
+hour the forecast first reaches them; the envelope is captioned; a layer toggle.
+Re-earned: 7/7 against naive 0/7, McNemar p = 0.0156, abstentions 1/2; leak audit
+3 of 33 flagged (about 2.7 by chance).
+
 ---
 
 ## 13 September 2026

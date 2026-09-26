@@ -2,7 +2,7 @@
   "incident_id": "case_0004",
   "family": "crowded",
   "seed": 8813,
-  "true_vessel_key": "419602854",
+  "true_vessel_key": "419210002",
   "absent_true_vessel_key": null,
   "source_is_in_manifest": true,
   "expected_outcome": "named_candidate",
@@ -11,21 +11,21 @@
   "is_continuous": true,
   "swirl": 0.017929844194457235,
   "roles": {
-    "419407863": "background",
-    "419918411": "near_miss_decoy",
-    "419603105": "background",
-    "419643687": "near_decoy",
-    "419745959": "background",
-    "419224568": "background",
-    "419602854": "true_source",
-    "419933538": "background",
-    "419334550": "background",
-    "419298967": "background",
-    "419202023": "background"
+    "419364347": "background",
+    "419105044": "background",
+    "419925490": "near_miss_decoy",
+    "419245446": "near_decoy",
+    "419551783": "background",
+    "419761151": "background",
+    "419737493": "background",
+    "419634099": "background",
+    "419210002": "true_source",
+    "419580368": "background",
+    "419433516": "background"
   },
   "slick_centroid": [
-    72.38283628692679,
-    19.113380361985485
+    72.34579396357218,
+    19.140747115056257
   ],
   "WARNING": "Dev/validation only. Not served by the API, not read by the UI, and not required to reproduce any result shown to a reviewer."
 }

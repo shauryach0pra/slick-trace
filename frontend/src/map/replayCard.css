@@ -1,0 +1,40 @@
+/* Loading state and legend for the replay card. Loaded with the card, not
+   the lazy map chunk, so neither is ever unstyled. */
+
+.rmap-loading {
+  position: relative;
+  height: 520px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  display: grid;
+  place-items: center;
+  color: var(--label-2);
+  font-size: var(--font-size-sm);
+}
+
+.rmap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-xs);
+  color: var(--label-2);
+}
+.rmap-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.rmap-legend i { display: inline-block; flex: 0 0 auto; }
+
+.lg-ship { width: 5px; height: 14px; border-radius: 50% 50% 35% 35% / 70% 70% 12% 12%; background: #e5e7eb;
+           box-shadow: 0 0 0 0.75px rgba(0, 0, 0, 0.55); }
+.lg-ship.is-inside { background: #7fdcff; }
+.lg-ship.is-projected { background: transparent; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.85); }
+.lg-ship.is-lead { background: #0a84ff; box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.35); }
+.lg-env { width: 14px; height: 10px; border-radius: 3px; background: rgba(90, 200, 250, 0.3); box-shadow: inset 0 0 0 1.2px #5ac8fa; }
+.lg-oil { width: 14px; height: 10px; border-radius: 5px;
+          background: radial-gradient(closest-side, #fff0b4, #ff9614 55%, rgba(200, 90, 0, 0.2)); }
+.lg-stranded { width: 7px; height: 7px; border-radius: 50%; background: #ff453a; }
+.lg-slick { width: 14px; height: 10px; border-radius: 3px; background: rgba(5, 7, 10, 0.35); box-shadow: inset 0 0 0 1.5px var(--label-1); }
+.lg-gap { width: 16px; height: 0; border-top: 1.5px dotted var(--label-2); }
+.lg-area { width: 14px; height: 10px; border-radius: 2px; border: 1px dashed #30d158; background: rgba(48, 209, 88, 0.14); }
+.lg-area.is-fishery { border-color: #64d2ff; background: rgba(100, 210, 255, 0.14); }

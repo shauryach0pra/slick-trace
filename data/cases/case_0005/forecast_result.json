@@ -7,17 +7,17 @@
     {
       "horizon_hours": 6,
       "valid_utc": "2026-09-10T10:30:00+00:00",
-      "envelope_area_km2": 497.3,
+      "envelope_area_km2": 479.2,
       "centroid": [
-        72.36042,
-        19.13776
+        72.32171,
+        19.16903
       ],
       "modelled_shoreline_fraction": 0.0,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.4069,
+          "modelled_particle_fraction": 0.4197,
           "any_contact": true
         },
         {
@@ -32,17 +32,17 @@
     {
       "horizon_hours": 12,
       "valid_utc": "2026-09-10T16:30:00+00:00",
-      "envelope_area_km2": 537.9,
+      "envelope_area_km2": 536.0,
       "centroid": [
-        72.39002,
-        19.12795
+        72.35132,
+        19.15922
       ],
       "modelled_shoreline_fraction": 0.0,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.3858,
+          "modelled_particle_fraction": 0.4014,
           "any_contact": true
         },
         {
@@ -57,23 +57,23 @@
     {
       "horizon_hours": 24,
       "valid_utc": "2026-09-11T04:30:00+00:00",
-      "envelope_area_km2": 590.5,
+      "envelope_area_km2": 582.4,
       "centroid": [
-        72.4487,
-        19.10837
+        72.41018,
+        19.13965
       ],
-      "modelled_shoreline_fraction": 0.0056,
+      "modelled_shoreline_fraction": 0.0019,
       "sensitive_area_exposure": [
         {
           "name": "Fishing ground (synthetic)",
           "kind": "fishery",
-          "modelled_particle_fraction": 0.2833,
+          "modelled_particle_fraction": 0.2894,
           "any_contact": true
         },
         {
           "name": "Mangrove reserve (synthetic)",
           "kind": "mangrove",
-          "modelled_particle_fraction": 0.0019,
+          "modelled_particle_fraction": 0.0006,
           "any_contact": true
         }
       ],

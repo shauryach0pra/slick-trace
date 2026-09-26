@@ -11,21 +11,21 @@
   "conditions": {
     "selective": {
       "n_runs": 40,
-      "hidden_ais_recovery_rate": 0.8305,
-      "hidden_ais_recovery_n": "49/59",
-      "false_unmatched_alert_rate": 0.2581,
-      "false_unmatched_alert_n": "24/93",
-      "mistaken_promotion_rate": 0.375,
-      "mistaken_promotion_n": "15/40"
+      "hidden_ais_recovery_rate": 0.8182,
+      "hidden_ais_recovery_n": "54/66",
+      "false_unmatched_alert_rate": 0.2712,
+      "false_unmatched_alert_n": "32/118",
+      "mistaken_promotion_rate": 0.15,
+      "mistaken_promotion_n": "6/40"
     },
     "coverage_failure": {
       "n_runs": 40,
-      "hidden_ais_recovery_rate": 0.8269,
-      "hidden_ais_recovery_n": "43/52",
-      "false_unmatched_alert_rate": 0.2083,
-      "false_unmatched_alert_n": "15/72",
-      "mistaken_promotion_rate": 0.1786,
-      "mistaken_promotion_n": "5/28"
+      "hidden_ais_recovery_rate": 0.881,
+      "hidden_ais_recovery_n": "74/84",
+      "false_unmatched_alert_rate": 0.189,
+      "false_unmatched_alert_n": "24/127",
+      "mistaken_promotion_rate": 0.1389,
+      "mistaken_promotion_n": "5/36"
     }
   },
   "limits": [

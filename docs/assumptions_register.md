@@ -212,14 +212,15 @@ exercised rather than trivially satisfied. Current result: 1/2 correct
 abstentions, 1/2 false named attributions, with a 95% interval of 9 to 91% on
 the abstention rate, which is the honest reading at n = 2.
 
-**Where it fails.** In case_0003 a passer-by crossed the slick area 2.5 h before
-the image. Its best hypothetical release fits at mean IoU 0.49, above the 0.3
-gate, and is not separated from the runner-up (0.41); the system names it. The
-fit gate alone cannot reject a plausible but imperfect alternative. Before the
+**Where it fails.** In case_0003 a background vessel's best hypothetical release -
+a half-hour pulse 8 h before the image - fits at mean IoU 0.325, just above the
+0.3 gate and well ahead of the runner-up (0.19), so the system names it. The fit
+gate alone cannot reject a plausible but imperfect alternative. Before the
 benchmark fix (A21) this case could not arise: every innocent vessel was placed
-far from the slick. A candidate rule - name no one when the top two are not
-separated - is recorded as future work and is to be evaluated on held-out seeds,
-not on these cases, so that it is not tuned to them.
+far from the slick. A rule once considered - name no one when the top two are
+not separated - would not catch it: here they are separated. Any change to the
+gate is to be evaluated on held-out seeds, not on these cases, so that it is not
+tuned to them.
 
 ---
 
@@ -564,24 +565,29 @@ generator was changed - found 10 of 33 rules naming the source at or above the
 flag threshold, four of them in 7 of 7 cases, matching forward replay's headline
 without any physics.
 
-**How it is bounded.** Every vessel now draws its first fix (10 to 16 h before
-the image), reporting cadence (30 min), speed (a shared mix of loitering and
-transit) and route from the same distributions whatever its role; reported speed
+**How it is bounded.** Every vessel is tracked over the whole 24 h AIS window and
+published as an AIS query for the scene returns it - the fixes inside the scene,
+so ships enter and leave through its edges - with the same reporting cadence
+(30 min), speed (a shared mix of loitering and transit) and route distributions
+whatever its role; 15% of vessels, of any role, switch their transponder off for
+1 to 3 h; reported speed
 and course are its actual motion; half of background traffic passes the slick as
 closely as a polluter does (0.5 to 3.3 km, the range the sources were measured
 at). Innocent vessels are kept physically identifiable: none is within 8 km of
 the source while it releases, because a vessel at the release point during the
 release is indistinguishable from the polluter by drift physics and a case
-containing one tests nothing. The audit runs in every validation: 2 of 33 rules
+containing one tests nothing. The audit runs in every validation: 3 of 33 rules
 flag, where about 2.7 are expected by chance, and no rule exceeds 5 of 7.
 
 **What remains.** "Second-closest approach to the slick" names the source in 5 of
 7. Its cause is physical rather than bookkeeping - the source was at the release
 point hours before the image and the slick drifts only a few kilometres, while
 the near decoy is placed on the slick at image time - so it is reported, not
-engineered away. The fairer benchmark cost the headline: the naive baseline now
-names the source once (a loitering source sitting beside its own slick), McNemar
-p rose from 0.0156 to 0.0312, and one absent-source case now names a vessel (A10).
+engineered away. The fairer benchmark first cost the headline - the naive baseline
+named the source once and McNemar p rose to 0.0312 - and full-day tracks then
+brought the naive baseline back to 0/7 (p = 0.0156). One absent-source case names
+a vessel (A10). An earlier version started every track 10 to 16 h before the
+image, so ships appeared in open water rather than entering the scene.
 
 ---
 
@@ -606,6 +612,25 @@ bright, as SAR shows it; and forecast particles that reach land strand there,
 checked hourly. Forecasts whose particles never touch land are unchanged to the
 last digit. Natural Earth 10 m resolves narrow creeks and harbour detail only
 coarsely; it is a scene-scale shoreline, not a harbour chart.
+
+---
+
+### A23 · Release times are searched at a fixed resolution
+
+**The assumption.** Forward replay tries enough release start times to find the
+one that happened.
+
+**Why it was needed.** It tried three per vessel - the start, middle and end of
+the vessel's observed track - so the resolution depended on how long a track
+happened to be. With full-day tracks those were 12 h apart, a release 6 h before
+the image was never tried, and the true source's fit fell from 0.69 to 0.50 in
+case_0001 (still ranked first, but below the frozen case's 0.55 floor).
+
+**How it is bounded.** A start is tried every hour across each vessel's observed
+window, the same for every vessel, crossed with the same three durations. It was
+fixed on that principle before rescoring, not tuned to the result; case_0001's
+best hypothesis now starts at the true release time. Attribution does about
+eight times the work; the slowest case takes about 25 s, within the 5 min budget.
 
 ---
 

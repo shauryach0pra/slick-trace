@@ -1,7 +1,7 @@
 {
   "report_type": "reproducible investigation report",
   "not_a": "This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.",
-  "generated_utc": "2026-09-25T20:56:43.634819+00:00",
+  "generated_utc": "2026-09-26T12:22:32.628195+00:00",
   "incident_id": "case_0009",
   "scene": {
     "scene_id": "case_0009_S1SYN_20260910T043000",
@@ -35,12 +35,212 @@
   "historical_filtering": {
     "hours_back": 24,
     "status_counts": {
-      "candidate": 4,
-      "unassessed": 2
+      "candidate": 6
     },
     "assessments": [
       {
-        "vessel_key": "419173678",
+        "vessel_key": "419390401",
+        "status": "candidate",
+        "first_entry_hours_before": 24.0,
+        "reason": "inside envelope at 13 of 25 queried times",
+        "inside_at": [
+          12.0,
+          13.0,
+          14.0,
+          15.0,
+          16.0,
+          17.0,
+          18.0,
+          19.0,
+          20.0,
+          21.0,
+          22.0,
+          23.0,
+          24.0
+        ],
+        "hourly_state": [
+          "no_data",
+          "no_data",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside"
+        ],
+        "hours_with_data": 23,
+        "data_intervals_hours_before": [
+          [
+            24.0,
+            2.0
+          ]
+        ]
+      },
+      {
+        "vessel_key": "419578923",
+        "status": "candidate",
+        "first_entry_hours_before": 24.0,
+        "reason": "inside envelope at 13 of 25 queried times",
+        "inside_at": [
+          11.0,
+          12.0,
+          13.0,
+          14.0,
+          15.0,
+          16.0,
+          17.0,
+          18.0,
+          19.0,
+          20.0,
+          21.0,
+          22.0,
+          24.0
+        ],
+        "hourly_state": [
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "inside",
+          "outside",
+          "inside"
+        ],
+        "hours_with_data": 25,
+        "data_intervals_hours_before": [
+          [
+            24.0,
+            0.0
+          ]
+        ]
+      },
+      {
+        "vessel_key": "419151108",
+        "status": "candidate",
+        "first_entry_hours_before": 1.0,
+        "reason": "inside envelope at 2 of 25 queried times",
+        "inside_at": [
+          0.0,
+          1.0
+        ],
+        "hourly_state": [
+          "inside",
+          "inside",
+          "outside",
+          "outside",
+          "outside",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data",
+          "no_data"
+        ],
+        "hours_with_data": 5,
+        "data_intervals_hours_before": [
+          [
+            4.0,
+            0.0
+          ]
+        ]
+      },
+      {
+        "vessel_key": "419356707",
+        "status": "candidate",
+        "first_entry_hours_before": 24.0,
+        "reason": "inside envelope at 5 of 25 queried times",
+        "inside_at": [
+          18.0,
+          19.0,
+          20.0,
+          23.0,
+          24.0
+        ],
+        "hourly_state": [
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "outside",
+          "inside",
+          "inside",
+          "inside",
+          "outside",
+          "outside",
+          "inside",
+          "inside"
+        ],
+        "hours_with_data": 25,
+        "data_intervals_hours_before": [
+          [
+            24.0,
+            0.0
+          ]
+        ]
+      },
+      {
+        "vessel_key": "419134716",
         "status": "candidate",
         "first_entry_hours_before": 11.0,
         "reason": "inside envelope at 5 of 25 queried times",
@@ -87,7 +287,7 @@
         ]
       },
       {
-        "vessel_key": "419336308",
+        "vessel_key": "419792319",
         "status": "candidate",
         "first_entry_hours_before": 9.0,
         "reason": "inside envelope at 9 of 25 queried times",
@@ -136,186 +336,6 @@
             0.0
           ]
         ]
-      },
-      {
-        "vessel_key": "419806892",
-        "status": "candidate",
-        "first_entry_hours_before": 11.0,
-        "reason": "inside envelope at 8 of 25 queried times",
-        "inside_at": [
-          3.0,
-          4.0,
-          5.0,
-          6.0,
-          7.0,
-          8.0,
-          9.0,
-          11.0
-        ],
-        "hourly_state": [
-          "no_data",
-          "no_data",
-          "no_data",
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "outside",
-          "inside",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data"
-        ],
-        "hours_with_data": 9,
-        "data_intervals_hours_before": [
-          [
-            11.0,
-            3.0
-          ]
-        ]
-      },
-      {
-        "vessel_key": "419285458",
-        "status": "unassessed",
-        "first_entry_hours_before": null,
-        "reason": "no track data at 23 of 25 queried times; track data 14 h to 13 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
-        "inside_at": [],
-        "hourly_state": [
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "outside",
-          "outside",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data"
-        ],
-        "hours_with_data": 2,
-        "data_intervals_hours_before": [
-          [
-            14.0,
-            13.0
-          ]
-        ]
-      },
-      {
-        "vessel_key": "419163741",
-        "status": "unassessed",
-        "first_entry_hours_before": null,
-        "reason": "no track data at 13 of 25 queried times; track data 11 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel",
-        "inside_at": [],
-        "hourly_state": [
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data"
-        ],
-        "hours_with_data": 12,
-        "data_intervals_hours_before": [
-          [
-            11.0,
-            0.0
-          ]
-        ]
-      },
-      {
-        "vessel_key": "419358060",
-        "status": "candidate",
-        "first_entry_hours_before": 5.0,
-        "reason": "inside envelope at 6 of 25 queried times",
-        "inside_at": [
-          0.0,
-          1.0,
-          2.0,
-          3.0,
-          4.0,
-          5.0
-        ],
-        "hourly_state": [
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "inside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "outside",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data",
-          "no_data"
-        ],
-        "hours_with_data": 13,
-        "data_intervals_hours_before": [
-          [
-            12.0,
-            0.0
-          ]
-        ]
       }
     ],
     "state_meaning": {
@@ -326,7 +346,7 @@
   },
   "attribution": {
     "outcome": "named_candidate",
-    "top_candidate": "419336308",
+    "top_candidate": "419792319",
     "abstention_iou_gate": 0.3,
     "loss_weights": {
       "a_iou": 0.5,
@@ -337,46 +357,68 @@
     "n_ensemble_variants": 6,
     "ranking": [
       {
-        "candidate_id": "419336308_2330_4.0h",
-        "vessel_key": "419336308",
-        "release_start": "2026-09-09T23:30:00+00:00",
+        "candidate_id": "419792319_2130_4.0h",
+        "vessel_key": "419792319",
+        "release_start": "2026-09-09T21:30:00+00:00",
         "duration_hours": 4.0,
         "is_continuous": true,
-        "mean_iou": 0.417466520484356,
-        "mean_loss": 0.4335361529846901,
-        "ensemble_win_count": 5,
+        "mean_iou": 0.5099721614248603,
+        "mean_loss": 0.3723014240041891,
+        "ensemble_win_count": 6,
         "n_ensemble": 6
       },
       {
-        "candidate_id": "419806892_2130_2.0h",
-        "vessel_key": "419806892",
-        "release_start": "2026-09-09T21:30:00+00:00",
-        "duration_hours": 2.0,
-        "is_continuous": true,
-        "mean_iou": 0.2904111815023694,
-        "mean_loss": 0.44813010794179736,
-        "ensemble_win_count": 1,
-        "n_ensemble": 6
-      },
-      {
-        "candidate_id": "419358060_2215_0.5h",
-        "vessel_key": "419358060",
-        "release_start": "2026-09-09T22:15:00+00:00",
+        "candidate_id": "419390401_0430_0.5h",
+        "vessel_key": "419390401",
+        "release_start": "2026-09-09T04:30:00+00:00",
         "duration_hours": 0.5,
         "is_continuous": false,
-        "mean_iou": 0.01528457034318908,
-        "mean_loss": 0.5686266148761068,
+        "mean_iou": 0.12992069501741124,
+        "mean_loss": 0.484766971553316,
         "ensemble_win_count": 0,
         "n_ensemble": 6
       },
       {
-        "candidate_id": "419173678_2145_0.5h",
-        "vessel_key": "419173678",
-        "release_start": "2026-09-09T21:45:00+00:00",
+        "candidate_id": "419134716_1900_0.5h",
+        "vessel_key": "419134716",
+        "release_start": "2026-09-09T19:00:00+00:00",
         "duration_hours": 0.5,
         "is_continuous": false,
-        "mean_iou": 0.0014158746179942245,
-        "mean_loss": 0.5900954621238683,
+        "mean_iou": 0.10313342412590316,
+        "mean_loss": 0.5254647608265001,
+        "ensemble_win_count": 0,
+        "n_ensemble": 6
+      },
+      {
+        "candidate_id": "419578923_0430_0.5h",
+        "vessel_key": "419578923",
+        "release_start": "2026-09-09T04:30:00+00:00",
+        "duration_hours": 0.5,
+        "is_continuous": false,
+        "mean_iou": 0.0042459222499618065,
+        "mean_loss": 0.5597319306994236,
+        "ensemble_win_count": 0,
+        "n_ensemble": 6
+      },
+      {
+        "candidate_id": "419151108_0400_0.5h",
+        "vessel_key": "419151108",
+        "release_start": "2026-09-10T04:00:00+00:00",
+        "duration_hours": 0.5,
+        "is_continuous": false,
+        "mean_iou": 0.04971909160516375,
+        "mean_loss": 0.5658748850655275,
+        "ensemble_win_count": 0,
+        "n_ensemble": 6
+      },
+      {
+        "candidate_id": "419356707_1730_0.5h",
+        "vessel_key": "419356707",
+        "release_start": "2026-09-09T17:30:00+00:00",
+        "duration_hours": 0.5,
+        "is_continuous": false,
+        "mean_iou": 1.8976052222095713e-05,
+        "mean_loss": 0.5958182620754534,
         "ensemble_win_count": 0,
         "n_ensemble": 6
       }
@@ -386,62 +428,43 @@
       "method": "naive_nearest_at_observation",
       "ranking": [
         {
-          "vessel_key": "419358060",
-          "distance_deg": 0.01550651028642715
+          "vessel_key": "419151108",
+          "distance_deg": 0.015181575574545908
         },
         {
-          "vessel_key": "419173678",
-          "distance_deg": 0.20584352726773916
+          "vessel_key": "419578923",
+          "distance_deg": 0.18106158809848927
         },
         {
-          "vessel_key": "419163741",
-          "distance_deg": 0.24255156904242867
+          "vessel_key": "419134716",
+          "distance_deg": 0.20615753876646362
         },
         {
-          "vessel_key": "419806892",
-          "distance_deg": 0.4439048250865529
+          "vessel_key": "419356707",
+          "distance_deg": 0.3715601707545874
         },
         {
-          "vessel_key": "419336308",
-          "distance_deg": 0.4529270242200546
+          "vessel_key": "419792319",
+          "distance_deg": 0.4529214626913363
         },
         {
-          "vessel_key": "419285458",
-          "distance_deg": 0.5654741713626258
+          "vessel_key": "419390401",
+          "distance_deg": 0.5348248775150941
         }
       ],
-      "top_candidate_id": "419358060"
+      "top_candidate_id": "419151108"
     }
   },
   "rank_fragility": {
     "incident_id": "case_0009",
     "testable": true,
-    "baseline_top": "419336308",
+    "baseline_top": "419792319",
     "baseline_unknown_source": false,
     "n_points_tested": 80,
-    "n_points_flipped": 18,
-    "flip_found": true,
-    "smallest_flip": {
-      "point_id": "p020",
-      "params": {
-        "current_u_bias": 0.0,
-        "current_v_bias": 0.0,
-        "diffusivity_scale": 1.0,
-        "mask_threshold": 0.15,
-        "duration_shift_h": 1.0
-      },
-      "changed_axes": {
-        "duration_shift_h": 1.0
-      },
-      "magnitude": 1.0,
-      "top_candidate": "419806892",
-      "top_iou": 0.365,
-      "baseline_candidate_iou": 0.372,
-      "loss_margin": 0.0287,
-      "flipped": true,
-      "source": "computed"
-    },
-    "lead_retained_fraction": 0.775,
+    "n_points_flipped": 0,
+    "flip_found": false,
+    "smallest_flip": null,
+    "lead_retained_fraction": 1.0,
     "grid": [
       {
         "point_id": "p000",
@@ -456,10 +479,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 0.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.3857,
-        "baseline_candidate_iou": 0.3857,
-        "loss_margin": 0.0062,
+        "top_candidate": "419792319",
+        "top_iou": 0.5066,
+        "baseline_candidate_iou": 0.5066,
+        "loss_margin": 0.1294,
         "flipped": false,
         "source": "computed"
       },
@@ -476,10 +499,10 @@
           "current_u_bias": -0.03
         },
         "magnitude": 0.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4167,
-        "baseline_candidate_iou": 0.4167,
-        "loss_margin": 0.017,
+        "top_candidate": "419792319",
+        "top_iou": 0.4765,
+        "baseline_candidate_iou": 0.4765,
+        "loss_margin": 0.0777,
         "flipped": false,
         "source": "computed"
       },
@@ -496,10 +519,10 @@
           "current_u_bias": 0.03
         },
         "magnitude": 0.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4526,
-        "baseline_candidate_iou": 0.4526,
-        "loss_margin": 0.0239,
+        "top_candidate": "419792319",
+        "top_iou": 0.5718,
+        "baseline_candidate_iou": 0.5718,
+        "loss_margin": 0.1507,
         "flipped": false,
         "source": "computed"
       },
@@ -516,10 +539,10 @@
           "current_v_bias": -0.03
         },
         "magnitude": 0.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4041,
-        "baseline_candidate_iou": 0.4041,
-        "loss_margin": 0.011,
+        "top_candidate": "419792319",
+        "top_iou": 0.5129,
+        "baseline_candidate_iou": 0.5129,
+        "loss_margin": 0.1133,
         "flipped": false,
         "source": "computed"
       },
@@ -536,10 +559,10 @@
           "current_v_bias": 0.03
         },
         "magnitude": 0.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.409,
-        "baseline_candidate_iou": 0.409,
-        "loss_margin": 0.0299,
+        "top_candidate": "419792319",
+        "top_iou": 0.5059,
+        "baseline_candidate_iou": 0.5059,
+        "loss_margin": 0.1082,
         "flipped": false,
         "source": "computed"
       },
@@ -556,10 +579,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 0.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3371,
-        "baseline_candidate_iou": 0.3371,
-        "loss_margin": 0.0094,
+        "top_candidate": "419792319",
+        "top_iou": 0.4095,
+        "baseline_candidate_iou": 0.4095,
+        "loss_margin": 0.1022,
         "flipped": false,
         "source": "computed"
       },
@@ -576,10 +599,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 0.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4419,
-        "baseline_candidate_iou": 0.4419,
-        "loss_margin": 0.001,
+        "top_candidate": "419792319",
+        "top_iou": 0.4976,
+        "baseline_candidate_iou": 0.4976,
+        "loss_margin": 0.1231,
         "flipped": false,
         "source": "computed"
       },
@@ -596,10 +619,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 0.7143,
-        "top_candidate": "419336308",
-        "top_iou": 0.4481,
-        "baseline_candidate_iou": 0.4481,
-        "loss_margin": 0.0141,
+        "top_candidate": "419792319",
+        "top_iou": 0.5366,
+        "baseline_candidate_iou": 0.5366,
+        "loss_margin": 0.0814,
         "flipped": false,
         "source": "computed"
       },
@@ -617,10 +640,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 0.75,
-        "top_candidate": "419336308",
-        "top_iou": 0.402,
-        "baseline_candidate_iou": 0.402,
-        "loss_margin": 0.0136,
+        "top_candidate": "419792319",
+        "top_iou": 0.4996,
+        "baseline_candidate_iou": 0.4996,
+        "loss_margin": 0.0985,
         "flipped": false,
         "source": "computed"
       },
@@ -638,10 +661,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 0.75,
-        "top_candidate": "419336308",
-        "top_iou": 0.3918,
-        "baseline_candidate_iou": 0.3918,
-        "loss_margin": 0.0241,
+        "top_candidate": "419792319",
+        "top_iou": 0.4916,
+        "baseline_candidate_iou": 0.4916,
+        "loss_margin": 0.1522,
         "flipped": false,
         "source": "computed"
       },
@@ -659,10 +682,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 0.75,
-        "top_candidate": "419336308",
-        "top_iou": 0.3934,
-        "baseline_candidate_iou": 0.3934,
-        "loss_margin": 0.0114,
+        "top_candidate": "419792319",
+        "top_iou": 0.4653,
+        "baseline_candidate_iou": 0.4653,
+        "loss_margin": 0.0909,
         "flipped": false,
         "source": "computed"
       },
@@ -680,10 +703,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 0.75,
-        "top_candidate": "419336308",
-        "top_iou": 0.4288,
-        "baseline_candidate_iou": 0.4288,
-        "loss_margin": 0.0466,
+        "top_candidate": "419792319",
+        "top_iou": 0.467,
+        "baseline_candidate_iou": 0.467,
+        "loss_margin": 0.1251,
         "flipped": false,
         "source": "computed"
       },
@@ -701,10 +724,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 0.9643,
-        "top_candidate": "419336308",
-        "top_iou": 0.4215,
-        "baseline_candidate_iou": 0.4215,
-        "loss_margin": 0.0234,
+        "top_candidate": "419792319",
+        "top_iou": 0.5078,
+        "baseline_candidate_iou": 0.5078,
+        "loss_margin": 0.089,
         "flipped": false,
         "source": "computed"
       },
@@ -721,10 +744,10 @@
           "current_u_bias": -0.06
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4093,
-        "baseline_candidate_iou": 0.4093,
-        "loss_margin": 0.0254,
+        "top_candidate": "419792319",
+        "top_iou": 0.4882,
+        "baseline_candidate_iou": 0.4882,
+        "loss_margin": 0.0237,
         "flipped": false,
         "source": "computed"
       },
@@ -741,10 +764,10 @@
           "current_u_bias": 0.06
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4061,
-        "baseline_candidate_iou": 0.4061,
-        "loss_margin": 0.0403,
+        "top_candidate": "419792319",
+        "top_iou": 0.4721,
+        "baseline_candidate_iou": 0.4721,
+        "loss_margin": 0.1082,
         "flipped": false,
         "source": "computed"
       },
@@ -761,10 +784,10 @@
           "current_v_bias": -0.06
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4022,
-        "baseline_candidate_iou": 0.4022,
-        "loss_margin": 0.0457,
+        "top_candidate": "419792319",
+        "top_iou": 0.4559,
+        "baseline_candidate_iou": 0.4559,
+        "loss_margin": 0.041,
         "flipped": false,
         "source": "computed"
       },
@@ -781,10 +804,10 @@
           "current_v_bias": 0.06
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4552,
-        "baseline_candidate_iou": 0.4552,
-        "loss_margin": 0.0498,
+        "top_candidate": "419792319",
+        "top_iou": 0.5209,
+        "baseline_candidate_iou": 0.5209,
+        "loss_margin": 0.1223,
         "flipped": false,
         "source": "computed"
       },
@@ -801,10 +824,10 @@
           "diffusivity_scale": 1.8
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4019,
-        "baseline_candidate_iou": 0.4019,
-        "loss_margin": 0.0116,
+        "top_candidate": "419792319",
+        "top_iou": 0.4278,
+        "baseline_candidate_iou": 0.4278,
+        "loss_margin": 0.0785,
         "flipped": false,
         "source": "computed"
       },
@@ -821,10 +844,10 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.373,
-        "baseline_candidate_iou": 0.373,
-        "loss_margin": 0.0036,
+        "top_candidate": "419792319",
+        "top_iou": 0.4566,
+        "baseline_candidate_iou": 0.4566,
+        "loss_margin": 0.094,
         "flipped": false,
         "source": "computed"
       },
@@ -841,10 +864,10 @@
           "duration_shift_h": -1.0
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4044,
-        "baseline_candidate_iou": 0.4044,
-        "loss_margin": 0.0373,
+        "top_candidate": "419792319",
+        "top_iou": 0.4659,
+        "baseline_candidate_iou": 0.4659,
+        "loss_margin": 0.0813,
         "flipped": false,
         "source": "computed"
       },
@@ -861,11 +884,11 @@
           "duration_shift_h": 1.0
         },
         "magnitude": 1.0,
-        "top_candidate": "419806892",
-        "top_iou": 0.365,
-        "baseline_candidate_iou": 0.372,
-        "loss_margin": 0.0287,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.5809,
+        "baseline_candidate_iou": 0.5809,
+        "loss_margin": 0.1336,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -882,10 +905,10 @@
           "current_v_bias": -0.03
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4205,
-        "baseline_candidate_iou": 0.4205,
-        "loss_margin": 0.0396,
+        "top_candidate": "419792319",
+        "top_iou": 0.5081,
+        "baseline_candidate_iou": 0.5081,
+        "loss_margin": 0.043,
         "flipped": false,
         "source": "computed"
       },
@@ -903,10 +926,10 @@
           "current_v_bias": 0.03
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.469,
-        "baseline_candidate_iou": 0.469,
-        "loss_margin": 0.0326,
+        "top_candidate": "419792319",
+        "top_iou": 0.5792,
+        "baseline_candidate_iou": 0.5792,
+        "loss_margin": 0.1202,
         "flipped": false,
         "source": "computed"
       },
@@ -924,10 +947,10 @@
           "current_v_bias": -0.03
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4338,
-        "baseline_candidate_iou": 0.4338,
-        "loss_margin": 0.0432,
+        "top_candidate": "419792319",
+        "top_iou": 0.5371,
+        "baseline_candidate_iou": 0.5371,
+        "loss_margin": 0.1317,
         "flipped": false,
         "source": "computed"
       },
@@ -945,10 +968,10 @@
           "current_v_bias": 0.03
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4065,
-        "baseline_candidate_iou": 0.4065,
-        "loss_margin": 0.0395,
+        "top_candidate": "419792319",
+        "top_iou": 0.4878,
+        "baseline_candidate_iou": 0.4878,
+        "loss_margin": 0.0914,
         "flipped": false,
         "source": "computed"
       },
@@ -966,10 +989,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.3497,
-        "baseline_candidate_iou": 0.3497,
-        "loss_margin": 0.0047,
+        "top_candidate": "419792319",
+        "top_iou": 0.4138,
+        "baseline_candidate_iou": 0.4138,
+        "loss_margin": 0.1018,
         "flipped": false,
         "source": "computed"
       },
@@ -987,10 +1010,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4166,
-        "baseline_candidate_iou": 0.4166,
-        "loss_margin": 0.0136,
+        "top_candidate": "419792319",
+        "top_iou": 0.4841,
+        "baseline_candidate_iou": 0.4841,
+        "loss_margin": 0.075,
         "flipped": false,
         "source": "computed"
       },
@@ -1008,10 +1031,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.392,
-        "baseline_candidate_iou": 0.392,
-        "loss_margin": 0.0271,
+        "top_candidate": "419792319",
+        "top_iou": 0.4453,
+        "baseline_candidate_iou": 0.4453,
+        "loss_margin": 0.1404,
         "flipped": false,
         "source": "computed"
       },
@@ -1029,11 +1052,11 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.0,
-        "top_candidate": "419806892",
-        "top_iou": 0.3329,
-        "baseline_candidate_iou": 0.3926,
-        "loss_margin": 0.0303,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.5173,
+        "baseline_candidate_iou": 0.5173,
+        "loss_margin": 0.1369,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1050,11 +1073,11 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.0,
-        "top_candidate": "419806892",
-        "top_iou": 0.2232,
-        "baseline_candidate_iou": 0.3146,
-        "loss_margin": 0.0001,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.3534,
+        "baseline_candidate_iou": 0.3534,
+        "loss_margin": 0.0637,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1071,11 +1094,11 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.0,
-        "top_candidate": "419806892",
-        "top_iou": 0.3508,
-        "baseline_candidate_iou": 0.4401,
-        "loss_margin": 0.0111,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.5427,
+        "baseline_candidate_iou": 0.5427,
+        "loss_margin": 0.1183,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1092,10 +1115,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.3244,
-        "baseline_candidate_iou": 0.3244,
-        "loss_margin": 0.0054,
+        "top_candidate": "419792319",
+        "top_iou": 0.4279,
+        "baseline_candidate_iou": 0.4279,
+        "loss_margin": 0.1262,
         "flipped": false,
         "source": "computed"
       },
@@ -1113,10 +1136,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.0,
-        "top_candidate": "419336308",
-        "top_iou": 0.4568,
-        "baseline_candidate_iou": 0.4568,
-        "loss_margin": 0.0187,
+        "top_candidate": "419792319",
+        "top_iou": 0.499,
+        "baseline_candidate_iou": 0.499,
+        "loss_margin": 0.1121,
         "flipped": false,
         "source": "computed"
       },
@@ -1134,10 +1157,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 1.2143,
-        "top_candidate": "419336308",
-        "top_iou": 0.4842,
-        "baseline_candidate_iou": 0.4842,
-        "loss_margin": 0.0108,
+        "top_candidate": "419792319",
+        "top_iou": 0.575,
+        "baseline_candidate_iou": 0.575,
+        "loss_margin": 0.0913,
         "flipped": false,
         "source": "computed"
       },
@@ -1155,10 +1178,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 1.2143,
-        "top_candidate": "419336308",
-        "top_iou": 0.4487,
-        "baseline_candidate_iou": 0.4487,
-        "loss_margin": 0.0096,
+        "top_candidate": "419792319",
+        "top_iou": 0.5478,
+        "baseline_candidate_iou": 0.5478,
+        "loss_margin": 0.1245,
         "flipped": false,
         "source": "computed"
       },
@@ -1176,10 +1199,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 1.2143,
-        "top_candidate": "419336308",
-        "top_iou": 0.4637,
-        "baseline_candidate_iou": 0.4637,
-        "loss_margin": 0.0267,
+        "top_candidate": "419792319",
+        "top_iou": 0.598,
+        "baseline_candidate_iou": 0.598,
+        "loss_margin": 0.133,
         "flipped": false,
         "source": "computed"
       },
@@ -1197,10 +1220,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 1.2143,
-        "top_candidate": "419336308",
-        "top_iou": 0.5116,
-        "baseline_candidate_iou": 0.5116,
-        "loss_margin": 0.0455,
+        "top_candidate": "419792319",
+        "top_iou": 0.585,
+        "baseline_candidate_iou": 0.585,
+        "loss_margin": 0.1317,
         "flipped": false,
         "source": "computed"
       },
@@ -1218,10 +1241,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 1.2143,
-        "top_candidate": "419336308",
-        "top_iou": 0.4222,
-        "baseline_candidate_iou": 0.4222,
-        "loss_margin": 0.035,
+        "top_candidate": "419792319",
+        "top_iou": 0.5183,
+        "baseline_candidate_iou": 0.5183,
+        "loss_margin": 0.1462,
         "flipped": false,
         "source": "computed"
       },
@@ -1239,10 +1262,10 @@
           "mask_threshold": 0.1
         },
         "magnitude": 1.2143,
-        "top_candidate": "419336308",
-        "top_iou": 0.4684,
-        "baseline_candidate_iou": 0.4684,
-        "loss_margin": 0.016,
+        "top_candidate": "419792319",
+        "top_iou": 0.5388,
+        "baseline_candidate_iou": 0.5388,
+        "loss_margin": 0.1393,
         "flipped": false,
         "source": "computed"
       },
@@ -1260,10 +1283,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 1.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.4386,
-        "baseline_candidate_iou": 0.4386,
-        "loss_margin": 0.0128,
+        "top_candidate": "419792319",
+        "top_iou": 0.5268,
+        "baseline_candidate_iou": 0.5268,
+        "loss_margin": 0.0955,
         "flipped": false,
         "source": "computed"
       },
@@ -1281,10 +1304,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 1.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.4166,
-        "baseline_candidate_iou": 0.4166,
-        "loss_margin": 0.0385,
+        "top_candidate": "419792319",
+        "top_iou": 0.4596,
+        "baseline_candidate_iou": 0.4596,
+        "loss_margin": 0.1399,
         "flipped": false,
         "source": "computed"
       },
@@ -1302,10 +1325,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 1.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.4181,
-        "baseline_candidate_iou": 0.4181,
-        "loss_margin": 0.0211,
+        "top_candidate": "419792319",
+        "top_iou": 0.5284,
+        "baseline_candidate_iou": 0.5284,
+        "loss_margin": 0.1288,
         "flipped": false,
         "source": "computed"
       },
@@ -1323,10 +1346,10 @@
           "diffusivity_scale": 0.8
         },
         "magnitude": 1.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.3898,
-        "baseline_candidate_iou": 0.3898,
-        "loss_margin": 0.0283,
+        "top_candidate": "419792319",
+        "top_iou": 0.4585,
+        "baseline_candidate_iou": 0.4585,
+        "loss_margin": 0.1237,
         "flipped": false,
         "source": "computed"
       },
@@ -1344,10 +1367,10 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.3388,
-        "baseline_candidate_iou": 0.3388,
-        "loss_margin": 0.0144,
+        "top_candidate": "419792319",
+        "top_iou": 0.4187,
+        "baseline_candidate_iou": 0.4187,
+        "loss_margin": 0.096,
         "flipped": false,
         "source": "computed"
       },
@@ -1365,10 +1388,10 @@
           "duration_shift_h": -1.0
         },
         "magnitude": 1.25,
-        "top_candidate": "419336308",
-        "top_iou": 0.3395,
-        "baseline_candidate_iou": 0.3395,
-        "loss_margin": 0.0323,
+        "top_candidate": "419792319",
+        "top_iou": 0.3755,
+        "baseline_candidate_iou": 0.3755,
+        "loss_margin": 0.0581,
         "flipped": false,
         "source": "computed"
       },
@@ -1386,11 +1409,11 @@
           "duration_shift_h": 1.0
         },
         "magnitude": 1.25,
-        "top_candidate": "419806892",
-        "top_iou": 0.3424,
-        "baseline_candidate_iou": 0.3507,
-        "loss_margin": 0.0198,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.5076,
+        "baseline_candidate_iou": 0.5076,
+        "loss_margin": 0.1345,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1407,11 +1430,11 @@
           "current_v_bias": -0.03
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3314,
-        "baseline_candidate_iou": 0.3909,
-        "loss_margin": 0.0173,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4697,
+        "baseline_candidate_iou": 0.4697,
+        "loss_margin": 0.0468,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1428,10 +1451,10 @@
           "current_v_bias": 0.03
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4454,
-        "baseline_candidate_iou": 0.4454,
-        "loss_margin": 0.0132,
+        "top_candidate": "419792319",
+        "top_iou": 0.5246,
+        "baseline_candidate_iou": 0.5246,
+        "loss_margin": 0.0805,
         "flipped": false,
         "source": "computed"
       },
@@ -1449,10 +1472,10 @@
           "current_v_bias": -0.06
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3976,
-        "baseline_candidate_iou": 0.3976,
-        "loss_margin": 0.012,
+        "top_candidate": "419792319",
+        "top_iou": 0.4498,
+        "baseline_candidate_iou": 0.4498,
+        "loss_margin": 0.0528,
         "flipped": false,
         "source": "computed"
       },
@@ -1470,10 +1493,10 @@
           "current_v_bias": 0.06
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4924,
-        "baseline_candidate_iou": 0.4924,
-        "loss_margin": 0.0671,
+        "top_candidate": "419792319",
+        "top_iou": 0.5312,
+        "baseline_candidate_iou": 0.5312,
+        "loss_margin": 0.1037,
         "flipped": false,
         "source": "computed"
       },
@@ -1491,10 +1514,10 @@
           "current_v_bias": -0.06
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4438,
-        "baseline_candidate_iou": 0.4438,
-        "loss_margin": 0.0309,
+        "top_candidate": "419792319",
+        "top_iou": 0.5452,
+        "baseline_candidate_iou": 0.5452,
+        "loss_margin": 0.1331,
         "flipped": false,
         "source": "computed"
       },
@@ -1512,10 +1535,10 @@
           "current_v_bias": 0.06
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4609,
-        "baseline_candidate_iou": 0.4609,
-        "loss_margin": 0.0528,
+        "top_candidate": "419792319",
+        "top_iou": 0.5744,
+        "baseline_candidate_iou": 0.5744,
+        "loss_margin": 0.1509,
         "flipped": false,
         "source": "computed"
       },
@@ -1533,10 +1556,10 @@
           "current_v_bias": -0.03
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4566,
-        "baseline_candidate_iou": 0.4566,
-        "loss_margin": 0.0645,
+        "top_candidate": "419792319",
+        "top_iou": 0.4925,
+        "baseline_candidate_iou": 0.4925,
+        "loss_margin": 0.1471,
         "flipped": false,
         "source": "computed"
       },
@@ -1554,10 +1577,10 @@
           "current_v_bias": 0.03
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4337,
-        "baseline_candidate_iou": 0.4337,
-        "loss_margin": 0.0253,
+        "top_candidate": "419792319",
+        "top_iou": 0.5329,
+        "baseline_candidate_iou": 0.5329,
+        "loss_margin": 0.1531,
         "flipped": false,
         "source": "computed"
       },
@@ -1575,11 +1598,11 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.2497,
-        "baseline_candidate_iou": 0.3307,
-        "loss_margin": 0.0033,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.3684,
+        "baseline_candidate_iou": 0.3684,
+        "loss_margin": 0.0402,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1596,10 +1619,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4207,
-        "baseline_candidate_iou": 0.4207,
-        "loss_margin": 0.0003,
+        "top_candidate": "419792319",
+        "top_iou": 0.4329,
+        "baseline_candidate_iou": 0.4329,
+        "loss_margin": 0.0456,
         "flipped": false,
         "source": "computed"
       },
@@ -1617,10 +1640,10 @@
           "diffusivity_scale": 1.8
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4255,
-        "baseline_candidate_iou": 0.4255,
-        "loss_margin": 0.0052,
+        "top_candidate": "419792319",
+        "top_iou": 0.4549,
+        "baseline_candidate_iou": 0.4549,
+        "loss_margin": 0.0903,
         "flipped": false,
         "source": "computed"
       },
@@ -1638,11 +1661,11 @@
           "diffusivity_scale": 1.8
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3118,
-        "baseline_candidate_iou": 0.3903,
-        "loss_margin": 0.0196,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4472,
+        "baseline_candidate_iou": 0.4472,
+        "loss_margin": 0.0925,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1659,10 +1682,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3194,
-        "baseline_candidate_iou": 0.3194,
-        "loss_margin": 0.0222,
+        "top_candidate": "419792319",
+        "top_iou": 0.3762,
+        "baseline_candidate_iou": 0.3762,
+        "loss_margin": 0.1146,
         "flipped": false,
         "source": "computed"
       },
@@ -1680,10 +1703,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4516,
-        "baseline_candidate_iou": 0.4516,
-        "loss_margin": 0.0192,
+        "top_candidate": "419792319",
+        "top_iou": 0.5365,
+        "baseline_candidate_iou": 0.5365,
+        "loss_margin": 0.1506,
         "flipped": false,
         "source": "computed"
       },
@@ -1701,11 +1724,11 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.2643,
-        "baseline_candidate_iou": 0.3344,
-        "loss_margin": 0.0126,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4326,
+        "baseline_candidate_iou": 0.4326,
+        "loss_margin": 0.059,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1722,11 +1745,11 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.2559,
-        "baseline_candidate_iou": 0.3451,
-        "loss_margin": 0.0047,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4416,
+        "baseline_candidate_iou": 0.4416,
+        "loss_margin": 0.0933,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1743,10 +1766,10 @@
           "duration_shift_h": -1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3782,
-        "baseline_candidate_iou": 0.3782,
-        "loss_margin": 0.0222,
+        "top_candidate": "419792319",
+        "top_iou": 0.4199,
+        "baseline_candidate_iou": 0.4199,
+        "loss_margin": 0.0366,
         "flipped": false,
         "source": "computed"
       },
@@ -1764,11 +1787,11 @@
           "duration_shift_h": 1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3661,
-        "baseline_candidate_iou": 0.3904,
-        "loss_margin": 0.0208,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.6084,
+        "baseline_candidate_iou": 0.6084,
+        "loss_margin": 0.1472,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1785,10 +1808,10 @@
           "duration_shift_h": -1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3367,
-        "baseline_candidate_iou": 0.3367,
-        "loss_margin": 0.0363,
+        "top_candidate": "419792319",
+        "top_iou": 0.3625,
+        "baseline_candidate_iou": 0.3625,
+        "loss_margin": 0.0855,
         "flipped": false,
         "source": "computed"
       },
@@ -1806,11 +1829,11 @@
           "duration_shift_h": 1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3529,
-        "baseline_candidate_iou": 0.3787,
-        "loss_margin": 0.0218,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.5614,
+        "baseline_candidate_iou": 0.5614,
+        "loss_margin": 0.1607,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1827,10 +1850,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3244,
-        "baseline_candidate_iou": 0.3244,
-        "loss_margin": 0.0047,
+        "top_candidate": "419792319",
+        "top_iou": 0.3894,
+        "baseline_candidate_iou": 0.3894,
+        "loss_margin": 0.0873,
         "flipped": false,
         "source": "computed"
       },
@@ -1848,10 +1871,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.401,
-        "baseline_candidate_iou": 0.401,
-        "loss_margin": 0.0041,
+        "top_candidate": "419792319",
+        "top_iou": 0.4893,
+        "baseline_candidate_iou": 0.4893,
+        "loss_margin": 0.1037,
         "flipped": false,
         "source": "computed"
       },
@@ -1869,11 +1892,11 @@
           "diffusivity_scale": 1.8
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3003,
-        "baseline_candidate_iou": 0.3813,
-        "loss_margin": 0.0224,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4488,
+        "baseline_candidate_iou": 0.4488,
+        "loss_margin": 0.0996,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1890,11 +1913,11 @@
           "diffusivity_scale": 1.8
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.2893,
-        "baseline_candidate_iou": 0.3606,
-        "loss_margin": 0.0243,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4105,
+        "baseline_candidate_iou": 0.4105,
+        "loss_margin": 0.0809,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1911,10 +1934,10 @@
           "diffusivity_scale": 0.6
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3977,
-        "baseline_candidate_iou": 0.3977,
-        "loss_margin": 0.0266,
+        "top_candidate": "419792319",
+        "top_iou": 0.4521,
+        "baseline_candidate_iou": 0.4521,
+        "loss_margin": 0.1338,
         "flipped": false,
         "source": "computed"
       },
@@ -1932,10 +1955,10 @@
           "diffusivity_scale": 1.4
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.4465,
-        "baseline_candidate_iou": 0.4465,
-        "loss_margin": 0.0315,
+        "top_candidate": "419792319",
+        "top_iou": 0.5318,
+        "baseline_candidate_iou": 0.5318,
+        "loss_margin": 0.1057,
         "flipped": false,
         "source": "computed"
       },
@@ -1953,11 +1976,11 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.2835,
-        "baseline_candidate_iou": 0.3492,
-        "loss_margin": 0.0164,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.4355,
+        "baseline_candidate_iou": 0.4355,
+        "loss_margin": 0.126,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -1974,10 +1997,10 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3221,
-        "baseline_candidate_iou": 0.3221,
-        "loss_margin": 0.0016,
+        "top_candidate": "419792319",
+        "top_iou": 0.4415,
+        "baseline_candidate_iou": 0.4415,
+        "loss_margin": 0.0939,
         "flipped": false,
         "source": "computed"
       },
@@ -1995,10 +2018,10 @@
           "duration_shift_h": -1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.3943,
-        "baseline_candidate_iou": 0.3943,
-        "loss_margin": 0.0444,
+        "top_candidate": "419792319",
+        "top_iou": 0.4395,
+        "baseline_candidate_iou": 0.4395,
+        "loss_margin": 0.0864,
         "flipped": false,
         "source": "computed"
       },
@@ -2016,11 +2039,11 @@
           "duration_shift_h": 1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3689,
-        "baseline_candidate_iou": 0.3451,
-        "loss_margin": 0.0484,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.6174,
+        "baseline_candidate_iou": 0.6174,
+        "loss_margin": 0.1775,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -2037,10 +2060,10 @@
           "duration_shift_h": -1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.43,
-        "baseline_candidate_iou": 0.43,
-        "loss_margin": 0.0471,
+        "top_candidate": "419792319",
+        "top_iou": 0.4902,
+        "baseline_candidate_iou": 0.4902,
+        "loss_margin": 0.1072,
         "flipped": false,
         "source": "computed"
       },
@@ -2058,11 +2081,11 @@
           "duration_shift_h": 1.0
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.3594,
-        "baseline_candidate_iou": 0.3559,
-        "loss_margin": 0.0389,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.5654,
+        "baseline_candidate_iou": 0.5654,
+        "loss_margin": 0.1683,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -2079,11 +2102,11 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.5,
-        "top_candidate": "419806892",
-        "top_iou": 0.1956,
-        "baseline_candidate_iou": 0.2746,
-        "loss_margin": 0.0052,
-        "flipped": true,
+        "top_candidate": "419792319",
+        "top_iou": 0.3377,
+        "baseline_candidate_iou": 0.3377,
+        "loss_margin": 0.0904,
+        "flipped": false,
         "source": "computed"
       },
       {
@@ -2100,10 +2123,10 @@
           "mask_threshold": 0.22
         },
         "magnitude": 1.5,
-        "top_candidate": "419336308",
-        "top_iou": 0.403,
-        "baseline_candidate_iou": 0.403,
-        "loss_margin": 0.0209,
+        "top_candidate": "419792319",
+        "top_iou": 0.427,
+        "baseline_candidate_iou": 0.427,
+        "loss_margin": 0.0501,
         "flipped": false,
         "source": "computed"
       }
@@ -2170,10 +2193,12 @@
       "d_complexity": 0.1
     },
     "nominal_mean_losses": {
-      "419336308": 0.4335361529846901,
-      "419806892": 0.44813010794179736,
-      "419358060": 0.5686266148761068,
-      "419173678": 0.5900954621238683
+      "419792319": 0.3723014240041891,
+      "419390401": 0.484766971553316,
+      "419134716": 0.5254647608265001,
+      "419578923": 0.5597319306994236,
+      "419151108": 0.5658748850655275,
+      "419356707": 0.5958182620754534
     }
   },
   "unmatched_contacts": {
@@ -2189,21 +2214,21 @@
     "conditions": {
       "selective": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8305,
-        "hidden_ais_recovery_n": "49/59",
-        "false_unmatched_alert_rate": 0.2581,
-        "false_unmatched_alert_n": "24/93",
-        "mistaken_promotion_rate": 0.375,
-        "mistaken_promotion_n": "15/40"
+        "hidden_ais_recovery_rate": 0.8182,
+        "hidden_ais_recovery_n": "54/66",
+        "false_unmatched_alert_rate": 0.2712,
+        "false_unmatched_alert_n": "32/118",
+        "mistaken_promotion_rate": 0.15,
+        "mistaken_promotion_n": "6/40"
       },
       "coverage_failure": {
         "n_runs": 40,
-        "hidden_ais_recovery_rate": 0.8269,
-        "hidden_ais_recovery_n": "43/52",
-        "false_unmatched_alert_rate": 0.2083,
-        "false_unmatched_alert_n": "15/72",
-        "mistaken_promotion_rate": 0.1786,
-        "mistaken_promotion_n": "5/28"
+        "hidden_ais_recovery_rate": 0.881,
+        "hidden_ais_recovery_n": "74/84",
+        "false_unmatched_alert_rate": 0.189,
+        "false_unmatched_alert_n": "24/127",
+        "mistaken_promotion_rate": 0.1389,
+        "mistaken_promotion_n": "5/36"
       }
     },
     "limits": [
@@ -2222,17 +2247,17 @@
       {
         "horizon_hours": 6,
         "valid_utc": "2026-09-10T10:30:00+00:00",
-        "envelope_area_km2": 585.6,
+        "envelope_area_km2": 581.7,
         "centroid": [
-          72.54275,
-          18.87446
+          72.54368,
+          18.8745
         ],
         "modelled_shoreline_fraction": 0.0003,
         "sensitive_area_exposure": [
           {
             "name": "Fishing ground (synthetic)",
             "kind": "fishery",
-            "modelled_particle_fraction": 0.1433,
+            "modelled_particle_fraction": 0.1481,
             "any_contact": true
           },
           {
@@ -2247,23 +2272,23 @@
       {
         "horizon_hours": 12,
         "valid_utc": "2026-09-10T16:30:00+00:00",
-        "envelope_area_km2": 600.3,
+        "envelope_area_km2": 602.7,
         "centroid": [
-          72.57216,
-          18.86464
+          72.57306,
+          18.86468
         ],
-        "modelled_shoreline_fraction": 0.0056,
+        "modelled_shoreline_fraction": 0.0053,
         "sensitive_area_exposure": [
           {
             "name": "Fishing ground (synthetic)",
             "kind": "fishery",
-            "modelled_particle_fraction": 0.1514,
+            "modelled_particle_fraction": 0.1544,
             "any_contact": true
           },
           {
             "name": "Mangrove reserve (synthetic)",
             "kind": "mangrove",
-            "modelled_particle_fraction": 0.0014,
+            "modelled_particle_fraction": 0.0017,
             "any_contact": true
           }
         ],
@@ -2272,12 +2297,12 @@
       {
         "horizon_hours": 24,
         "valid_utc": "2026-09-11T04:30:00+00:00",
-        "envelope_area_km2": 616.7,
+        "envelope_area_km2": 615.7,
         "centroid": [
-          72.62867,
-          18.84514
+          72.62937,
+          18.8452
         ],
-        "modelled_shoreline_fraction": 0.0414,
+        "modelled_shoreline_fraction": 0.0408,
         "sensitive_area_exposure": [
           {
             "name": "Fishing ground (synthetic)",
@@ -2288,7 +2313,7 @@
           {
             "name": "Mangrove reserve (synthetic)",
             "kind": "mangrove",
-            "modelled_particle_fraction": 0.0114,
+            "modelled_particle_fraction": 0.0097,
             "any_contact": true
           }
         ],
@@ -2306,107 +2331,107 @@
     "incident_id": "case_0009",
     "applicable": true,
     "hypothesis_a": {
-      "vessel_key": "419336308",
-      "candidate_id": "419336308_2330_4.0h"
+      "vessel_key": "419792319",
+      "candidate_id": "419792319_2130_4.0h"
     },
     "hypothesis_b": {
-      "vessel_key": "419806892",
-      "candidate_id": "419806892_2130_2.0h"
+      "vessel_key": "419390401",
+      "candidate_id": "419390401_0430_0.5h"
     },
     "current_ambiguity": {
-      "mean_iou_gap": 0.1271,
-      "mean_loss_gap": 0.0146
+      "mean_iou_gap": 0.3801,
+      "mean_loss_gap": 0.1125
     },
     "windows": [
       {
         "horizon_hours": 3,
         "valid_utc": "2026-09-10T07:30:00+00:00",
-        "disagreement_score": 0.5179,
-        "predicted_overlap_iou": 0.4821,
+        "disagreement_score": 0.8375,
+        "predicted_overlap_iou": 0.1625,
         "disagreement_bbox": {
-          "min_lon": 72.40078,
-          "min_lat": 18.47812,
-          "max_lon": 72.77969,
-          "max_lat": 18.98203
+          "min_lon": 72.36172,
+          "min_lat": 18.56016,
+          "max_lon": 72.94375,
+          "max_lat": 19.23594
         },
         "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
       },
       {
         "horizon_hours": 6,
         "valid_utc": "2026-09-10T10:30:00+00:00",
-        "disagreement_score": 0.5541,
-        "predicted_overlap_iou": 0.4459,
+        "disagreement_score": 0.8136,
+        "predicted_overlap_iou": 0.1864,
         "disagreement_bbox": {
-          "min_lon": 72.38906,
-          "min_lat": 18.45078,
-          "max_lon": 72.74062,
-          "max_lat": 18.99375
+          "min_lon": 72.34609,
+          "min_lat": 18.54062,
+          "max_lon": 72.97109,
+          "max_lat": 19.25156
         },
         "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
       },
       {
         "horizon_hours": 9,
         "valid_utc": "2026-09-10T13:30:00+00:00",
-        "disagreement_score": 0.5874,
-        "predicted_overlap_iou": 0.4126,
+        "disagreement_score": 0.8155,
+        "predicted_overlap_iou": 0.1845,
         "disagreement_bbox": {
-          "min_lon": 72.38125,
-          "min_lat": 18.43516,
-          "max_lon": 72.77578,
-          "max_lat": 19.00547
+          "min_lon": 72.34219,
+          "min_lat": 18.52109,
+          "max_lon": 72.99844,
+          "max_lat": 19.26719
         },
         "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
       },
       {
         "horizon_hours": 12,
         "valid_utc": "2026-09-10T16:30:00+00:00",
-        "disagreement_score": 0.6043,
-        "predicted_overlap_iou": 0.3957,
+        "disagreement_score": 0.8158,
+        "predicted_overlap_iou": 0.1842,
         "disagreement_bbox": {
-          "min_lon": 72.37734,
-          "min_lat": 18.41562,
-          "max_lon": 72.91641,
-          "max_lat": 19.01328
+          "min_lon": 72.32656,
+          "min_lat": 18.50156,
+          "max_lon": 73.02578,
+          "max_lat": 19.27891
         },
         "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
       },
       {
         "horizon_hours": 18,
         "valid_utc": "2026-09-10T22:30:00+00:00",
-        "disagreement_score": 0.6111,
-        "predicted_overlap_iou": 0.3889,
+        "disagreement_score": 0.7831,
+        "predicted_overlap_iou": 0.2169,
         "disagreement_bbox": {
-          "min_lon": 72.36172,
-          "min_lat": 18.40391,
-          "max_lon": 72.99844,
-          "max_lat": 19.03281
+          "min_lon": 72.31875,
+          "min_lat": 18.46641,
+          "max_lon": 73.08437,
+          "max_lat": 19.30625
         },
         "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
       },
       {
         "horizon_hours": 24,
         "valid_utc": "2026-09-11T04:30:00+00:00",
-        "disagreement_score": 0.6666,
-        "predicted_overlap_iou": 0.3334,
+        "disagreement_score": 0.7813,
+        "predicted_overlap_iou": 0.2187,
         "disagreement_bbox": {
-          "min_lon": 72.36562,
-          "min_lat": 18.40391,
-          "max_lon": 73.07266,
-          "max_lat": 19.04453
+          "min_lon": 72.31484,
+          "min_lat": 18.42734,
+          "max_lon": 73.09609,
+          "max_lat": 19.33359
         },
         "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
       }
     ],
     "recommended_window": {
-      "horizon_hours": 24,
-      "valid_utc": "2026-09-11T04:30:00+00:00",
-      "disagreement_score": 0.6666,
-      "predicted_overlap_iou": 0.3334,
+      "horizon_hours": 3,
+      "valid_utc": "2026-09-10T07:30:00+00:00",
+      "disagreement_score": 0.8375,
+      "predicted_overlap_iou": 0.1625,
       "disagreement_bbox": {
-        "min_lon": 72.36562,
-        "min_lat": 18.40391,
-        "max_lon": 73.07266,
-        "max_lat": 19.04453
+        "min_lon": 72.36172,
+        "min_lat": 18.56016,
+        "max_lon": 72.94375,
+        "max_lat": 19.23594
       },
       "schedule_status": "hypothetical \u2014 no acquisition schedule supplied"
     },
@@ -2421,22 +2446,22 @@
     "Synthetic ranking accuracy is not a measurement of real-world attribution accuracy."
   ],
   "run_metadata": {
-    "git_revision": "3de746c",
+    "git_revision": "7e10f46",
     "python": "3.12.14",
     "platform": "Darwin 25.2.0 (arm64)",
     "argv0": "run_pipeline.py"
   },
   "checksums_sha256": {
-    "manifest.json": "8d6937c1a42f950b62d29c75ed9dfb679b149f063173401db12db9813974ea31",
-    "historical_mapping.json": "93e9d956d4d1c66fa85545b733eaedd536d6c77095054b5d1ccc16b12ea09117",
-    "naive_baseline_result.json": "acbc9e8fd3cf62fb88aef73918e44cde007537311fbd7574d64a53757373121e",
-    "attribution_result.json": "c44daf1742e66ed0b53d3636f35b85ec529f0fec53230376c1a0545404ba8b30",
-    "fragility_result.json": "8727dd6890e9ef55e0f0946057afeb0015e104215322ed2ad5d28680570c765b",
-    "coverage_result.json": "06cd9a5f5fd31f8a2aa6d4ed5bbb3183c33c96fa5768637cfec9149ad355efa5",
-    "forecast_result.json": "4aa983acf9fd6763bbf78c7165486efcfa0f4a5c94298d04a6b0315a936a337e",
-    "next_observation_result.json": "04a81f840754abce0dbde4dba4aa5498cebb9000aed7056ca7f2321163388e22",
-    "scene.png": "beac45c2ad970c787f8aa1b0c3a86a78582df8d2aa5d5b3c75ad273273ac5355",
-    "mask_groundtruth.png": "15c9f46c4d9ac448ef3bd9a36a8bb7183cd40be02f6c20a091f823b36831c3ea",
+    "manifest.json": "a30cb8d0cfc797fb01102b3d391a13fc2a214b169956e2001a859a5b713f71c9",
+    "historical_mapping.json": "ec286ade49884ab142cbc4c6bbccd64bee0875987f4cf7e90cbd651611e2f0ca",
+    "naive_baseline_result.json": "47bab7ddfd6f2887dc4cabe6c0c94ea38c3f2347e46283e9c75a18b85f68f931",
+    "attribution_result.json": "351c431307e79375150fdf61da42d3822d10c138c431319d5a0432da2b64a77e",
+    "fragility_result.json": "d3d9c6722d1c50b28765874dbd2e958584f28853e3a7ef14126299f8c3ae2705",
+    "coverage_result.json": "82c713864f3774fb9a82d8e1cf7a97b15f211244fe4ba6ee85bf009f29568219",
+    "forecast_result.json": "49b1e5d52098088c6a2d6b444d63626a911dda18151d2f1afd57ae9196fc1e52",
+    "next_observation_result.json": "af7534725417ee1cc6e74fa732ebafa99c2ac84a137dfd519031994112e150d8",
+    "scene.png": "78c3779d73ff851a3db24ace451b69f74cbd1f153d644ab6adf3628818e7f41d",
+    "mask_groundtruth.png": "e924a87a19bb9da27770eeab94e8e8d016a83f24c4fe5f9e99426577ba1bdcf1",
     "forcing.npz": "75abcfbcc618a9f421ea505279a4490abcc0e188b1c18a4d6f6f47ae52a64b51"
   },
   "checksum_note": "Hashes verify file integrity only. They do not establish that an observation is true, that a label is correct, or that this analysis is legally sufficient."

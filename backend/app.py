@@ -137,6 +137,19 @@ def get_track_display(incident_id: str):
     return _require(incident_id, "track_display.json", "track display")
 
 
+@app.get("/api/incidents/{incident_id}/replay-timeline")
+def get_replay_timeline(incident_id: str):
+    """The named leading candidate's scored release, hour by hour, for the map.
+    Empty frames on an abstention: nothing is animated for a vessel not named."""
+    return _require(incident_id, "replay_timeline.json", "replay timeline")
+
+
+@app.get("/api/incidents/{incident_id}/forecast-timeline")
+def get_forecast_timeline(incident_id: str):
+    """Modelled drift after the image, every hour to +24 h, for the map."""
+    return _require(incident_id, "forecast_timeline.json", "forecast timeline")
+
+
 # ------------------------------------------------------------- incidents --
 
 @app.get("/api/incidents")
@@ -315,11 +328,13 @@ def probe_forcing(incident_id: str,
         raise HTTPException(400, "point is outside the scene")
 
     f = np.load(m["forcing_path"])
-    u_deg, v_deg = float(f["u"]), float(f["v"])
-
-    # deg/h -> km/h, with the cos(lat) factor that assumption A15 records
-    east_kmh = u_deg * 111.32 * math.cos(math.radians(lat))
-    north_kmh = v_deg * 110.57
+    # The forcing stores the current in metres per second - the simulator
+    # converts with DEG_PER_MS_HR. An earlier version read these as degrees
+    # per hour and reported a current about 29 times too fast (9.03 kn for a
+    # 0.31 kn current); the bearing was right because the units cancel in it.
+    u_ms, v_ms = float(f["u"]), float(f["v"])
+    east_kmh = u_ms * 3.6
+    north_kmh = v_ms * 3.6
     speed = math.hypot(east_kmh, north_kmh)
     bearing = (math.degrees(math.atan2(east_kmh, north_kmh)) + 360) % 360
 

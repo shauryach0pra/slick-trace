@@ -2,7 +2,7 @@
 
 *This is not a court-ready dossier, a legal finding, or an accusation. It records what the system computed and under which assumptions.*
 
-Generated 2026-09-25T20:56:30.551194+00:00 · git `3de746c` · Darwin 25.2.0 (arm64)
+Generated 2026-09-26T12:21:52.565055+00:00 · git `7e10f46` · Darwin 25.2.0 (arm64)
 
 ## Outcome
 
@@ -26,15 +26,15 @@ Generated 2026-09-25T20:56:30.551194+00:00 · git `3de746c` · Darwin 25.2.0 (ar
 
 ## Historical filtering
 
-Backward window: 24 h. Outcomes: 4 candidate, 1 unassessed.
+Backward window: 24 h. Outcomes: 1 excluded, 4 candidate.
 
 | Vessel | State | Reason |
 | --- | --- | --- |
-| `419603086` | candidate | inside envelope at 4 of 25 queried times |
-| `419212504` | candidate | inside envelope at 6 of 25 queried times |
-| `419492471` | unassessed | no track data at 9 of 25 queried times; track data 15 h to 0 h before acquisition, never inside the backward envelope. Hours without data cannot exclude a vessel |
-| `419748958` | candidate | inside envelope at 2 of 25 queried times |
-| `419439072` | candidate | inside envelope at 5 of 25 queried times |
+| `419803821` | excluded | track data at all 25 queried times; never inside the backward envelope |
+| `419534124` | candidate | inside envelope at 17 of 25 queried times |
+| `419833570` | candidate | inside envelope at 1 of 25 queried times |
+| `419655571` | candidate | inside envelope at 2 of 25 queried times |
+| `419486428` | candidate | inside envelope at 3 of 25 queried times |
 
 > `unassessed` means the track had no data at one or more queried times and was never inside the envelope where it did. Those hours are missing evidence, not exoneration, so the vessel is not `excluded`: that state requires data at every queried time.
 
@@ -42,18 +42,18 @@ Backward window: 24 h. Outcomes: 4 candidate, 1 unassessed.
 
 | Vessel | Mean IoU | Mean loss | Ensemble wins | Release hypothesis |
 | --- | --- | --- | --- | --- |
-| `419748958` | 0.229 | 0.4729 | 5/6 | 2.0 h continuous |
-| `419439072` | 0.033 | 0.5212 | 0/6 | 0.5 h pulse |
-| `419603086` | 0.204 | 0.5263 | 1/6 | 2.0 h continuous |
-| `419212504` | 0.108 | 0.5273 | 0/6 | 2.0 h continuous |
+| `419486428` | 0.202 | 0.4667 | 6/6 | 0.5 h pulse |
+| `419534124` | 0.031 | 0.5209 | 0/6 | 0.5 h pulse |
+| `419655571` | 0.000 | 0.6009 | 0/6 | 0.5 h pulse |
+| `419833570` | 0.000 | 0.6009 | 0/6 | 0.5 h pulse |
 
-Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419748958`.
+Naive nearest-at-acquisition baseline over the full unfiltered vessel list picked `419486428`.
 
 ## Rank fragility
 
-80 perturbations tested; the leader changed in 38 of them (52% lead retention).
+80 perturbations tested; the leader changed in 0 of them (100% lead retention).
 
-Smallest tested rank-changing perturbation (standardised magnitude 0.25): `diffusivity_scale` = 0.8 → leader becomes `419603086`.
+No tested perturbation changed the leader.
 
 > Single-axis and two-axis perturbations only. Three-or-more-axis combinations were not tested, so absence of a flip is evidence of stability across the tested set, not a proof of stability.
 
@@ -65,9 +65,9 @@ _reanalysis-style retrospective field — NOT an operational forecast issued fro
 
 | Horizon | Envelope area (km²) | Shoreline fraction | Sensitive-area contact |
 | --- | --- | --- | --- |
-| +6 h | 483.0 | 0.0 | Fishing ground (synthetic) |
-| +12 h | 538.6 | 0.0 | Fishing ground (synthetic) |
-| +24 h | 577.7 | 0.0036 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
+| +6 h | 494.8 | 0.0 | Fishing ground (synthetic) |
+| +12 h | 542.4 | 0.0003 | Fishing ground (synthetic) |
+| +24 h | 589.6 | 0.0039 | Fishing ground (synthetic), Mangrove reserve (synthetic) |
 
 > Modelled surface-particle exposure and arrival intervals under the tested forcing ensemble. Not a prediction of beaching, concentration, or environmental damage. A particle that reaches the coastline is held where it arrives (simple stranding, checked hourly); refloating, weathering and emulsification are not modelled.
 
@@ -77,12 +77,12 @@ Operating point: match gate 0.02°, contact position noise 0.012°.
 
 | Condition | Hidden-AIS recovery | False unmatched-alert | Mistaken promotion |
 | --- | --- | --- | --- |
-| selective | 0.8444 (38/45) | 0.3091 (17/55) | None (0/0) |
-| coverage_failure | 0.8929 (25/28) | 0.3902 (16/41) | None (0/0) |
+| selective | 0.7937 (50/63) | 0.2784 (27/97) | None (0/0) |
+| coverage_failure | 0.8167 (49/60) | 0.2025 (16/79) | None (0/0) |
 
 ## Recommended next observation
 
-Most informative tested window: **+3 h** (disagreement score 1.0). hypothetical — no acquisition schedule supplied.
+Most informative tested window: **+3 h** (disagreement score 0.9724). hypothetical — no acquisition schedule supplied.
 
 > The system recommends which evidence would be informative. It does not task satellites and does not assert that an acquisition is available in the recommended window.
 
@@ -99,14 +99,14 @@ Most informative tested window: **+3 h** (disagreement score 1.0). hypothetical 
 
 | Artefact | SHA-256 |
 | --- | --- |
-| `manifest.json` | `54bfae689f6c8d69…` |
-| `historical_mapping.json` | `afb67b4c34a0e25f…` |
-| `naive_baseline_result.json` | `ab4b282ff85c9cd8…` |
-| `attribution_result.json` | `b9326ab39ffe79e8…` |
-| `fragility_result.json` | `b9afbfccf7f0f666…` |
-| `coverage_result.json` | `dc187a5ea98fdb99…` |
-| `forecast_result.json` | `f0d149af6147f7ab…` |
-| `next_observation_result.json` | `b1eff965f9e80855…` |
-| `scene.png` | `c12e46838d79a351…` |
-| `mask_groundtruth.png` | `73ecf67908e5fbaa…` |
+| `manifest.json` | `2297dfa436dd8ea5…` |
+| `historical_mapping.json` | `f600ca374180a6c5…` |
+| `naive_baseline_result.json` | `ea0683fbf3354ad0…` |
+| `attribution_result.json` | `5db2e4757712bf85…` |
+| `fragility_result.json` | `4811a6875cef91c3…` |
+| `coverage_result.json` | `2a86fa8542fd2367…` |
+| `forecast_result.json` | `92efc88a87e99f34…` |
+| `next_observation_result.json` | `d5654d2e3535eb49…` |
+| `scene.png` | `e81930a0301fbc5e…` |
+| `mask_groundtruth.png` | `57f9574e078cb2c6…` |
 | `forcing.npz` | `07595f69999ce4c5…` |
