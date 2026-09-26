@@ -553,6 +553,9 @@ the values line up, and each hint sits on one line.
 change - until another is hovered, and returns to it when the pointer leaves; the dot described is
 shown enlarged.
 
+**Coverage's text lines up.** Every rate's title is two deliberate lines, so the titles, the values
+and the hints each sit level across the three columns.
+
 ---
 
 ## 13 September 2026

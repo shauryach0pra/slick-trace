@@ -15,13 +15,14 @@ const ROWS = [
 ];
 
 const RATE = {
-  hidden_ais_recovery_rate: { title: 'Hidden AIS recovered', better: 'higher' },
-  false_unmatched_alert_rate: { title: 'False alerts', better: 'lower' },
-  mistaken_promotion_rate: { title: 'Mistaken promotions', better: 'lower' },
+  // every title on exactly two lines, broken deliberately, so all three line up
+  hidden_ais_recovery_rate: { title: 'Hidden AIS recovered', lines: ['Hidden AIS', 'recovered'], better: 'higher' },
+  false_unmatched_alert_rate: { title: 'False alerts', lines: ['False', 'alerts'], better: 'lower' },
+  mistaken_promotion_rate: { title: 'Mistaken promotions', lines: ['Mistaken', 'promotions'], better: 'lower' },
 };
 
 /** A rate under both conditions as two concentric rings: outer, vessels hidden; inner, area goes dark. */
-function Rings({ outer, inner, title, better, nOuter, nInner }) {
+function Rings({ outer, inner, title, lines, better, nOuter, nInner }) {
   const ring = (r, v, cls) => {
     const c = 2 * Math.PI * r;
     return (
@@ -45,7 +46,7 @@ function Rings({ outer, inner, title, better, nOuter, nInner }) {
         {ring(28, inner, 'is-inner')}
       </svg>
       <figcaption>
-        <b>{title}</b>
+        <b>{lines ? <>{lines[0]}<br />{lines[1]}</> : title}</b>
         <span className="cv-vals"><i className="is-outer" title={`vessels hidden: ${nOuter}`}>{pct(outer)}</i><i className="is-inner" title={`area goes dark: ${nInner}`}>{pct(inner)}</i></span>
         <span className={`cv-better is-${better}`}>{better === 'higher' ? '↑' : '↓'} {better} is better</span>
       </figcaption>
@@ -62,7 +63,7 @@ export default function CoverageCard({ coverage }) {
           caption="Matching radar contacts to AIS when some AIS is hidden.">
       <div className="cv-rings">
         {ROWS.map(([rk, nk]) => (
-          <Rings key={rk} title={RATE[rk].title} better={RATE[rk].better}
+          <Rings key={rk} title={RATE[rk].title} lines={RATE[rk].lines} better={RATE[rk].better}
                  outer={selective[rk]} inner={failure[rk]} nOuter={selective[nk]} nInner={failure[nk]} />
         ))}
       </div>
