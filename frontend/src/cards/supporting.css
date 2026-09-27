@@ -147,3 +147,7 @@
 .pv-dots:not(.is-playing) :is(.pv-dot, .pv-none) { animation-play-state: paused; }
 .pv-legend .pv-dot { animation: none; }
 @media (prefers-reduced-motion: reduce) { .pv-dots .pv-dot, .pv-dots .pv-none { animation: none; } }
+
+/* "Named" reads like the other rows; the four chips sit centred under the dots */
+.pv-row.is-named .pv-row-label { color: var(--label-2); font-weight: 400; }
+.pv-chips { justify-content: center; }

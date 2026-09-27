@@ -79,7 +79,7 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
       : `under the tested assumptions — an investigative lead, not proof of responsibility${disc?.discriminated === false ? '; its ordering against the runner-up carries no weight' : ''}`,
   });
   // what each stage summarises in the evidence column
-  const TARGET = { detection: 'Observed Scene', filtering: 'Traffic Filtering and Provenance', replay: 'Naive vs Forward-Replay',
+  const TARGET = { detection: 'Observed Scene', filtering: 'Traffic and Provenance', replay: 'Naive vs Forward-Replay',
                    baseline: 'Naive vs Forward-Replay', fragility: 'Rank Fragility', finding: 'Case Finding' };
   const decorate = (s) => ({ ...s, caption: CAPTION[s.id], target: TARGET[s.id], branches: s.branches?.map(decorate) });
   return stages.map(decorate);

@@ -48,7 +48,7 @@ export default function ProvenanceCard({ meta, report, attribution }) {
     ['Seed', meta.generator.seed], ['Integrity', nFiles == null ? '—' : `${nFiles} files · SHA-256`], ['Licence', meta.data_licence],
   ];
   return (
-    <Card title="Traffic Filtering and Provenance" badge={<Badge>{`${meta.provenance.status.charAt(0).toUpperCase()}${meta.provenance.status.slice(1)} data`}</Badge>}
+    <Card title="Traffic and Provenance" badge={<Badge>{`${meta.provenance.status.charAt(0).toUpperCase()}${meta.provenance.status.slice(1)} data`}</Badge>}
           caption="Every vessel in the scene, down to the one named.">
       <div ref={dotsRef} className={`pv-dots${dotsSeen ? ' is-playing' : ''}`} role="list" aria-label={steps.map((st) => `${st.label}: ${st.n}`).join(', ')}>
         {steps.map((st, row) => (

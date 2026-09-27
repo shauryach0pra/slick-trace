@@ -11,7 +11,7 @@ import './confidenceBadge.css';
  */
 function jumpToProvenance() {
   const pane = document.querySelector('.finder-features');
-  const h = [...(pane?.querySelectorAll('h2') ?? [])].find((x) => x.textContent.trim() === 'Traffic Filtering and Provenance');
+  const h = [...(pane?.querySelectorAll('h2') ?? [])].find((x) => x.textContent.trim() === 'Traffic and Provenance');
   const card = h?.closest('.panel');
   if (!pane || !card) return;
   pane.scrollTo({ top: card.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - 12, behavior: 'smooth' });

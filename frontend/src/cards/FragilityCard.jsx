@@ -93,6 +93,7 @@ export default function FragilityCard({ fragility, attribution }) {
           <dt>Magnitude</dt><dd>{C.magnitude}</dd>
           <dt>Ranking</dt><dd>{C.lossRanking}</dd>
           <dt>Explore one setting</dt><dd>{C.sweep}</dd>
+          <dt>What if</dt><dd>Ranked by loss; the bars show mean IoU. Only the two leading vessels' fits are stored for each tested change, so the rest of the ranking under it is not shown.</dd>
           <dt>What this is and is not</dt><dd>{fragility.interpretation_note} {fragility.coverage_note}</dd>
         </dl>
       </HowMeasured>
@@ -150,7 +151,7 @@ function WhatIf({ fragility, attribution, flip, on, setOn, label }) {
   const rank = (k) => (attribution?.ranking ?? []).findIndex((r) => r.vessel_key === k) + 1;
   const iou0 = (k) => (attribution?.ranking ?? []).find((r) => r.vessel_key === k)?.mean_iou;
   const loss0 = fragility.nominal_mean_losses ?? {};
-  const change = Object.entries(flip.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ');
+  const change = Object.entries(flip.changed_axes).map(([k, v]) => `${label(k).replace(/\s*\([^)]*\)/, '')} ${v}`).join(' and ');
   const rows = [
     { key: a, pos: on ? 1 : 0, iou: on ? flip.baseline_candidate_iou : iou0(a),
       note: on ? 'now behind' : `#${rank(a)} as tested · loss ${loss0[a]?.toFixed(3) ?? '—'}`, lead: !on },
@@ -179,10 +180,7 @@ function WhatIf({ fragility, attribution, flip, on, setOn, label }) {
         ))}
       </div>
       <p className="whatif-foot">
-        {on ? `With ${change} (magnitude ${flip.magnitude}), ${b} leads instead of ${a}. `
-          : `As tested, ${a} leads. `}
-        Ranked by loss; the bar is mean IoU. Only these two vessels' fits are stored for each tested change, so the
-        rest of the ranking under it is not shown.
+        {on ? `With ${change}, ${b} leads instead of ${a}` : `As tested, ${a} leads`}
       </p>
     </div>
   );

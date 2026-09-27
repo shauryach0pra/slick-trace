@@ -194,3 +194,8 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 .fr-flip2-line { margin-top: 6px; font-size: var(--font-size-sm); color: var(--label-2); }
 .fr-flip2-line b { color: var(--label-1); }
 .fr-hero .fr-flip2 .fr-track { margin-top: 12px; }
+
+/* the What-if caption stays on one line */
+.whatif-foot { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* on unusually narrow windows a long caption wraps rather than hiding part of the finding */
+@media (max-width: 1360px) { .whatif-foot { white-space: normal; overflow: visible; } }
