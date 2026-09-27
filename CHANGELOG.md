@@ -13,3 +13,6 @@ coverage, provenance and checksums over four pages - every number still from the
 
 **The Conclusion Graph scrolls smoothly.** No snapping pulling swipes back, no per-frame mask, its
 animations rest while it scrolls, and its card no longer tilts under the pointer.
+
+**Traffic Filtering's dots sweep in.** One after another, left to right and row by row, with each
+row's number rising from 0 alongside - when the dots come on screen.

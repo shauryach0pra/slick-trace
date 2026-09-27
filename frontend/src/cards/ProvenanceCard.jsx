@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Badge, Card } from '../ui/primitives';
+import { useCountUp } from '../ui/useCountUp';
+import { useInView } from '../ui/useInView';
 import { HowMeasured } from '../ui/viz';
 import './supporting.css';
 import { CAPTIONS as C } from '../ui/glossary';
@@ -11,7 +14,12 @@ import { CAPTIONS as C } from '../ui/glossary';
  */
 const STATES = [['candidate', 'Candidates'], ['excluded', 'Excluded'], ['unassessed', 'Unassessed']];
 
+// one dot appears every STEP ms, left to right and row by row
+const STEP = 80, POP = 420;
+
 export default function ProvenanceCard({ meta, report, attribution }) {
+  // the dots and their numbers play when the dots themselves are on screen
+  const [dotsRef, dotsSeen] = useInView({ threshold: 0.6 });
   if (!meta) return null;
   const counts = report?.historical_filtering?.status_counts ?? {};
   const nFiles = report ? Object.keys(report.checksums_sha256 ?? {}).length : null;
@@ -29,6 +37,8 @@ export default function ProvenanceCard({ meta, report, attribution }) {
   const nc = counts.candidate ?? 0, ne = counts.excluded ?? 0, nu = counts.unassessed ?? 0;
   const dots = (k) => k === 'scene' ? [...Array(nc).fill('candidate'), ...Array(ne).fill('excluded'), ...Array(nu).fill('unassessed')]
     : k === 'kept' ? Array(nc).fill('candidate') : k === 'replayed' ? Array(replayed).fill('candidate') : ['named'];
+  const starts = [];
+  steps.reduce((acc, st) => { starts.push(acc); return acc + (st.k === 'named' && !named ? 1 : dots(st.k).length); }, 0);
   const chips = [
     ['AIS', String(meta.ais_source).split(' (')[0]], ['Projection', meta.metric_crs], ['Seed', meta.generator.seed],
     ['Integrity', nFiles == null ? '—' : `${nFiles} files · SHA-256`],
@@ -40,15 +50,15 @@ export default function ProvenanceCard({ meta, report, attribution }) {
   return (
     <Card title="Traffic Filtering and Provenance" badge={<Badge>{meta.provenance.status} data</Badge>}
           caption="Every vessel in the scene, down to the one named.">
-      <div className="pv-dots" role="list" aria-label={steps.map((st) => `${st.label}: ${st.n}`).join(', ')}>
+      <div ref={dotsRef} className={`pv-dots${dotsSeen ? ' is-playing' : ''}`} role="list" aria-label={steps.map((st) => `${st.label}: ${st.n}`).join(', ')}>
         {steps.map((st, row) => (
           <div key={st.k} role="listitem" className={`pv-row is-${st.k}`}>
             <span className="pv-row-label">{st.label}</span>
             <span className="pv-row-dots">
               {st.k === 'named' && !named ? <span className="pv-none">no vessel named</span>
-                : dots(st.k).map((kind, i) => <i key={i} className={`pv-dot is-${kind}`} style={{ '--i': row * 4 + i }} />)}
+                : dots(st.k).map((kind, i) => <i key={i} className={`pv-dot is-${kind}`} style={{ '--i': starts[row] + i }} />)}
             </span>
-            <span className="pv-row-n">{st.n}</span>
+            <span className="pv-row-n"><RowCount n={st.n} run={dotsSeen} delay={starts[row] * STEP} span={Math.max(1, st.n) * STEP + POP} /></span>
           </div>
         ))}
       </div>
@@ -72,3 +82,15 @@ export default function ProvenanceCard({ meta, report, attribution }) {
     </Card>
   );
 }
+
+/** A row's number, rising from 0 in step with its dots as they appear. */
+function RowCount({ n, run, delay, span }) {
+  const [go, setGo] = useState(false);
+  useEffect(() => {
+    if (!run) return undefined;
+    const t = setTimeout(() => setGo(true), delay);
+    return () => clearTimeout(t);
+  }, [run, delay]);
+  return useCountUp(n, { decimals: 0, duration: span, run: go, easing: (k) => k });
+}
+
