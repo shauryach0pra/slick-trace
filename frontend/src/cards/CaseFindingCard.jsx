@@ -4,9 +4,9 @@ import { FitGauge, HowMeasured } from '../ui/viz';
 import './caseFinding.css';
 
 /**
- * Case Finding, compact: one surface with the named vessel and its fit gauge, the three facts as a
- * slim strip along its foot, and the proximity pick as a quiet line beneath. An abstention uses the
- * same layout in amber. Every value is a field of attribution_result.json,
+ * Case Finding, as Apple would say it: the finding as a sentence, beside its fit gauge, then the
+ * evidence as a short list of rows, each led by a small symbol - supporting (a check), against (a
+ * cross) or a caution. Every value is a field of attribution_result.json,
  * naive_baseline_result.json or the case's vessels.
  */
 export default function CaseFindingCard({ attribution, baseline, vessels }) {
@@ -22,68 +22,65 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
   const differs = !unknown && nearest && top && nearest.vessel_key !== top.vessel_key;
   const km = nearest ? (nearest.distance_deg * 111).toFixed(1) : null;
   const wins = top?.ensemble_win_count ?? 0, nVar = top?.n_ensemble ?? 0;
+  const fit = top?.mean_iou ?? 0;
 
   const badge = unknown
     ? <Badge tone="warning">System abstains</Badge>
     : <Badge tone="accent">{differs ? 'Nearest vessel not supported' : 'Candidate named'}</Badge>;
 
-  const stats = unknown
-    ? [
-        { label: 'Best fit', value: top?.mean_iou.toFixed(2) ?? '—', sub: 'mean IoU' },
-        { label: 'Fit gate', value: String(gate), sub: 'to name a vessel' },
-        { label: 'Short by', value: top ? (gate - top.mean_iou).toFixed(2) : '—', sub: `across ${nCandidates} candidates` },
-      ]
-    : [
-        { label: 'Variants won', value: <>{wins}<small>/{nVar}</small></>, pips: true },
-        { label: 'Lead over runner-up', value: disc?.loss_gap ?? '—', sub: disc?.discriminated === false ? `tied: under ${disc.tolerance}` : 'loss gap', warn: disc?.discriminated === false },
-        { label: 'In the origin area', value: <>{topVessel?.first_entry_hours_before ?? '—'}<small> h</small></>, sub: 'before the image' },
-      ];
+  // the evidence, one row each: kind is 'for' (a check), 'against' (a cross) or 'caution'
+  const rows = unknown ? [
+    { kind: 'caution', text: <>The best fit reaches <b>{fit.toFixed(2)}</b>, short of the <b>{gate}</b> gate by <b>{(gate - fit).toFixed(2)}</b></> },
+    { kind: 'caution', text: <>None of the <b>{nCandidates}</b> replayed candidates recreates the slick well enough</> },
+    runnerUp && { kind: 'caution', text: <>The next-best candidate fits at only <b>{runnerUp.mean_iou.toFixed(2)}</b></> },
+    nearest && { kind: 'against', text: <>The nearest vessel, <b className="mono">{nearest.vessel_key}</b>, {km} km away, isn’t named either</> },
+  ] : [
+    { kind: 'for', text: <>Best fit under <b>{wins} of {nVar}</b> forcing variants</> },
+    disc && (disc.discriminated === false
+      ? { kind: 'caution', text: <>Close to the runner-up: loss gap <b>{disc.loss_gap}</b>, within {disc.tolerance}</> }
+      : { kind: 'for', text: <>Clearly ahead of the runner-up, with a loss gap of <b>{disc.loss_gap}</b></> }),
+    topVessel?.first_entry_hours_before != null && { kind: 'for', text: <>Inside the origin area <b>{topVessel.first_entry_hours_before} h</b> before the image</> },
+    nearest && (differs
+      ? { kind: 'against', text: <>The nearest vessel, <b className="mono">{nearest.vessel_key}</b>, {km} km away, isn’t supported</> }
+      : { kind: 'for', text: <>It is also the nearest vessel, {km} km away</> }),
+  ];
 
   return (
-    <Card title="Case Finding" badge={badge} className={`finding cf4${unknown ? ' is-abstain' : ''}`}>
-      <div className="cf4-surface">
-        <div className="cf4-top">
-          <div className="cf4-main">
-            <span className="cf4-eyebrow">{unknown ? 'The system abstains' : 'Forward replay names'}</span>
-            <span className="cf4-key">{unknown ? 'No vessel named' : top?.vessel_key}</span>
-            <span className="cf4-line">{unknown
-              ? `The best of ${nCandidates} replayed candidates fits at ${top?.mean_iou.toFixed(2) ?? '—'}, below the gate of ${gate}.`
-              : `Best physical fit of ${nCandidates} replayed candidates${runnerUp ? `, ahead of the runner-up at ${runnerUp.mean_iou.toFixed(2)}` : ''}.`}</span>
-          </div>
-          <FitGauge value={top?.mean_iou ?? 0} gate={gate} secondary={unknown ? null : runnerUp?.mean_iou ?? null}
-                    tone={unknown ? 'warning' : 'accent'} size={88} />
+    <Card title="Case Finding" badge={badge} className={`finding cf6${unknown ? ' is-abstain' : ''}`}>
+      <div className="cf6-hero">
+        <div className="cf6-say">
+          <h3 className="cf6-headline">{unknown
+            ? <><em>No vessel</em> fits the slick well enough to be named.</>
+            : <><em className="mono">{top?.vessel_key}</em> is the best physical fit.</>}</h3>
+          <p className="cf6-sub">{unknown
+            ? `Forward replay tested ${nCandidates} candidates; the source may not be in the data.`
+            : `Forward replay tested ${nCandidates} candidates${runnerUp ? `; the runner-up fits at ${runnerUp.mean_iou.toFixed(2)}` : ''}.`}</p>
         </div>
-        <div className="cf4-stats">
-          {stats.map((st) => (
-            <div key={st.label} className="cf4-stat">
-              <span className="cf4-stat-label">{st.label}</span>
-              <span className="cf4-stat-value">{st.value}</span>
-              {st.pips
-                ? <span className="cf4-pips" aria-hidden="true">{Array.from({ length: nVar }, (_, i) => <i key={i} className={i < wins ? 'is-won' : ''} style={{ '--i': i }} />)}</span>
-                : <span className={`cf4-stat-sub${st.warn ? ' is-warn' : ''}`}>{st.sub}</span>}
-            </div>
-          ))}
-        </div>
+        <FitGauge value={fit} gate={gate} secondary={unknown ? null : runnerUp?.mean_iou ?? null}
+                  tone={unknown ? 'warning' : 'accent'} size={96} />
       </div>
 
-      {nearest && (
-        <p className={`cf4-naive${differs ? ' is-struck' : ''}`}>
-          <span className="cf4-naive-label">Proximity pick</span>
-          <span className="cf4-naive-key"><span>{nearest.vessel_key}</span></span>
-          <span className="cf4-naive-sub">nearest at image time, about {km} km away</span>
-          <span className={`cf4-verdict${differs ? '' : unknown ? ' is-neutral' : ' is-agree'}`}>
-            {differs ? 'not supported by forward replay' : unknown ? 'not named either' : 'also the best physical fit'}</span>
-        </p>
-      )}
+      <ul className="cf6-list">
+        {rows.filter(Boolean).map((r, i) => (
+          <li key={i} className={`cf6-row is-${r.kind}`} style={{ '--i': i }}>
+            <span className="cf6-sym" aria-hidden="true">
+              <svg viewBox="0 0 16 16">{r.kind === 'for' ? <path d="M4.6 8.3l2.2 2.2 4.6-4.9" />
+                : r.kind === 'against' ? <path d="M5.3 5.3l5.4 5.4M10.7 5.3l-5.4 5.4" />
+                : <path d="M8 4.6v4.3M8 11.3v.1" />}</svg>
+            </span>
+            <span className="cf6-text">{r.text}</span>
+          </li>
+        ))}
+      </ul>
 
       <HowMeasured>
         <dl>
-          <dt>Proximity pick</dt><dd>{C.distance}</dd>
-          <dt>Mean IoU</dt><dd>{C.meanIou}</dd>
+          <dt>Best physical fit</dt><dd>{C.meanIou}</dd>
           <dt>Fit gate</dt><dd>{C.fitGate}</dd>
-          {!unknown && <><dt>In the origin area</dt><dd>{C.firstEntry}</dd></>}
-          {!unknown && <><dt>Lead over the runner-up</dt><dd>{C.lossGap}</dd></>}
           <dt>Forcing variants</dt><dd>Every release is replayed under six forcing variants; a win is a variant in which this vessel fits best of all candidates.</dd>
+          {!unknown && <><dt>Loss gap</dt><dd>{C.lossGap}</dd></>}
+          {!unknown && <><dt>Origin area</dt><dd>{C.firstEntry}</dd></>}
+          <dt>Nearest vessel</dt><dd>{C.distance}</dd>
         </dl>
       </HowMeasured>
     </Card>

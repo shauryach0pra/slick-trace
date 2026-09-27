@@ -1,60 +1,38 @@
-/* Case Finding, compact: one surface - the vessel and its gauge, a slim stat strip - then one quiet line. */
-.cf4-surface { position: relative; overflow: hidden; border-radius: 16px;
-               background: linear-gradient(135deg, rgba(10, 132, 255, 0.13), rgba(10, 132, 255, 0.03) 60%, rgba(100, 210, 255, 0.06));
-               box-shadow: inset 0 0 0 0.5px rgba(100, 180, 255, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
-.cf4.is-abstain .cf4-surface { background: linear-gradient(135deg, rgba(255, 159, 10, 0.13), rgba(255, 159, 10, 0.03) 60%, rgba(255, 214, 10, 0.05));
-                               box-shadow: inset 0 0 0 0.5px rgba(255, 190, 90, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
-.cf4-top { display: flex; align-items: center; gap: var(--space-5); padding: 16px 20px 14px; }
-.cf4-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.cf4-eyebrow { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.09em; color: var(--label-2); }
-.cf4.is-abstain .cf4-eyebrow { color: #ffb340; }
-.cf4-key { font-family: var(--font-mono); font-size: clamp(22px, 2.4vw, 30px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1;
-           overflow-wrap: anywhere; background: linear-gradient(95deg, #0a84ff, #64d2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.cf4.is-abstain .cf4-key { font-family: var(--font-display); letter-spacing: -0.02em; background: linear-gradient(95deg, #ff9f0a, #ffd60a);
-                           -webkit-background-clip: text; background-clip: text; }
-.cf4-line { max-width: 52ch; font-size: var(--font-size-xs); line-height: 1.45; color: var(--label-2); }
-.cf4 .fitg { flex: none; }
+/* Case Finding, as Apple would say it: the finding as a sentence beside its gauge, then the evidence
+   as a short list of rows led by small symbols. Content sits on the card; colour marks the answer. */
+.cf6-hero { display: flex; align-items: center; gap: var(--space-6); margin-top: 20px; }
+.cf6-say { flex: 1; min-width: 0; }
+.cf6-headline { margin: 0; font-family: var(--font-display); font-size: 26px; font-weight: 600; line-height: 1.22; letter-spacing: -0.02em; color: var(--label-1); }
+.cf6-headline em { font-style: normal; color: var(--accent); }
+.cf6-headline em.mono { font-family: var(--font-mono); letter-spacing: -0.01em; }
+.cf6.is-abstain .cf6-headline em { color: var(--status-orange); }
+.cf6-sub { margin: 8px 0 0; font-size: var(--font-size-sm); line-height: 1.45; color: var(--label-2); }
+.cf6 .fitg { flex: none; }
 
-/* the three facts as a slim strip along the foot of the surface, split by hairlines */
-.cf4-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 0.5px solid rgba(128, 170, 255, 0.22); }
-.cf4.is-abstain .cf4-stats { border-top-color: rgba(255, 190, 90, 0.26); }
-.cf4-stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 10px 20px 12px; }
-.cf4-stat + .cf4-stat { box-shadow: inset 0.5px 0 0 rgba(128, 170, 255, 0.22); }
-.cf4.is-abstain .cf4-stat + .cf4-stat { box-shadow: inset 0.5px 0 0 rgba(255, 190, 90, 0.26); }
-.cf4-stat-label { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--label-3);
-                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cf4-stat-value { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2; color: var(--label-1); font-variant-numeric: tabular-nums; }
-.cf4-stat-value small { font-size: 12px; font-weight: 500; color: var(--label-3); letter-spacing: 0; }
-.cf4.is-abstain .cf4-stat-value { color: #ffb340; }
-.cf4-stat-sub { font-size: var(--font-size-xxs); color: var(--label-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cf4-stat-sub.is-warn { color: var(--status-orange); }
-.cf4-pips { display: flex; gap: 4px; margin-top: 3px; }
-.cf4-pips i { width: 7px; height: 7px; border-radius: 50%; background: var(--label-3); opacity: 0.4;
-              animation: cf-pip 420ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards; animation-delay: calc(500ms + var(--i) * 70ms); }
-.cf4-pips i.is-won { background: #64d2ff; opacity: 1; box-shadow: 0 0 5px rgba(100, 210, 255, 0.7); }
-@keyframes cf-pip { from { transform: scale(0); } }
+.cf6-list { list-style: none; margin: 22px 0 4px; padding: 0; }
+.cf6-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; font-size: var(--font-size-sm); color: var(--label-1);
+           animation: cf6-in 480ms cubic-bezier(0.22, 1, 0.36, 1) backwards; animation-delay: calc(250ms + var(--i) * 80ms); }
+.cf6-row + .cf6-row { box-shadow: inset 0 0.5px 0 var(--separator); }
+.cf6-text { min-width: 0; line-height: 1.4; }
+.cf6-text b { font-weight: var(--font-weight-semibold); font-variant-numeric: tabular-nums; }
+.cf6-text b.mono { font-family: var(--font-mono); font-weight: var(--font-weight-medium); }
+.cf6-sym { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; }
+.cf6-sym svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cf6-row.is-for .cf6-sym { background: var(--accent); }
+.cf6-row.is-against .cf6-sym { background: var(--status-orange); }
+.cf6-row.is-caution .cf6-sym { background: var(--status-orange); }
+.cf6.is-abstain .cf6-row.is-against .cf6-sym { background: var(--label-3); }
+@keyframes cf6-in { from { opacity: 0; translate: 0 6px; } }
+.panel:not(.is-inview) .cf6-row { animation-play-state: paused; }
+@media (max-width: 900px) { .cf6-hero { flex-direction: column-reverse; align-items: flex-start; } }
+@media (prefers-reduced-motion: reduce) { .cf6-row { animation: none; } }
 
-/* the proximity pick: one quiet line beneath */
-.cf4-naive { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 12px 2px 0; font-size: var(--font-size-xs); color: var(--label-2); }
-.cf4-naive-label { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--label-3); }
-.cf4-naive-key { position: relative; font-family: var(--font-mono); font-size: var(--font-size-sm); color: var(--label-1); }
-.cf4-naive-key > span { position: relative; }
-.cf4-naive.is-struck .cf4-naive-key { color: var(--label-2); }
-.cf4-naive.is-struck .cf4-naive-key > span::after { content: ""; position: absolute; left: -2px; right: -2px; top: 54%; height: 1.5px; background: var(--status-orange);
-                                                    transform-origin: left; animation: cf-strike 520ms 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
-@keyframes cf-strike { from { transform: scaleX(0); } }
-.cf4-verdict { margin-left: auto; padding: 1px 9px; border-radius: 999px; font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold);
-               color: var(--status-orange); background: rgba(255, 159, 10, 0.12); }
-.cf4-verdict.is-agree { color: var(--status-green); background: rgba(48, 209, 88, 0.12); }
-.cf4-verdict.is-neutral { color: var(--label-2); background: rgba(128, 128, 128, 0.14); }
-@media (max-width: 900px) { .cf4-top { flex-direction: column; align-items: flex-start; } .cf4-stats { grid-template-columns: 1fr; } .cf4-stat + .cf4-stat { box-shadow: inset 0 0.5px 0 rgba(128, 170, 255, 0.22); } }
-@media (prefers-reduced-motion: reduce) { .cf4-pips i, .cf4-naive.is-struck .cf4-naive-key > span::after { animation: none; } }
-/* tighter: the sentence uses the width, and the top sits closer to its content */
-.cf4-top { padding: 12px 20px 10px; }
-.cf4-line { max-width: 78ch; }
-.cf4 .fitg-num { font-size: 22px; }
-.cf4 .fitg-label { font-size: 8px; }
-
-/* natural breathing space under the Case Finding title: 22 px (touching margins collapse,
-   so this is the whole gap) */
-.cf4-surface { margin-top: 22px; }
+/* the evidence as a 2 x 2 grid of short facts, side by side, with no dividers and tighter spacing */
+.cf6-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 32px; margin: 20px 0 6px; }
+.cf6-row { padding: 0; align-items: flex-start; }
+.cf6-row + .cf6-row { box-shadow: none; }
+.cf6-row .cf6-text { padding-top: 2px; }
+@media (max-width: 900px) { .cf6-list { grid-template-columns: 1fr; } }
+/* the gauge's number sized for this gauge, so it sits inside the ring */
+.cf6 .fitg-num { font-size: 22px; }
+.cf6 .fitg-label { font-size: 8px; letter-spacing: 0.06em; }

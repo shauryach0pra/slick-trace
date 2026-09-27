@@ -1,7 +1,8 @@
 
 
-**Forward Exposure's share bars fill as they come on screen.** Each bar fills slowly while its
-percentage counts up on the same curve; changing the hour carries both to the new values.
+**Case Finding says its finding.** A sentence - the vessel as the best physical fit, or no vessel
+named - beside the fit gauge, then the evidence as a short list of rows led by small symbols.
 
-**Popups on the card surface.** The Lead · not proof popover, a ship's details and the other map
-popups take the cards' colour, edge and shadow and the theme's text colours, not blue-tinted glass.
+**Case Finding's evidence as a 2 x 2 grid** - side by side, no dividers, about 28% shorter.
+
+**An abstention's Case Finding gets a fourth fact** - how the next-best candidate fits.
