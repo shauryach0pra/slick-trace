@@ -49,3 +49,5 @@ Filtering, and every tag's dot a quiet grey.
 **The Conclusion Graph's stage cards, even** - one height, titles on one line, content capitalised.
 
 **One-line What-if caption; "Traffic and Provenance" on one line, Named regular, chips centred.**
+
+**The Conclusion Graph's cards, one size** - one-line headlines, two-line plain descriptions, no hover tooltip.

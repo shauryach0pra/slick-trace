@@ -29,6 +29,8 @@ const CAPTION = {
   finding: 'What the evidence supports: a lead for an analyst to follow up, never proof of responsibility.',
 };
 
+const f2 = (x) => (x == null ? '—' : Number(x).toFixed(2));
+
 function buildStages({ attribution, naive, report, detection, fragility }) {
   const counts = report?.historical_filtering?.status_counts;
   const top = attribution?.ranking?.[0];
@@ -37,46 +39,51 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
   const nearest = naive?.ranking?.[0];
   const stages = [];
 
+  // Each card reads the same way: the stage's name, a one-line headline, and a two-line description.
+  const AXIS = { current_u_bias: 'along-shore current', current_v_bias: 'cross-shore current', diffusivity_scale: 'spreading',
+                 mask_threshold: 'footprint threshold', duration_shift_h: 'release duration' };
+  const num = (v) => (v < 0 ? `−${Math.abs(v)}` : `${v}`);
   stages.push(!detection ? { id: 'detection', title: 'Detection', state: 'pending' } : {
     id: 'detection', title: 'Detection', state: detection.detected ? 'done' : 'abstain',
-    value: detection.detected ? `${detection.geometry.area_km2} km² slick` : 'No slick detected',
-    detail: detection.detected ? `${detection.n_regions} region${detection.n_regions === 1 ? '' : 's'} · classical baseline detector` : null,
+    value: detection.detected ? `${Math.round(detection.geometry.area_km2)} km² slick found` : 'No slick detected',
+    detail: detection.detected
+      ? `${detection.n_regions} dark region${detection.n_regions === 1 ? '' : 's'}, outlined by the classical baseline detector`
+      : 'The detector found no dark region that looks like oil',
   });
   stages.push(!counts ? { id: 'filtering', title: 'Historical filtering', state: 'pending' } : {
     id: 'filtering', title: 'Historical filtering', state: 'done',
-    value: `${counts.candidate ?? 0} candidates`,
-    detail: `${counts.unassessed ?? 0} unassessed · ${counts.excluded ?? 0} excluded by the backward origin envelope`,
+    value: `${counts.candidate ?? 0} candidate vessel${(counts.candidate ?? 0) === 1 ? '' : 's'}`,
+    detail: `${counts.unassessed ?? 0} unassessed and ${counts.excluded ?? 0} excluded by the origin check`,
   });
+  const tied = disc?.discriminated === false;
   const replay = !attribution ? { id: 'replay', title: 'Forward replay', state: 'pending' } : {
-    id: 'replay', title: 'Forward replay', state: (unknown || disc?.discriminated === false) ? 'abstain' : 'done',
-    value: unknown ? 'No candidate cleared the fit gate' : top?.vessel_key, mono: !unknown,
-    detail: unknown ? `best mean IoU ${f3(top?.mean_iou)} against a gate of ${attribution.abstention_iou_gate}`
-      : `mean IoU ${f3(top?.mean_iou)} · best under ${top?.ensemble_win_count}/${top?.n_ensemble} forcing variants`,
-    note: disc && disc.discriminated !== null && !unknown
-      ? (disc.discriminated ? `separated from the runner-up by a loss gap of ${disc.loss_gap}`
-        : `not separated from the runner-up: loss gap ${disc.loss_gap} is under ${disc.tolerance}`) : null,
+    id: 'replay', title: 'Forward replay', state: (unknown || tied) ? 'abstain' : 'done',
+    value: unknown ? 'No fit above the gate' : `${top?.vessel_key} fits best`,
+    detail: unknown ? `Best mean IoU ${f2(top?.mean_iou)}, below the ${attribution.abstention_iou_gate} gate`
+      : tied ? `Mean IoU ${f3(top?.mean_iou)}, too close to the runner-up to separate`
+        : `Mean IoU ${f3(top?.mean_iou)}, best in ${top?.ensemble_win_count} of ${top?.n_ensemble} forcing variants`,
   };
   if (nearest) {
     replay.branches = [{
-      id: 'baseline', title: 'Proximity baseline', state: 'compare', value: naive.top_candidate_id, mono: true,
-      detail: `${f3(nearest.distance_deg)}° from the slick — ${unknown ? 'replay names no one'
-        : naive.top_candidate_id === attribution?.top_candidate_id ? 'the same vessel as replay' : 'a different vessel from replay'}`,
+      id: 'baseline', title: 'Proximity baseline', state: 'compare', value: `${naive.top_candidate_id} is nearest`,
+      detail: `Nearest at image time — ${unknown ? 'replay names no one'
+        : naive.top_candidate_id === attribution?.top_candidate_id ? 'the same vessel replay names' : 'not the vessel replay names'}`,
     }];
   }
   stages.push(replay);
   stages.push(!fragility ? { id: 'fragility', title: 'Rank fragility', state: 'pending' } : {
     id: 'fragility', title: 'Rank fragility', state: fragility.flip_found ? 'abstain' : 'done',
-    value: `${unknown ? 'Unnamed leader' : 'Leader'} held in ${Math.round(fragility.lead_retained_fraction * 100)}% of ${fragility.n_points_tested} perturbations`,
+    value: `${unknown ? 'Best fit' : 'Lead'} held in ${Math.round(fragility.lead_retained_fraction * 100)}% of tests`,
     detail: fragility.flip_found && fragility.smallest_flip
-      ? `smallest change that flips it: ${Object.entries(fragility.smallest_flip.changed_axes)
-        .map(([k, v]) => `${k.replaceAll('_', ' ')} ${v}`).join(', ')} (magnitude ${fragility.smallest_flip.magnitude})`
-      : 'no tested perturbation changed the leader',
+      ? `The lead flips first at ${Object.entries(fragility.smallest_flip.changed_axes).map(([k, v]) => `${AXIS[k] ?? k.replaceAll('_', ' ')} ${num(v)}`).join(' + ')}`
+      : `No tested change, of ${fragility.n_points_tested}, moved the leader`,
   });
   stages.push(!attribution ? { id: 'finding', title: 'Finding', state: 'pending', final: true } : {
     id: 'finding', title: 'Finding', final: true, state: unknown ? 'abstain' : 'done',
-    value: unknown ? 'Unknown source' : `${attribution.top_candidate_id} is physically consistent`,
-    detail: unknown ? 'no vessel is named; declining is the output'
-      : `under the tested assumptions — an investigative lead, not proof of responsibility${disc?.discriminated === false ? '; its ordering against the runner-up carries no weight' : ''}`,
+    value: unknown ? 'No vessel named' : `${attribution.top_candidate_id} is the lead`,
+    detail: unknown ? 'Declining is the output: the source may not be in the data'
+      : tied ? 'A weak lead: too close to the runner-up to rank'
+        : 'A lead for an analyst to check, not proof of responsibility',
   });
   // what each stage summarises in the evidence column
   const TARGET = { detection: 'Observed Scene', filtering: 'Traffic and Provenance', replay: 'Naive vs Forward-Replay',
@@ -111,7 +118,6 @@ function NodeCard({ s, index, register }) {
   return (
     <button type="button" ref={ref} className={`cgx-node is-${s.state}${s.final ? ' is-final' : ''}${s.state === 'compare' ? ' is-compare' : ''}`}
             style={{ '--k': index }} onClick={() => s.target && jumpTo(s.target, s.id)}
-            title={s.target ? `Open ${s.target}` : undefined}
             aria-label={`${s.title}: ${s.value ?? 'not loaded'}. ${s.caption ?? ''}`}>
       <span className="cgx-head">
         <span className="cgx-dot" aria-hidden="true">{s.state === 'compare' ? 'vs' : index + 1}</span>

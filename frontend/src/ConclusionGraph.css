@@ -154,3 +154,8 @@
 .cgx-node { width: 212px; }
 .cgx-node.is-compare { min-height: 0; }
 .cgx-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* every stage card the same shape: its name on one line, a one-line headline, a two-line description */
+.cgx-node { width: 224px; }
+.cgx-value { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cgx-node .cgx-detail { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; min-height: calc(2 * 1.35em); }
