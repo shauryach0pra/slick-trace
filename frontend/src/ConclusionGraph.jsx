@@ -103,6 +103,8 @@ function jumpTo(title, stage) {
   setTimeout(() => card.classList.remove('cg-flash'), 1800);
 }
 
+const cap = (t) => (typeof t === 'string' && /^[a-z]/.test(t) ? t.charAt(0).toUpperCase() + t.slice(1) : t);
+
 function NodeCard({ s, index, register }) {
   const ref = useRef(null);
   useLayoutEffect(() => register(s.id, ref.current), [register, s.id]);
@@ -115,11 +117,11 @@ function NodeCard({ s, index, register }) {
         <span className="cgx-dot" aria-hidden="true">{s.state === 'compare' ? 'vs' : index + 1}</span>
         <span className="cgx-title">{s.title}</span>
       </span>
-      {s.state === 'pending' ? <span className="cgx-detail">not loaded</span> : (
+      {s.state === 'pending' ? <span className="cgx-detail">Not loaded</span> : (
         <>
-          <span className={`cgx-value${s.mono ? ' is-mono' : ''}`}>{s.value}</span>
-          {s.detail && <span className="cgx-detail">{s.detail}</span>}
-          {s.note && <span className="cgx-detail">{s.note}</span>}
+          <span className={`cgx-value${s.mono ? ' is-mono' : ''}`}>{cap(s.value)}</span>
+          {s.detail && <span className="cgx-detail">{cap(s.detail)}</span>}
+          {s.note && <span className="cgx-detail">{cap(s.note)}</span>}
         </>
       )}
     </button>
@@ -156,6 +158,12 @@ export default function ConclusionGraph(props) {
   const layout = useCallback(() => {
     const t = track.current;
     if (!t) return;
+    // every main card as tall as the tallest, so the row reads evenly - set before the
+    // connectors are measured, so they always meet the cards level
+    const mains = stages.map((st) => nodes.current[st.id]).filter(Boolean);
+    mains.forEach((el) => { el.style.minHeight = ''; });
+    const tallest = Math.max(0, ...mains.map((el) => el.offsetHeight));
+    mains.forEach((el) => { el.style.minHeight = `${tallest}px`; });
     // Layout positions (offsetLeft/offsetTop), not getBoundingClientRect: the cards'
     // staggered entrance animation moves them with a transform, and measuring
     // mid-animation left the connectors a few pixels out of level.

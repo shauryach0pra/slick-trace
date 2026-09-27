@@ -149,3 +149,8 @@
 /* no edge fades: the strip runs edge to edge and is cut off crisply by the card's own edge, as
    Apple's sideways rows are - the next stage peeking in is what says there is more */
 .cgx-window::before, .cgx-window::after { content: none; display: none; }
+
+/* stage cards a little wider, so long lines wrap less; every title on one line */
+.cgx-node { width: 212px; }
+.cgx-node.is-compare { min-height: 0; }
+.cgx-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

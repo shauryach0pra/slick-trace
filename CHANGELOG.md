@@ -45,3 +45,5 @@ Filtering, and every tag's dot a quiet grey.
 **The smallest flip is part of its column** - a hairline, a grey label and a neutral tag, no box.
 
 **The half-width cards, matched** - both tagged Synthetic data, four chips, equal heights.
+
+**The Conclusion Graph's stage cards, even** - one height, titles on one line, content capitalised.
