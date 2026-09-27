@@ -145,3 +145,7 @@
 .cgx-window::before, .cgx-window::after { width: var(--cg-pad); }
 .cgx-window::before { left: calc(-1 * var(--cg-pad)); }
 .cgx-window::after { right: calc(-1 * var(--cg-pad)); }
+
+/* no edge fades: the strip runs edge to edge and is cut off crisply by the card's own edge, as
+   Apple's sideways rows are - the next stage peeking in is what says there is more */
+.cgx-window::before, .cgx-window::after { content: none; display: none; }

@@ -37,3 +37,5 @@ stating the outcome with Mean IoU and Margin beside it - opening on the as-teste
 
 **Tags top right and quiet.** Shorter half-width tags kept top right, a Window chip in Traffic
 Filtering, and every tag's dot a quiet grey.
+
+**The Conclusion Graph without edge fades** - the strip is cut off crisply by the card's edge.
