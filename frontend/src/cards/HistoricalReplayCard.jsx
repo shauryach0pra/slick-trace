@@ -58,6 +58,7 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
   const max = forecast?.frames?.length ?? 0;
 
   const moveTau = useCallback((v) => { tauRef.current = v; setTau(v); }, []);
+  const keyMoments = useRef([0]);                  // the image, and the release once known - playback slows near them
 
   // playback: the clock runs continuously, about 1.4 h a second at 1x
   useEffect(() => {
@@ -65,7 +66,10 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
     const rate = (speed === 1 ? 1 / 0.7 : 1 / 0.35) / 1000;      // hours per millisecond
     let last = performance.now();
     const step = (now) => {
-      const next = Math.min(max, tauRef.current + (now - last) * rate);
+      // near a key moment the clock eases down to about a third of its speed, then picks up again
+      const d = Math.min(...keyMoments.current.map((k) => Math.abs(tauRef.current - k)));
+      const ease = d >= 1.2 ? 1 : 0.32 + 0.68 * (d / 1.2) ** 2;
+      const next = Math.min(max, tauRef.current + (now - last) * rate * ease);
       last = now;
       moveTau(next);
       if (next >= max) { setPlaying(false); return; }
@@ -124,6 +128,8 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
     const h = Math.round((ms(replay.release_start) - ms(acquired)) / 3600e3);
     if (h >= min && h < 0) marks.push({ t: h, label: 'release' });
   }
+  const releaseT = marks[0]?.t ?? null;
+  useEffect(() => { keyMoments.current = releaseT == null ? [0] : [0, releaseT]; }, [releaseT]);
 
   const slickInfo = c?.slick?.geometry ? {
     when: `detected in the radar image at ${acquired?.slice(11, 16)} UTC`,

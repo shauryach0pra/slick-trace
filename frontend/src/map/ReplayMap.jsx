@@ -162,8 +162,10 @@ function addLayers(map, bbox) {
     paint: { 'circle-radius': 1.8, 'circle-color': 'rgba(210,216,226,0.9)' } });
   map.addLayer({ id: 'trails', type: 'line', source: 'trails', layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: { 'line-width': 1.3, 'line-gradient': trailGradient(INK.dark.trail) } });
+  map.addLayer({ id: 'trails-lead-glow', type: 'line', source: 'trails-lead', layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: { 'line-width': 10, 'line-blur': 7, 'line-opacity': 0.45, 'line-gradient': trailGradient('rgba(64,156,255,0.9)') } });
   map.addLayer({ id: 'trails-lead', type: 'line', source: 'trails-lead', layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-width': 2.6, 'line-gradient': trailGradient('rgba(10,132,255,0.95)') } });
+    paint: { 'line-width': 3.2, 'line-gradient': trailGradient('rgba(100,190,255,1)') } });
 }
 
 function paintInk(map, surface) {
@@ -396,9 +398,9 @@ function burst(map, at) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const node = document.createElement('div');
   node.className = 'release-burst';
-  node.innerHTML = '<span></span><span></span><em>release</em>';
+  node.innerHTML = '<span></span><span></span>';
   const m = new Marker({ element: node }).setLngLat(at).addTo(map);
-  setTimeout(() => m.remove(), 1900);
+  setTimeout(() => m.remove(), 3400);
 }
 
 function placeShips(map, ships, ctx) {
@@ -428,9 +430,12 @@ function placeShips(map, ships, ctx) {
     m.el.classList.toggle('is-lead', s.lead);
     m.el.style.setProperty('--cog', `${(s.cog ?? 0).toFixed(1)}deg`);
     m.el.style.setProperty('--wake', String(Math.max(0, Math.min(1, ((s.sog ?? 0) - 0.5) / 7))));
-    const text = s.lead ? `${s.key} · leading candidate${s.state === 'projected' ? ' · projected' : ''}` : '';
+    const text = s.lead ? `${s.key} · Leading candidate${s.state === 'projected' ? ' · projected' : ''}` : '';
     const lbl = m.el.querySelector('.ship-label');
-    if (lbl.textContent !== text) lbl.textContent = text;
+    if (lbl.dataset.text !== text) {
+      lbl.dataset.text = text;
+      lbl.innerHTML = s.lead ? `<b>${esc(s.key)}</b><span>Leading candidate${s.state === 'projected' ? ' · projected' : ''}</span>` : '';
+    }
     m.el.title = `${s.key} · ${TYPE_LABEL[s.type] ?? TYPE_LABEL.other}${s.state === 'projected' ? ': projected from last course and speed, not observed'
       : s.state === 'inside' ? ': inside the origin envelope' : ''}${s.sog != null ? ` · ${s.sog} kn reported` : ''}`;
   }
@@ -476,6 +481,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
   const [follow, setFollow] = useState(false);
   const followRef = useRef(false);
   const leadKey = timeline?.vessels?.find((v) => v.lead)?.key ?? null;
+  const relH = timeline?.releaseH ?? null;
   const leadAt = (at) => {
     if (!timeline || !leadKey) return null;
     const S = shipsAt(timeline, at);
@@ -650,7 +656,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     envelope: ['a', 'b'].flatMap((b) => [...ENV_LEVELS.flatMap((L) => [`env-${b}-fill-${L.pct}`, `env-${b}-line-${L.pct}`]),
                                          `env-${b}-glow`, `env-pts-${b}`]),
     oil: ['oil-heat', 'oil-heat-fc', 'oil-stranded'],
-    vessels: ['trails', 'trails-lead', 'gaps', 'gaps-hit', 'lastseen', 'lastseen-dot', 'proj'],
+    vessels: ['trails', 'trails-lead-glow', 'trails-lead', 'gaps', 'gaps-hit', 'lastseen', 'lastseen-dot', 'proj'],
     fan: ['fan-lines', 'fan-ends', 'fan-hit'],
     forcing: ['forcing-arrows'],
     areas: ['areas-fill', 'areas-glow', 'areas-line', 'areas-hit'],
@@ -838,7 +844,13 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
           <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M13.6 2.4 2.6 7.1l4.6 1.8 1.8 4.7 4.6-11.2Z" /></svg>
         </button>
       )}
-      {Math.abs(tau) < 0.5 && <div className="rmap-acq" aria-hidden="true">Radar image acquired</div>}
+      <div className={`rmap-moment is-image${Math.abs(tau) < 0.5 ? ' is-on' : ''}`} aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 9.2V14M5.6 14h4.8M4.3 6.1a3.7 3.7 0 0 1 7.4 0M2.2 4.4a6 6 0 0 1 11.6 0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><circle cx="8" cy="8.2" r="1.3" fill="currentColor" /></svg>
+        Radar image acquired
+      </div>
+      <div className={`rmap-moment is-release${relH != null && Math.abs(tau - relH) < 0.5 ? ' is-on' : ''}`} aria-hidden="true">
+        <i /> Release begins
+      </div>
     </div>
   );
 }
