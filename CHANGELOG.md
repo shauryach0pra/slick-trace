@@ -34,3 +34,6 @@ worded as a complete thought; Forward Exposure's chips are gone, its tag carries
 
 **Explore one setting, redesigned.** The setting and its value as a heading, and one result panel
 stating the outcome with Mean IoU and Margin beside it - opening on the as-tested result.
+
+**Tags top right and quiet.** Shorter half-width tags kept top right, a Window chip in Traffic
+Filtering, and every tag's dot a quiet grey.

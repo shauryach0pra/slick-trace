@@ -835,3 +835,18 @@
 .topbar-meta .tag::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--label-3); }
 .topbar-meta .tag-teal::before { background: var(--accent); }
 .topbar-meta .tag-amber::before { background: var(--status-orange); }
+
+/* the half-width cards keep their tag in the top right on one line; a long title wraps under itself
+   instead of pushing the tag down */
+.finder-features .card-row .panel-head { flex-wrap: nowrap; align-items: flex-start; }
+.finder-features .card-row .panel-head h2 { flex: 1 1 auto; min-width: 0; }
+.finder-features .card-row .panel-head .tag { flex: none; margin-top: 1px; }
+
+/* every tag's dot is the same quiet grey - no colour in any of them */
+.finder-features .panel-head .tag::before,
+.finder-features .panel-head .tag-teal::before, .finder-features .panel-head .tag-amber::before,
+.finder-features .panel-head .tag-green::before, .finder-features .panel-head .tag-red::before,
+.topbar-meta .tag::before, .topbar-meta .tag-teal::before, .topbar-meta .tag-amber::before,
+.rpop-lead::before { background: var(--label-3); }
+/* on narrow windows, the half-width cards' titles are a touch smaller, so they hold at two lines */
+@media (max-width: 1360px) { .finder-features .card-row .panel-head h2 { font-size: 14px; } }

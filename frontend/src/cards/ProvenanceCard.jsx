@@ -42,13 +42,15 @@ export default function ProvenanceCard({ meta, report, attribution }) {
   const chips = [
     ['AIS', String(meta.ais_source).split(' (')[0]], ['Projection', meta.metric_crs], ['Seed', meta.generator.seed],
     ['Integrity', nFiles == null ? '—' : `${nFiles} files · SHA-256`],
+    // the span of AIS the filtering covered, from the case's own filtering record
+    ...(report?.historical_filtering?.hours_back != null ? [['Window', `${report.historical_filtering.hours_back} h`]] : []),
   ];
   const facts = [
     ['AIS', meta.ais_source], ['Forcing', meta.forcing_product], ['Projection', meta.metric_crs],
     ['Seed', meta.generator.seed], ['Integrity', nFiles == null ? '—' : `${nFiles} files · SHA-256`], ['Licence', meta.data_licence],
   ];
   return (
-    <Card title="Traffic Filtering and Provenance" badge={<Badge>{`${meta.provenance.status.charAt(0).toUpperCase()}${meta.provenance.status.slice(1)} data`}</Badge>}
+    <Card title="Traffic Filtering and Provenance" badge={<Badge>{`${meta.provenance.status.charAt(0).toUpperCase()}${meta.provenance.status.slice(1)}`}</Badge>}
           caption="Every vessel in the scene, down to the one named.">
       <div ref={dotsRef} className={`pv-dots${dotsSeen ? ' is-playing' : ''}`} role="list" aria-label={steps.map((st) => `${st.label}: ${st.n}`).join(', ')}>
         {steps.map((st, row) => (
