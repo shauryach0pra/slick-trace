@@ -26,25 +26,13 @@ export default function ForecastCard({ forecast }) {
   const h = hs[Math.min(hi, hs.length - 1)];
   const xs = hs.map((x) => `+${x.horizon_hours} h`);
   const spreadMax = Math.ceil(Math.max(...hs.map((x) => x.envelope_area_km2)) / 100) * 100;
-  // first contact is recorded per area; the chip names the earliest area reached
-  const byArea = Object.entries(forecast.first_modelled_sensitive_contact_h ?? {}).filter(([, t]) => t != null).sort((x, y) => x[1] - y[1]);
-  const firstArea = byArea[0] ?? null, firstShore = forecast.first_modelled_shoreline_contact_h;
-  const last = hs[hs.length - 1]?.horizon_hours;
   const shares = [
     ...h.sensitive_area_exposure.map((a, k) => ({ name: a.name.replace(' (synthetic)', ''), v: a.modelled_particle_fraction, tone: TONES[k % TONES.length] })),
     ...(h.modelled_shoreline_fraction != null ? [{ name: 'Shoreline', v: h.modelled_shoreline_fraction, tone: 'grey' }] : []),
   ];
   return (
-    <Card title="Forward Exposure" badge={<Badge tone="warning">modelled</Badge>}
+    <Card title="Forward Exposure" badge={<Badge tone="warning">Modelled, not a forecast</Badge>}
           caption="Where the oil is modelled to drift after the image.">
-      <div className="fx-chips">
-        <span className={`fx-chip${firstArea ? ' is-warn' : ''}`}>
-          {firstArea ? <>{firstArea[0].replace(' (synthetic)', '')} reached · <b>+{firstArea[1]} h</b></> : <>No sensitive-area contact within {last} h</>}</span>
-        <span className={`fx-chip${firstShore != null ? ' is-warn' : ''}`}>
-          {firstShore != null ? <>Shoreline reached · <b>+{firstShore} h</b></> : <>No shoreline contact within {last} h</>}</span>
-        <span className="fx-chip is-mode" title={forecast.forcing_mode}>Retrospective field, not a forecast</span>
-      </div>
-
       <div className="fx-board">
         <div className="fx-hero">
           <div className="fx-hero-head">

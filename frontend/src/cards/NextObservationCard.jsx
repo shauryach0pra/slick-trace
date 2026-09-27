@@ -16,7 +16,7 @@ export default function NextObservationCard({ nextObs, closing = false }) {
   if (!nextObs) return null;
   if (!nextObs.applicable) {
     return (
-      <Card title="Next Observation" badge={<Badge>not applicable</Badge>} {...frame}>
+      <Card title="Next Observation" badge={<Badge>Not applicable here</Badge>} {...frame}>
         <EmptyState>Not applicable for this incident: {nextObs.reason}</EmptyState>
       </Card>
     );
@@ -24,7 +24,7 @@ export default function NextObservationCard({ nextObs, closing = false }) {
   const rec = nextObs.recommended_window;
   const A = nextObs.hypothesis_a.vessel_key, B = nextObs.hypothesis_b.vessel_key;
   return (
-    <Card title="Next Observation" badge={<Badge tone="warning">advisory</Badge>} {...frame}
+    <Card title="Next Observation" badge={<Badge tone="warning">Advisory only</Badge>} {...frame}
           caption={`When one more image would best tell ${A} and ${B} apart.`}>
       <div className="no">
         <div className="no-hero">

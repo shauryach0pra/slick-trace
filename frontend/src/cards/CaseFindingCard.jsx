@@ -25,8 +25,8 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
   const fit = top?.mean_iou ?? 0;
 
   const badge = unknown
-    ? <Badge tone="warning">System abstains</Badge>
-    : <Badge tone="accent">{differs ? 'Nearest vessel not supported' : 'Candidate named'}</Badge>;
+    ? <Badge tone="warning">No vessel named</Badge>
+    : <Badge tone="accent">{differs ? 'Nearest vessel ruled out' : 'Nearest vessel confirmed'}</Badge>;
 
   // the evidence, one row each: kind is 'for' (a check), 'against' (a cross) or 'caution'
   const rows = unknown ? [

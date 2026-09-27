@@ -164,7 +164,7 @@ export default function HistoricalReplayCard({ incidentId, api, c, tracks }) {
   const tone = t === 0 ? 'accent' : 'warning';
   return (
     <Card title="Replay Map" caption="Play the 24 hours before and after the image."
-          badge={<Badge tone={tone}>{t === 0 ? 'observed' : 'modelled'}</Badge>}>
+          badge={<Badge tone={tone}>{t === 0 ? 'Observed at image time' : 'Modelled drift'}</Badge>}>
       <Suspense fallback={<div className="rmap rmap-loading">Loading map…</div>}>
         {timeline ? (
           <ReplayMap bbox={c.meta.bbox} coastline={c.geography?.coastline} slickInfo={slickInfo} onShowRanking={showRanking}

@@ -18,3 +18,6 @@ animations rest while it scrolls, and its card no longer tilts under the pointer
 row's number rising from 0 alongside - when the dots come on screen.
 
 **Traffic Filtering's numbers rise.** The count-up no longer restarts when given a new easing function.
+
+**Tags unified and self-explanatory.** Every card tag is the neutral pill with a meaning-coloured dot,
+worded as a complete thought; Forward Exposure's chips are gone, its tag carries the caveat.

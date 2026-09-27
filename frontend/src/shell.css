@@ -817,3 +817,15 @@
 }
 /* the Conclusion Graph's card stays still: no tilt, so scrolling inside it stays on the GPU */
 .finder-details > .cg { transform: none; }
+
+/* every tag in the middle column: the same neutral grey pill as "Synthetic data", with a small dot
+   before the text - the dot keeps the tag's meaning (blue, amber, green, or grey when neutral) */
+.finder-features .panel-head .tag { background: var(--fill-hover); color: var(--label-2); }
+.finder-features .panel-head .tag::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--label-3); }
+.finder-features .panel-head .tag-teal::before { background: var(--accent); }
+.finder-features .panel-head .tag-amber::before { background: var(--status-orange); }
+.finder-features .panel-head .tag-green::before { background: var(--status-green); }
+.finder-features .panel-head .tag-red::before { background: var(--status-red); }
+/* in the narrower half-width cards, a tag that does not fit beside its title drops neatly below it */
+.finder-features .card-row .panel-head { flex-wrap: wrap; row-gap: 8px; }
+.finder-features .card-row .panel-head h2 { min-width: 0; }

@@ -28,7 +28,7 @@ export default function ObservedSceneCard({ meta, slick, sceneUrl, nVessels }) {
 
   return (
     <Card title="Observed Scene"
-          badge={<Badge tone={synthetic ? 'warning' : 'accent'}>{synthetic ? 'synthetic' : 'real'}</Badge>}
+          badge={<Badge tone={synthetic ? 'warning' : 'accent'}>{synthetic ? 'Synthetic scene' : 'Real scene'}</Badge>}
           caption="The dark, smooth patch the detector outlined. Radar darkness alone is not proof of oil.">
       <div className="os">
         <div ref={sceneRef} className={`scene-wrap os-scene${sceneSeen ? ' is-playing' : ''}`}>

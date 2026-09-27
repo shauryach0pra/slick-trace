@@ -104,8 +104,8 @@ export default function RankingRevealCard({ attribution, baseline, vessels }) {
     );
   });
 
-  const badge = !revealed ? <Badge>proximity only</Badge>
-    : <Badge tone={unknown ? 'warning' : 'accent'}>{unknown ? 'abstained' : 'named'}</Badge>;
+  const badge = !revealed ? <Badge>Showing proximity only</Badge>
+    : <Badge tone={unknown ? 'warning' : 'accent'}>{unknown ? 'Forward replay abstains' : 'Showing forward replay'}</Badge>;
   return (
     <Card title="Naive vs Forward-Replay" badge={badge}
           caption={revealed ? 'Which vessel’s drifted release best matches the slick.' : 'The shortcut: the vessel nearest the slick when the image was taken.'}

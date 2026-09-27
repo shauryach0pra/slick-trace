@@ -27,7 +27,7 @@ export default function FragilityCard({ fragility, attribution }) {
   if (!fragility) return null;
   if (!fragility.testable) {
     return (
-      <Card title="Rank Fragility" badge={<Badge tone="warning">not testable</Badge>}>
+      <Card title="Rank Fragility" badge={<Badge tone="warning">Not testable here</Badge>}>
         <EmptyState>Not testable for this incident: {fragility.reason}</EmptyState>
       </Card>
     );
@@ -41,7 +41,7 @@ export default function FragilityCard({ fragility, attribution }) {
   return (
     <Card title="Rank Fragility"
           badge={<Badge tone={fragility.flip_found ? 'warning' : 'accent'}>
-            {fragility.flip_found ? 'lead can flip' : 'lead held'}</Badge>}
+            {fragility.flip_found ? 'Lead can flip' : 'Lead held in every test'}</Badge>}
           caption="Does the leader survive small changes to the model's assumptions?">
       <div className="fr">
         <FlipMatrix fragility={fragility} label={label} />

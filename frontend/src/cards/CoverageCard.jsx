@@ -63,7 +63,7 @@ export default function CoverageCard({ coverage }) {
   const { selective, coverage_failure: failure } = coverage.conditions;
   const op = coverage.operating_point;
   return (
-    <Card title="Coverage-Aware Matching" badge={<Badge tone="accent">tested</Badge>}
+    <Card title="Coverage-Aware Matching" badge={<Badge tone="accent">Tested on synthetic data</Badge>}
           caption="Matching radar contacts to AIS when some AIS is hidden.">
       <div ref={ringsRef} className={`cv-rings${ringsSeen ? ' is-playing' : ''}`}>
         {ROWS.map(([rk, nk], col) => (
