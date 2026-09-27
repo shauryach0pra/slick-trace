@@ -83,6 +83,8 @@ export default function ProvenanceCard({ meta, report, attribution }) {
   );
 }
 
+const linear = (k) => k;          // one fixed function, defined once
+
 /** A row's number, rising from 0 in step with its dots as they appear. */
 function RowCount({ n, run, delay, span }) {
   const [go, setGo] = useState(false);
@@ -91,6 +93,6 @@ function RowCount({ n, run, delay, span }) {
     const t = setTimeout(() => setGo(true), delay);
     return () => clearTimeout(t);
   }, [run, delay]);
-  return useCountUp(n, { decimals: 0, duration: span, run: go, easing: (k) => k });
+  return useCountUp(n, { decimals: 0, duration: span, run: go, easing: linear });
 }
 

@@ -12,18 +12,21 @@ export function useCountUp(value, { duration = 900, decimals = 2, run = true, ea
   const still = reduce() || value == null;
   const [shown, setShown] = useState(0);
   const from = useRef(0);
+  const ease = useRef(easing);
+  // kept current after each render and read at each frame, so a new function never restarts the count
+  useEffect(() => { ease.current = easing; });
   useEffect(() => {
     if (still || !run) return undefined;
     let raf = 0;
     const start = performance.now(), a = from.current;
     const tick = (t) => {
-      const k = Math.min(1, (t - start) / duration), e = easing(k);
+      const k = Math.min(1, (t - start) / duration), e = ease.current(k);
       setShown(a + (value - a) * e);
       if (k < 1) raf = requestAnimationFrame(tick); else from.current = value;
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [value, duration, still, run, easing]);   // easing is a fixed, top-level function
+  }, [value, duration, still, run]);
   if (value == null) return '—';
   return Number(still ? value : shown).toFixed(decimals);
 }

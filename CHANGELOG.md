@@ -16,3 +16,5 @@ animations rest while it scrolls, and its card no longer tilts under the pointer
 
 **Traffic Filtering's dots sweep in.** One after another, left to right and row by row, with each
 row's number rising from 0 alongside - when the dots come on screen.
+
+**Traffic Filtering's numbers rise.** The count-up no longer restarts when given a new easing function.
