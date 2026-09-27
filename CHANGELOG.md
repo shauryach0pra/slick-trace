@@ -41,3 +41,5 @@ Filtering, and every tag's dot a quiet grey.
 **The Conclusion Graph without edge fades** - the strip is cut off crisply by the card's edge.
 
 **Explore one setting as one grouped panel** - tabs, slider and a one-line result together; no big value.
+
+**The smallest flip is part of its column** - a hairline, a grey label and a neutral tag, no box.

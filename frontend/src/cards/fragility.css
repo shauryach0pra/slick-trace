@@ -182,3 +182,15 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 .fr-ex-group .fr-result-figs b:last-child { margin-right: 0; }
 /* the picked value, under its stop, is the one to read */
 .fr-ex-group .fr-stop.is-sel span { color: var(--label-1); font-weight: 700; }
+
+/* the smallest flip as part of the column, not a box beside it: a hairline above, a small grey
+   label, the change in plain text, the magnitude as a neutral tag, then its slider */
+.fr-hero .fr-flip2 { background: none; border: 0; box-shadow: none; border-radius: 0; padding: 16px 0 0; border-top: 0.5px solid var(--separator); }
+.fr-hero .fr-flip2::before, .fr-hero .fr-flip2::after { content: none; }
+.fr-flip2-top b { font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.07em; color: var(--label-3); }
+.fr-flip2-mag { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: 999px;
+                background: var(--fill-hover); color: var(--label-2); font-size: var(--font-size-xs); }
+.fr-flip2-mag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--label-3); }
+.fr-flip2-line { margin-top: 6px; font-size: var(--font-size-sm); color: var(--label-2); }
+.fr-flip2-line b { color: var(--label-1); }
+.fr-hero .fr-flip2 .fr-track { margin-top: 12px; }
