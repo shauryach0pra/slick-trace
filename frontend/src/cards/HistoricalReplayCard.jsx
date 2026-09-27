@@ -262,23 +262,33 @@ function MapLegend({ leadKey }) {
       [<i key="c" className="lg-forcing" />, 'forcing: one uniform current'],
     ] },
   ];
-  const g = groups.find((x) => x.key === open);
+  // the chosen group opens as a popover under its chip; a tap elsewhere or Escape closes it
+  const root = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const away = (e) => { if (root.current && !root.current.contains(e.target)) setOpen(null); };
+    const esc = (e) => { if (e.key === 'Escape') setOpen(null); };
+    document.addEventListener('pointerdown', away);
+    document.addEventListener('keydown', esc);
+    return () => { document.removeEventListener('pointerdown', away); document.removeEventListener('keydown', esc); };
+  }, [open]);
   return (
-    <div className="lgx">
+    <div className="lgx" ref={root}>
       <div className="lgx-chips" role="group" aria-label="Map legend">
         {groups.map((x) => (
-          <button key={x.key} type="button" className={`lgx-chip${open === x.key ? ' is-on' : ''}`} aria-expanded={open === x.key}
-                  onClick={() => setOpen(open === x.key ? null : x.key)}>
-            {x.icon}{x.name}<span className="lgx-n">{x.entries.length}</span>
-          </button>
+          <span key={x.key} className="lgx-item">
+            <button type="button" className={`lgx-chip${open === x.key ? ' is-on' : ''}`} aria-expanded={open === x.key}
+                    onClick={() => setOpen(open === x.key ? null : x.key)}>
+              {x.icon}{x.name}<span className="lgx-n">{x.entries.length}</span>
+            </button>
+            {open === x.key && (
+              <div className={`lgx-pop${x.entries.length > 5 ? ' is-wide' : ''}`} role="dialog" aria-label={`${x.name} legend`}>
+                <ul>{x.entries.map(([icon, label]) => <li key={label}>{icon}<span>{label.charAt(0).toUpperCase() + label.slice(1)}</span></li>)}</ul>
+              </div>
+            )}
+          </span>
         ))}
       </div>
-      {g && (
-        <div className="lgx-panel" key={g.key}>
-          <ul>{g.entries.map(([icon, label]) => <li key={label}>{icon}<span>{label.charAt(0).toUpperCase() + label.slice(1)}</span></li>)}</ul>
-          {g.note && <p>{g.note}</p>}
-        </div>
-      )}
     </div>
   );
 }

@@ -1,122 +1,55 @@
-.scrub {
-  margin-top: var(--space-4);
-  padding: var(--space-3) var(--space-4) var(--space-2);
-  border-radius: var(--radius-lg);
-  background: var(--surface-sunken);
-  box-shadow: inset 0 0 0 0.5px var(--separator);
-}
+/* The replay's time control, in the manner of Apple's video player controls: one slim bar with the
+   transport, the time, a thin filling track with its moments marked, and the speed; a pill below says
+   what the hour shows. */
+.scrub { margin-top: var(--space-4); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.scrub-bar { width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 16px; padding: 10px 16px 10px 10px;
+             border-radius: 16px; background: var(--fill-hover); box-shadow: inset 0 0 0 0.5px var(--separator); }
 
-.scrub-controls { display: flex; align-items: center; gap: 6px; }
+/* the transport: plain glyphs, the play button the largest */
+.scrub-transport { flex: none; display: flex; align-items: center; gap: 2px; }
+.scrub-btn { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%;
+             background: none; color: var(--label-1); cursor: default; transition: background-color 160ms ease, transform 120ms ease, opacity 160ms ease; }
+.scrub-btn:hover:not(:disabled) { background: var(--fill-pressed); }
+.scrub-btn:active:not(:disabled) { transform: scale(0.9); }
+.scrub-btn:disabled { opacity: 0.3; }
+.scrub-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.scrub-play { width: 40px; height: 40px; }
+.scrub-play svg { width: 22px; height: 22px; }
 
-.scrub-btn, .scrub-speed {
-  display: inline-grid;
-  place-items: center;
-  height: 28px;
-  min-width: 28px;
-  padding: 0 6px;
-  border: 0;
-  border-radius: 7px;
-  background: var(--control-bg);
-  box-shadow: var(--shadow-control);
-  color: var(--label-1);
-  cursor: default;
-  transition: transform var(--dur-base) var(--ease-spring), background-color var(--dur-fast) ease;
-}
-.scrub-btn:hover:not(:disabled), .scrub-speed:hover { background: var(--control-bg-hover); }
-.scrub-btn:active:not(:disabled), .scrub-speed:active { transform: scale(0.94); transition-duration: var(--dur-fast); }
-.scrub-btn:disabled { opacity: 0.4; }
-.scrub-play { width: 36px; background: var(--accent); color: var(--on-accent); }
-.scrub-play:hover:not(:disabled) { background: var(--accent-hover); }
-.scrub-speed { font-family: var(--font-mono); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); }
+/* the time, as the video player shows elapsed time */
+.scrub-now { flex: none; display: flex; flex-direction: column; line-height: 1.15; min-width: 64px; }
+.scrub-now b { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--label-1); font-variant-numeric: tabular-nums; }
+.scrub-now small { font-size: var(--font-size-xxs); color: var(--label-3); }
 
-.scrub-readout { margin-left: auto; display: flex; align-items: baseline; gap: 10px; }
-.scrub-time {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
-  color: var(--label-1);
-}
-.scrub-time small { font-size: var(--font-size-xs); font-weight: var(--font-weight-normal); color: var(--label-2); }
-.scrub-rel {
-  min-width: 78px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-}
-.scrub-rel.is-before { color: #0a84ff; background: rgba(90, 200, 250, 0.16); }
-.scrub-rel.is-image { color: var(--label-1); background: var(--fill-pressed); }
-.scrub-rel.is-after { color: #c46a00; background: rgba(255, 159, 10, 0.18); }
-:root[data-theme="dark"] .scrub-rel.is-after { color: #ffb340; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .scrub-rel.is-after { color: #ffb340; } }
+/* the track: thin and rounded, filling as it plays; the knob grows when held */
+.scrub-track-wrap { position: relative; flex: 1; min-width: 0; height: 40px; }
+.scrub-track { position: absolute; left: 0; right: 0; top: 18px; height: 5px; }
+.scrub-rail { position: absolute; inset: 0; border-radius: 3px; background: var(--fill-pressed); }
+.scrub-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--label-1); opacity: 0.85; }
+.scrub-knob { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: #fff;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35), 0 0 0 0.5px rgba(0, 0, 0, 0.15); transition: transform 140ms ease; }
+.scrub-track-wrap:hover .scrub-knob, .scrub-input:active ~ .scrub-track .scrub-knob { transform: scale(1.25); }
+.scrub-track-wrap:has(.scrub-input:active) .scrub-knob { transform: scale(1.35); }
+/* the moments on the track - the release, and the image - as small ticks labelled just above */
+.scrub-mark { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--accent); }
+.scrub-mark.is-image { background: var(--label-1); }
+.scrub-mark-label { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+                    font-size: 10px; font-weight: var(--font-weight-semibold); letter-spacing: 0.02em; color: var(--accent); }
+.scrub-mark.is-image .scrub-mark-label { color: var(--label-2); }
+.scrub-ends { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between;
+              font-size: 10px; color: var(--label-3); font-variant-numeric: tabular-nums; }
+/* the native range input sits over the track, invisible, for pointer and keyboard */
+.scrub-input { position: absolute; left: -7px; right: -7px; top: 8px; height: 24px; width: calc(100% + 14px); margin: 0; opacity: 0; cursor: default; }
+.scrub-input:focus-visible ~ .scrub-track .scrub-knob { box-shadow: 0 0 0 3px var(--accent-ring, rgba(10, 132, 255, 0.4)), 0 1px 4px rgba(0, 0, 0, 0.35); }
 
-/* the track: history in cyan, drift in amber, the image a white seam */
-.scrub-track-wrap { position: relative; margin: 18px 6px 0; padding-bottom: 30px; }
-.scrub-track {
-  position: relative;
-  height: 6px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, rgba(90, 200, 250, 0.28) 0 var(--zero), rgba(255, 159, 10, 0.28) var(--zero) 100%);
-}
-.scrub-fill {
-  position: absolute; top: 0; bottom: 0;
-  border-radius: 3px;
-  background: #5ac8fa;
-}
-.scrub[data-phase="after"] .scrub-fill { background: #ff9f0a; }
-.scrub-tick {
-  position: absolute; top: 9px; width: 1px; height: 3px; margin-left: -0.5px;
-  background: var(--label-3); opacity: 0.7;
-}
-.scrub-tick.is-major { height: 5px; opacity: 1; }
-.scrub-zero {
-  position: absolute; top: -5px; bottom: -5px; left: var(--zero); width: 2px; margin-left: -1px;
-  border-radius: 1px; background: var(--label-1);
-}
-.scrub-thumb {
-  position: absolute; top: 50%; left: var(--pos);
-  width: 18px; height: 18px; margin: -9px 0 0 -9px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.35);
-}
-.scrub-mark {
-  position: absolute; top: -9px; width: 2px; height: 24px; margin-left: -1px;
-  background: #0a84ff; border-radius: 1px;
-}
-.scrub-mark-label {
-  position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
-  white-space: nowrap; font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); color: #0a84ff;
-}
+/* the speed, a compact pill */
+.scrub-speed { flex: none; height: 26px; min-width: 40px; padding: 0 9px; border: 0; border-radius: 13px; background: var(--fill-pressed);
+               color: var(--label-1); font: 600 12px/1 var(--font-body); font-variant-numeric: tabular-nums; cursor: default; }
+.scrub-speed:hover { background: var(--separator-strong); }
+.scrub-speed:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-/* the real control, invisible, laid over the drawn track */
-.scrub-input {
-  position: absolute; left: -9px; right: -9px; top: -8px; height: 22px;
-  width: calc(100% + 18px); margin: 0; opacity: 0; cursor: pointer;
-}
-.scrub-input:focus-visible ~ .scrub-scale { outline: none; }
-.scrub-track-wrap:focus-within .scrub-thumb { box-shadow: 0 0 0 4px var(--accent-ring), 0 1px 3px rgba(0, 0, 0, 0.35); }
-
-.scrub-scale { position: absolute; left: 0; right: 0; top: 14px; height: 14px; }
-.scrub-scale span {
-  position: absolute; transform: translateX(-50%); white-space: nowrap;
-  font-family: var(--font-mono); font-size: var(--font-size-xxs); color: var(--label-2);
-}
-/* end labels sit inside the track rather than half off it */
-.scrub-scale span:first-child { transform: none; }
-.scrub-scale span:last-child { transform: translateX(-100%); }
-.scrub-scale span.is-zero { color: var(--label-1); font-weight: var(--font-weight-semibold); }
-.scrub-phases { position: absolute; left: 0; right: 0; top: 30px; height: 12px; }
-.scrub-phases span {
-  position: absolute; text-align: center; font-size: 10px; letter-spacing: 0.02em;
-  color: var(--label-3); white-space: nowrap; overflow: hidden;
-}
-
-@media (max-width: 620px) {
-  .scrub-readout { gap: 6px; }
-  .scrub-time { font-size: var(--font-size-md); }
-  .scrub-phases { display: none; }
-}
+/* what the hour shows: the neutral pill, with a dot */
+.scrub-state { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 10px; border-radius: 999px;
+               background: var(--fill-hover); color: var(--label-2); font-size: var(--font-size-xs); }
+.scrub-state::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--label-3); }
+@media (prefers-reduced-motion: reduce) { .scrub-knob, .scrub-btn { transition: none; } }
