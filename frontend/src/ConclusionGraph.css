@@ -136,3 +136,12 @@
 .cgx-col { scroll-snap-align: none; }
 .cgx-scroll.is-scrolling :is(.cgx-edge-flow, .cgx-edge-base, .cgx-spine-dot) { animation-play-state: paused; }
 .cgx-scroll.is-scrolling .cgx-edge-glow { filter: none; }
+
+/* the strip and its edge fades are sized from the card's own padding, so they end exactly at the
+   card's edge and never spill over its outline (the inspector's cards are 16 px in, not 20) */
+.cgx { --cg-pad: var(--space-5); }
+.finder-details > .cgx { --cg-pad: var(--space-4); }
+.cgx-scroll { margin: 0 calc(-1 * var(--cg-pad)); padding: 6px var(--cg-pad) 12px; scroll-padding-inline: var(--cg-pad); }
+.cgx-window::before, .cgx-window::after { width: var(--cg-pad); }
+.cgx-window::before { left: calc(-1 * var(--cg-pad)); }
+.cgx-window::after { right: calc(-1 * var(--cg-pad)); }
