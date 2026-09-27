@@ -95,8 +95,8 @@ export default function App() {
         <div className="topbar-trailing">
           {meta && route.view === 'case' && (
             <div className="topbar-meta">
-              <span className="tag tag-teal">{meta.case_state.replace('_', ' ')}</span>
-              {meta.provenance.status === 'synthetic' && <span className="tag tag-amber">synthetic case</span>}
+              <span className="tag tag-teal">{(([c, ...r]) => c.toUpperCase() + r.join(''))(meta.case_state.replace('_', ' '))}</span>
+              {meta.provenance.status === 'synthetic' && <span className="tag tag-amber">Synthetic case</span>}
             </div>
           )}
           {route.view === 'case' && vc && <ConfidenceBadge key={`conf-${vid}`} attribution={vc.attribution} />}

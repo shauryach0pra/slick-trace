@@ -56,8 +56,8 @@ export default function ConfidenceBadge({ attribution }) {
             <span className="conf-k">Fit gate</span>
             <span className="conf-v">
               {unknown
-                ? <>best fit <b>{top?.mean_iou?.toFixed(2) ?? '—'}</b> is below the gate of <b>{gate}</b>, so no vessel is named</>
-                : <>mean IoU <b>{top.mean_iou.toFixed(2)}</b> ≥ gate <b>{gate}</b>
+                ? <>Best fit <b>{top?.mean_iou?.toFixed(2) ?? '—'}</b> is below the gate of <b>{gate}</b>, so no vessel is named</>
+                : <>Mean IoU <b>{top.mean_iou.toFixed(2)}</b> ≥ gate <b>{gate}</b>
                     {disc?.discriminated === true ? <>, separated from the runner-up by a loss gap of {disc.loss_gap}</>
                       : disc?.discriminated === false ? <>, but not separated from the runner-up (gap {disc.loss_gap} under {disc.tolerance})</> : null}</>}
             </span>

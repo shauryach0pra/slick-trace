@@ -829,3 +829,9 @@
 /* in the narrower half-width cards, a tag that does not fit beside its title drops neatly below it */
 .finder-features .card-row .panel-head { flex-wrap: wrap; row-gap: 8px; }
 .finder-features .card-row .panel-head h2 { min-width: 0; }
+
+/* the top bar's tags, like the cards': the neutral pill, with a dot that keeps the meaning */
+.topbar-meta .tag { background: var(--fill-hover); color: var(--label-2); }
+.topbar-meta .tag::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--label-3); }
+.topbar-meta .tag-teal::before { background: var(--accent); }
+.topbar-meta .tag-amber::before { background: var(--status-orange); }

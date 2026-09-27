@@ -29,3 +29,5 @@ worded as a complete thought; Forward Exposure's chips are gone, its tag carries
 **The Conclusion Graph's outline stays crisp** - its edge fades no longer spill over the card's edge.
 
 **The ship popup's wording tidied** - capitalised values, no "(synthetic)", a "Leading candidate" pill with a dot.
+
+**Capitals and consistent tags at the top** - the popover's values capitalised; top-bar tags as neutral pills with a dot.
