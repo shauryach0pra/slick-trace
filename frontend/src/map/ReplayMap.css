@@ -397,3 +397,22 @@
 .rmap-follow.is-on svg path { fill: currentColor; }
 .rmap-follow:active { transform: scale(0.94); }
 .rmap-follow:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---- the bottom-left controls in the same material as the top-right buttons ---- */
+/* the scale: a small label over a thin measuring line, on the controls' surface */
+.rmap .maplibregl-ctrl-scale { position: relative; box-sizing: border-box; height: 24px; margin: 0 0 10px 10px; padding: 3px 8px 0;
+  border: 0; border-radius: 7px; background: var(--control-bg); box-shadow: var(--shadow-control); color: var(--label-1);
+  font: 500 11px/1.2 var(--font-body); font-variant-numeric: tabular-nums; }
+.rmap .maplibregl-ctrl-scale::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 4px; height: 2px; border-radius: 1px;
+  background: var(--label-2); }
+/* the current: the same surface, corners and type as the controls */
+.rmap .rmap-forcing { bottom: 42px; height: 24px; padding: 0 9px 0 8px; border-radius: 7px; background: var(--control-bg);
+  box-shadow: var(--shadow-control); color: var(--label-1); font: 500 11px/1 var(--font-body); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.rmap .rmap-forcing svg { stroke: var(--accent); }
+/* the attribution's "i", in the same material as the other controls; its credits read on it when open */
+.rmap .maplibregl-ctrl-attrib.maplibregl-compact { background: var(--control-bg); box-shadow: var(--shadow-control); color: var(--label-1); }
+.rmap .maplibregl-ctrl-attrib.maplibregl-compact a { color: var(--accent); }
+.rmap .maplibregl-ctrl-attrib-button { background-color: transparent; }
+/* in dark mode the "i" itself is white (an icon, not a filter - so the focus ring keeps its colour) */
+:root[data-theme="dark"] .rmap .maplibregl-ctrl-attrib-button { background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill-rule='evenodd' viewBox='0 0 20 20'%3E%3Cpath fill='%23fff' d='M4 10a6 6 0 1 0 12 0 6 6 0 1 0-12 0m5-3a1 1 0 1 0 2 0 1 1 0 1 0-2 0m0 3a1 1 0 1 1 2 0v3a1 1 0 1 1-2 0'/%3E%3C/svg%3E"); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .rmap .maplibregl-ctrl-attrib-button { background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill-rule='evenodd' viewBox='0 0 20 20'%3E%3Cpath fill='%23fff' d='M4 10a6 6 0 1 0 12 0 6 6 0 1 0-12 0m5-3a1 1 0 1 0 2 0 1 1 0 1 0-2 0m0 3a1 1 0 1 1 2 0v3a1 1 0 1 1-2 0'/%3E%3C/svg%3E"); } }

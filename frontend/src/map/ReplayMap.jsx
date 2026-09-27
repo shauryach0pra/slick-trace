@@ -530,6 +530,18 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left');
     map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
+    {
+      // MapLibre opens the compact attribution once, when the credits first arrive; close that
+      // one opening so it starts as its "i" - tapping it still shows the credits
+      const attrib = map.getContainer().querySelector('.maplibregl-ctrl-attrib');
+      if (attrib) {
+        const shut = () => { if (attrib.classList.contains('maplibregl-compact-show')) { attrib.classList.remove('maplibregl-compact-show'); mo.disconnect(); } };
+        const mo = new MutationObserver(shut);
+        mo.observe(attrib, { attributes: true, attributeFilter: ['class'] });
+        shut();
+        map.on('remove', () => mo.disconnect());
+      }
+    }
 
     let imageryLoaded = false;
     map.on('sourcedata', (e) => {
@@ -756,6 +768,15 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
       // about 30 frames a second is smooth here and leaves the renderer headroom;
       // a whole computed hour is always drawn at once
       if (now - lastDraw.current < 30 && Math.abs(at - Math.round(at)) > 1e-6) {
+        // between full redraws the ships - and a following camera - still move on every frame,
+        // so their motion is smooth; the heavier layers keep the gentler rate
+        const S = shipsAt(timeline, at);
+        placeShips(map, S.ships, { el, mapRef, markers, envLabels, envLoaded, bbox, cache: cache.current, areas, areaLabels,
+          selected, popup, popBody, select });
+        if (followRef.current && !map.isMoving()) {
+          const s0 = S.ships.find((x) => x.lead) ?? S.lastSeen.find((x) => x.key === leadKey);
+          if (s0) map.jumpTo({ center: [s0.lon, s0.lat] });
+        }
         raf.current = requestAnimationFrame(run);
         return;
       }

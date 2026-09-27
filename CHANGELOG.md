@@ -57,3 +57,5 @@ Filtering, and every tag's dot a quiet grey.
 **The map legend, tidied** - centred chips, evenly spaced items, no footnotes, capitalised labels.
 
 **The Conclusion Graph's cards, formatted** - larger stage names, every description exactly two lines.
+
+**The Replay Map, smoother** - ships glide every frame; matching bottom-left controls; the attribution starts as its i.
