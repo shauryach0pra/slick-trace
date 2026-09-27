@@ -53,3 +53,5 @@ Filtering, and every tag's dot a quiet grey.
 **The Conclusion Graph's cards, one size** - one-line headlines, two-line plain descriptions, no hover tooltip.
 
 **A follow button on the Replay Map** - zooms to the leading candidate and keeps it centred through the replay.
+
+**The map legend, tidied** - centred chips, evenly spaced items, no footnotes, capitalised labels.

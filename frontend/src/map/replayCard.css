@@ -74,3 +74,9 @@
 .lgx-panel p { margin: 10px 0 0; font-size: var(--font-size-xxs); color: var(--label-3); }
 @keyframes lgx-in { from { opacity: 0; translate: 0 -4px; } }
 @media (prefers-reduced-motion: reduce) { .lgx-panel { animation: none; } }
+
+/* the legend: its four chips centred, and each group's items flowing with one even gap between
+   every pair (not fixed-width columns), centred - so a short group like Oil sits on one line */
+.lgx-chips { justify-content: center; }
+.lgx-panel ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; }
+.lgx-panel li { white-space: nowrap; }

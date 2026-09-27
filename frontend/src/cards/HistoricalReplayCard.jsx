@@ -245,7 +245,7 @@ function MapLegend({ leadKey }) {
       [<i key="i" className="lg-ship is-inside" />, 'inside the origin envelope'],
       ...(leadKey ? [[<i key="l" className="lg-ship is-lead" />, 'leading candidate']] : []),
       [<i key="g" className="lg-gap" />, 'AIS gap or projected track'],
-    ], note: 'Symbols by AIS ship type (synthetic static data), not to scale.' },
+    ] },
     { key: 'oil', name: 'Oil', icon: <i className="lg-oil" />, entries: [
       [<i key="s" className="lg-slick" />, 'observed slick'],
       [<i key="o" className="lg-oil" />, 'modelled oil'],
@@ -256,7 +256,7 @@ function MapLegend({ leadKey }) {
       [<i key="e" className="lg-env" />, 'origin envelope, 50 / 75 / 90%'],
       [<i key="f" className="lg-area is-fishery" />, 'fishing ground'],
       [<i key="m" className="lg-area" />, 'mangrove fringe'],
-    ], note: 'Sensitive areas are synthetic and appear after the image.' },
+    ] },
     { key: 'model', name: 'Model', icon: <i className="lg-fan" />, entries: [
       [<i key="d" className="lg-fan" />, 'ensemble drift: the six forcing variants forward replay scored'],
       [<i key="c" className="lg-forcing" />, 'forcing: one uniform current'],
@@ -266,7 +266,6 @@ function MapLegend({ leadKey }) {
   return (
     <div className="lgx">
       <div className="lgx-chips" role="group" aria-label="Map legend">
-        <span className="lgx-title">Legend</span>
         {groups.map((x) => (
           <button key={x.key} type="button" className={`lgx-chip${open === x.key ? ' is-on' : ''}`} aria-expanded={open === x.key}
                   onClick={() => setOpen(open === x.key ? null : x.key)}>
@@ -276,7 +275,7 @@ function MapLegend({ leadKey }) {
       </div>
       {g && (
         <div className="lgx-panel" key={g.key}>
-          <ul>{g.entries.map(([icon, label]) => <li key={label}>{icon}<span>{label}</span></li>)}</ul>
+          <ul>{g.entries.map(([icon, label]) => <li key={label}>{icon}<span>{label.charAt(0).toUpperCase() + label.slice(1)}</span></li>)}</ul>
           {g.note && <p>{g.note}</p>}
         </div>
       )}
