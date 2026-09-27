@@ -61,3 +61,5 @@ Filtering, and every tag's dot a quiet grey.
 **The Replay Map, smoother** - ships glide every frame; matching bottom-left controls; the attribution starts as its i.
 
 **The time bar and legend, redesigned** - an Apple-style video-player bar, and legend popovers under their chips.
+
+**The Conclusion Graph's descriptions run to the card's edge** - three reworded to fill their first line.

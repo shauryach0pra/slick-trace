@@ -47,7 +47,8 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
     id: 'detection', title: 'Detection', state: detection.detected ? 'done' : 'abstain',
     value: detection.detected ? `${Math.round(detection.geometry.area_km2)} km² slick found` : 'No slick detected',
     detail: detection.detected
-      ? `${detection.n_regions} dark region${detection.n_regions === 1 ? '' : 's'}, outlined by the classical baseline detector`
+      ? (detection.n_regions === 1 ? 'A single dark region, found by the classical detector'
+        : `${detection.n_regions} dark regions, found by the classical detector`)
       : 'The detector found no dark region that looks like oil',
   });
   stages.push(!counts ? { id: 'filtering', title: 'Historical filtering', state: 'pending' } : {
@@ -61,7 +62,7 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
     value: unknown ? 'No fit above the gate' : `${top?.vessel_key} fits best`,
     detail: unknown ? `Best mean IoU ${f2(top?.mean_iou)}, below the ${attribution.abstention_iou_gate} gate`
       : tied ? `Mean IoU ${f3(top?.mean_iou)}, too close to the runner-up to separate`
-        : `Mean IoU ${f3(top?.mean_iou)}, best in ${top?.ensemble_win_count} of ${top?.n_ensemble} forcing variants`,
+        : `Mean IoU ${f3(top?.mean_iou)}, the best in ${top?.ensemble_win_count} of ${top?.n_ensemble} forcing variants`,
   };
   if (nearest) {
     replay.branches = [{
@@ -87,7 +88,7 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
     id: 'finding', title: 'Finding', final: true, state: unknown ? 'abstain' : 'done',
     value: unknown ? 'No vessel named' : `${attribution.top_candidate_id} is the lead`,
     detail: unknown ? 'Declining is the output: the source may not be in the data'
-      : tied ? 'A weak lead: too close to the runner-up to rank'
+      : tied ? 'Only a weak lead: too close to the runner-up to rank'
         : 'A lead for an analyst to check, not proof of responsibility',
   });
   // what each stage summarises in the evidence column
