@@ -476,7 +476,9 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
   useEffect(() => { tlRef.current = timeline; }, [timeline]);
   const slickRef = useRef(slickInfo);
   useEffect(() => { slickRef.current = slickInfo; }, [slickInfo]);
-  const [hidden, setHidden] = useState({});
+  // the ensemble drift (the six forcing variants' release points) starts off - a modelling detail that
+  // crowds the lead ship; it stays in the Layers menu
+  const [hidden, setHidden] = useState({ fan: true });
   // the camera can follow the leading candidate through the replay; dragging the map hands control back
   const [follow, setFollow] = useState(false);
   const followRef = useRef(false);

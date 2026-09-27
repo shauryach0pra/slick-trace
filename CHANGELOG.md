@@ -67,3 +67,5 @@ Filtering, and every tag's dot a quiet grey.
 **Gauge text centred; a steady two-line fragility readout; an Apple-style stepped slider.**
 
 **The Replay Map's key moments and lead** - slower moments, glass moment pills, a yellow release mark, a clearer lead.
+
+**Ensemble drift starts off; the slider's state pill is removed.**

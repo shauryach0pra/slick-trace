@@ -29,8 +29,6 @@ export default function TimeScrubber({ t, pos, onChange, min, max, playing, onPl
   const when = new Date(new Date(acquiredUtc).getTime() + t * 3600e3);
   const rel = t === 0 ? 'image time' : `${t > 0 ? '+' : '−'}${Math.abs(t)} h`;
   const phase = t < 0 ? 'before' : t === 0 ? 'image' : 'after';
-  const state = t === 0 ? 'Image time'
-    : `Modelled · ${Math.abs(t)} h ${t < 0 ? 'before' : 'after'} the image`;
   const allMarks = [...marks, { t: 0, label: 'image', kind: 'image' }];
 
   return (
@@ -70,7 +68,6 @@ export default function TimeScrubber({ t, pos, onChange, min, max, playing, onPl
         <button type="button" className="scrub-speed" onClick={onSpeed}
                 aria-label={`Playback speed ${speed}x`}>{speed}×</button>
       </div>
-      <div className={`scrub-state is-${phase}`}>{state}</div>
     </div>
   );
 }
