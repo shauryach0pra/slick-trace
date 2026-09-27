@@ -229,11 +229,13 @@ function vesselCard(key, P, S, tau) {
     return null;                                    // no report at this hour: nothing to point at
   }
   const when = hhmm(P.acq + tau * 3600e3);
-  const row = (k, val) => `<div class="rpop-row"><span>${k}</span><span>${val}</span></div>`;
+  // every value starts with a capital, as the labels do
+  const cap = (t) => (/^[a-z]/.test(t) ? t.charAt(0).toUpperCase() + t.slice(1) : t);
+  const row = (k, val) => `<div class="rpop-row"><span>${k}</span><span>${cap(val)}</span></div>`;
   const rank = inf.replayRank ? `#${inf.replayRank} of ${inf.replayOf} · mean IoU ${inf.iou.toFixed(3)}` : 'not replayed (not a candidate)';
   const html = `<div class="rpop-head">${glyph(v?.type)}<div><div class="rpop-key">${esc(key)}</div>`
-    + `<div class="rpop-type">${type ? `${esc(type)} · AIS static data (synthetic)` : 'type not reported'}</div></div>`
-    + `${v?.lead ? '<span class="rpop-lead">leading candidate</span>' : ''}</div>`
+    + `<div class="rpop-type">${type ? `${esc(cap(type))} · AIS static data` : 'Type not reported'}</div></div>`
+    + `${v?.lead ? '<span class="rpop-lead">Leading candidate</span>' : ''}</div>`
     + row(`At ${when} UTC`, esc(now))
     + row('Position', `${pos[1].toFixed(4)}° N, ${pos[0].toFixed(4)}° E`)
     + (ship?.sog != null && ship.state !== 'projected' ? row('Reported', `${ship.sog} kn, course ${Math.round(ship.cog)}°`) : '')

@@ -27,3 +27,5 @@ worded as a complete thought; Forward Exposure's chips are gone, its tag carries
 **Case Finding's evidence, one line per fact** - shorter wording, every number kept.
 
 **The Conclusion Graph's outline stays crisp** - its edge fades no longer spill over the card's edge.
+
+**The ship popup's wording tidied** - capitalised values, no "(synthetic)", a "Leading candidate" pill with a dot.

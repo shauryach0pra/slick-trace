@@ -381,3 +381,9 @@
 .rfloat.is-below .rfloat-arrow { box-shadow: -0.5px -0.5px 0 var(--separator-strong); }
 .rfloat-close { background: var(--fill-pressed); color: var(--label-2); }
 .rfloat-close:hover { background: var(--fill-hover); }
+
+/* the popup's "Leading candidate" pill, styled like the card tags: the neutral pill with a dot */
+.rpop-lead { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: 999px;
+             background: var(--fill-hover); box-shadow: none; color: var(--label-2);
+             font-size: var(--font-size-xs); font-weight: var(--font-weight-medium); white-space: nowrap; }
+.rpop-lead::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
