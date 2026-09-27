@@ -23,3 +23,5 @@ row's number rising from 0 alongside - when the dots come on screen.
 worded as a complete thought; Forward Exposure's chips are gone, its tag carries the caveat.
 
 **Traffic Filtering's last row is labelled just "Named".**
+
+**Case Finding's evidence, one line per fact** - shorter wording, every number kept.

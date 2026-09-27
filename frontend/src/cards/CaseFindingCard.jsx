@@ -30,19 +30,19 @@ export default function CaseFindingCard({ attribution, baseline, vessels }) {
 
   // the evidence, one row each: kind is 'for' (a check), 'against' (a cross) or 'caution'
   const rows = unknown ? [
-    { kind: 'caution', text: <>The best fit reaches <b>{fit.toFixed(2)}</b>, short of the <b>{gate}</b> gate by <b>{(gate - fit).toFixed(2)}</b></> },
-    { kind: 'caution', text: <>None of the <b>{nCandidates}</b> replayed candidates recreates the slick well enough</> },
-    runnerUp && { kind: 'caution', text: <>The next-best candidate fits at only <b>{runnerUp.mean_iou.toFixed(2)}</b></> },
-    nearest && { kind: 'against', text: <>The nearest vessel, <b className="mono">{nearest.vessel_key}</b>, {km} km away, isn’t named either</> },
+    { kind: 'caution', text: <>Best fit <b>{fit.toFixed(2)}</b>, <b>{(gate - fit).toFixed(2)}</b> short of the <b>{gate}</b> gate</> },
+    { kind: 'caution', text: <>None of <b>{nCandidates}</b> candidates recreates the slick</> },
+    runnerUp && { kind: 'caution', text: <>Next best fits at only <b>{runnerUp.mean_iou.toFixed(2)}</b></> },
+    nearest && { kind: 'against', text: <>Nearest vessel <b className="mono">{nearest.vessel_key}</b> ({km} km) not named</> },
   ] : [
     { kind: 'for', text: <>Best fit under <b>{wins} of {nVar}</b> forcing variants</> },
     disc && (disc.discriminated === false
-      ? { kind: 'caution', text: <>Close to the runner-up: loss gap <b>{disc.loss_gap}</b>, within {disc.tolerance}</> }
-      : { kind: 'for', text: <>Clearly ahead of the runner-up, with a loss gap of <b>{disc.loss_gap}</b></> }),
-    topVessel?.first_entry_hours_before != null && { kind: 'for', text: <>Inside the origin area <b>{topVessel.first_entry_hours_before} h</b> before the image</> },
+      ? { kind: 'caution', text: <>Near-tie with the runner-up: gap <b>{disc.loss_gap}</b></> }
+      : { kind: 'for', text: <>Leads the runner-up by a <b>{disc.loss_gap}</b> loss gap</> }),
+    topVessel?.first_entry_hours_before != null && { kind: 'for', text: <>In the origin area <b>{topVessel.first_entry_hours_before} h</b> before the image</> },
     nearest && (differs
-      ? { kind: 'against', text: <>The nearest vessel, <b className="mono">{nearest.vessel_key}</b>, {km} km away, isn’t supported</> }
-      : { kind: 'for', text: <>It is also the nearest vessel, {km} km away</> }),
+      ? { kind: 'against', text: <>Nearest vessel <b className="mono">{nearest.vessel_key}</b> ({km} km) ruled out</> }
+      : { kind: 'for', text: <>Also the nearest vessel ({km} km)</> }),
   ];
 
   return (
