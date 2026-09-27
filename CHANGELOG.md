@@ -21,3 +21,5 @@ row's number rising from 0 alongside - when the dots come on screen.
 
 **Tags unified and self-explanatory.** Every card tag is the neutral pill with a meaning-coloured dot,
 worded as a complete thought; Forward Exposure's chips are gone, its tag carries the caveat.
+
+**Traffic Filtering's last row is labelled just "Named".**

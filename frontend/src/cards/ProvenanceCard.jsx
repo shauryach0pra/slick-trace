@@ -31,7 +31,7 @@ export default function ProvenanceCard({ meta, report, attribution }) {
     { k: 'scene', label: 'In the scene', n: total },
     { k: 'kept', label: 'Kept by the origin area', n: counts.candidate ?? 0 },
     { k: 'replayed', label: 'Replayed', n: replayed },
-    ...(named != null ? [{ k: 'named', label: named ? 'Named' : 'Named — system abstains', n: named }] : []),
+    ...(named != null ? [{ k: 'named', label: 'Named', n: named }] : []),
   ];
   // one dot per vessel at each stage: candidates first, then excluded, then unassessed
   const nc = counts.candidate ?? 0, ne = counts.excluded ?? 0, nu = counts.unassessed ?? 0;
