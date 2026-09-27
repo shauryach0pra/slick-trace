@@ -63,3 +63,5 @@ Filtering, and every tag's dot a quiet grey.
 **The time bar and legend, redesigned** - an Apple-style video-player bar, and legend popovers under their chips.
 
 **The Conclusion Graph's descriptions run to the card's edge** - three reworded to fill their first line.
+
+**Gauge text centred; a steady two-line fragility readout; an Apple-style stepped slider.**

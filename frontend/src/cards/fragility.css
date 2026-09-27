@@ -199,3 +199,31 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 .whatif-foot { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* on unusually narrow windows a long caption wraps rather than hiding part of the finding */
 @media (max-width: 1360px) { .whatif-foot { white-space: normal; overflow: visible; } }
+
+/* ---- the dot grid's readout: always exactly two short lines, centred under the grid, in a box of
+   fixed height - so hovering never moves anything ---- */
+.fr-matrix-wrap .fr-readout { display: block; min-height: 0; height: calc(2 * 1.4em); line-height: 1.4; text-align: center; }
+.fr-readout .fr-ro-a, .fr-readout .fr-ro-b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fr-readout .fr-ro-a { color: var(--label-1); }
+.fr-readout .fr-ro-b { color: var(--label-2); }
+.fr-readout .fr-ro-b b { color: var(--label-1); font-weight: var(--font-weight-semibold); }
+
+/* ---- Explore one setting's slider, Apple style: a thin rounded rail, a small dot at each tested
+   value (blue where the lead holds, orange where it flips, a ring for the as-tested value), and the
+   picked value as a white thumb with a soft shadow and a coloured centre ---- */
+.fr-ex-group .fr-track { margin-top: 10px; padding-bottom: 4px; }
+.fr-ex-group .fr-track-line { padding: 0 4px; }
+.fr-ex-group .fr-track-rail { left: 30px; right: 30px; top: 9px; height: 4px; border-radius: 2px; background: var(--fill-pressed); }
+.fr-ex-group .fr-stop { gap: 7px; }
+.fr-ex-group .fr-stop i { --c: var(--accent); width: 22px; height: 22px; border-radius: 50%; box-shadow: none;
+  background: radial-gradient(circle, var(--c) 0 4.5px, transparent 5px); transition: transform 180ms var(--ease-spring), background 180ms ease; }
+.fr-ex-group .fr-stop.is-flip i { --c: var(--status-orange); }
+.fr-ex-group .fr-stop.is-nominal i { background: radial-gradient(circle, transparent 0 3px, var(--label-2) 3.5px 5px, transparent 5.5px); }
+.fr-ex-group button.fr-stop:hover i { transform: scale(1.3); }
+.fr-ex-group .fr-stop.is-sel i, .fr-ex-group button.fr-stop.is-sel:hover i { transform: none;
+  background: radial-gradient(circle, var(--c) 0 4px, #fff 4.5px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(0, 0, 0, 0.12); }
+.fr-ex-group .fr-stop span { font-size: 11px; color: var(--label-3); }
+.fr-ex-group .fr-stop.is-nominal span { color: var(--label-2); font-weight: var(--font-weight-medium); }
+.fr-ex-group .fr-stop.is-sel span { color: var(--label-1); font-weight: 700; }
+.fr-ex-group button.fr-stop:focus-visible i { box-shadow: 0 0 0 3px var(--accent-ring, rgba(10, 132, 255, 0.4)); }

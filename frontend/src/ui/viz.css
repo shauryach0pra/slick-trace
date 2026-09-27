@@ -33,3 +33,7 @@
 .fitg.is-compact .fitg-num { font-size: 17px; }
 .fitg.is-compact .fitg-label { font-size: 8px; }
 .fitg.is-compact .fitg-arc, .fitg.is-compact .fitg-track { stroke-width: 11; }
+/* the gauge's number and label centred by their visible letters: letter-spacing is added after the
+   last letter too, which shifts tracked text off its centre - cancel that trailing space */
+.fitg-label { margin-right: -0.06em; }
+.fitg-num { margin-right: 0.02em; }

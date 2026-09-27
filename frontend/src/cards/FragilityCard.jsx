@@ -110,8 +110,19 @@ function FlipMatrix({ fragility, label }) {
   const [hover, setHover] = useState(null);
   const pts = [...(fragility.grid ?? [])].sort((x, y) => x.magnitude - y.magnitude || x.point_id.localeCompare(y.point_id));
   const firstId = fragility.smallest_flip?.point_id;
-  const describe = (pt) => `${Object.entries(pt.changed_axes).map(([k, v]) => `${label(k)} ${v}`).join(', ')} · `
-    + `${pt.flipped ? `${pt.top_candidate} leads` : 'leader held'} · magnitude ${pt.magnitude}`;
+  // the grid readout is always two short lines: what changed, then what happened
+  const TINY = { current_u_bias: 'along-shore', current_v_bias: 'cross-shore', diffusivity_scale: 'spreading',
+                 mask_threshold: 'footprint', duration_shift_h: 'duration' };
+  const val = (k, v) => `${v < 0 ? '−' : ''}${Math.abs(v)}${k === 'duration_shift_h' ? ' h' : ''}`;
+  const describe = (pt, plain = false) => {
+    const ch = Object.entries(pt.changed_axes);
+    const what = ch.length === 1 ? `${SHORT[ch[0][0]] ?? label(ch[0][0])} ${val(...ch[0])}`
+      : ch.map(([k, v]) => `${TINY[k] ?? k} ${val(k, v)}`).join(' + ').replace(/^./, (c) => c.toUpperCase());
+    const mag = Number(pt.magnitude).toFixed(2);
+    if (plain) return `${what}. ${pt.flipped ? `${pt.top_candidate} leads` : 'Lead held'}, magnitude ${mag}`;
+    return (<><span className="fr-ro-a">{what}</span>
+      <span className="fr-ro-b">{pt.flipped ? <><b className="mono">{pt.top_candidate}</b> leads</> : 'Lead held'} · magnitude {mag}</span></>);
+  };
   // the readout always describes a dot: the first (the smallest change) until another is hovered
   const shown = hover ?? pts[0] ?? null;
   return (
@@ -119,7 +130,7 @@ function FlipMatrix({ fragility, label }) {
       <div className="fr-matrix" role="list" aria-label={`${pts.length} tested changes, smallest first`}
            onMouseLeave={() => setHover(null)}>
         {pts.map((pt, i) => (
-          <span key={pt.point_id} role="listitem" tabIndex={0} aria-label={describe(pt)}
+          <span key={pt.point_id} role="listitem" tabIndex={0} aria-label={describe(pt, true)}
                 className={`fr-dot${pt.flipped ? ' is-flip' : ''}${pt.point_id === firstId ? ' is-first' : ''}${shown && pt.point_id === shown.point_id ? ' is-shown' : ''}`}
                 style={{ '--i': i }} onMouseEnter={() => setHover(pt)} onFocus={() => setHover(pt)} onBlur={() => setHover(null)} />
         ))}
