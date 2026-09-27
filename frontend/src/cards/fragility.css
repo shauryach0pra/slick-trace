@@ -160,3 +160,25 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 @keyframes fr-result-in { from { opacity: 0.35; } }
 @media (max-width: 900px) { .fr-result { grid-template-columns: auto minmax(0, 1fr); } .fr-result-figs { grid-column: 2; } }
 @media (prefers-reduced-motion: reduce) { .fr-result-say, .fr-result-figs b { animation: none; } }
+
+/* ---- Explore one setting as one grouped panel, like a macOS Settings group: the tabs, the slider
+   and a slim result row, on one soft surface; the chosen value shows on the slider itself */
+.fr-ex-group { margin-top: 10px; padding: 6px 6px 0; border-radius: 16px; background: var(--fill-hover); }
+.fr-ex-group .fr-tabs { margin: 0; }
+.fr-ex-head { margin: 14px 14px 2px; }
+.fr-ex-name { font-size: var(--font-size-xs); color: var(--label-3); }
+.fr-ex-name small { font-size: inherit; }
+.fr-ex-value { display: none; }
+.fr-ex-group .fr-track { padding: 0 14px; }
+.fr-ex-group .fr-result { display: flex; align-items: center; gap: 10px; margin: 10px -6px 0; padding: 11px 20px 12px;
+                          border-radius: 0 0 16px 16px; background: none; box-shadow: inset 0 0.5px 0 var(--separator); }
+.fr-ex-group .fr-result-sym { flex: none; width: 18px; height: 18px; }
+.fr-ex-group .fr-result-sym svg { width: 11px; height: 11px; stroke-width: 2.4; }
+.fr-ex-group .fr-result-line { flex: 1; min-width: 0; font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fr-ex-group .fr-result-sub { font-weight: 400; color: var(--label-2); }
+.fr-ex-group .fr-result-figs { flex: none; display: flex; align-items: baseline; gap: 6px; }
+.fr-ex-group .fr-result-figs em { font-style: normal; font-size: var(--font-size-xxs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--label-3); }
+.fr-ex-group .fr-result-figs b { font-family: var(--font-display); font-size: var(--font-size-sm); font-weight: 600; color: var(--label-1); font-variant-numeric: tabular-nums; margin-right: 10px; }
+.fr-ex-group .fr-result-figs b:last-child { margin-right: 0; }
+/* the picked value, under its stop, is the one to read */
+.fr-ex-group .fr-stop.is-sel span { color: var(--label-1); font-weight: 700; }

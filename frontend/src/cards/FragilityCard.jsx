@@ -73,16 +73,18 @@ export default function FragilityCard({ fragility, attribution }) {
 
       <div className="fr-explore">
         <span className="fr-explore-label">Explore one setting</span>
+        <div className="fr-ex-group">
         <div className="fr-tabs" role="tablist" aria-label="Assumption to explore">
           {AXIS_ORDER.filter((x) => fragility.axes[x]).map((x) => (
             <button key={x} type="button" role="tab" aria-selected={axis === x} className={`fr-tab${axis === x ? ' is-on' : ''}`}
                     onClick={() => { setAxis(x); setPointId(null); }}>{SHORT[x] ?? label(x)}</button>
           ))}
         </div>
-        <ExploreHead axis={axis} label={label} value={selected ? selected.changed_axes[axis] : null} />
+        <ExploreHead axis={axis} label={label} />
         <AxisTrack axis={axis} fragility={fragility} label={label} selected={pointId}
                    onPick={(pt) => setPointId(pointId === pt.point_id ? null : pt.point_id)} />
         <ExploreResult key={selected?.point_id ?? 'as-tested'} fragility={fragility} attribution={attribution} selected={selected} />
+        </div>
       </div>
 
       <HowMeasured>
@@ -215,16 +217,14 @@ function AxisTrack({ axis, fragility, label, mark = null, selected = null, onPic
   );
 }
 
-/** The setting being explored and its chosen value - "Along-shore current bias  -0.03 m/s". */
-function ExploreHead({ axis, label, value }) {
+/** The setting being explored, named small and quiet; its chosen value shows on the slider itself. */
+function ExploreHead({ axis, label }) {
   const full = label(axis);
-  const m = full.match(/^(.*?)\s*\(([^)]+)\)\s*$/);          // "along-shore current bias (m/s)"
-  const name = m ? m[1] : full, unit = m ? m[2] : '';
-  const shown = value == null ? null : `${value < 0 ? '−' : ''}${Math.abs(value)}`;
+  const name = full.replace(/\s*\([^)]*\)\s*$/, '');           // "along-shore current bias (m/s)" -> name
+  const unit = (full.match(/\(([^)]+)\)\s*$/) ?? [])[1];
   return (
     <div className="fr-ex-head">
-      <span className="fr-ex-name">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
-      <span className="fr-ex-value">{shown == null ? 'As tested' : <>{shown}{unit && <small> {unit}</small>}</>}</span>
+      <span className="fr-ex-name">{name.charAt(0).toUpperCase() + name.slice(1)}{unit ? <small> · {unit}</small> : null}</span>
     </div>
   );
 }
@@ -237,7 +237,7 @@ function ExploreResult({ fragility, attribution, selected }) {
     state = unknown ? 'neutral' : 'held';
     lead = unknown ? null : fragility.baseline_top;
     say = unknown ? 'No vessel is named as tested' : 'leads as tested';
-    sub = 'Pick a tested value to see who leads under it.';
+    sub = 'Pick a value to try it.';
     iou = attribution?.ranking?.[0]?.mean_iou;
     margin = attribution?.discrimination?.loss_gap;
   } else if (unknown) {
@@ -263,14 +263,14 @@ function ExploreResult({ fragility, attribution, selected }) {
       <span className="fr-result-sym" aria-hidden="true">
         <svg viewBox="0 0 16 16">{state === 'flip' ? <path d="M8 4.4v4.6M8 11.4v.1" /> : state === 'held' ? <path d="M4.6 8.3l2.2 2.2 4.6-4.9" /> : <path d="M4.8 8h6.4" />}</svg>
       </span>
-      <div className="fr-result-say">
-        <span className="fr-result-line">{lead && <b className="mono">{lead}</b>}{lead ? ' ' : ''}{say}</span>
-        <span className="fr-result-sub">{sub}</span>
-      </div>
-      <div className="fr-result-figs">
-        <div><em>Mean IoU</em><b>{iou != null ? Number(iou).toFixed(3) : '—'}</b></div>
-        <div><em>Margin</em><b>{margin != null ? margin : '—'}</b></div>
-      </div>
+      <span className="fr-result-line">
+        {lead && <b className="mono">{lead}</b>}{lead ? ' ' : ''}{say}
+        <span className="fr-result-sub"> — {sub.charAt(0).toLowerCase() + sub.slice(1).replace(/\.$/, '')}</span>
+      </span>
+      <span className="fr-result-figs">
+        <em>Mean IoU</em><b>{iou != null ? Number(iou).toFixed(3) : '—'}</b>
+        <em>Margin</em><b>{margin != null ? margin : '—'}</b>
+      </span>
     </div>
   );
 }
