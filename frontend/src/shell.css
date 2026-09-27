@@ -850,3 +850,8 @@
 .rpop-lead::before { background: var(--label-3); }
 /* on narrow windows, the half-width cards' titles are a touch smaller, so they hold at two lines */
 @media (max-width: 1360px) { .finder-features .card-row .panel-head h2 { font-size: 14px; } }
+
+/* the two half-width cards stand the same height, their "How this is measured" lines level */
+.finder-features .card-row { align-items: stretch; }
+.finder-features .card-row > .panel { display: flex; flex-direction: column; }
+.finder-features .card-row > .panel > .howto { margin-top: auto; }

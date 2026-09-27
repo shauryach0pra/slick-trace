@@ -43,3 +43,5 @@ Filtering, and every tag's dot a quiet grey.
 **Explore one setting as one grouped panel** - tabs, slider and a one-line result together; no big value.
 
 **The smallest flip is part of its column** - a hairline, a grey label and a neutral tag, no box.
+
+**The half-width cards, matched** - both tagged Synthetic data, four chips, equal heights.
