@@ -31,3 +31,6 @@ worded as a complete thought; Forward Exposure's chips are gone, its tag carries
 **The ship popup's wording tidied** - capitalised values, no "(synthetic)", a "Leading candidate" pill with a dot.
 
 **Capitals and consistent tags at the top** - the popover's values capitalised; top-bar tags as neutral pills with a dot.
+
+**Explore one setting, redesigned.** The setting and its value as a heading, and one result panel
+stating the outcome with Mean IoU and Margin beside it - opening on the as-tested result.

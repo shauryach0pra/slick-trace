@@ -79,13 +79,10 @@ export default function FragilityCard({ fragility, attribution }) {
                     onClick={() => { setAxis(x); setPointId(null); }}>{SHORT[x] ?? label(x)}</button>
           ))}
         </div>
+        <ExploreHead axis={axis} label={label} value={selected ? selected.changed_axes[axis] : null} />
         <AxisTrack axis={axis} fragility={fragility} label={label} selected={pointId}
                    onPick={(pt) => setPointId(pointId === pt.point_id ? null : pt.point_id)} />
-        <p className={`fr-selected${selected ? ' is-on' : ''}`}>
-          {selected ? <><b className="mono">{selected.top_candidate}</b> leads{selected.flipped ? ' — a different vessel' : ' — the same leader'}
-            {' '}· IoU {selected.top_iou.toFixed(3)}{selected.loss_margin != null ? ` · margin ${selected.loss_margin}` : ''}</>
-            : 'Tap a tested value to see who leads under it.'}
-        </p>
+        <ExploreResult key={selected?.point_id ?? 'as-tested'} fragility={fragility} attribution={attribution} selected={selected} />
       </div>
 
       <HowMeasured>
@@ -218,3 +215,62 @@ function AxisTrack({ axis, fragility, label, mark = null, selected = null, onPic
   );
 }
 
+/** The setting being explored and its chosen value - "Along-shore current bias  -0.03 m/s". */
+function ExploreHead({ axis, label, value }) {
+  const full = label(axis);
+  const m = full.match(/^(.*?)\s*\(([^)]+)\)\s*$/);          // "along-shore current bias (m/s)"
+  const name = m ? m[1] : full, unit = m ? m[2] : '';
+  const shown = value == null ? null : `${value < 0 ? '−' : ''}${Math.abs(value)}`;
+  return (
+    <div className="fr-ex-head">
+      <span className="fr-ex-name">{name.charAt(0).toUpperCase() + name.slice(1)}</span>
+      <span className="fr-ex-value">{shown == null ? 'As tested' : <>{shown}{unit && <small> {unit}</small>}</>}</span>
+    </div>
+  );
+}
+
+/** What happens under the chosen value, stated plainly, with its two figures beside it. */
+function ExploreResult({ fragility, attribution, selected }) {
+  const unknown = fragility.baseline_unknown_source;
+  let state, lead, say, sub, iou, margin;
+  if (!selected) {
+    state = unknown ? 'neutral' : 'held';
+    lead = unknown ? null : fragility.baseline_top;
+    say = unknown ? 'No vessel is named as tested' : 'leads as tested';
+    sub = 'Pick a tested value to see who leads under it.';
+    iou = attribution?.ranking?.[0]?.mean_iou;
+    margin = attribution?.discrimination?.loss_gap;
+  } else if (unknown) {
+    // an abstention: the best fit is not a leader - say whether this setting would clear the gate
+    const gate = attribution?.abstention_iou_gate;
+    const clears = gate != null && selected.top_iou >= gate;
+    state = clears ? 'flip' : 'neutral';
+    lead = selected.top_candidate;
+    say = 'fits best';
+    sub = clears ? `Under this setting it would clear the ${gate} gate.` : `Still below the ${gate} gate, so no vessel is named.`;
+    iou = selected.top_iou;
+    margin = selected.loss_margin;
+  } else {
+    state = selected.flipped ? 'flip' : 'held';
+    lead = selected.top_candidate;
+    say = selected.flipped ? 'takes the lead' : 'still leads';
+    sub = selected.flipped ? 'The leader changes under this setting.' : 'The same leader holds under this setting.';
+    iou = selected.top_iou;
+    margin = selected.loss_margin;
+  }
+  return (
+    <div className={`fr-result is-${state}`} aria-live="polite">
+      <span className="fr-result-sym" aria-hidden="true">
+        <svg viewBox="0 0 16 16">{state === 'flip' ? <path d="M8 4.4v4.6M8 11.4v.1" /> : state === 'held' ? <path d="M4.6 8.3l2.2 2.2 4.6-4.9" /> : <path d="M4.8 8h6.4" />}</svg>
+      </span>
+      <div className="fr-result-say">
+        <span className="fr-result-line">{lead && <b className="mono">{lead}</b>}{lead ? ' ' : ''}{say}</span>
+        <span className="fr-result-sub">{sub}</span>
+      </div>
+      <div className="fr-result-figs">
+        <div><em>Mean IoU</em><b>{iou != null ? Number(iou).toFixed(3) : '—'}</b></div>
+        <div><em>Margin</em><b>{margin != null ? margin : '—'}</b></div>
+      </div>
+    </div>
+  );
+}

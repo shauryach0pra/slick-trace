@@ -131,3 +131,32 @@ button.fr-stop:focus-visible { outline: none; } button.fr-stop:focus-visible i {
 .fr-matrix-wrap .fr-readout { min-height: calc(3 * 1.35em); display: flex; align-items: flex-end; }
 /* the dot being described is shown enlarged, as on hover */
 .fr-dot.is-shown { transform: scale(1.35); }
+
+/* ---- Explore one setting, the Apple way: the setting and its value as a heading line, the track
+   of tested values, and one result panel that states the outcome with its figures beside it */
+.fr-explore .fr-track-name { display: none; }                 /* the heading line names it */
+.fr-ex-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 16px 0 6px; }
+.fr-ex-name { font-size: var(--font-size-sm); color: var(--label-2); }
+.fr-ex-value { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; color: var(--label-1); font-variant-numeric: tabular-nums; }
+.fr-ex-value small { font-size: var(--font-size-sm); font-weight: 500; color: var(--label-3); }
+.fr-explore .fr-selected { display: none; }
+.fr-result { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px;
+             margin-top: 14px; padding: 14px 18px; border-radius: 14px; background: var(--fill-pressed); }
+.fr-result-sym { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--label-3); transition: background-color 250ms ease; }
+.fr-result.is-held .fr-result-sym { background: var(--accent); }
+.fr-result.is-flip .fr-result-sym { background: var(--status-orange); }
+.fr-result-sym svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.fr-result-say { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.fr-result-line { font-size: 15px; font-weight: var(--font-weight-semibold); color: var(--label-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fr-result-line b { font-weight: 600; }
+.fr-result.is-flip .fr-result-line b { color: var(--status-orange); }
+.fr-result-sub { font-size: var(--font-size-xs); color: var(--label-2); }
+.fr-result-figs { display: flex; gap: 22px; }
+.fr-result-figs div { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.fr-result-figs em { font-style: normal; font-size: var(--font-size-xxs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--label-3); }
+.fr-result-figs b { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--label-1); font-variant-numeric: tabular-nums; }
+/* the panel settles into each new state */
+.fr-result-say, .fr-result-figs b { animation: fr-result-in 280ms ease both; }
+@keyframes fr-result-in { from { opacity: 0.35; } }
+@media (max-width: 900px) { .fr-result { grid-template-columns: auto minmax(0, 1fr); } .fr-result-figs { grid-column: 2; } }
+@media (prefers-reduced-motion: reduce) { .fr-result-say, .fr-result-figs b { animation: none; } }
