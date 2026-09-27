@@ -55,3 +55,5 @@ Filtering, and every tag's dot a quiet grey.
 **A follow button on the Replay Map** - zooms to the leading candidate and keeps it centred through the replay.
 
 **The map legend, tidied** - centred chips, evenly spaced items, no footnotes, capitalised labels.
+
+**The Conclusion Graph's cards, formatted** - larger stage names, every description exactly two lines.

@@ -73,9 +73,14 @@ function buildStages({ attribution, naive, report, detection, fragility }) {
   stages.push(replay);
   stages.push(!fragility ? { id: 'fragility', title: 'Rank fragility', state: 'pending' } : {
     id: 'fragility', title: 'Rank fragility', state: fragility.flip_found ? 'abstain' : 'done',
-    value: `${unknown ? 'Best fit' : 'Lead'} held in ${Math.round(fragility.lead_retained_fraction * 100)}% of tests`,
+    value: `Held in ${Math.round(fragility.lead_retained_fraction * 100)}% of tests`,
     detail: fragility.flip_found && fragility.smallest_flip
-      ? `The lead flips first at ${Object.entries(fragility.smallest_flip.changed_axes).map(([k, v]) => `${AXIS[k] ?? k.replaceAll('_', ' ')} ${num(v)}`).join(' + ')}`
+      ? (() => {
+        // one change reads as a full sentence (two lines); two changes are listed compactly (also two lines)
+        const ch = Object.entries(fragility.smallest_flip.changed_axes).map(([k, v]) => [AXIS[k] ?? k.replaceAll('_', ' '), num(v)]);
+        return ch.length === 1 ? `The lead first flips when ${ch[0][0]} is set to ${ch[0][1]}`
+          : `The lead flips first at ${ch.map(([n, v]) => `${n} ${v}`).join(' + ')}`;
+      })()
       : `No tested change, of ${fragility.n_points_tested}, moved the leader`,
   });
   stages.push(!attribution ? { id: 'finding', title: 'Finding', state: 'pending', final: true } : {

@@ -159,3 +159,7 @@
 .cgx-node { width: 224px; }
 .cgx-value { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cgx-node .cgx-detail { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; min-height: calc(2 * 1.35em); }
+
+/* a clearer hierarchy: the stage's name at card-title size, the headline a touch larger */
+.cgx-title { font-size: var(--font-size-sm); color: var(--label-1); letter-spacing: 0; }
+.cgx-value { font-size: 16px; font-weight: var(--font-weight-semibold); }
