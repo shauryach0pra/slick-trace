@@ -815,3 +815,5 @@
 .finder-features > .panel, .finder-features > .card-row > .panel, .finder-details > .cg, .finder-details > .panel {
   animation-delay: 0ms;
 }
+/* the Conclusion Graph's card stays still: no tilt, so scrolling inside it stays on the GPU */
+.finder-details > .cg { transform: none; }

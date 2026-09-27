@@ -122,3 +122,17 @@
    an even margin on every side, corners parallel to the card's - instead of the
    text-hugging offsets used for the plain cards */
 .panel.finding.cg-flash::after { inset: -6px; border-radius: calc(var(--radius-xl) + 6px); }
+
+/* ---- a smooth sideways strip ---------------------------------------------------------------
+   Free scrolling that follows the trackpad (no snapping to pull it back), no mask repainted on
+   every frame - the edge fades are drawn over the strip by its window - and the decorative
+   connector animations rest while the strip is being scrolled. */
+.cgx-window { position: relative; }
+.cgx-window::before, .cgx-window::after { content: ""; position: absolute; top: 0; bottom: 0; width: var(--space-5); z-index: 2; pointer-events: none; }
+.cgx-window::before { left: calc(-1 * var(--space-5)); background: linear-gradient(to right, var(--card-bg), transparent); }
+.cgx-window::after { right: calc(-1 * var(--space-5)); background: linear-gradient(to left, var(--card-bg), transparent); }
+.cgx-scroll { scroll-snap-type: none; scroll-behavior: auto; -webkit-mask-image: none; mask-image: none;
+              -webkit-overflow-scrolling: touch; will-change: scroll-position; }
+.cgx-col { scroll-snap-align: none; }
+.cgx-scroll.is-scrolling :is(.cgx-edge-flow, .cgx-edge-base, .cgx-spine-dot) { animation-play-state: paused; }
+.cgx-scroll.is-scrolling .cgx-edge-glow { filter: none; }

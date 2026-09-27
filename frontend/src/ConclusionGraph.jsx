@@ -132,6 +132,19 @@ export default function ConclusionGraph(props) {
   const stages = useMemo(() => buildStages({ attribution, naive, report, detection, fragility }),
                          [attribution, naive, report, detection, fragility]);
   const track = useRef(null);
+  const scrollEnd = useRef(0);
+  const onScroll = useCallback((e) => {
+    const el = e.currentTarget;
+    if (!el.classList.contains('is-scrolling')) {
+      el.classList.add('is-scrolling');
+      el.querySelector('svg.cgx-edges')?.pauseAnimations?.();
+    }
+    clearTimeout(scrollEnd.current);
+    scrollEnd.current = setTimeout(() => {
+      el.classList.remove('is-scrolling');
+      el.querySelector('svg.cgx-edges')?.unpauseAnimations?.();
+    }, 160);
+  }, []);
   const nodes = useRef({});
   const [edges, setEdges] = useState([]);
   const [size, setSize] = useState({ w: 0, h: 0 });
@@ -188,7 +201,8 @@ export default function ConclusionGraph(props) {
       <div className="cg-head">
         <h2>Conclusion Graph</h2>
       </div>
-      <div className="cgx-scroll" tabIndex={0} role="group" style={viewH ? { height: viewH } : undefined}
+      <div className="cgx-window">
+      <div className="cgx-scroll" tabIndex={0} role="group" style={viewH ? { height: viewH } : undefined} onScroll={onScroll}
            aria-label="Pipeline stages, left to right; scroll sideways, and down for the comparison">
         <div className="cgx-track" ref={track} role="list">
           <svg className="cgx-edges" width={size.w} height={size.h} aria-hidden="true">
@@ -219,6 +233,7 @@ export default function ConclusionGraph(props) {
             </div>
           ))}
         </div>
+      </div>
       </div>
       <HowMeasured title="How to read this graph">
         <p>Click a stage to jump to its evidence. Scroll sideways for every stage, and down for the proximity baseline.</p>
