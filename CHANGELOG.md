@@ -51,3 +51,5 @@ Filtering, and every tag's dot a quiet grey.
 **One-line What-if caption; "Traffic and Provenance" on one line, Named regular, chips centred.**
 
 **The Conclusion Graph's cards, one size** - one-line headlines, two-line plain descriptions, no hover tooltip.
+
+**A follow button on the Replay Map** - zooms to the leading candidate and keeps it centred through the replay.

@@ -472,6 +472,24 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
   const slickRef = useRef(slickInfo);
   useEffect(() => { slickRef.current = slickInfo; }, [slickInfo]);
   const [hidden, setHidden] = useState({});
+  // the camera can follow the leading candidate through the replay; dragging the map hands control back
+  const [follow, setFollow] = useState(false);
+  const followRef = useRef(false);
+  const leadKey = timeline?.vessels?.find((v) => v.lead)?.key ?? null;
+  const leadAt = (at) => {
+    if (!timeline || !leadKey) return null;
+    const S = shipsAt(timeline, at);
+    const s = S.ships.find((x) => x.lead) ?? S.lastSeen.find((x) => x.key === leadKey);
+    return s ? [s.lon, s.lat] : null;
+  };
+  const toggleFollow = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (followRef.current) { followRef.current = false; setFollow(false); return; }
+    followRef.current = true; setFollow(true);
+    const c = leadAt(tau);
+    if (c) map.easeTo({ center: c, zoom: Math.min(map.getZoom() + 1.3, 12), duration: 900, essential: true });
+  };
   const [layersOpen, setLayersOpen] = useState(false);
   const envLoaded = useRef({ a: null, b: null });
   const lastTau = useRef(null);
@@ -507,6 +525,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
       attributionControl: false, dragRotate: false, pitchWithRotate: false,
     });
     mapRef.current = map;
+    map.on('dragstart', () => { if (followRef.current) { followRef.current = false; setFollow(false); } });
     map.touchZoomRotate.disableRotation();
     map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
     map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left');
@@ -744,6 +763,10 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
       drawScene(map, timeline, at, lastTau.current, { el, mapRef, markers, envLabels, envLoaded, bbox, cache: cache.current, areas, areaLabels,
         selected, popup, popBody, select });
       lastTau.current = at;
+      if (followRef.current && !map.isMoving()) {      // not while the zoom-in glide is still running
+        const c = leadAt(at);
+        if (c) map.jumpTo({ center: c });
+      }
     };
     raf.current = requestAnimationFrame(run);
     return () => cancelAnimationFrame(raf.current);
@@ -788,6 +811,12 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
           </div>
         )}
       </div>
+      {leadKey && (
+        <button type="button" className={`rmap-follow${follow ? ' is-on' : ''}`} aria-pressed={follow} onClick={toggleFollow}
+                aria-label={follow ? 'Stop following the leading candidate' : 'Follow the leading candidate'}>
+          <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M13.6 2.4 2.6 7.1l4.6 1.8 1.8 4.7 4.6-11.2Z" /></svg>
+        </button>
+      )}
       {Math.abs(tau) < 0.5 && <div className="rmap-acq" aria-hidden="true">Radar image acquired</div>}
     </div>
   );
