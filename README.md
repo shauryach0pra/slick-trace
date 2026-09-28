@@ -208,10 +208,10 @@ docker network connect slick-trace_default slick-trace-slicktrace-1
 
 | Check | Command | Status |
 |-------|---------|--------|
-| Startup check | `python3 scripts/startup_check.py` | pass |
-| Determinism | regenerate, diff analysis artifacts | byte-identical, 9 cases, verified in CI on Ubuntu x86-64 |
-| Test suite | `python3 -m pytest tests/ -q` | 359 passed, 8 skipped |
-| Document claims | `python3 scripts/verify_document_claims.py` | 38 passed, 0 failed |
+| Startup&nbsp;check | `python3 scripts/startup_check.py` | pass |
+| Determinism |   regenerate, diff analysis artifacts | byte-identical, 9 cases, verified in CI on Ubuntu x86-64 |
+| Test&nbsp;suite | `python3 -m pytest tests/ -q` | 359 passed, 8 skipped |
+| Document&nbsp;claims | `python3&nbsp;scripts/verify_document_claims.py` | 38 passed, 0 failed |
 | Validation | `python3 scripts/run_validation.py` | 7/7 attribution (naive 0/7, exact McNemar p = 0.0156), 1/2 abstentions, 3 of 35 leak-audit rules flagged (about 2.8 expected by chance), 47/47 NLP |
 | Acceptance | `python3 scripts/smoke_test.py` | 5/5 |
 | API | 31 API routes and 404 paths | pass, no 500s |
@@ -243,14 +243,14 @@ The path to real data is an adapter, not a rewrite: every pipeline stage reads `
 
 | Layer | Candidate | Effort and caveat |
 |---|---|---|
-| SAR imagery | Zenodo Sentinel-1 oil-spill dataset, Parts I–III | ~96 GB. Part II negatives are essential: its look-alike masks are zero-valued oil masks, not outlines of the look-alike |
-| Ship contacts | `allenai/vessel-detection-sentinels` | Production models from Skylight; would replace the stand-in contact detector behind the coverage metrics |
-| AIS decoding | `pyais` | Message-level only |
+| SAR&nbsp;imagery | Zenodo Sentinel-1 oil-spill dataset, Parts I–III | ~96 GB. Part II negatives are essential: its look-alike masks are zero-valued oil masks, not outlines of the look-alike |
+| Ship&nbsp;contacts | `allenai/vessel-detection-sentinels` | Production models from Skylight; would replace the stand-in contact detector behind the coverage metrics |
+| AIS&nbsp;decoding | `pyais` | Message-level only |
 | AIS tracks | MovingPandas, or AISdb for larger extracts | MovingPandas is in-memory; AISdb adds a database but scales |
 | Transport | OpenDrift / OpenOil | **GPL v2 — would require relicensing this repository from MIT.** See `docs/licence_and_data_rights.md` |
-| Oil properties | NOAA ADIOS (`adios_db`) | Unencumbered. Would replace blind variation of density and windage with measured values |
+| Oil&nbsp;properties | NOAA ADIOS (`adios_db`) | Unencumbered. Would replace blind variation of density and windage with measured values |
 | Shoreline | GSHHG | LGPL library over public-domain data |
-| Protected areas | WDPA via `pywdpa` | Mandatory attribution string in README, report export and interface |
+| Protected&nbsp;areas | WDPA via `pywdpa` | Mandatory attribution string in README, report export and interface |
 | Forcing | Copernicus ERA5 and Marine reanalysis | Accounts and attribution required |
 
 Two things would then need re-establishing rather than assuming: detection metrics against real look-alikes, and the fact that real cases have no source label, so attribution accuracy becomes unmeasurable without independently confirmed incidents.
