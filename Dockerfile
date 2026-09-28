@@ -14,6 +14,9 @@ WORKDIR /app/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 COPY frontend/ ./
+# the Esri basemap key, passed in at build time (Vite builds it into the dashboard); optional
+ARG VITE_ARCGIS_API_KEY=""
+ENV VITE_ARCGIS_API_KEY=$VITE_ARCGIS_API_KEY
 RUN npm run build
 
 # ---- stage 2: runtime -------------------------------------------------------
