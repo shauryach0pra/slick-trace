@@ -1,4 +1,5 @@
-const BASE = '/api';
+// the dashboard's base path (/slicktrace/), so its API calls work at any address it is served from
+const BASE = `${import.meta.env.BASE_URL}api`;
 
 async function j(path, opts) {
   const res = await fetch(BASE + path, opts);

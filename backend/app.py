@@ -44,6 +44,30 @@ DATA_ROOT = os.path.join(REPO_ROOT, "data", "cases")
 
 app = FastAPI(title="Slick Trace API", version="0.2.0")
 
+
+# ------------------------------------------------------------ path prefix --
+# The dashboard is built to live under /slicktrace/, so it can be served both at the root of its own
+# domain and behind a proxy that forwards shauryachopra.dev/slicktrace/* here. A request arriving with
+# the prefix has it removed; a request without it is untouched - so /api/... and /slicktrace/api/...
+# reach the same route.
+URL_PREFIX = "/slicktrace"
+
+
+class _StripPrefix:
+    def __init__(self, app, prefix):
+        self.app, self.prefix = app, prefix
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] in ("http", "websocket"):
+            path = scope.get("path", "")
+            if path == self.prefix or path.startswith(self.prefix + "/"):
+                new = path[len(self.prefix):] or "/"
+                scope = dict(scope, path=new, raw_path=new.encode())
+        await self.app(scope, receive, send)
+
+
+app.add_middleware(_StripPrefix, prefix=URL_PREFIX)
+
 _kb_cache: dict[str, CaseKB] = {}
 _query_log: dict[str, list[dict]] = {}
 
