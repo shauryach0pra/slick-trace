@@ -20,6 +20,11 @@ On nine synthetic cases with known ground truth, forward replay names the true s
 
 ---
 
+### Demo
+
+- Demo Video: [Watch on Youtube](https://www.youtube.com/watch?v=oEyRfSFHWvo)
+- Live Dashboard: [shauryachopra.dev/slicktrace](https://shauryachopra.dev/slicktrace) 
+
 ### Project Structure
 
 ```
