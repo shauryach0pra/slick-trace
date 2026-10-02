@@ -223,3 +223,12 @@
 .arc-grid { align-content: center; }
 /* the boundary opens a little above the column headings, so its label and theirs never touch */
 .arc-boundary { margin: -30px -12px -12px; }
+
+/* the pulse flows into the arrowhead rather than through it: it eases, shrinks and fades just before the head */
+.arc-link span { animation-name: arc-into; }
+@keyframes arc-into {
+  0% { left: -3px; opacity: 0; transform: scale(0.6); }
+  14% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { left: calc(100% - 14px); opacity: 0; transform: scale(0.35); }
+}

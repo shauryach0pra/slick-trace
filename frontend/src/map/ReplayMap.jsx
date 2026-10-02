@@ -292,11 +292,17 @@ function drawScene(map, P, tau, prevTau, ctx) {
     map.getSource(`env-pts-${buf}`).setData(frame?.particles ? pointsFc(frame.particles) : EMPTY);
   };
   if (env) {
-    load('a', env.near, env.nearH);
-    load('b', env.far, env.farH);
+    // each hour keeps one buffer - even hours 'a', odd hours 'b' - so passing an hour never swaps the
+    // contours already on screen: only the buffer fading in is given new data, and while its update is
+    // still in flight it is nearly transparent. (With both buffers re-filled at every hour, a busy map -
+    // or nine of them - showed last hour's contours at this hour's weight for a few frames.)
+    const bufOf = (h) => (h % 2 === 0 ? 'a' : 'b');
+    const nb = bufOf(env.nearH), fb = bufOf(env.farH);
+    load(nb, env.near, env.nearH);
+    if (fb !== nb) load(fb, env.far, env.farH);
     // the image-time envelope (hour 0) is the slick itself: fade it out as tau reaches 0
-    envWeight(map, 'a', env.nearH === 0 ? 0 : 1 - env.k, ctx);
-    envWeight(map, 'b', env.k, ctx);
+    envWeight(map, nb, env.nearH === 0 ? 0 : 1 - env.k, ctx);
+    envWeight(map, fb === nb ? (nb === 'a' ? 'b' : 'a') : fb, fb === nb ? 0 : env.k, ctx);
   } else {
     envWeight(map, 'a', 0, ctx); envWeight(map, 'b', 0, ctx);
   }
