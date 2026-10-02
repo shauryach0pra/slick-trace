@@ -1,13 +1,20 @@
 import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import OutcomeIcon from './OutcomeIcon';
 import { prepare } from './map/timeline';
+import { playProfile, REFERENCE } from './replayPlay';
 
 /**
  * A case's replay in its overview tile: the case page's own Replay Map - the same imagery, ships and
  * their labels, replayed oil, release burst and moment pills - in compact mode, fed exactly the inputs
  * the Historical Replay card gives it. Every tile follows the overview's one clock (tau), so the image is
  * acquired at the same moment in all of them. A tap opens the case.
+ *
+ * Each tile plays exactly as the case page's Play does: 1x (an hour every 0.7 s), easing to a third of that
+ * speed within 1.2 h of the image and of the case's own release, from -24 h to +24 h. The overview supplies
+ * one time base; each tile turns it into its own hour, starting just late enough that every tile reaches
+ * the image at the same moment.
  */
+
 const ReplayMap = lazy(() => import('./map/ReplayMap'));
 
 // one fetch per case, shared across mounts and switches between views
@@ -23,7 +30,7 @@ function load(api, id) {
   return cache.get(id);
 }
 
-export default function ReplayTile({ api, row, index, tau, onOpen }) {
+export default function ReplayTile({ api, row, index, clock, onOpen, onMode }) {
   const [d, setD] = useState(null);
   const [failed, setFailed] = useState(false);
   const f = row.finding;
@@ -55,6 +62,15 @@ export default function ReplayTile({ api, row, index, tau, onOpen }) {
     });
   }, [d]);
 
+  // this case's own play, offset so its image moment lands with everyone else's
+  const play = useMemo(() => {
+    if (!timeline || !d?.env) return null;
+    const min = -((d.env.frames?.length ?? 25) - 1), max = d.forecast?.frames?.length ?? 24;
+    const prof = playProfile(timeline.releaseH != null ? [0, timeline.releaseH] : [0], min, max);
+    return { prof, offset: REFERENCE.toImage - prof.toImage };
+  }, [timeline, d]);
+  const tau = !play ? 0 : clock == null ? 0 : play.prof.at(clock - play.offset);
+
   const open = () => onOpen(row.incident_id);
   const name = row.incident_id.replace('case_', 'Case ');
   return (
@@ -66,7 +82,7 @@ export default function ReplayTile({ api, row, index, tau, onOpen }) {
         {timeline ? (
           <Suspense fallback={null}>
             <ReplayMap compact bbox={d.c.meta.bbox} coastline={d.c.geography?.coastline} areas={d.c.geography?.sensitive_areas}
-                       slick={d.c.slick?.polygon} timeline={timeline} tau={tau} label="" />
+                       slick={d.c.slick?.polygon} timeline={timeline} tau={tau} label="" onMode={onMode} />
           </Suspense>
         ) : <span className="ovr-wait">{failed ? 'Replay unavailable' : 'Loading replay…'}</span>}
       </div>

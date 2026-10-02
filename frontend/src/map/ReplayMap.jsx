@@ -549,7 +549,8 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
       map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
       map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left');
     }
-    map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
+    // compact tiles carry no attribution control: the overview shows the same credit in its footnote
+    if (!compact) map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
     {
       // MapLibre opens the compact attribution once, when the credits first arrive; close that
       // one opening so it starts as its "i" - tapping it still shows the credits
