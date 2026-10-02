@@ -460,7 +460,9 @@ function ForcingRose({ forcing }) {
 const MAP_DEFER_MS = 420;
 let firstMap = true;
 
-export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, timeline, tau, label, onPick, onMode, onShowRanking, fan }) {
+// compact: the overview's tiles - the same replay (imagery, ships and their labels, oil, the release burst, the
+// moment pills) without the case page's controls, label, layers or popups, and not interactive, so a tap opens the case
+export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, timeline, tau, label, onPick, onMode, onShowRanking, fan, compact = false }) {
   const el = useRef(null);
   const mapRef = useRef(null);
   const markers = useRef(new Map());
@@ -525,18 +527,28 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     // the new case has risen into focus, and the old one is removed after the fade.
     let teardown = null;
     const start = () => {
+    // compact tiles frame the story - the slick and the water around it - rather than the whole scene
+    let view = [[bbox.min_lon, bbox.min_lat], [bbox.max_lon, bbox.max_lat]];
+    if (compact && slick?.length) {
+      const xs = slick.map((q) => q[0]), ys = slick.map((q) => q[1]);
+      const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+      const half = Math.max(0.16, 1.7 * Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) / 2);
+      view = [[cx - half, cy - half], [cx + half, cy + half]];
+    }
     const map = new MapLibreMap({
       container: el.current,
       style: baseStyle(bbox, coastline, currentTheme()),
-      bounds: [[bbox.min_lon, bbox.min_lat], [bbox.max_lon, bbox.max_lat]],
-      fitBoundsOptions: { padding: 20 },
-      attributionControl: false, dragRotate: false, pitchWithRotate: false,
+      bounds: view,
+      fitBoundsOptions: { padding: compact ? 6 : 20 },
+      attributionControl: false, dragRotate: false, pitchWithRotate: false, interactive: !compact,
     });
     mapRef.current = map;
     map.on('dragstart', () => { if (followRef.current) { followRef.current = false; setFollow(false); } });
     map.touchZoomRotate.disableRotation();
-    map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
-    map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left');
+    if (!compact) {
+      map.addControl(new NavigationControl({ showCompass: false }), 'top-right');
+      map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left');
+    }
     map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
     {
       // MapLibre opens the compact attribution once, when the credits first arrive; close that
@@ -651,7 +663,7 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
     firstMap = false;
     const id = setTimeout(() => { teardown = start(); }, delay);
     return () => { clearTimeout(id); teardown?.(); };
-  }, [bbox, coastline]);
+  }, [bbox, coastline, compact, slick]);
 
   // layer toggle: map layers by group, markers by a class on the map
   const GROUPS = {
@@ -802,10 +814,10 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
   }, [ready, timeline, tau, bbox, areas, sel]);   // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className={`rmap${Object.entries(hidden).filter(([, v]) => v).map(([k]) => ` hide-${k}`).join('')}`}>
+    <div className={`rmap${compact ? ' is-compact' : ''}${Object.entries(hidden).filter(([, v]) => v).map(([k]) => ` hide-${k}`).join('')}`}>
       <div ref={el} className="rmap-canvas" role="img"
            aria-label={`Map of the scene, ${bbox.min_lon}–${bbox.max_lon}° E, ${bbox.min_lat}–${bbox.max_lat}° N. ${label}`} />
-      {(() => {
+      {!compact && (() => {
         // "Observed · the image: …" becomes a coloured tag and its description, on one line
         const [head, ...rest] = String(label ?? '').split(' · ');
         const text = rest.join(' · ');
@@ -823,8 +835,8 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
         );
       })()}
       <div className="rmap-sweep" aria-hidden="true"><span /></div>
-      {fan?.forcing && !hidden.forcing && <ForcingRose forcing={fan.forcing} />}
-      <div className="rmap-layers">
+      {!compact && fan?.forcing && !hidden.forcing && <ForcingRose forcing={fan.forcing} />}
+      {!compact && <div className="rmap-layers">
         <button type="button" className="rmap-layers-btn" aria-expanded={layersOpen}
                 onClick={() => setLayersOpen((o) => !o)} title="Layers">
           <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M8 2 1.5 5.5 8 9l6.5-3.5L8 2Zm-6.5 6L8 11.5 14.5 8M1.5 10.5 8 14l6.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
@@ -839,8 +851,8 @@ export default function ReplayMap({ bbox, coastline, areas, slick, slickInfo, ti
             ))}
           </div>
         )}
-      </div>
-      {leadKey && (
+      </div>}
+      {!compact && leadKey && (
         <button type="button" className={`rmap-follow${follow ? ' is-on' : ''}`} aria-pressed={follow} onClick={toggleFollow}
                 aria-label={follow ? 'Stop following the leading candidate' : 'Follow the leading candidate'}>
           <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M13.6 2.4 2.6 7.1l4.6 1.8 1.8 4.7 4.6-11.2Z" /></svg>

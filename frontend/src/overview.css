@@ -105,70 +105,110 @@
 .ov-switch-seg[aria-checked="true"] { color: var(--label-1); }
 .ov-switch-seg:focus-visible { outline: 2px solid var(--accent-ring); outline-offset: 1px; }
 
-/* ---- Replays: each tile keeps its place; the replay fills it, the case and the outcome float on glass */
-.ov-replay { padding: 0; gap: 0; }
-.ovr-canvas { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; display: block; }
-.ov-replay::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 1;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.34), transparent 34%, transparent 66%, rgba(0, 0, 0, 0.38)); }
-:root[data-theme="light"] .ov-replay::before { background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 36%, transparent 64%, rgba(255, 255, 255, 0.6)); }
-@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .ov-replay::before { background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 36%, transparent 64%, rgba(255, 255, 255, 0.6)); } }
-.ovr-top { position: absolute; z-index: 2; left: 14px; right: 14px; top: 12px; display: flex; align-items: center; gap: 9px; }
-.ovr-top .sl-outcome, .ovr-top .sl-outcome svg { width: 18px; height: 18px; }
-.ovr-time { margin-left: auto; padding: 3px 9px; border-radius: 999px; font-family: var(--font-mono); font-size: var(--font-size-xxs);
-  color: var(--label-1); background: var(--control-bg); box-shadow: 0 0 0 0.5px var(--separator), 0 2px 6px rgba(0, 0, 0, 0.15);
-  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); font-variant-numeric: tabular-nums; min-width: 52px; text-align: center; }
-.ovr-time.is-image { color: var(--on-accent); background: var(--accent); }
-.ovr-cap { position: absolute; z-index: 2; left: 14px; bottom: 12px; max-width: calc(100% - 140px); font-size: var(--font-size-xs); color: var(--label-1);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ovr-cap b { font-family: var(--font-mono); font-weight: var(--font-weight-semibold); }
-.ov-replay .ov-open { z-index: 2; }
-.ovr-wait { position: absolute; inset: 0; display: grid; place-items: center; font-size: var(--font-size-xs); color: var(--label-3); z-index: 1; }
-
-/* ---- Architecture: inputs, the pipeline, outputs, then the figures - glass cards, one screen */
-.ova { height: 100%; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
-.ova-flow { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1.55fr) 34px minmax(0, 1fr); align-items: stretch; }
-.ova-col, .ova-core { min-height: 0; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
-.ova-label { margin: 0 0 2px 2px; font-size: var(--font-size-xxs); font-weight: var(--font-weight-semibold); letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--label-3); }
-.ova-card, .ova-step, .ova-fact { border-radius: 14px;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)), var(--surface-raised);
-  box-shadow: 0 0 0 0.5px var(--separator-strong), 0 6px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  animation: ov-in 480ms var(--ease-spring) backwards; }
-.ova-card { padding: 14px 16px; border-left: 3px solid transparent; }
-.ova-card.is-in { border-left-color: var(--accent); }
-.ova-card.is-out { border-left-color: var(--status-green); }
-.ova-card b, .ova-step b { display: block; font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); color: var(--label-1); }
-.ova-card span, .ova-step b + span { display: block; margin-top: 3px; font-size: var(--font-size-xs); line-height: 1.45; color: var(--label-2); }
-.ova-core { padding: 16px; border-radius: 18px; background: var(--fill-hover); box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.35), 0 0 40px rgba(10, 132, 255, 0.06); }
-.ova-core .ova-label { color: var(--accent); }
-.ova-step { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; animation-delay: calc(var(--k) * 60ms); }
-.ova-n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent);
-  color: var(--on-accent); font-size: var(--font-size-sm); font-weight: 700; }
-.ova-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
-.ova-chip { padding: 3px 10px; border-radius: 999px; font-size: var(--font-size-xxs); color: var(--label-2); background: var(--fill-pressed); }
-.ova-arrow { display: grid; place-items: center; color: var(--accent); }
-.ova-arrow svg { width: 22px; height: 22px; }
-.ova-facts { flex: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.ova-fact { padding: 12px 16px; display: flex; align-items: baseline; gap: 10px; }
-.ova-fact b { font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--label-1); white-space: nowrap; }
-.ova-fact span { font-size: var(--font-size-xs); color: var(--label-2); }
-
 /* narrow windows: nine tiles cannot share one screen in two columns, so the grid scrolls there */
 @media (max-width: 1180px) {
   .ov { overflow-y: auto; }
   .ov-stage { flex: none; }
   .ov-grid { height: auto; grid-template-rows: none; grid-auto-rows: 200px; }
-  .ova-flow { grid-template-columns: 1fr; gap: 10px; }
-  .ova-arrow { transform: rotate(90deg); height: 28px; }
-  .ova-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (prefers-reduced-motion: reduce) { .ova-card, .ova-step, .ova-fact { animation: none; } .ov-switch-thumb { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .ov-switch-thumb { transition: none; } }
 
 /* the tile's text: the outcome always shows whole; the context takes as many whole lines as fit,
    measured per tile (Overview.jsx sets --ctx-lines) - never squeezed into a half-visible line */
 .ov-grid .ov-story { display: flex; flex-direction: column; -webkit-line-clamp: none; overflow: hidden; }
 .ov-ctx { flex: none; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--ctx-lines, 7); overflow: hidden; }
 .ov-out { display: block; flex: none; }
-/* the three columns sit centred together; the pipeline box hugs its content rather than the full height */
-.ova-flow { align-items: center; }
-.ova-core { justify-content: flex-start; }
+
+/* ======================================================================================
+   Replays: each tile is the case page's Replay Map (compact), every one on the overview's clock
+   ====================================================================================== */
+.ov-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ov-bar > .in-overview { margin: 0; }
+.ov-clock { flex: none; display: flex; align-items: center; gap: 10px; height: 28px; padding: 0 12px 0 4px; border-radius: 999px;
+  background: var(--fill-hover); box-shadow: inset 0 0 0 0.5px var(--separator); }
+.ov-clock-btn { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%;
+  background: var(--control-bg); color: var(--label-1); box-shadow: var(--shadow-control); cursor: default;
+  transition: transform var(--dur-base) var(--ease-spring); }
+.ov-clock-btn:active { transform: scale(0.9); }
+.ov-clock-btn:focus-visible { outline: 2px solid var(--accent-ring); outline-offset: 1px; }
+.ov-clock-track { position: relative; width: 132px; height: 4px; border-radius: 2px; background: var(--fill-pressed); overflow: hidden; }
+.ov-clock-track > span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; background: var(--label-1); opacity: 0.85; }
+.ov-clock-time { min-width: 46px; font-family: var(--font-mono); font-size: var(--font-size-xs); color: var(--label-2); text-align: right; font-variant-numeric: tabular-nums; }
+.ov-clock-time.is-image { color: var(--accent); font-weight: var(--font-weight-semibold); }
+
+.ov-replay { padding: 0; gap: 0; overflow: hidden; }
+.ovr-map { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; background: var(--surface-sunken); }
+.ovr-map .rmap.is-compact { height: 100%; border-radius: inherit; box-shadow: none; }
+/* the case and its outcome on a frosted chip, like the map's own controls */
+.ovr-chip { position: absolute; z-index: 3; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 7px; padding: 4px 10px 4px 6px;
+  border-radius: 999px; background: var(--control-bg); color: var(--label-1); pointer-events: none;
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 0 0 0.5px var(--separator-strong), 0 4px 12px rgba(0, 0, 0, 0.18); }
+.ovr-chip .sl-outcome, .ovr-chip .sl-outcome svg { width: 15px; height: 15px; }
+.ovr-chip .ov-id { font-size: var(--font-size-sm); }
+.ov-replay .ov-open { z-index: 3; padding: 3px 9px; border-radius: 999px; background: var(--control-bg); bottom: 10px; right: 10px;
+  box-shadow: 0 0 0 0.5px var(--separator-strong); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.ov-replay:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 2px; }
+.ovr-wait { position: absolute; inset: 0; display: grid; place-items: center; font-size: var(--font-size-xs); color: var(--label-3); }
+
+/* ======================================================================================
+   Architecture: the dashboard's own language - stage cards and hairline sections
+   ====================================================================================== */
+.ovx { height: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-5); padding-top: 4px; }
+.ovx-sec { min-width: 0; border-top: 1px solid var(--separator); padding-top: 14px; }
+.ovx-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.ovx-head h2 { font-family: var(--font-display); font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); letter-spacing: -0.012em; color: var(--label-1); }
+.ovx-tag { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 10px; border-radius: 999px; background: var(--fill-hover);
+  color: var(--label-2); font-size: var(--font-size-xs); white-space: nowrap; }
+.ovx-tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--label-3); }
+
+/* the pipeline: four glass stage cards, joined by connectors a pulse travels along */
+.ovx-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; margin: 0; padding: 0; list-style: none; }
+.ovx-step { position: relative; min-width: 0; }
+.ovx-node { height: 100%; display: flex; flex-direction: column; gap: 4px; padding: 12px 14px 14px; border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)), var(--surface-raised);
+  box-shadow: 0 0 0 0.5px var(--separator-strong), 0 6px 18px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: ov-in 520ms var(--ease-spring) backwards; animation-delay: calc(var(--k) * 90ms); }
+.ovx-node-head { display: flex; align-items: center; gap: 8px; }
+.ovx-dot { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--on-accent);
+  font-size: 11px; font-weight: 700; box-shadow: 0 0 10px rgba(10, 132, 255, 0.45); }
+.ovx-title { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--label-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ovx-headline { margin-top: 4px; font-family: var(--font-display); font-size: 19px; font-weight: 700; letter-spacing: -0.015em; color: var(--label-1); }
+.ovx-detail { font-size: var(--font-size-xs); line-height: 1.4; color: var(--label-2);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ovx-link { position: absolute; top: 50%; left: -30px; width: 30px; height: 2px; margin-top: -1px; border-radius: 1px;
+  background: linear-gradient(90deg, rgba(10, 132, 255, 0.25), rgba(10, 132, 255, 0.75)); }
+.ovx-link span { position: absolute; top: -2px; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 8px var(--accent); animation: ovx-pulse 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: calc(var(--k) * 0.6s); }
+@keyframes ovx-pulse { 0% { left: -3px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: 27px; opacity: 0; } }
+
+/* the three sections: macOS settings-style rows with small tinted icons, and the stack */
+.ovx-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.ovx-rows { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.ovx-rows li { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.ovx-rows li > span:last-child { min-width: 0; }
+.ovx-rows b { display: block; font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--label-1); }
+.ovx-rows b + span { display: block; font-size: var(--font-size-xs); color: var(--label-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ovx-icon { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(10, 132, 255, 0.14); color: var(--accent); box-shadow: inset 0 0 0 0.5px rgba(10, 132, 255, 0.3); }
+.ovx-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ovx-stack { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.ovx-stack > div { display: grid; grid-template-columns: 74px 1fr; align-items: center; gap: 10px; }
+.ovx-stack dt { font-size: var(--font-size-xs); color: var(--label-3); }
+.ovx-stack dd { margin: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+.ovx-chip { padding: 2px 9px; border-radius: 999px; font-size: var(--font-size-xs); color: var(--label-1); background: var(--fill-pressed); }
+
+/* the figures: one value style, one label style */
+.ovx-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--separator); padding-top: 16px; }
+.ovx-fact { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 12px 14px; border-radius: 12px; background: var(--fill-hover);
+  box-shadow: inset 0 0 0 0.5px var(--separator); }
+.ovx-fact b { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -0.015em; color: var(--label-1); line-height: 1.15; }
+.ovx-fact span { font-size: var(--font-size-xs); color: var(--label-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 1180px) {
+  .ovx-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
+  .ovx-step:nth-child(3) .ovx-link { display: none; }
+  .ovx-trio { grid-template-columns: 1fr; gap: 14px; }
+  .ovx-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .ovx-node { animation: none; } .ovx-link span { animation: none; opacity: 0; } }

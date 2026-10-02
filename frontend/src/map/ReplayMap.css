@@ -445,3 +445,9 @@
 .ship.is-lead .ship-label b { font-family: var(--font-mono); font-weight: 600; letter-spacing: 0; }
 .ship.is-lead .ship-label span { color: #64d2ff; }
 @media (prefers-reduced-motion: reduce) { .rmap-moment { transition: none; } .ship.is-lead::before { animation: none; } }
+
+/* compact (the overview's tiles): the replay itself, untouchable - a tap goes to the tile, which opens the case */
+.rmap.is-compact { border-radius: inherit; }
+.rmap.is-compact .maplibregl-marker, .rmap.is-compact .rpop { pointer-events: none; }
+.rmap.is-compact .rmap-moment { bottom: 14px; padding: 5px 11px 5px 9px; font-size: 11.5px; gap: 6px; }
+.rmap.is-compact .rmap-moment svg { width: 12px; height: 12px; }

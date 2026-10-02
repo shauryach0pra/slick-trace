@@ -7,13 +7,82 @@ import './overview.css';
 
 // the overview's three views: every case as text, every case replayed, and how the system works
 const VIEWS = [
-  { value: 'cases', label: 'Cases' },
   { value: 'replays', label: 'Replays' },
+  { value: 'cases', label: 'Cases' },
   { value: 'architecture', label: 'Architecture' },
 ];
 const VIEW_KEY = 'slicktrace-overview-view';
 function readView() {
-  try { const v = sessionStorage.getItem(VIEW_KEY); return VIEWS.some((o) => o.value === v) ? v : 'cases'; } catch { return 'cases'; }
+  try { const v = sessionStorage.getItem(VIEW_KEY); return VIEWS.some((o) => o.value === v) ? v : VIEWS[0].value; } catch { return VIEWS[0].value; }
+}
+
+/**
+ * The replays' one clock, from 24 h before the image to the image, then a hold on the image moment so every
+ * tile shows "Radar image acquired" together, then again. Its speed follows the story: brisk through the quiet
+ * early hours, slow through the window where the releases happen (-8 to -5 h in these cases), so each release
+ * can be seen, and easing into the image. Twenty updates a second is smooth for this motion and keeps nine live
+ * maps light enough to run together. Under reduced motion it rests on the image.
+ */
+const FROM_H = -24, HOLD_S = 3.6, BAND = [-8.6, -4.4];
+const smooth = (x) => { const k = Math.max(0, Math.min(1, x)); return k * k * (3 - 2 * k); };
+function speedAt(h) {                       // hours of replay per second of playback
+  const out = h < BAND[0] ? BAND[0] - h : h > BAND[1] ? h - BAND[1] : 0;
+  const release = 0.62 + 3.4 * smooth(out / 1.2);
+  const image = 0.42 + 1.9 * -h;
+  return Math.min(4.2, release, image);
+}
+// tau as a function of playback seconds, integrated once
+const CLOCK = (() => {
+  const ts = [0], hs = [FROM_H];
+  for (let h = FROM_H, t = 0; h < 0;) { const dh = Math.min(0.02, -h); t += dh / speedAt(h + dh / 2); h += dh; ts.push(t); hs.push(h); }
+  return { ts, hs, run: ts[ts.length - 1] };
+})();
+function tauAt(sec) {
+  if (sec >= CLOCK.run) return 0;
+  let lo = 0, hi = CLOCK.ts.length - 1;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (CLOCK.ts[m] <= sec) lo = m; else hi = m; }
+  const k = (sec - CLOCK.ts[lo]) / (CLOCK.ts[hi] - CLOCK.ts[lo] || 1);
+  return CLOCK.hs[lo] + (CLOCK.hs[hi] - CLOCK.hs[lo]) * k;
+}
+const RUN_S = CLOCK.run;
+function useReplayClock(active) {
+  const reduce = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const [tau, setTau] = useState(reduce ? 0 : FROM_H);
+  const [playing, setPlaying] = useState(!reduce);
+  const clock = useRef({ start: 0, offset: 0 });
+  useEffect(() => {
+    if (!active || !playing) return undefined;
+    let raf = 0, last = 0;
+    clock.current.start = performance.now() - clock.current.offset * 1000;
+    const step = (now) => {
+      const sec = ((now - clock.current.start) / 1000) % (RUN_S + HOLD_S);
+      clock.current.offset = sec;
+      if (now - last >= 50) {
+        last = now;
+        setTau(tauAt(sec));
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [active, playing]);
+  return { tau, playing, toggle: () => setPlaying((v) => !v) };
+}
+
+/** The shared clock's control: play/pause, a hairline track that fills to the image, and the hour. */
+function ReplayClock({ tau, playing, onToggle }) {
+  const k = Math.max(0, Math.min(1, (tau - FROM_H) / -FROM_H));
+  return (
+    <div className="ov-clock">
+      <button type="button" className="ov-clock-btn" onClick={onToggle} aria-label={playing ? 'Pause the replays' : 'Play the replays'}>
+        <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">{playing
+          ? <><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor" /><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor" /></>
+          : <path d="M4.5 2.8v10.4c0 .6.7 1 1.2.6l8-5.2c.5-.3.5-1 0-1.3l-8-5.2c-.5-.3-1.2 0-1.2.7Z" fill="currentColor" />}</svg>
+      </button>
+      <span className="ov-clock-track" aria-hidden="true"><span style={{ width: `${k * 100}%` }} /></span>
+      <span className={`ov-clock-time${tau > -0.5 ? ' is-image' : ''}`}>{tau > -0.5 ? 'Image' : `−${Math.ceil(-tau)} h`}</span>
+    </div>
+  );
 }
 
 /**
@@ -97,6 +166,7 @@ export default function Overview({ api, onOpen, family = 'all', chips = null }) 
   const [error, setError] = useState(null);
   const [view, setViewState] = useState(readView);
   const gridRef = useRef(null);
+  const clock = useReplayClock(view === 'replays');
   useFitStories(gridRef, rows && view === 'cases');
   const setView = (v) => { setViewState(v); try { sessionStorage.setItem(VIEW_KEY, v); } catch { /* private mode */ } };
   useEffect(() => {
@@ -113,7 +183,7 @@ export default function Overview({ api, onOpen, family = 'all', chips = null }) 
   const abstained = shown.filter((r) => r.finding?.unknown_source).length;
   const sub = view === 'architecture' ? 'From a satellite image to a ranked, evidenced lead'
     : `${shown.length === rows.length ? `${rows.length} cases` : `${shown.length} of ${rows.length} cases`} · ${named} ${named === 1 ? 'names' : 'name'} a vessel · ${abstained} ${abstained === 1 ? 'abstains' : 'abstain'}`
-      + (view === 'replays' ? ' · each replayed from 24 h before the image, the lead in blue' : '');
+      + (view === 'replays' ? ' · every replay on one clock, from 24 h before the image' : '');
   return (
     <div className={`ov is-${view}`}>
       <header className="ov-head">
@@ -123,12 +193,17 @@ export default function Overview({ api, onOpen, family = 'all', chips = null }) 
         </div>
         <ViewSwitch value={view} onChange={setView} />
       </header>
-      {view !== 'architecture' && chips}
+      {view !== 'architecture' && (
+        <div className="ov-bar">
+          {chips}
+          {view === 'replays' && <ReplayClock tau={clock.tau} playing={clock.playing} onToggle={clock.toggle} />}
+        </div>
+      )}
       <div className="ov-stage">
         {view === 'architecture' ? <ArchitecturePanel /> : (
           <div className="ov-grid" ref={gridRef}>
             {shown.map((r, i) => {
-              if (view === 'replays') return <ReplayTile key={r.incident_id} api={api} row={r} index={i} onOpen={onOpen} active />;
+              if (view === 'replays') return <ReplayTile key={r.incident_id} api={api} row={r} index={i} tau={clock.tau} onOpen={onOpen} />;
               const f = r.finding;
               const unknown = f?.unknown_source;
               return (
