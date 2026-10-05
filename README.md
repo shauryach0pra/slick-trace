@@ -16,7 +16,7 @@
 
 Slick Trace detects oil slicks in radar imagery and works out which vessel most plausibly caused them. Instead of naming the ship nearest the slick, it replays a release from every candidate vessel's AIS track, drifts the oil forward through modelled currents under six forcing variants, and ranks each candidate by how well its replayed oil recreates the observed slick. When no candidate fits well enough, it declines to name anyone.
 
-On nine synthetic cases with known ground truth, forward replay names the true source in 7 of 7 source-present cases, against 0 of 7 for nearest-vessel proximity (exact McNemar p = 0.0156). Built for SIH 2026 problem statement 26143 (NTRO). Every result is an investigative lead, not proof of responsibility.
+On nine synthetic cases with known ground truth, forward replay names the true source in 7 of 7 source-present cases, against 0 of 7 for nearest-vessel proximity (exact McNemar p = 0.0156). Every result is an investigative lead, not proof of responsibility.
 
 ---
 
@@ -281,9 +281,7 @@ MIT License; see `LICENSE`. Code and data rights are separated: source licences,
 
 **Shaurya Chopra** — shauryachopra@zohomail.in — [github.com/shauryach0pra](https://github.com/shauryach0pra)
 
-Team Untangle (ID 124608), SIH 2026 problem statement 26143 (NTRO).
-
-Built and maintained by one person. Continuity does not rest on a second reader being available: nine cases regenerate byte-identically from fixed seeds, 359 automated tests run on every regeneration, and a scripted acceptance check verifies the frozen case against declared tolerances. A no-obligation handover (code, manifests, assumptions register, licence appendix and validation report) is offered to the evaluating body; see `docs/sustainability_and_ownership.md`.
+Continuity does not rest on a second reader being available: nine cases regenerate byte-identically from fixed seeds, 359 automated tests run on every regeneration, and a scripted acceptance check verifies the frozen case against declared tolerances. A no-obligation handover (code, manifests, assumptions register, licence appendix and validation report) is offered to the evaluating body; see `docs/sustainability_and_ownership.md`.
 
 ---
 
